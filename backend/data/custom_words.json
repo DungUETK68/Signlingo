@@ -1,0 +1,19 @@
+[
+  {
+    "id": "w-hello",
+    "word": "Chào",
+    "topic": "greeting",
+    "topicLabel": "Chào hỏi & Làm quen",
+    "dialect": "Toàn quốc",
+    "description": "Dua ban tay mo cham nhe len vung thai duong, sau do dua nhe ra phia truoc kem nu cuoi than thien. (Chuan VSL cap nhat)",
+    "videoFront": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80",
+    "videoSide": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80",
+    "difficulty": "Dễ",
+    "duration": "3 phút",
+    "handShape": "Bàn tay mở 5 ngón khép tự nhiên (Open-B)",
+    "movement": "Chạm thái dương -> Đưa về phía đối tác (Vòng cung nhỏ)",
+    "details": "Dua ban tay mo cham nhe len vung thai duong, sau do dua nhe ra phia truoc kem nu cuoi than thien. (Chuan VSL cap nhat)",
+    "isCustom": true,
+    "createdAt": 1792821459.6617799
+  }
+]
