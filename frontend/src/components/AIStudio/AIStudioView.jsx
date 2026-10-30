@@ -540,6 +540,14 @@ export default function AIStudioView({ initialWord = 'Chào', onBack }) {
         badJointsRef.current = data.bad_joints || [];
         setBadJoints(data.bad_joints || []);
 
+        // Tự động ghi lại phiên thực hành để động cơ AI thích ứng điều chỉnh lộ trình cá nhân
+        recordPracticeSession({
+          word: currentWordObj.word,
+          score: Math.round(data.overall_score),
+          passed: data.passed,
+          badJoints: data.bad_joints || []
+        });
+
         if (data.passed) {
           setStatusMessage("✅ Đã hoàn tất chấm điểm! Bạn đã ĐẠT yêu cầu (≥ 85%).");
           confetti({ particleCount: 75, spread: 65, origin: { y: 0.6 } });

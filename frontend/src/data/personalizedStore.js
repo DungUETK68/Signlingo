@@ -625,3 +625,4 @@ export function usePersonalizedPath() {
     completeLesson: completeLessonInPath
   };
 }
+

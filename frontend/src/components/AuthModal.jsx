@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   X, 
   Lock, 
@@ -13,7 +13,7 @@ import {
   BookOpen,
   Award
 } from 'lucide-react';
-import { saveUserProfile, recalculateAdaptivePath } from '../data/personalizedStore';
+import { getUserProfile, saveUserProfile, recalculateAdaptivePath } from '../data/personalizedStore';
 
 export default function AuthModal({ isOpen, onClose, onLoginSuccess, forceOnboarding = false }) {
   const [step, setStep] = useState(forceOnboarding ? 'onboarding' : 'auth'); // 'auth' | 'onboarding'
@@ -27,11 +27,40 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess, forceOnboar
   const [learningGoalMinutes, setLearningGoalMinutes] = useState(15);
   const [priorityTopic, setPriorityTopic] = useState('greeting');
 
+  // Đồng bộ trạng thái mỗi khi mở modal: nếu đã đăng nhập hoặc bấm khảo sát lại -> chuyển thẳng đến bước chọn mức độ
+  useEffect(() => {
+    if (isOpen) {
+      const currentProfile = getUserProfile();
+      if (currentProfile) {
+        setFullName(currentProfile.name || 'Nguyễn Minh Anh');
+        setEmail(currentProfile.email || 'minhanh.signlingo@edu.vn');
+        setSelectedLevel(currentProfile.learningLevel || 'beginner');
+        setLearningGoalMinutes(currentProfile.learningGoalMinutes || 15);
+        setPriorityTopic(currentProfile.priorityTopic || 'greeting');
+      }
+
+      // Phân định rõ ràng:
+      // - Nếu ấn "Khảo sát lại" (forceOnboarding === true) -> chuyển thẳng tới màn hình chọn mức độ ('onboarding')
+      // - Nếu ấn "Đổi tài khoản" (forceOnboarding === false) -> hiển thị form đăng nhập ('auth')
+      if (forceOnboarding) {
+        setStep('onboarding');
+      } else {
+        setStep('auth');
+      }
+    }
+  }, [isOpen, forceOnboarding]);
+
   if (!isOpen) return null;
 
   // Xử lý nộp form đăng nhập / đăng ký
   const handleAuthSubmit = (e) => {
     e.preventDefault();
+    if (!isRegister && (!fullName || fullName === 'Nguyễn Minh Anh')) {
+      // Nếu là đăng nhập, tự động lấy tên từ email nếu chưa có
+      const username = email.split('@')[0] || 'học viên';
+      const cleanName = username.charAt(0).toUpperCase() + username.slice(1);
+      setFullName(cleanName);
+    }
     // Chuyển sang bước Khảo sát trình độ ban đầu để cá nhân hóa lộ trình
     setStep('onboarding');
   };
@@ -131,29 +160,31 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess, forceOnboar
             </div>
 
             <form onSubmit={handleAuthSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
-              <div>
-                <label style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-main)', display: 'block', marginBottom: '0.35rem' }}>
-                  Họ và tên của bạn:
-                </label>
-                <div style={{ position: 'relative' }}>
-                  <User size={16} color="#94a3b8" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
-                  <input
-                    type="text"
-                    required
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    placeholder="Nguyễn Văn A"
-                    style={{
-                      width: '100%',
-                      padding: '0.75rem 1rem 0.75rem 2.6rem',
-                      borderRadius: 'var(--radius-pill)',
-                      border: '1.5px solid var(--border-light)',
-                      outline: 'none',
-                      fontSize: '0.9rem'
-                    }}
-                  />
+              {isRegister && (
+                <div>
+                  <label style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-main)', display: 'block', marginBottom: '0.35rem' }}>
+                    Họ và tên của bạn:
+                  </label>
+                  <div style={{ position: 'relative' }}>
+                    <User size={16} color="#94a3b8" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
+                    <input
+                      type="text"
+                      required={isRegister}
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      placeholder="Nguyễn Văn A"
+                      style={{
+                        width: '100%',
+                        padding: '0.75rem 1rem 0.75rem 2.6rem',
+                        borderRadius: 'var(--radius-pill)',
+                        border: '1.5px solid var(--border-light)',
+                        outline: 'none',
+                        fontSize: '0.9rem'
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div>
                 <label style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-main)', display: 'block', marginBottom: '0.35rem' }}>
@@ -208,7 +239,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess, forceOnboar
                 className="btn-pill btn-primary btn-lg"
                 style={{ width: '100%', marginTop: '0.4rem', gap: '0.4rem' }}
               >
-                <span>{isRegister ? 'Đăng Ký & Khảo Sát Trình Độ' : 'Đăng Nhập & Tiếp Tục'}</span>
+                <span>{isRegister ? 'Đăng Ký Tài Khoản' : 'Đăng Nhập'}</span>
                 <ArrowRight size={18} />
               </button>
             </form>
@@ -453,8 +484,26 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess, forceOnboar
               style={{ width: '100%', gap: '0.5rem', boxShadow: 'var(--btn-shadow)' }}
             >
               <Sparkles size={18} />
-              <span>Kích Hoạt Lộ Trình Cá Nhân Hóa Ngay</span>
+              <span>Cập Nhật Lộ Trình Cá Nhân Hóa Ngay</span>
             </button>
+
+            <div style={{ textAlign: 'center', marginTop: '1rem', fontSize: '0.82rem', color: '#64748b' }}>
+              Muốn sử dụng tài khoản khác?{' '}
+              <button
+                type="button"
+                onClick={() => setStep('auth')}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#0284c7',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  textDecoration: 'underline'
+                }}
+              >
+                Đăng nhập tài khoản khác
+              </button>
+            </div>
           </div>
         )}
       </div>

@@ -1,35 +1,33 @@
 import React, { useState } from 'react';
-import { 
-  Sparkles, 
-  RotateCcw, 
-  Play, 
-  CheckCircle2, 
-  Camera, 
-  Clock, 
-  Award, 
-  Compass, 
-  Sliders, 
-  Check, 
+import {
+  Sparkles,
+  RotateCcw,
+  Play,
+  CheckCircle2,
+  Camera,
+  Clock,
+  Award,
+  Compass,
+  Sliders,
+  Check,
   AlertTriangle,
   Zap,
   TrendingUp,
-  BrainCircuit,
   ArrowRight
 } from 'lucide-react';
-import { usePersonalizedPath, recordPracticeSession } from '../../data/personalizedStore';
+import { usePersonalizedPath } from '../../data/personalizedStore';
 
-export default function PersonalizedPathView({ 
-  onStartPracticeWord, 
+export default function PersonalizedPathView({
+  onStartPracticeWord,
   onOpenSurvey,
-  onOpenLesson 
+  onOpenLesson
 }) {
-  const { 
-    profile, 
-    capability, 
-    path, 
-    updateLevel, 
-    recalculate, 
-    completeLesson 
+  const {
+    profile,
+    capability,
+    path,
+    recalculate,
+    completeLesson
   } = usePersonalizedPath();
 
   const [isRecalculating, setIsRecalculating] = useState(false);
@@ -47,20 +45,6 @@ export default function PersonalizedPathView({
     }, 700);
   };
 
-  // Giả lập thử nghiệm khả năng học tập để kiểm chứng cơ chế thích ứng động
-  const handleSimulateCapability = (type) => {
-    if (type === 'high') {
-      recordPracticeSession({ word: 'Chào', score: 96, passed: true, badJoints: [] });
-      recordPracticeSession({ word: 'Cảm ơn', score: 94, passed: true, badJoints: [] });
-    } else if (type === 'low') {
-      recordPracticeSession({ word: 'Cảm ơn', score: 65, passed: false, badJoints: [1, 2] });
-      recordPracticeSession({ word: 'Chào', score: 68, passed: false, badJoints: [0] });
-    } else {
-      recordPracticeSession({ word: 'Số 5', score: 85, passed: true, badJoints: [] });
-    }
-    handleRecalculate();
-  };
-
   // Tính tổng tiến độ lộ trình cá nhân
   const allLessons = path.flatMap(s => s.lessons);
   const totalLessons = allLessons.length;
@@ -69,7 +53,7 @@ export default function PersonalizedPathView({
 
   return (
     <div style={{ width: '100%', margin: '0 auto', animation: 'fadeIn 0.25s ease-out' }}>
-      
+
       {/* 1. Header Khảo Sát & Phân Tích Thích Ứng AI (Adaptive AI Hero Card) */}
       <div style={{
         background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
@@ -95,7 +79,7 @@ export default function PersonalizedPathView({
               fontWeight: 800
             }}>
               <Sparkles size={16} />
-              <span>LỘ TRÌNH CÁ NHÂN HÓA THÍCH ỨNG (AI ADAPTIVE PATH)</span>
+              <span>LỘ TRÌNH CÁ NHÂN HÓA</span>
             </div>
 
             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
@@ -115,7 +99,7 @@ export default function PersonalizedPathView({
                 }}
               >
                 <RotateCcw size={15} className={isRecalculating ? 'animate-spin' : ''} />
-                <span>{isRecalculating ? 'AI đang phân tích...' : 'Tối ưu hóa lại bằng AI'}</span>
+                <span>{isRecalculating ? 'Đang phân tích...' : 'Tối ưu hóa lại'}</span>
               </button>
 
               <button
@@ -142,38 +126,44 @@ export default function PersonalizedPathView({
             Lộ Trình Của Bạn: {profile.name}
           </h2>
           <p style={{ fontSize: '0.9rem', opacity: 0.92, maxWidth: 680, lineHeight: 1.5, marginBottom: '1.25rem' }}>
-            Hệ thống tự động tinh chỉnh các bài học dựa trên mức độ hiểu biết ban đầu và tốc độ thực hành camera AI thực tế.
+            Hệ thống tự động đề xuất bài học dựa trên mức độ hiểu biết ban đầu và tốc độ học thực tế.
           </p>
 
           {/* 3 Metric Cards Tình Trạng Cá Nhân Hóa */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
             gap: '0.75rem',
-            paddingTop: '0.75rem',
+            paddingTop: '0.85rem',
             borderTop: '1px solid rgba(255, 255, 255, 0.2)'
           }}>
-            <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.12)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-lg)' }}>
-              <div style={{ fontSize: '0.75rem', opacity: 0.85, fontWeight: 700, textTransform: 'uppercase' }}>Trình độ ban đầu đã chọn</div>
-              <div style={{ fontSize: '1.05rem', fontWeight: 900, marginTop: '0.2rem' }}>
-                {profile.learningLevel === 'beginner' && '🐣 Mới bắt đầu (Level 1)'}
-                {profile.learningLevel === 'elementary' && '🌿 Đã biết cơ bản (Level 2)'}
-                {profile.learningLevel === 'intermediate' && '🚀 Đã có nền tảng (Level 3)'}
+            <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.12)', padding: '0.65rem 0.85rem', borderRadius: 'var(--radius-lg)' }}>
+              <div style={{ fontSize: '0.72rem', opacity: 0.85, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.02em', whiteSpace: 'nowrap' }}>
+                Trình độ ban đầu
+              </div>
+              <div style={{ fontSize: '0.94rem', fontWeight: 900, marginTop: '0.25rem', whiteSpace: 'nowrap' }}>
+                {profile.learningLevel === 'beginner' && '🐣 Level 1: Mới học'}
+                {profile.learningLevel === 'elementary' && '🌿 Level 2: Cơ bản'}
+                {profile.learningLevel === 'intermediate' && '🚀 Level 3: Nâng cao'}
               </div>
             </div>
 
-            <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.12)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-lg)' }}>
-              <div style={{ fontSize: '0.75rem', opacity: 0.85, fontWeight: 700, textTransform: 'uppercase' }}>Đánh giá khả năng AI</div>
-              <div style={{ fontSize: '1.05rem', fontWeight: 900, marginTop: '0.2rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                <TrendingUp size={18} />
+            <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.12)', padding: '0.65rem 0.85rem', borderRadius: 'var(--radius-lg)' }}>
+              <div style={{ fontSize: '0.72rem', opacity: 0.85, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.02em', whiteSpace: 'nowrap' }}>
+                Đánh giá khả năng AI
+              </div>
+              <div style={{ fontSize: '0.94rem', fontWeight: 900, marginTop: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.35rem', whiteSpace: 'nowrap' }}>
+                <TrendingUp size={16} />
                 <span>{capability.statusTitle}</span>
               </div>
             </div>
 
-            <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.12)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-lg)' }}>
-              <div style={{ fontSize: '0.75rem', opacity: 0.85, fontWeight: 700, textTransform: 'uppercase' }}>Điểm AI thực hành TB</div>
-              <div style={{ fontSize: '1.05rem', fontWeight: 900, marginTop: '0.2rem' }}>
-                {capability.avgScore}% ({completedLessons}/{totalLessons} bài hoàn thành)
+            <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.12)', padding: '0.65rem 0.85rem', borderRadius: 'var(--radius-lg)' }}>
+              <div style={{ fontSize: '0.72rem', opacity: 0.85, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.02em', whiteSpace: 'nowrap' }}>
+                Điểm AI thực hành TB
+              </div>
+              <div style={{ fontSize: '0.94rem', fontWeight: 900, marginTop: '0.25rem', whiteSpace: 'nowrap' }}>
+                {capability.avgScore}% ({completedLessons}/{totalLessons} bài)
               </div>
             </div>
           </div>
@@ -197,110 +187,10 @@ export default function PersonalizedPathView({
         </div>
       )}
 
-      {/* 2. Thẻ Động Cơ Thích Ứng (Adaptive Recommendation Box) */}
-      <div style={{
-        backgroundColor: '#ffffff',
-        border: '1.5px solid var(--border-color)',
-        borderRadius: 'var(--radius-xl)',
-        padding: '1.25rem 1.5rem',
-        marginBottom: '1.5rem',
-        boxShadow: 'var(--card-shadow)'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-          <BrainCircuit size={20} color="#0284c7" />
-          <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#1e293b', margin: 0 }}>
-            Động cơ Thích Ứng AI đang tối ưu hóa lộ trình của bạn:
-          </h3>
-        </div>
-        <p style={{ fontSize: '0.86rem', color: '#475569', margin: '0 0 0.85rem 0', lineHeight: 1.5 }}>
-          {capability.recommendation}
-        </p>
-
-        {/* Thanh chuyển đổi nhanh mức độ hiểu để kiểm chứng trực tiếp */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.75rem',
-          paddingTop: '0.85rem',
-          borderTop: '1px solid #f1f5f9',
-          flexWrap: 'wrap'
-        }}>
-          <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#64748b' }}>
-            CHUYỂN NHANH MỨC ĐỘ ĐỂ XEM LỘ TRÌNH:
-          </span>
-          <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-            <button
-              onClick={() => updateLevel('beginner')}
-              className={`btn-pill ${profile.learningLevel === 'beginner' ? 'btn-primary' : 'btn-secondary'}`}
-              style={{ fontSize: '0.76rem', padding: '0.3rem 0.75rem' }}
-            >
-              🐣 1. Người mới bắt đầu
-            </button>
-            <button
-              onClick={() => updateLevel('elementary')}
-              className={`btn-pill ${profile.learningLevel === 'elementary' ? 'btn-primary' : 'btn-secondary'}`}
-              style={{ fontSize: '0.76rem', padding: '0.3rem 0.75rem' }}
-            >
-              🌿 2. Đã biết cơ bản
-            </button>
-            <button
-              onClick={() => updateLevel('intermediate')}
-              className={`btn-pill ${profile.learningLevel === 'intermediate' ? 'btn-primary' : 'btn-secondary'}`}
-              style={{ fontSize: '0.76rem', padding: '0.3rem 0.75rem' }}
-            >
-              🚀 3. Nâng cao / Có nền tảng
-            </button>
-          </div>
-        </div>
-
-        {/* Thử nghiệm khả năng học thực tế (Mô phỏng điểm AI) */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.6rem',
-          marginTop: '0.75rem',
-          fontSize: '0.78rem',
-          color: '#64748b',
-          flexWrap: 'wrap'
-        }}>
-          <span style={{ fontWeight: 800 }}>THỬ NGHIỆM ĐIỀU CHỈNH THEO TỐC ĐỘ HỌC:</span>
-          <button
-            onClick={() => handleSimulateCapability('high')}
-            className="btn-pill"
-            style={{
-              fontSize: '0.72rem',
-              padding: '0.25rem 0.65rem',
-              backgroundColor: '#ecfdf5',
-              color: '#059669',
-              border: '1px solid #a7f3d0',
-              fontWeight: 700,
-              cursor: 'pointer'
-            }}
-          >
-            ⚡ Giả lập điểm cao (≥ 95% - Mở khóa vượt cấp)
-          </button>
-          <button
-            onClick={() => handleSimulateCapability('low')}
-            className="btn-pill"
-            style={{
-              fontSize: '0.72rem',
-              padding: '0.25rem 0.65rem',
-              backgroundColor: '#fff7ed',
-              color: '#c2410c',
-              border: '1px solid #fed7aa',
-              fontWeight: 700,
-              cursor: 'pointer'
-            }}
-          >
-            🤖 Giả lập điểm thấp (&lt; 70% - Tự chèn bài bổ trợ)
-          </button>
-        </div>
-      </div>
-
-      {/* 3. Danh Sách Các Chặng Học Cá Nhân Hóa (Adaptive Stages) */}
+      {/* 2. Danh Sách Các Chặng Học Cá Nhân Hóa (Adaptive Stages) */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
         {path.map((stage, sIdx) => (
-          <div 
+          <div
             key={stage.id}
             style={{
               backgroundColor: '#ffffff',
@@ -382,7 +272,7 @@ export default function PersonalizedPathView({
                   >
                     {/* Cột 1: Thông tin bài học */}
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem', flex: 1, minWidth: 260 }}>
-                      <div 
+                      <div
                         onClick={() => completeLesson(lesson.id, 92)}
                         title="Bấm để đánh dấu hoàn thành bài học"
                         style={{
@@ -504,3 +394,4 @@ export default function PersonalizedPathView({
     </div>
   );
 }
+
