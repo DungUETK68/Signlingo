@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { X, Camera } from 'lucide-react';
+import { X, Camera, BookOpen } from 'lucide-react';
 
-export default function WordDetailModal({ wordData, onClose, onStartPractice }) {
+export default function WordDetailModal({ wordData, onClose, onStartPractice, onOpenLesson }) {
   const [viewAngle, setViewAngle] = useState('front');
 
   if (!wordData) return null;
@@ -46,6 +46,7 @@ export default function WordDetailModal({ wordData, onClose, onStartPractice }) 
           }}>
             {isVideo ? (
               <video
+                key={currentVideo}
                 src={currentVideo}
                 controls
                 autoPlay
@@ -89,17 +90,33 @@ export default function WordDetailModal({ wordData, onClose, onStartPractice }) 
             {wordData.description}
           </p>
 
-          <button
-            className="btn-pill btn-green"
-            style={{ width: '100%', padding: '0.85rem' }}
-            onClick={() => {
-              onClose();
-              onStartPractice(wordData.word);
-            }}
-          >
-            <Camera size={18} />
-            <span>LUYỆN TẬP CÙNG AI</span>
-          </button>
+          <div style={{ display: 'grid', gridTemplateColumns: onOpenLesson ? '1fr 1fr' : '1fr', gap: '0.65rem' }}>
+            {onOpenLesson && (
+              <button
+                className="btn-pill btn-primary"
+                style={{ padding: '0.8rem', fontWeight: 800, fontSize: '0.88rem', gap: '0.4rem' }}
+                onClick={() => {
+                  onClose();
+                  onOpenLesson(wordData);
+                }}
+              >
+                <BookOpen size={18} />
+                <span>HỌC BƯỚC 1</span>
+              </button>
+            )}
+
+            <button
+              className="btn-pill btn-green"
+              style={{ padding: '0.8rem', fontWeight: 800, fontSize: '0.88rem', gap: '0.4rem' }}
+              onClick={() => {
+                onClose();
+                onStartPractice(wordData.word);
+              }}
+            >
+              <Camera size={18} />
+              <span>LUYỆN TẬP AI</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

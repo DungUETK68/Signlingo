@@ -4,6 +4,7 @@ import RightSidebar from './components/RightSidebar';
 import PersonalizedPathView from './components/LearningPath/PersonalizedPathView';
 import LearningPathView from './components/LearningPath/LearningPathView';
 import DictionaryView from './components/Dictionary/DictionaryView';
+import SentencesView from './components/Sentences/SentencesView';
 import AIStudioView from './components/AIStudio/AIStudioView';
 import GamesView from './components/Games/GamesView';
 import ReviewView from './components/Review/ReviewView';
@@ -34,12 +35,14 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleOpenLessonFromReview = (lesson, topic) => {
+  const handleOpenLesson = (lesson, topic) => {
     setSelectedLearningLesson(lesson);
     setSelectedLearningTopic(topic);
     setActiveTab('learning');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const handleOpenLessonFromReview = handleOpenLesson;
 
   const handleOpenAuthForSurvey = () => {
     setForceOnboarding(true);
@@ -106,7 +109,17 @@ export default function App() {
 
         {/* TAB 3: TỪ ĐIỂN */}
         {activeTab === 'dictionary' && (
-          <DictionaryView onStartPracticeWord={handleStartPracticeWord} />
+          <DictionaryView 
+            onStartPracticeWord={handleStartPracticeWord}
+            onOpenLesson={handleOpenLesson}
+          />
+        )}
+
+        {/* TAB MỚI: CÂU THƯỜNG GẶP (VSL SENTENCES) */}
+        {activeTab === 'sentences' && (
+          <SentencesView 
+            onStartPracticeWord={handleStartPracticeWord}
+          />
         )}
 
         {/* TAB 4: LUYỆN TẬP CAMERA AI */}

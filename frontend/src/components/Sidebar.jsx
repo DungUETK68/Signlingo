@@ -8,7 +8,8 @@ import {
   User,
   Settings,
   Hand,
-  Sparkles
+  Sparkles,
+  MessageSquareQuote
 } from 'lucide-react';
 import { useSavedLessons } from '../data/wordsStore';
 
@@ -16,6 +17,7 @@ const NAV_ITEMS = [
   { id: 'personalized', label: 'Lộ trình cá nhân', icon: Sparkles, isAi: true },
   { id: 'learning', label: 'Lộ trình chuẩn', icon: BookOpen },
   { id: 'dictionary', label: 'Từ điển', icon: Search },
+  { id: 'sentences', label: 'Câu thường gặp', icon: MessageSquareQuote },
   { id: 'practice', label: 'Luyện tập AI', icon: Camera, highlight: true },
   { id: 'games', label: 'Thử thách', icon: Zap },
   { id: 'review', label: 'Ôn tập', icon: BookmarkCheck },

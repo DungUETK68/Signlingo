@@ -1,17 +1,53 @@
 import React, { useState, useMemo } from 'react';
-import { useSignWords } from '../../data/wordsStore';
+import { useSignWords, getAllTopics } from '../../data/wordsStore';
 import WordDetailModal from './WordDetailModal';
-import { Search, Camera, Video, X } from 'lucide-react';
+import { Search, Camera, Video, X, BookOpen, Play } from 'lucide-react';
 
-export default function DictionaryView({ onStartPracticeWord }) {
+export default function DictionaryView({ onStartPracticeWord, onOpenLesson }) {
   const { words } = useSignWords();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTopic, setSelectedTopic] = useState('all');
   const [activeWordData, setActiveWordData] = useState(null);
 
+  // Lấy đường dẫn thumbnail (frame đầu tiên của video)
+  const getThumbnailSrc = (word) => {
+    if (word.thumbnail) return word.thumbnail;
+    if (word.slug) return `/vsl400_videos/${word.slug}_thumb.jpg`;
+    if (word.id === 'w-hello' || (word.word && word.word.toLowerCase() === 'chào')) return '/chao_thumb.jpg';
+    return word.videoFront;
+  };
+
+  // Điều hướng sang màn hình Bước 1: Học & Quan sát cử chỉ
+  const handleLearnWord = (word) => {
+    if (!onOpenLesson) return;
+    const allTopics = getAllTopics();
+    const targetTopic = allTopics.find(t => t.id === word.topic) || allTopics[0];
+    
+    let matchedLesson = targetTopic?.lessons?.find(
+      l => l.title.toLowerCase() === word.word.toLowerCase() || l.id === word.id
+    );
+    
+    if (!matchedLesson) {
+      matchedLesson = {
+        id: `lesson-${word.id}`,
+        wordId: word.id,
+        title: word.word,
+        description: word.description,
+        duration: word.duration || '3 phút',
+        level: word.difficulty || 'Dễ',
+        completed: false,
+        score: 0,
+        videoUrl: word.videoFront
+      };
+    }
+    
+    onOpenLesson(matchedLesson, targetTopic);
+  };
+
   const filteredWords = useMemo(() => {
-    return words.filter(w => {
-      const matchSearch = w.word.toLowerCase().includes(searchTerm.toLowerCase());
+    return (words || []).filter(w => {
+      if (!w || !w.word) return false;
+      const matchSearch = w.word.toLowerCase().includes((searchTerm || '').toLowerCase().trim());
       const matchTopic = selectedTopic === 'all' || w.topic === selectedTopic;
       return matchSearch && matchTopic;
     });
@@ -53,6 +89,8 @@ export default function DictionaryView({ onStartPracticeWord }) {
           { id: 'greeting', label: 'Chào hỏi' },
           { id: 'family', label: 'Gia đình' },
           { id: 'food', label: 'Ẩm thực' },
+          { id: 'daily', label: 'Giao tiếp' },
+          { id: 'sports', label: 'Thể thao' },
           { id: 'numbers', label: 'Số đếm' },
           { id: 'alphabet', label: 'Chữ cái' }
         ].map(cat => (
@@ -70,7 +108,7 @@ export default function DictionaryView({ onStartPracticeWord }) {
       {/* Visual Flashcards Grid */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))',
         gap: '1rem'
       }}>
         {filteredWords.map(word => (
@@ -79,7 +117,7 @@ export default function DictionaryView({ onStartPracticeWord }) {
             className="mini-card"
             style={{ padding: '0.75rem', cursor: 'pointer', display: 'flex', flexDirection: 'column' }}
           >
-            {/* Thumbnail */}
+            {/* Thumbnail: Frame đầu tiên của video */}
             <div 
               style={{
                 position: 'relative',
@@ -91,7 +129,12 @@ export default function DictionaryView({ onStartPracticeWord }) {
               }}
               onClick={() => setActiveWordData(word)}
             >
-              <img src={word.videoFront} alt={word.word} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img
+                src={getThumbnailSrc(word)}
+                alt={word.word}
+                loading="lazy"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
               <span style={{
                 position: 'absolute',
                 top: '0.4rem',
@@ -105,31 +148,90 @@ export default function DictionaryView({ onStartPracticeWord }) {
               }}>
                 {word.dialect}
               </span>
+              <span style={{
+                position: 'absolute',
+                bottom: '0.4rem',
+                right: '0.4rem',
+                backgroundColor: 'rgba(2, 132, 199, 0.85)',
+                color: 'white',
+                fontSize: '0.65rem',
+                fontWeight: 700,
+                padding: '0.15rem 0.45rem',
+                borderRadius: 'var(--radius-pill)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.2rem'
+              }}>
+                <Play size={10} fill="white" />
+                <span>Xem mẫu</span>
+              </span>
             </div>
 
-            {/* Word info & Action */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
-              <div>
+            {/* Tên từ vựng & Chủ đề (Hàng riêng, full width, không bao giờ bị cắt chữ) */}
+            <div style={{ marginTop: '0.2rem', marginBottom: '0.65rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '0.35rem' }}>
                 <h4 
-                  style={{ fontSize: '1.05rem', fontWeight: 800, color: '#1e293b' }}
+                  style={{
+                    fontSize: '1.12rem',
+                    fontWeight: 800,
+                    color: '#1e293b',
+                    margin: 0,
+                    lineHeight: 1.25,
+                    cursor: 'pointer'
+                  }}
                   onClick={() => setActiveWordData(word)}
+                  title={word.word}
                 >
                   {word.word}
                 </h4>
-                <span style={{ fontSize: '0.75rem', color: '#64748b' }}>{word.topicLabel}</span>
+                <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 600, flexShrink: 0 }}>
+                  {word.topicLabel}
+                </span>
               </div>
+            </div>
 
+            {/* Actions: 2 nút Luyện và Học ngay chia đều 50/50 ở hàng dưới cùng */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.45rem', marginTop: 'auto' }}>
+              {/* Nút Luyện Camera AI */}
               <button
-                className="btn-pill btn-primary btn-sm"
-                style={{ padding: '0.4rem 0.75rem', fontSize: '0.8rem' }}
+                className="btn-pill btn-secondary btn-sm"
+                style={{
+                  justifyContent: 'center',
+                  padding: '0.45rem 0.35rem',
+                  fontSize: '0.82rem',
+                  gap: '0.3rem',
+                  fontWeight: 700,
+                  width: '100%'
+                }}
                 onClick={(e) => {
                   e.stopPropagation();
                   onStartPracticeWord(word.word);
                 }}
-                title="Luyện camera ngay"
+                title="Luyện camera AI (Bước 2)"
               >
-                <Camera size={14} />
-                <span>Luyện</span>
+                <Camera size={14} color="#0284c7" />
+                <span>Luyện AI</span>
+              </button>
+
+              {/* Nút Học Ngay (Chuyển sang Bước 1: Học cử chỉ) */}
+              <button
+                className="btn-pill btn-primary btn-sm"
+                style={{
+                  justifyContent: 'center',
+                  padding: '0.45rem 0.35rem',
+                  fontSize: '0.82rem',
+                  gap: '0.3rem',
+                  fontWeight: 800,
+                  width: '100%'
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleLearnWord(word);
+                }}
+                title="Học cử chỉ chi tiết (Bước 1)"
+              >
+                <BookOpen size={14} />
+                <span>Học ngay</span>
               </button>
             </div>
           </div>
@@ -142,6 +244,10 @@ export default function DictionaryView({ onStartPracticeWord }) {
           wordData={activeWordData}
           onClose={() => setActiveWordData(null)}
           onStartPractice={onStartPracticeWord}
+          onOpenLesson={(w) => {
+            setActiveWordData(null);
+            handleLearnWord(w);
+          }}
         />
       )}
     </div>

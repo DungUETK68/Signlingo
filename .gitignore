@@ -42,3 +42,13 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+
+# Media & Sample Videos (VSL400 dataset & uploads)
+*.mp4
+*.webm
+*.mov
+*.avi
+!frontend/public/chao.mp4
+frontend/public/uploads/*
+!frontend/public/uploads/.gitkeep
+

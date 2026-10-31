@@ -1,4 +1,5 @@
 // Dữ liệu mẫu chuẩn cho hệ thống Signlingo (Ngôn ngữ ký hiệu Việt Nam - VSL)
+import { VSL400_WORDS } from './vsl400Words.js';
 
 export const TOPICS = [
   {
@@ -45,17 +46,19 @@ export const TOPICS = [
     level: 'Sơ cấp (Level 2)',
     levelCode: 'elementary',
     icon: '👋',
-    description: 'Chào, Tạm biệt, Cảm ơn, Xin lỗi và hỏi thăm sức khỏe',
-    totalLessons: 12,
-    completedLessons: 10,
+    description: 'Chào, Tạm biệt, Cảm ơn, Xin lỗi, Giúp đỡ và hỏi thăm sức khỏe chuẩn VSL400',
+    totalLessons: 6,
+    completedLessons: 4,
     color: '#d97706',
     bgColor: '#fef3c7',
     accentColor: '#fbbf24',
     lessons: [
-      { id: 'greet-hello', title: 'Chào', description: 'Bàn tay mở chạm nhẹ thái dương và đưa nhẹ ra ngoài kèm nụ cười', duration: '3 phút', level: 'Dễ', completed: true, score: 94 },
-      { id: 'greet-thanks', title: 'Cảm ơn', description: 'Đặt đầu ngón tay lên cằm rồi hạ nhẹ bàn tay về phía trước', duration: '3 phút', level: 'Dễ', completed: true, score: 71 },
-      { id: 'greet-sorry', title: 'Xin lỗi', description: 'Bàn tay nắm lại, xoay tròn nhẹ nhàng trên ngực trái', duration: '4 phút', level: 'Trung bình', completed: true, score: 62 },
-      { id: 'greet-bye', title: 'Tạm biệt', description: 'Bàn tay nâng cao ngang vai, gập mở các ngón tay vẫy nhẹ', duration: '2 phút', level: 'Dễ', completed: true, score: 95 }
+      { id: 'greet-hello', title: 'Chào', description: 'Bàn tay mở chạm nhẹ thái dương và đưa nhẹ ra ngoài kèm nụ cười', duration: '2 phút', level: 'Dễ', completed: true, score: 94, videoUrl: '/chao.mp4' },
+      { id: 'vsl-cam-on', title: 'Cảm ơn', description: 'Đặt đầu ngón tay lên cằm rồi hạ nhẹ bàn tay về phía trước', duration: '2 phút', level: 'Dễ', completed: true, score: 97, videoUrl: '/vsl400_videos/cam_on_front.mp4' },
+      { id: 'vsl-xin-loi', title: 'Xin lỗi', description: 'Bàn tay nắm lại, xoay tròn nhẹ nhàng trên ngực trái', duration: '3 phút', level: 'Trung bình', completed: true, score: 95, videoUrl: '/vsl400_videos/xin_loi_front.mp4' },
+      { id: 'vsl-giup-do', title: 'Giúp đỡ', description: 'Bàn tay mở đặt dưới mu bàn tay còn lại đưa về phía trước hỗ trợ', duration: '3 phút', level: 'Trung bình', completed: true, score: 96, videoUrl: '/vsl400_videos/giup_do_front.mp4' },
+      { id: 'vsl-khoe', title: 'Khỏe', description: 'Hai bàn tay nắm gập vuông góc trước ngực thể hiện sức mạnh', duration: '2 phút', level: 'Dễ', completed: false, score: 0, videoUrl: '/vsl400_videos/khoe_front.mp4' },
+      { id: 'greet-bye', title: 'Tạm biệt', description: 'Bàn tay nâng cao ngang vai, gập mở các ngón tay vẫy nhẹ', duration: '2 phút', level: 'Dễ', completed: false, score: 0 }
     ]
   },
   {
@@ -64,16 +67,23 @@ export const TOPICS = [
     level: 'Sơ cấp (Level 2)',
     levelCode: 'elementary',
     icon: '👨‍👩‍👧‍👦',
-    description: 'Bố, Mẹ, Ông, Bà, Anh chị em và các mối quan hệ thân thuộc',
-    totalLessons: 14,
-    completedLessons: 8,
+    description: 'Bố, Mẹ, Ông bà, Anh chị em và các mối quan hệ thân thuộc',
+    totalLessons: 10,
+    completedLessons: 6,
     color: '#e11d48',
     bgColor: '#ffe4e6',
     accentColor: '#fb7185',
     lessons: [
-      { id: 'fam-dad', title: 'Bố / Cha', description: 'Ký hiệu ria mép kết hợp động tác trang trọng', duration: '3 phút', level: 'Dễ', completed: true, score: 89 },
-      { id: 'fam-mom', title: 'Mẹ', description: 'Ngón tay trỏ chạm nhẹ cạnh cằm hoặc dái tai biểu trưng cho khuyên tai', duration: '3 phút', level: 'Dễ', completed: true, score: 93 },
-      { id: 'fam-love', title: 'Gia đình hạnh phúc', description: 'Hai bàn tay tạo vòng tròn khép kín bao bọc', duration: '5 phút', level: 'Khó', completed: true, score: 68 }
+      { id: 'vsl-bo', title: 'Bố', description: 'Ký hiệu ria mép kết hợp động tác trang trọng', duration: '2 phút', level: 'Dễ', completed: true, score: 97, videoUrl: '/vsl400_videos/bo_front.mp4' },
+      { id: 'vsl-me', title: 'Mẹ', description: 'Ngón tay trỏ chạm nhẹ cạnh cằm hoặc dái tai biểu trưng cho khuyên tai', duration: '2 phút', level: 'Dễ', completed: true, score: 96, videoUrl: '/vsl400_videos/me_front.mp4' },
+      { id: 'vsl-anh', title: 'Anh', description: 'Ngón trỏ chỉ về người nam lớn tuổi hơn kết hợp cử chỉ trang trọng', duration: '2 phút', level: 'Dễ', completed: true, score: 95, videoUrl: '/vsl400_videos/anh_front.mp4' },
+      { id: 'vsl-chi', title: 'Chị', description: 'Cử chỉ tay vuốt tóc hoặc chạm tai biểu thị người nữ lớn tuổi hơn', duration: '2 phút', level: 'Dễ', completed: true, score: 96, videoUrl: '/vsl400_videos/chi_front.mp4' },
+      { id: 'vsl-em', title: 'Em', description: 'Bàn tay hạ thấp ngang ngực thể hiện người nhỏ tuổi hơn', duration: '2 phút', level: 'Dễ', completed: false, score: 0, videoUrl: '/vsl400_videos/em_front.mp4' },
+      { id: 'vsl-ong-noi', title: 'Ông nội', description: 'Ký hiệu vuốt chòm râu dài dưới cằm kết hợp chỉ bên nội', duration: '3 phút', level: 'Trung bình', completed: false, score: 0, videoUrl: '/vsl400_videos/ong_noi_front.mp4' },
+      { id: 'vsl-ba-noi', title: 'Bà nội', description: 'Ký hiệu búi tóc móm mém của người bà kính yêu', duration: '3 phút', level: 'Trung bình', completed: false, score: 0, videoUrl: '/vsl400_videos/ba_noi_front.mp4' },
+      { id: 'vsl-chu', title: 'Chú', description: 'Ký hiệu nam giới kèm vị trí xưng hô bậc em cha mẹ', duration: '2 phút', level: 'Dễ', completed: false, score: 0, videoUrl: '/vsl400_videos/chu_front.mp4' },
+      { id: 'vsl-co', title: 'Cô', description: 'Ký hiệu nữ giới kèm nét mặt tươi vui thể hiện bậc cô / dì', duration: '2 phút', level: 'Dễ', completed: false, score: 0, videoUrl: '/vsl400_videos/co_front.mp4' },
+      { id: 'vsl-bac', title: 'Bác', description: 'Ký hiệu biểu thị người lớn tuổi hơn cha mẹ một bậc', duration: '2 phút', level: 'Dễ', completed: false, score: 0, videoUrl: '/vsl400_videos/bac_front.mp4' }
     ]
   },
   {
@@ -82,14 +92,19 @@ export const TOPICS = [
     level: 'Trung cấp (Level 3)',
     levelCode: 'intermediate',
     icon: '💬',
-    description: 'Hỏi đường, Giờ giấc, Thời tiết, Cảm xúc và câu hỏi Yes/No',
-    totalLessons: 16,
-    completedLessons: 6,
+    description: 'Y tế, Trường học, Thời gian và các hội thoại đời sống',
+    totalLessons: 7,
+    completedLessons: 3,
     color: '#7c3aed',
     bgColor: '#ede9fe',
     accentColor: '#a78bfa',
     lessons: [
-      { id: 'daily-help', title: 'Bạn có cần giúp không?', description: 'Bàn tay phải mở ngửa đặt trên mu bàn tay trái đưa về phía đối diện', duration: '4 phút', level: 'Trung bình', completed: true, score: 85 },
+      { id: 'vsl-bac-si', title: 'Bác sĩ', description: 'Ngón tay gõ nhẹ lên cổ tay bắt mạch y tế', duration: '3 phút', level: 'Trung bình', completed: true, score: 96, videoUrl: '/vsl400_videos/bac_si_front.mp4' },
+      { id: 'vsl-benh-vien', title: 'Bệnh viện', description: 'Ký hiệu chữ thập đỏ trên cánh tay kết hợp mái nhà', duration: '3 phút', level: 'Trung bình', completed: true, score: 96, videoUrl: '/vsl400_videos/benh_vien_front.mp4' },
+      { id: 'vsl-hoc', title: 'Học', description: 'Mở tay như trang sách, tay kia nhặt kiến thức đưa lên trán', duration: '2 phút', level: 'Dễ', completed: true, score: 98, videoUrl: '/vsl400_videos/hoc_front.mp4' },
+      { id: 'vsl-truong-hoc', title: 'Trường học', description: 'Ghép ký hiệu "Nhà" và ký hiệu "Học" biểu thị trường', duration: '3 phút', level: 'Trung bình', completed: false, score: 0, videoUrl: '/vsl400_videos/truong_hoc_front.mp4' },
+      { id: 'vsl-bay-gio', title: 'Bây giờ', description: 'Hai bàn tay uốn cong ngửa nhẹ hạ xuống dứt khoát trước ngực', duration: '2 phút', level: 'Dễ', completed: false, score: 0, videoUrl: '/vsl400_videos/bay_gio_front.mp4' },
+      { id: 'daily-help', title: 'Bạn có cần giúp không?', description: 'Bàn tay phải mở ngửa đặt trên mu bàn tay trái đưa về phía đối diện', duration: '4 phút', level: 'Trung bình', completed: false, score: 0 },
       { id: 'daily-time', title: 'Mấy giờ rồi?', description: 'Ngón trỏ gõ nhẹ lên cổ tay trái biểu thị mặt đồng hồ', duration: '3 phút', level: 'Dễ', completed: false, score: 0 }
     ]
   },
@@ -99,15 +114,39 @@ export const TOPICS = [
     level: 'Trung cấp (Level 3)',
     levelCode: 'intermediate',
     icon: '🍲',
-    description: 'Tên các món ăn Việt Nam: Phở, Bánh mì, Cơm, Nước khoáng, Trà sữa',
-    totalLessons: 15,
-    completedLessons: 5,
+    description: 'Phở, Bún, Bánh bao, Thịt, Trà, Sữa và cử chỉ ăn uống hàng ngày',
+    totalLessons: 9,
+    completedLessons: 4,
     color: '#0d9488',
     bgColor: '#ccfbf1',
     accentColor: '#2dd4bf',
     lessons: [
-      { id: 'food-pho', title: 'Phở bò', description: 'Động tác dùng đũa gắp sợi phở đưa lên miệng', duration: '4 phút', level: 'Trung bình', completed: true, score: 90 },
-      { id: 'food-water', title: 'Uống nước', description: 'Bàn tay hình chữ C đưa lên miệng mô phỏng nâng ly nước', duration: '3 phút', level: 'Dễ', completed: true, score: 97 }
+      { id: 'vsl-pho', title: 'Phở', description: 'Tay trái khum hình bát, tay phải chụm ngón gắp đưa lên miệng', duration: '3 phút', level: 'Trung bình', completed: true, score: 97, videoUrl: '/vsl400_videos/pho_front.mp4' },
+      { id: 'vsl-bun', title: 'Bún', description: 'Ký hiệu sợi bún mềm cuộn tròn gắp ăn kèm nước dùng', duration: '3 phút', level: 'Trung bình', completed: true, score: 96, videoUrl: '/vsl400_videos/bun_front.mp4' },
+      { id: 'vsl-an', title: 'Ăn', description: 'Các ngón tay chụm lại đưa vào sát miệng 2 lần', duration: '2 phút', level: 'Dễ', completed: true, score: 98, videoUrl: '/vsl400_videos/an_front.mp4' },
+      { id: 'vsl-uong', title: 'Uống', description: 'Bàn tay cong chữ C như cầm cốc nâng lên miệng', duration: '2 phút', level: 'Dễ', completed: true, score: 98, videoUrl: '/vsl400_videos/uong_front.mp4' },
+      { id: 'vsl-nuoc', title: 'Nước', description: 'Ngón tay trỏ chạm nhẹ cạnh cằm hoặc môi biểu thị chất lỏng', duration: '2 phút', level: 'Dễ', completed: false, score: 0, videoUrl: '/vsl400_videos/nuoc_front.mp4' },
+      { id: 'vsl-banh-bao', title: 'Bánh bao', description: 'Hai bàn tay chụm tròn lại tạo hình chiếc bánh bao xốp', duration: '3 phút', level: 'Trung bình', completed: false, score: 0, videoUrl: '/vsl400_videos/banh_bao_front.mp4' },
+      { id: 'vsl-thit', title: 'Thịt', description: 'Ngón cái và ngón trỏ véo nhẹ phần thịt mu bàn tay', duration: '2 phút', level: 'Dễ', completed: false, score: 0, videoUrl: '/vsl400_videos/thit_front.mp4' },
+      { id: 'vsl-tra', title: 'Trà', description: 'Tay cầm tách trà nhỏ đưa lên miệng nhấp nháp thanh lịch', duration: '2 phút', level: 'Dễ', completed: false, score: 0, videoUrl: '/vsl400_videos/tra_front.mp4' },
+      { id: 'vsl-sua', title: 'Sữa', description: 'Hai tay nắm mở nhịp nhàng mô phỏng hành động vắt sữa', duration: '2 phút', level: 'Dễ', completed: false, score: 0, videoUrl: '/vsl400_videos/sua_front.mp4' }
+    ]
+  },
+  {
+    id: 'sports',
+    title: 'Thể thao & Giải trí',
+    level: 'Trung cấp (Level 3)',
+    levelCode: 'intermediate',
+    icon: '⚽',
+    description: 'Bóng đá, Bơi lội và các hoạt động thể chất rèn luyện sức khỏe',
+    totalLessons: 2,
+    completedLessons: 1,
+    color: '#0284c7',
+    bgColor: '#e0f2fe',
+    accentColor: '#38bdf8',
+    lessons: [
+      { id: 'vsl-bong-da', title: 'Bóng đá', description: 'Tay trái khum tròn quả bóng, tay phải hai ngón chân đá dứt khoát', duration: '3 phút', level: 'Trung bình', completed: true, score: 96, videoUrl: '/vsl400_videos/bong_da_front.mp4' },
+      { id: 'vsl-boi-loi', title: 'Bơi lội', description: 'Hai cánh tay quạt so le về phía trước như động tác bơi sải', duration: '3 phút', level: 'Trung bình', completed: false, score: 0, videoUrl: '/vsl400_videos/boi_loi_front.mp4' }
     ]
   }
 ];
@@ -116,6 +155,7 @@ export const DICTIONARY_WORDS = [
   {
     id: 'w-hello',
     word: 'Chào',
+    slug: 'chao',
     topic: 'greeting',
     topicLabel: 'Chào hỏi',
     dialect: 'Toàn quốc',
@@ -125,51 +165,23 @@ export const DICTIONARY_WORDS = [
     handShape: 'Bàn tay mở 5 ngón khép tự nhiên (Open-B)',
     movement: 'Chạm thái dương -> Đưa về phía đối tác (Vòng cung nhỏ)',
     faceExpression: 'Mắt nhìn đối diện, nụ cười vui tươi',
-    videoFront: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80',
-    videoSide: 'https://images.unsplash.com/photo-1580894732454-defbe5ff2886?auto=format&fit=crop&w=800&q=80',
+    videoFront: '/chao.mp4',
+    videoSide: '/chao.mp4',
     benchmarkId: 'BM_HELLO_01',
     benchmarkLandmarksExtracted: true,
     benchmarkAccuracy: 98.4
   },
-  {
-    id: 'w-thanks',
-    word: 'Cảm ơn',
-    topic: 'greeting',
-    topicLabel: 'Chào hỏi',
-    dialect: 'Miền Bắc',
-    difficulty: 'Dễ',
-    description: 'Đặt các đầu ngón tay phải khép lại lên cằm, sau đó hạ bàn tay đưa thẳng nhẹ nhàng về phía trước đối diện.',
-    details: 'Động tác biểu thị sự biết ơn xuất phát từ tấm lòng. Chú ý giữ lưng thẳng và hạ bàn tay dứt khoát nhưng mềm mại.',
-    handShape: 'Bàn tay phẳng khép ngón (Flat hand)',
-    movement: 'Cằm -> Đưa xuôi về phía trước ngang ngực',
-    faceExpression: 'Gật đầu nhẹ, ánh mắt chân thành',
-    videoFront: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
-    videoSide: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80',
-    benchmarkId: 'BM_THANKS_01',
+  ...VSL400_WORDS.map(w => ({
+    ...w,
     benchmarkLandmarksExtracted: true,
-    benchmarkAccuracy: 97.2
-  },
-  {
-    id: 'w-sorry',
-    word: 'Xin lỗi',
-    topic: 'greeting',
-    topicLabel: 'Chào hỏi',
-    dialect: 'Toàn quốc',
-    difficulty: 'Trung bình',
-    description: 'Nắm bàn tay phải thành hình quả đấm chữ S, đặt lên ngực trái và xoay tròn nhẹ nhàng theo chiều kim đồng hồ 2 vòng.',
-    details: 'Động tác này thể hiện tâm trạng hối lỗi sâu sắc từ trái tim.',
-    handShape: 'Bàn tay nắm chữ S (Fist-S)',
-    movement: 'Xoay tròn 2 vòng quanh vùng tim/ngực trái',
-    faceExpression: 'Nét mặt biểu cảm hối lỗi, hơi cúi đầu',
-    videoFront: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80',
-    videoSide: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80',
-    benchmarkId: 'BM_SORRY_01',
-    benchmarkLandmarksExtracted: true,
-    benchmarkAccuracy: 95.8
-  },
+    handShape: w.handShape || 'Bàn tay mở hoặc định hình chuẩn VSL400',
+    movement: w.movement || 'Chuyển động dứt khoát theo video mẫu VSL400',
+    faceExpression: w.faceExpression || 'Tự nhiên, mắt nhìn thẳng thân thiện'
+  })),
   {
     id: 'w-bye',
     word: 'Tạm biệt',
+    slug: 'tam_biet',
     topic: 'greeting',
     topicLabel: 'Chào hỏi',
     dialect: 'Toàn quốc',
@@ -186,44 +198,9 @@ export const DICTIONARY_WORDS = [
     benchmarkAccuracy: 99.1
   },
   {
-    id: 'w-mom',
-    word: 'Mẹ',
-    topic: 'family',
-    topicLabel: 'Gia đình',
-    dialect: 'Miền Bắc',
-    difficulty: 'Dễ',
-    description: 'Ngón trỏ tay phải cong nhẹ hoặc chạm vào cạnh cằm / dái tai, thể hiện hình ảnh người phụ nữ đeo khuyên tai.',
-    details: 'Ở phương ngữ miền Nam, có thể chạm ngón cái vào cằm với bàn tay mở 5 ngón.',
-    handShape: 'Ngón trỏ cong nhẹ hoặc Bàn tay 5 ngón mở',
-    movement: 'Chạm nhẹ 2 nhịp vào cạnh cằm',
-    faceExpression: 'Ánh mắt trìu mến ấm áp',
-    videoFront: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80',
-    videoSide: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80',
-    benchmarkId: 'BM_MOM_01',
-    benchmarkLandmarksExtracted: true,
-    benchmarkAccuracy: 96.5
-  },
-  {
-    id: 'w-dad',
-    word: 'Bố / Cha',
-    topic: 'family',
-    topicLabel: 'Gia đình',
-    dialect: 'Toàn quốc',
-    difficulty: 'Dễ',
-    description: 'Ngón trỏ và ngón cái tay phải tạo đường ria mép trên nhân trung hoặc chạm đầu ngón cái vào trán.',
-    details: 'Biểu tượng ria mép truyền thống tượng trưng cho người cha đáng kính.',
-    handShape: 'Ngón cái & ngón trỏ khép mở nhẹ',
-    movement: 'Vuốt nhẹ sang 2 bên nhân trung',
-    faceExpression: 'Trang trọng, tôn kính',
-    videoFront: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80',
-    videoSide: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80',
-    benchmarkId: 'BM_DAD_01',
-    benchmarkLandmarksExtracted: true,
-    benchmarkAccuracy: 94.7
-  },
-  {
     id: 'w-family',
     word: 'Gia đình',
+    slug: 'gia_dinh',
     topic: 'family',
     topicLabel: 'Gia đình',
     dialect: 'Toàn quốc',
@@ -240,44 +217,9 @@ export const DICTIONARY_WORDS = [
     benchmarkAccuracy: 92.3
   },
   {
-    id: 'w-pho',
-    word: 'Phở',
-    topic: 'food',
-    topicLabel: 'Ẩm thực',
-    dialect: 'Toàn quốc',
-    difficulty: 'Trung bình',
-    description: 'Tay trái khum lại giả làm bát phở, tay phải chụm hai ngón tay trỏ và giữa làm đũa gắp thức ăn đưa lên miệng.',
-    details: 'Món ăn quốc hồn quốc túy của Việt Nam với cử chỉ gắp sợi phở đặc trưng.',
-    handShape: 'Tay trái cong chữ C (Bát), Tay phải hai ngón kẹp (Đũa)',
-    movement: 'Gắp từ bát đưa lên sát miệng 2 lần',
-    faceExpression: 'Thích thú, ngon miệng',
-    videoFront: '/sign_pho.jpg',
-    videoSide: '/sign_pho.jpg',
-    benchmarkId: 'BM_PHO_01',
-    benchmarkLandmarksExtracted: true,
-    benchmarkAccuracy: 95.1
-  },
-  {
-    id: 'w-water',
-    word: 'Uống nước',
-    topic: 'food',
-    topicLabel: 'Ẩm thực',
-    dialect: 'Toàn quốc',
-    difficulty: 'Dễ',
-    description: 'Bàn tay phải khum cong chữ C như đang cầm chiếc cốc, đưa lên miệng và hơi ngửa nhẹ đầu ra sau.',
-    details: 'Động tác rất tự nhiên và dễ nhớ, thường học ở những bài giao tiếp đầu tiên.',
-    handShape: 'Bàn tay cong chữ C cầm cốc',
-    movement: 'Nâng lên miệng và nghiêng nhẹ',
-    faceExpression: 'Tự nhiên',
-    videoFront: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=80',
-    videoSide: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80',
-    benchmarkId: 'BM_WATER_01',
-    benchmarkLandmarksExtracted: true,
-    benchmarkAccuracy: 99.0
-  },
-  {
     id: 'w-alpha-a',
     word: 'Chữ cái A',
+    slug: 'chu_cai_a',
     topic: 'alphabet',
     topicLabel: 'Bảng chữ cái',
     dialect: 'Toàn quốc',
@@ -296,6 +238,7 @@ export const DICTIONARY_WORDS = [
   {
     id: 'w-num-5',
     word: 'Số 5',
+    slug: 'so_5',
     topic: 'numbers',
     topicLabel: 'Số đếm',
     dialect: 'Toàn quốc',

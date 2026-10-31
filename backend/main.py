@@ -13,7 +13,7 @@ import uvicorn
 
 app = FastAPI(
     title="Signlingo AI Scoring Service",
-    description="Backend API đánh giá cử chỉ Ngôn ngữ Ký hiệu 'Chào' chuẩn VSL bằng FastDTW",
+    description="Backend API đánh giá cử chỉ Ngôn ngữ Ký hiệu chuẩn VSL",
     version="1.0.0"
 )
 
@@ -25,9 +25,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Nạp khuôn mẫu chuẩn và metadata của từ "Chào"
+# Nạp khuôn mẫu chuẩn và metadata của từ "Chào" và thư viện VSL400 benchmarks
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 MODELS_DIR = os.path.join(CURRENT_DIR, "models")
+BENCHMARKS_DIR = os.path.join(MODELS_DIR, "benchmarks")
 
 REF_SEQ = None
 META = {}
@@ -45,6 +46,29 @@ def load_benchmark():
             print(f"Error loading {benchmark_file}: {e}")
 
 load_benchmark()
+
+def get_word_benchmark(word_slug: str):
+    """Nạp benchmark động theo slug từ vựng VSL400"""
+    clean_slug = (word_slug or "chao").lower().replace("-", "_").strip()
+    
+    # 1. Thử tìm trong benchmarks directory
+    if os.path.exists(BENCHMARKS_DIR):
+        npy_path = os.path.join(BENCHMARKS_DIR, f"{clean_slug}_benchmark.npy")
+        meta_path = os.path.join(BENCHMARKS_DIR, f"{clean_slug}_meta.json")
+        if os.path.exists(npy_path) and os.path.exists(meta_path):
+            try:
+                seq = np.load(npy_path)
+                with open(meta_path, "r", encoding="utf-8") as jf:
+                    meta = json.load(jf)
+                return seq, meta
+            except Exception as e:
+                print(f"Error loading {npy_path}: {e}")
+
+    # 2. Fallback về chao_benchmark
+    global REF_SEQ, META
+    if REF_SEQ is None:
+        load_benchmark()
+    return REF_SEQ, META
 
 # Chuỗi xương từng ngón tay theo MediaPipe (gốc khớp nối -> đầu ngón)
 FINGER_CHAINS = {
@@ -92,7 +116,7 @@ def extract_dominant_hand(seq: np.ndarray, hand_side: str) -> np.ndarray:
 
 def get_finger_extension(hand: np.ndarray, chain: list) -> float:
     """Tính độ duỗi thẳng của ngón tay (tỷ lệ khoảng cách thẳng / độ dài các đốt)
-    - 0.93 - 1.0: Ngón tay mở thẳng chuẩn (Open-B trong từ 'Chào')
+    - 0.93 - 1.0: Ngón tay mở thẳng chuẩn (Open-B)
     - < 0.85: Ngón tay bị co gập hoặc quắp
     """
     p_mcp, p_tip = chain[1], chain[-1]
@@ -127,217 +151,344 @@ def count_macro_oscillations(signal: np.ndarray, min_amplitude: float = 0.08) ->
                 extreme_val = val
     return len(turning_points)
 
-def process_evaluation(landmarks: List[List[List[float]]]) -> dict:
-    global REF_SEQ, META
-    if REF_SEQ is None or not META:
-        load_benchmark()
+def detect_active_motion_range(hand_seq: np.ndarray, fps: float = 25.0):
+    """
+    Tự động phát hiện khoảng thời gian thực hiện cử chỉ [start_frame, end_frame].
+    Dựa trên vận tốc cổ tay và chuyển động của các ngón tay.
+    """
+    T = len(hand_seq)
+    if T < 5:
+        return 0, max(0, T - 1), 0.0, round(max(0, T - 1) / max(1.0, fps), 2)
+
+    wrist_pts = hand_seq[:, 0, :2]
+    wrist_vel = np.zeros(T)
+    for t in range(1, T):
+        wrist_vel[t] = np.linalg.norm(wrist_pts[t] - wrist_pts[t-1])
+
+    tip_indices = [4, 8, 12, 16, 20]
+    finger_vel = np.zeros(T)
+    for t in range(1, T):
+        f_diff = sum(np.linalg.norm(hand_seq[t, tip] - hand_seq[t-1, tip]) for tip in tip_indices)
+        finger_vel[t] = f_diff / 5.0
+
+    motion_energy = wrist_vel * 1.5 + finger_vel
+    window_size = 3
+    smooth_energy = np.convolve(motion_energy, np.ones(window_size)/window_size, mode='same')
+
+    base_thresh = float(np.mean(smooth_energy) + 0.25 * np.std(smooth_energy))
+    active_thresh = max(0.012, base_thresh)
+
+    active_frames = np.where(smooth_energy >= active_thresh)[0]
+    if len(active_frames) == 0:
+        valid_y = np.where(np.any(hand_seq != 0, axis=(1, 2)))[0]
+        if len(valid_y) > 0:
+            return int(valid_y[0]), int(valid_y[-1]), round(valid_y[0]/fps, 2), round(valid_y[-1]/fps, 2)
+        return 0, T - 1, 0.0, round((T - 1)/fps, 2)
+
+    start_frame = max(0, int(active_frames[0]) - 2)
+    end_frame = min(T - 1, int(active_frames[-1]) + 2)
+
+    start_sec = round(start_frame / fps, 2)
+    end_sec = round(end_frame / fps, 2)
+    return start_frame, end_frame, start_sec, end_sec
+
+def process_evaluation(landmarks: List[List[List[float]]], word_slug: str = "chao") -> dict:
+    clean_slug = (word_slug or "chao").lower().replace("-", "_").strip()
+    ref_seq, meta = get_word_benchmark(clean_slug)
+    word_display = meta.get("word", meta.get("gloss", clean_slug.capitalize()))
+    ref_fps = float(meta.get("fps", 25.0))
+    user_fps = 25.0
 
     usr_raw = np.array(landmarks, dtype=np.float32)
     if usr_raw.shape[0] < 5:
         return {
+            "word": word_display,
+            "word_slug": clean_slug,
             "overall_score": 0.0,
             "passed": False,
+            "dtw_score": 0.0,
             "angle_score": 0.0,
             "position_score": 0.0,
+            "user_action_start_sec": 0.0,
+            "ref_action_start_sec": 0.0,
+            "time_offset_sec": 0.0,
             "bad_joints": list(range(21)),
             "feedbacks": ["Chưa nhận diện đủ chuyển động tay. Hãy đưa bàn tay vào khung hình!"],
         }
 
     usr_seq = normalize_spatial(usr_raw)
     usr_pose = usr_seq[:, :33, :]
+    T_u = len(usr_seq)
 
-    ref_hand_side = META.get("dominant_hand", "right") if META else "right"
-    if REF_SEQ is not None:
-        ref_hand_seq = extract_dominant_hand(REF_SEQ, ref_hand_side)
-    else:
-        ref_hand_seq = usr_seq[:, 54:75, :]
+    # 1. Nhận diện tay hoạt động chính & cử động 2 tay của người học
+    u_lh_valid = [t for t in range(T_u) if np.any(usr_seq[t, 33:54] != 0)]
+    u_rh_valid = [t for t in range(T_u) if np.any(usr_seq[t, 54:75] != 0)]
 
-    # Nhận diện tay hoạt động chính của người học trên Webcam
-    usr_lh_active = np.sum(np.any(usr_seq[:, 33:54, :] != 0, axis=2))
-    usr_rh_active = np.sum(np.any(usr_seq[:, 54:75, :] != 0, axis=2))
-    usr_side = "right" if usr_rh_active >= usr_lh_active else "left"
-    usr_hand_seq = extract_dominant_hand(usr_seq, usr_side).copy()
+    u_lh_disp = float(np.max([np.linalg.norm(usr_seq[t, 33, :2] - usr_seq[u_lh_valid[0], 33, :2]) for t in u_lh_valid])) if len(u_lh_valid) > 1 else 0.0
+    u_rh_disp = float(np.max([np.linalg.norm(usr_seq[t, 54, :2] - usr_seq[u_rh_valid[0], 54, :2]) for t in u_rh_valid])) if len(u_rh_valid) > 1 else 0.0
 
-    # Lật trục X nếu thực hiện bằng tay trái để đồng bộ với khuôn mẫu chuẩn
-    if usr_side != ref_hand_side:
-        usr_hand_seq[:, :, 0] = -usr_hand_seq[:, :, 0]
+    u_is_two_handed = u_lh_disp >= 0.50 and u_rh_disp >= 0.50
+    u_side = "right" if u_rh_disp >= u_lh_disp else "left"
+    u_hand_seq = extract_dominant_hand(usr_seq, u_side).copy()
 
-    # 1. Trích xuất phân đoạn động tác chính (Active Gesture Segmentation)
-    # Lọc các khung hình bàn tay được nâng lên thực hiện động tác
-    wrists_y = usr_hand_seq[:, 0, 1]
-    valid_frames = np.where(np.any(usr_hand_seq != 0, axis=(1, 2)))[0]
+    # Active gesture segmentation của người học
+    wrists_y = u_hand_seq[:, 0, 1]
+    valid_frames = np.where(np.any(u_hand_seq != 0, axis=(1, 2)))[0]
     if len(valid_frames) >= 5:
-        sub_wrists_y = wrists_y[valid_frames]
-        min_y = np.min(sub_wrists_y)
-        max_y = np.max(sub_wrists_y)
-        y_threshold = min_y + 0.60 * (max_y - min_y) if (max_y - min_y) > 0.15 else max_y + 0.1
-        active_indices = [idx for idx in valid_frames if wrists_y[idx] <= y_threshold]
-        if len(active_indices) >= 5:
-            active_usr_hand = usr_hand_seq[active_indices]
-            active_usr_pose = usr_pose[active_indices]
-        else:
-            active_usr_hand = usr_hand_seq[valid_frames]
-            active_usr_pose = usr_pose[valid_frames]
+        sub_y = wrists_y[valid_frames]
+        min_y = np.min(sub_y)
+        max_y = np.max(sub_y)
+        y_thresh = min_y + 0.60 * (max_y - min_y) if (max_y - min_y) > 0.15 else max_y + 0.1
+        active_indices = [idx for idx in valid_frames if wrists_y[idx] <= y_thresh]
+        if len(active_indices) < 3: active_indices = valid_frames
     else:
-        active_usr_hand = usr_hand_seq
-        active_usr_pose = usr_pose
+        active_indices = valid_frames if len(valid_frames) > 0 else list(range(T_u))
 
-    # 2. Đánh giá hình dáng bàn tay nghiêm ngặt (Handshape: 5 ngón mở thẳng Open-B)
-    finger_scores = {}
-    bad_joints = []
+    active_u_hand = u_hand_seq[active_indices]
+    active_u_pose = usr_pose[active_indices]
+
+    # 2. Phân tích đặc trưng của khuôn mẫu chuẩn (Benchmark Reference)
+    ref_norm = normalize_spatial(ref_seq)
+    T_r = len(ref_norm)
+    r_lh_valid = [t for t in range(T_r) if np.any(ref_norm[t, 33:54] != 0)]
+    r_rh_valid = [t for t in range(T_r) if np.any(ref_norm[t, 54:75] != 0)]
+
+    r_lh_disp = float(np.max([np.linalg.norm(ref_norm[t, 33, :2] - ref_norm[r_lh_valid[0], 33, :2]) for t in r_lh_valid])) if len(r_lh_valid) > 1 else 0.0
+    r_rh_disp = float(np.max([np.linalg.norm(ref_norm[t, 54, :2] - ref_norm[r_rh_valid[0], 54, :2]) for t in r_rh_valid])) if len(r_rh_valid) > 1 else 0.0
+
+    r_is_two_handed = r_lh_disp >= 0.70 and r_rh_disp >= 0.70
+    r_side = "right" if r_rh_disp >= r_lh_disp else "left"
+
+    r_hand_seq = extract_dominant_hand(ref_norm, r_side)
+    r_wrists_y = r_hand_seq[:, 0, 1]
+    r_valid_frames = np.where(np.any(r_hand_seq != 0, axis=(1, 2)))[0]
+    if len(r_valid_frames) >= 5:
+        r_sub_y = r_wrists_y[r_valid_frames]
+        r_min_y = np.min(r_sub_y)
+        r_max_y = np.max(r_sub_y)
+        r_thresh_y = r_min_y + 0.60 * (r_max_y - r_min_y) if (r_max_y - r_min_y) > 0.15 else r_max_y + 0.1
+        r_active_idx = [idx for idx in r_valid_frames if r_wrists_y[idx] <= r_thresh_y]
+        if len(r_active_idx) < 3: r_active_idx = r_valid_frames
+    else:
+        r_active_idx = r_valid_frames if len(r_valid_frames) > 0 else list(range(T_r))
+
+    active_r_hand = r_hand_seq[r_active_idx]
+
+    # Tính thời gian bắt đầu hành động cho Tua lại so sánh (FastDTW Synchronization)
+    u_start, u_end, user_action_start_sec, user_action_end_sec = detect_active_motion_range(u_hand_seq, fps=user_fps)
+    r_start, r_end, ref_action_start_sec, ref_action_end_sec = detect_active_motion_range(r_hand_seq, fps=ref_fps)
+    time_offset_sec = round(user_action_start_sec - ref_action_start_sec, 2)
+
     feedbacks = []
+    bad_joints = []
 
-    for f_name, chain in FINGER_CHAINS.items():
-        exts = [get_finger_extension(h, chain) for h in active_usr_hand if np.any(h != 0)]
-        avg_ext = float(np.mean(exts)) if exts else 0.5
-        
-        # Tiêu chuẩn chấm khắt khe (chỉ duỗi thẳng thực sự mới đạt >= 90%):
-        # >= 0.93: Duỗi thẳng chuẩn (92 - 100%)
-        # 0.84 - 0.93: Cong nhẹ (72 - 91%)
-        # 0.70 - 0.84: Gập rõ rệt (50 - 71%)
-        # < 0.70: Co quắp (< 50%)
-        if avg_ext >= 0.93:
-            score = 92.0 + (avg_ext - 0.93) / 0.07 * 8.0
-        elif avg_ext >= 0.84:
-            score = 72.0 + (avg_ext - 0.84) / 0.09 * 19.0
-        elif avg_ext >= 0.70:
-            score = 50.0 + (avg_ext - 0.70) / 0.14 * 21.0
-        else:
-            score = max(15.0, avg_ext / 0.70 * 48.0)
-
-        score = min(100.0, round(score, 1))
-        finger_scores[f_name] = score
-        
-        # Điểm dưới 85% bị coi là chưa chuẩn và đánh dấu đỏ
-        if score < 85.0:
-            bad_joints.extend(chain[1:])
-            feedbacks.append(f"{f_name} chưa duỗi thẳng chuẩn xác ({score}%)")
-
-    angle_score = round(float(np.mean(list(finger_scores.values()))), 1)
-
-    # 3. Đánh giá vị trí tiếp xúc thái dương khắt khe (Location: Temple Proximity)
-    # Trong VSL "Chào", ngón tay PHẢI chạm hoặc tiếp cận sát vùng thái dương
-    temple_dists = []
-    for t_idx, h in enumerate(active_usr_hand):
-        p = active_usr_pose[t_idx] if t_idx < len(active_usr_pose) else np.zeros((33, 3))
-        # Xác định vị trí thái dương theo bên tay thực hiện
-        if usr_side == "right":
-            if np.any(p[5] != 0) and np.any(p[8] != 0):
-                temple_pos = (p[5][:2] + p[8][:2]) / 2.0
-            elif np.any(p[0] != 0):
-                temple_pos = p[0][:2] + np.array([-0.25, -0.15])
+    # =========================================================================
+    # 3A. ĐÁNH GIÁ CHUẨN XÁC RIÊNG CHO TỪ "CHÀO" (CHẶT CHẼ HƠN THEO YÊU CẦU)
+    # =========================================================================
+    if clean_slug == "chao":
+        finger_scores = {}
+        # Đánh giá 5 ngón mở thẳng Open-B chuẩn
+        for f_name, chain in FINGER_CHAINS.items():
+            exts = [get_finger_extension(h, chain) for h in active_u_hand if np.any(h != 0)]
+            avg_ext = float(np.mean(exts)) if exts else 0.5
+            if avg_ext >= 0.93:
+                sc = 90.0 + (avg_ext - 0.93) / 0.07 * 10.0
+            elif avg_ext >= 0.85:
+                sc = 70.0 + (avg_ext - 0.85) / 0.08 * 19.0
+            elif avg_ext >= 0.72:
+                sc = 50.0 + (avg_ext - 0.72) / 0.13 * 19.0
             else:
-                temple_pos = np.array([-0.25, -0.9])
-        else:
-            if np.any(p[2] != 0) and np.any(p[7] != 0):
-                temple_pos = (p[2][:2] + p[7][:2]) / 2.0
-            elif np.any(p[0] != 0):
-                temple_pos = p[0][:2] + np.array([0.25, -0.15])
+                sc = max(15.0, avg_ext / 0.72 * 48.0)
+            sc = min(100.0, round(sc, 1))
+            finger_scores[f_name] = sc
+            if sc < 80.0:
+                bad_joints.extend(chain[1:])
+                feedbacks.append(f"{f_name} chưa duỗi thẳng chuẩn xác ({sc}%)")
+
+        angle_score = round(float(np.mean(list(finger_scores.values()))), 1)
+
+        # Cự ly chạm thái dương (chấm chặt hơn, giảm dung sai khoảng cách Euclidean)
+        temple_dists = []
+        for t_idx, h in enumerate(active_u_hand):
+            p = active_u_pose[t_idx] if t_idx < len(active_u_pose) else np.zeros((33, 3))
+            if u_side == "right":
+                temple_pos = (p[5][:2] + p[8][:2]) / 2.0 if (np.any(p[5] != 0) and np.any(p[8] != 0)) else np.array([-0.25, -0.9])
             else:
-                temple_pos = np.array([0.25, -0.9])
+                temple_pos = (p[2][:2] + p[7][:2]) / 2.0 if (np.any(p[2] != 0) and np.any(p[7] != 0)) else np.array([0.25, -0.9])
 
-        # Kiểm tra cự ly từ đầu ngón trỏ (8) và ngón giữa (12) tới thái dương
-        # Trong VSL 'Chào', ngón tay chạm thái dương (ngang đuôi mắt hoặc cao hơn)
-        # Nếu tay ở má/miệng/cằm (y > temple_pos[1] + 0.04), áp dụng hệ số phạt độ cao khắt khe
-        frame_dists = []
-        for tip_i in [8, 12]:
-            tip_pos = h[tip_i][:2]
-            raw_d = float(np.linalg.norm(tip_pos - temple_pos))
-            y_below = max(0.0, float(tip_pos[1] - (temple_pos[1] + 0.04)))
-            eff_d = raw_d + y_below * 4.0
-            frame_dists.append(eff_d)
-        temple_dists.append(min(frame_dists))
+            f_dists = [float(np.linalg.norm(h[tip_i][:2] - temple_pos)) + max(0.0, float(h[tip_i][1] - (temple_pos[1] + 0.04))) * 4.0 for tip_i in [8, 12]]
+            temple_dists.append(min(f_dists))
 
-    min_temple_dist = float(np.min(temple_dists)) if temple_dists else 1.0
+        min_temple_dist = float(np.min(temple_dists)) if temple_dists else 1.0
 
-    # Chấm điểm độ tiếp cận thái dương (Temple Score cực kỳ khắt khe):
-    # <= 0.26: Đã chạm hoặc áp sát thái dương chuẩn VSL -> 95 - 100%
-    # 0.26 - 0.34: Hơi xa thái dương một chút -> 75 - 89%
-    # 0.34 - 0.50: Ở vùng má / tai / miệng hoặc lệch ra ngoài không trung -> 35 - 65%
-    # > 0.50: Cách xa thái dương (ngực, cằm hoặc vẫy tự do) -> 10 - 30%
-    if min_temple_dist <= 0.26:
-        temple_loc_score = 95.0 + min(5.0, (0.26 - min_temple_dist) * 35.0)
-    elif min_temple_dist <= 0.34:
-        temple_loc_score = 75.0 + (0.34 - min_temple_dist) / 0.08 * 14.0
-        feedbacks.append("Đầu ngón tay chưa chạm sát vào vùng thái dương (cần áp sát đuôi mắt/thái dương trước khi vươn ra)")
-    elif min_temple_dist <= 0.50:
-        temple_loc_score = 35.0 + (0.50 - min_temple_dist) / 0.16 * 35.0
-        feedbacks.append("Vị trí tay đang ở vùng má/miệng/tai hoặc lệch ra ngoài thay vì thái dương (ký hiệu 'Chào' bắt buộc chạm thái dương)")
+        # Ngưỡng Euclidean chặt chẽ:
+        # <= 0.20: Chạm chuẩn sát thái dương -> 92 - 100%
+        # 0.20 - 0.28: Hơi xa thái dương -> 70 - 89%
+        # 0.28 - 0.42: Ở má / miệng / lệch ra ngoài -> 35 - 69%
+        # > 0.42: Không chạm thái dương -> 10 - 30%
+        if min_temple_dist <= 0.20:
+            temple_loc_score = 92.0 + min(8.0, (0.20 - min_temple_dist) * 45.0)
+        elif min_temple_dist <= 0.28:
+            temple_loc_score = 70.0 + (0.28 - min_temple_dist) / 0.08 * 21.0
+            feedbacks.append("Đầu ngón tay chưa chạm sát vào vùng thái dương (cần áp sát đuôi mắt/thái dương trước khi vươn ra)")
+        elif min_temple_dist <= 0.42:
+            temple_loc_score = 35.0 + (0.42 - min_temple_dist) / 0.14 * 34.0
+            feedbacks.append("Vị trí tay đang ở vùng má/miệng hoặc lệch ra ngoài thay vì thái dương")
+        else:
+            temple_loc_score = max(10.0, 30.0 - (min_temple_dist - 0.42) * 40.0)
+            feedbacks.append("Chưa đưa tay lên vùng thái dương (đặc trưng cốt lõi của ký hiệu 'Chào')")
+
+        # Cự ly vươn ra ngoài dứt khoát
+        peak_dist = float(np.max(temple_dists)) if temple_dists else 0.5
+        stroke_range = peak_dist - min_temple_dist
+        if stroke_range >= 0.26:
+            stroke_score = 90.0 + min(10.0, (stroke_range - 0.26) * 40.0)
+        elif stroke_range >= 0.16:
+            stroke_score = 65.0 + (stroke_range - 0.16) / 0.10 * 24.0
+            feedbacks.append("Động tác vươn tay ra ngoài còn hơi ngắn, hãy đưa dứt khoát hơn")
+        else:
+            stroke_score = 30.0
+            feedbacks.append("Chưa có động tác đưa tay dứt khoát ra ngoài phía trước sau khi chạm thái dương")
+
+        # Kiểm tra vẫy tay
+        wrist_x = active_u_hand[:, 0, 0]
+        oscillations = count_macro_oscillations(wrist_x, min_amplitude=0.12)
+        is_waving = oscillations >= 3 and len(active_u_hand) >= 12
+        if is_waving:
+            feedbacks.append("Động tác đang là vẫy tay qua lại. Ký hiệu 'Chào' chạm nhẹ thái dương rồi đưa dứt khoát ra ngoài.")
+
+        # Điểm vị trí & chuyển động: KHÔNG nhân hệ số 1.2 phóng đại để đảm bảo chấm chặt hơn
+        position_score = min(100.0, round(0.50 * temple_loc_score + 0.50 * stroke_score, 1))
+        overall_score = min(100.0, round(0.25 * angle_score + 0.75 * position_score, 1))
+        if is_waving:
+            overall_score = min(overall_score, 45.0)
+
+    # =========================================================================
+    # 3B. ĐÁNH GIÁ CÁC TỪ VỰNG KHÁC THEO ĐẶC TRƯNG CHUẨN CỦA TỪ ĐÓ
+    # =========================================================================
     else:
-        temple_loc_score = max(10.0, 30.0 - (min_temple_dist - 0.50) * 35.0)
-        feedbacks.append("Chưa đưa tay lên vùng thái dương (đặc trưng cốt lõi của ký hiệu 'Chào')")
+        # 1. So khớp hình thái bàn tay (Handshape / Finger Extensions)
+        finger_scores = {}
+        for f_name, chain in FINGER_CHAINS.items():
+            u_exts = [get_finger_extension(h, chain) for h in active_u_hand if np.any(h != 0)]
+            r_exts = [get_finger_extension(h, chain) for h in active_r_hand if np.any(h != 0)]
+            u_avg = float(np.mean(u_exts)) if u_exts else 0.5
+            r_avg = float(np.mean(r_exts)) if r_exts else 0.85
+            diff = abs(u_avg - r_avg)
+            if diff <= 0.14:
+                sc = 90.0 + (0.14 - diff) / 0.14 * 10.0
+            elif diff <= 0.24:
+                sc = 72.0 + (0.24 - diff) / 0.10 * 17.0
+            elif diff <= 0.36:
+                sc = 45.0 + (0.36 - diff) / 0.12 * 26.0
+            else:
+                sc = max(10.0, 45.0 - (diff - 0.36) * 70.0)
+            sc = min(100.0, round(sc, 1))
+            finger_scores[f_name] = sc
+            if sc < 75.0:
+                bad_joints.extend(chain[1:])
+                feedbacks.append(f"{f_name} tư thế ngón tay chưa khớp mẫu từ '{word_display}' ({sc}%)")
 
-    # 4. Đánh giá quỹ đạo chuyển động & Phát hiện động tác vẫy tay (Movement & Waving Detection)
-    wrist_x = active_usr_hand[:, 0, 0]
-    oscillations = count_macro_oscillations(wrist_x, min_amplitude=0.07)
-    is_waving = oscillations >= 2 and len(active_usr_hand) >= 10
+        angle_score = round(float(np.mean(list(finger_scores.values()))), 1)
 
-    if is_waving:
-        feedbacks.append("Động tác đang là vẫy tay qua lại. Ký hiệu 'Chào' trong VSL là chạm nhẹ thái dương rồi đưa dứt khoát ra ngoài, tuyệt đối không vẫy lắc.")
+        # 2. Vị trí không gian của bàn tay (Hand Location Euclidean Distance)
+        # Đồng bộ trục x nếu người học thực hiện bằng tay trái
+        u_hand_eval = active_u_hand.copy()
+        if u_side != r_side:
+            u_hand_eval[:, :, 0] = -u_hand_eval[:, :, 0]
 
-    # Kiểm tra cự ly vươn ra ngoài (Stroke range)
-    peak_out_dist = float(np.max(temple_dists)) if temple_dists else 0.5
-    stroke_range = peak_out_dist - min_temple_dist
-    if stroke_range < 0.18:
-        feedbacks.append("Chưa có động tác đưa tay dứt khoát ra ngoài phía trước sau khi chạm thái dương")
-        stroke_score = 30.0
-    elif stroke_range < 0.28:
-        feedbacks.append("Động tác vươn tay ra ngoài còn hơi ngắn, hãy đưa dứt khoát hơn")
-        stroke_score = 65.0 + (stroke_range - 0.18) / 0.10 * 20.0
-    else:
-        stroke_score = 92.0 + min(8.0, (stroke_range - 0.28) * 40.0)
+        u_loc = np.mean(u_hand_eval[:, 0, :2], axis=0) if len(u_hand_eval) > 0 else np.array([0.0, 0.0])
+        r_loc = np.mean(active_r_hand[:, 0, :2], axis=0) if len(active_r_hand) > 0 else np.array([0.0, 0.0])
+        dist_loc = float(np.linalg.norm(u_loc - r_loc))
 
-    # So khớp quỹ đạo bằng FastDTW (Hệ số phạt nghiêm ngặt 0.32)
-    ref_active = ref_hand_seq[7:45, 0, :2] if len(ref_hand_seq) >= 45 else ref_hand_seq[:, 0, :2]
-    usr_active = active_usr_hand[:, 0, :2]
-    
-    if len(usr_active) >= 3 and len(ref_active) >= 3:
-        _, path = fastdtw(ref_active, usr_active, dist=euclidean)
-        dtw_errors = [np.linalg.norm(ref_active[r] - usr_active[u]) for r, u in path]
-        mean_dtw_err = float(np.mean(dtw_errors))
-        raw_dtw_score = max(10.0, min(100.0, 100.0 * float(np.exp(-mean_dtw_err / 0.32))))
-    else:
-        raw_dtw_score = 50.0
+        # Tiêu chuẩn chấm vị trí khắt khe (Euclidean Distance chặt chẽ):
+        # <= 0.15: Rất chuẩn xác vị trí -> 90 - 100%
+        # 0.15 - 0.26: Khớp tương đối -> 70 - 89%
+        # 0.26 - 0.40: Lệch vị trí khá xa -> 35 - 69%
+        # > 0.40: Sai hoàn toàn vị trí thực hiện (ví dụ làm ở thái dương thay vì ở miệng/ngực) -> 10 - 30%
+        if dist_loc <= 0.15:
+            loc_score = 90.0 + (0.15 - dist_loc) / 0.15 * 10.0
+        elif dist_loc <= 0.26:
+            loc_score = 70.0 + (0.26 - dist_loc) / 0.11 * 19.0
+            feedbacks.append(f"Vị trí bàn tay hơi lệch so với mẫu cử chỉ '{word_display}'")
+        elif dist_loc <= 0.40:
+            loc_score = 35.0 + (0.40 - dist_loc) / 0.14 * 34.0
+            feedbacks.append(f"Vị trí đặt tay chưa đúng khu vực cử chỉ của từ '{word_display}'")
+        else:
+            loc_score = max(10.0, 30.0 - (dist_loc - 0.40) * 50.0)
+            feedbacks.append(f"Sai vị trí: cử chỉ '{word_display}' cần thực hiện đúng vị trí mẫu (không đưa lên thái dương hoặc sai chỗ).")
 
-    # Nếu có hiện tượng vẫy tay qua lại, phạt điểm chuyển động xuống <= 20%
-    if is_waving:
-        move_score = min(20.0, raw_dtw_score * 0.20)
-    else:
-        move_score = round(0.40 * stroke_score + 0.60 * raw_dtw_score, 1)
+        # Kiểm tra hai tay nếu từ vựng yêu cầu 2 tay
+        if r_is_two_handed and not u_is_two_handed:
+            loc_score = max(15.0, loc_score - 30.0)
+            feedbacks.append(f"Ký hiệu '{word_display}' yêu cầu thực hiện bằng CẢ 2 BÀN TAY!")
 
-    # Điểm vị trí & chuyển động (Euclidean): 50% tiếp cận thái dương + 50% quỹ đạo đưa ra ngoài
-    # Áp dụng hệ số x1.2 để giảm độ khắt khe của khoảng cách Euclidean theo yêu cầu
-    raw_pos = 0.50 * temple_loc_score + 0.50 * move_score
-    position_score = min(100.0, round(raw_pos * 1.2, 1))
+        # 3. Quỹ đạo chuyển động (Movement Trajectory / Stroke)
+        u_stroke_vec = u_hand_eval[-1, 0, :2] - u_hand_eval[0, 0, :2] if len(u_hand_eval) >= 2 else np.array([0.0, 0.0])
+        r_stroke_vec = active_r_hand[-1, 0, :2] - active_r_hand[0, 0, :2] if len(active_r_hand) >= 2 else np.array([0.0, 0.0])
 
-    # 5. Tổng kết điểm số toàn diện:
-    # 25% Hình dáng ngón tay (Open-B)
-    # 75% Vị trí thái dương & Quỹ đạo dứt khoát (tránh trường hợp chỉ giơ tay mở là đạt)
-    overall_score = min(100.0, round(0.25 * angle_score + 0.75 * position_score, 1))
-    
-    # Nếu đang vẫy tay, khống chế trần điểm tối đa không quá 45%
-    if is_waving:
-        overall_score = min(overall_score, 45.0)
+        u_mag = float(np.linalg.norm(u_stroke_vec))
+        r_mag = float(np.linalg.norm(r_stroke_vec))
 
-    # MỨC ĐẠT (>= 85.0)
-    passed = overall_score >= 85.0
+        if r_mag >= 0.10 and u_mag >= 0.08:
+            # So sánh hướng chuyển động (cosine similarity)
+            cos_sim = float(np.dot(u_stroke_vec, r_stroke_vec) / (u_mag * r_mag + 1e-6))
+            if cos_sim >= 0.70:
+                m_score = 90.0 + min(10.0, (cos_sim - 0.70) / 0.30 * 10.0)
+            elif cos_sim >= 0.20:
+                m_score = 65.0 + (cos_sim - 0.20) / 0.50 * 24.0
+                feedbacks.append(f"Hướng di chuyển tay hơi lệch so với cử chỉ '{word_display}'")
+            else:
+                m_score = 30.0
+                feedbacks.append(f"Hướng chuyển động của tay đi ngược hoặc sai hướng mẫu của từ '{word_display}'")
+        else:
+            # Ký hiệu tĩnh hoặc biên độ chuyển động nhỏ
+            m_score = 85.0 if abs(u_mag - r_mag) < 0.18 else 50.0
 
+        position_score = min(100.0, round(0.60 * loc_score + 0.40 * m_score, 1))
+        overall_score = min(100.0, round(0.40 * angle_score + 0.60 * position_score, 1))
+
+    passed = overall_score >= 80.0
     if not feedbacks and passed:
-        feedbacks.append("Tuyệt vời! Cử chỉ 'Chào' của bạn rất chuẩn xác và đúng nhịp độ.")
+        feedbacks.append(f"Tuyệt vời! Cử chỉ '{word_display}' của bạn rất chuẩn xác.")
 
     return {
+        "word": word_display,
+        "word_slug": clean_slug,
         "overall_score": overall_score,
         "passed": passed,
+        "dtw_score": overall_score,
         "angle_score": angle_score,
         "position_score": position_score,
+        "user_action_start_sec": user_action_start_sec,
+        "ref_action_start_sec": ref_action_start_sec,
+        "time_offset_sec": time_offset_sec,
         "finger_details": finger_scores,
         "bad_joints": sorted(list(set(bad_joints))),
         "feedbacks": feedbacks,
     }
 
+@app.post("/api/evaluate/{word_slug}")
+def evaluate_word(word_slug: str, req: EvaluateRequest):
+    return process_evaluation(req.landmarks, word_slug=word_slug)
+
 @app.post("/api/evaluate/chao")
 def evaluate_chao(req: EvaluateRequest):
-    return process_evaluation(req.landmarks)
+    return process_evaluation(req.landmarks, word_slug="chao")
+
+@app.get("/api/benchmarks")
+def list_benchmarks():
+    """Danh sách các benchmark từ vựng VSL400 sẵn sàng chấm điểm"""
+    benchmarks = []
+    if os.path.exists(BENCHMARKS_DIR):
+        for f in sorted(os.listdir(BENCHMARKS_DIR)):
+            if f.endswith("_meta.json"):
+                try:
+                    with open(os.path.join(BENCHMARKS_DIR, f), "r", encoding="utf-8") as jf:
+                        benchmarks.append(json.load(jf))
+                except Exception:
+                    pass
+    return {"total": len(benchmarks), "benchmarks": benchmarks}
 
 @app.get("/")
 def root():
@@ -346,13 +497,13 @@ def root():
         "status": "online",
         "target_word": "chao",
         "benchmark_loaded": REF_SEQ is not None,
-        "passing_threshold": 85.0,
-        "endpoints": ["/api/evaluate/chao"]
+        "passing_threshold": 80.0,
+        "endpoints": ["/api/evaluate/chao", "/api/evaluate/{word_slug}"]
     }
 
 @app.get("/api/health")
 def health():
-    return {"status": "healthy", "service": "signlingo-backend", "target_word": "chao", "passing_threshold": 85.0}
+    return {"status": "healthy", "service": "signlingo-backend", "target_word": "chao", "passing_threshold": 80.0}
 
 DATA_DIR = os.path.join(CURRENT_DIR, "data")
 os.makedirs(DATA_DIR, exist_ok=True)

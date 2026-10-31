@@ -40,9 +40,20 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
     movement: 'Thực hiện động tác dứt khoát theo video mẫu'
   };
 
-  const currentVideo = lesson.videoUrl || (viewAngle === 'front' 
-    ? matchedWord.videoFront || '/chao.mp4'
-    : matchedWord.videoSide || matchedWord.videoFront || '/chao.mp4');
+  // Lấy video chuẩn theo góc quay: chính diện (front) hoặc góc nghiêng (side)
+  const currentVideo = React.useMemo(() => {
+    if (viewAngle === 'side') {
+      if (matchedWord.videoSide) return matchedWord.videoSide;
+      if (lesson.videoSideUrl) return lesson.videoSideUrl;
+      if (lesson.videoUrl && lesson.videoUrl.includes('_front.mp4')) {
+        return lesson.videoUrl.replace('_front.mp4', '_side.mp4');
+      }
+      return matchedWord.videoSide || matchedWord.videoFront || lesson.videoUrl || '/chao.mp4';
+    }
+
+    // viewAngle === 'front'
+    return matchedWord.videoFront || lesson.videoUrl || '/chao.mp4';
+  }, [viewAngle, matchedWord, lesson]);
 
   const isVideoFormat = currentVideo && (
     currentVideo.endsWith('.mp4') || 
@@ -270,6 +281,7 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
         }}>
           {isVideoFormat ? (
             <video 
+              key={currentVideo}
               ref={videoPlayerRef}
               src={currentVideo} 
               controls
