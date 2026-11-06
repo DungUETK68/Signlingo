@@ -49,8 +49,9 @@ export default function GamesView({ onStartPracticeWord }) {
     const videoWords = all.filter(w => 
       w.word && w.videoFront && (
         w.videoFront.endsWith('.mp4') || 
-        w.videoFront.includes('/vsl400_videos/') || 
-        w.videoFront.includes('chao.mp4')
+        w.videoFront.includes('/vsl400_videos/') ||
+        w.videoFront.startsWith('blob:') ||
+        w.videoFront.startsWith('/uploads/')
       )
     );
 
@@ -502,7 +503,7 @@ export default function GamesView({ onStartPracticeWord }) {
         .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
         .replace(/đ/g, 'd').replace(/Đ/g, 'd')
         .replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '')
-      : 'chao'
+      : 'cam_on'
     );
 
     // 1. Kiểm tra xem người dùng có thực sự giơ tay và làm cử chỉ không
@@ -530,14 +531,6 @@ export default function GamesView({ onStartPracticeWord }) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ landmarks: framesToSend })
         });
-
-        if (!res.ok && wordSlug !== 'chao') {
-          res = await fetch('http://localhost:8000/api/evaluate/chao', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ landmarks: framesToSend })
-          });
-        }
 
         if (res.ok) {
           evalData = await res.json();
@@ -571,7 +564,7 @@ export default function GamesView({ onStartPracticeWord }) {
 
     // Ghi nhận điểm số Thử thách 5s về NestJS Backend
     progressApi.logPractice({
-      wordSlug: currentWordObj.slug || 'chao',
+      wordSlug: currentWordObj.slug || 'cam_on',
       wordName: currentWordObj.word,
       score: finalScore,
       isPassed: passed,

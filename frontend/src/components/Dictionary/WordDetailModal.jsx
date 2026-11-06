@@ -5,13 +5,20 @@ export default function WordDetailModal({ wordData, onClose, onStartPractice, on
   const [viewAngle, setViewAngle] = useState('front');
 
   if (!wordData) return null;
-  const currentVideo = viewAngle === 'front' ? wordData.videoFront : wordData.videoSide;
+  
+  let currentVideo = wordData.videoFront;
+  if (viewAngle === 'left') {
+    currentVideo = wordData.videoLeft || wordData.videoSide || wordData.videoFront;
+  } else if (viewAngle === 'right') {
+    currentVideo = wordData.videoRight || wordData.videoFront;
+  }
+
   const isVideo = currentVideo && (
     currentVideo.endsWith('.mp4') || 
     currentVideo.endsWith('.webm') || 
     currentVideo.startsWith('blob:') ||
     currentVideo.startsWith('/uploads/') ||
-    currentVideo.includes('chao.mp4')
+    currentVideo.startsWith('/vsl400_videos/')
   );
 
   return (
@@ -23,16 +30,16 @@ export default function WordDetailModal({ wordData, onClose, onStartPractice, on
 
         <div style={{ padding: '1.75rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#0284c7' }}>{wordData.topicLabel}</span>
+            <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#0284c7' }}>{wordData.topicLabel || wordData.category}</span>
             <span style={{ color: '#cbd5e1' }}>•</span>
-            <span style={{ fontSize: '0.8rem', color: '#64748b' }}>{wordData.dialect}</span>
+            <span style={{ fontSize: '0.8rem', color: '#64748b' }}>Độ khó: {wordData.difficulty || 'Cơ bản'}</span>
           </div>
 
           <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#1e293b', marginBottom: '1rem' }}>
             {wordData.word}
           </h2>
 
-          {/* Video preview */}
+          {/* Video preview 3 góc quay */}
           <div style={{
             position: 'relative',
             borderRadius: 'var(--radius-xl)',
@@ -55,32 +62,41 @@ export default function WordDetailModal({ wordData, onClose, onStartPractice, on
                 style={{ width: '100%', height: '100%', objectFit: 'contain' }}
               />
             ) : (
-              <img src={currentVideo} alt={wordData.word} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={currentVideo || wordData.thumbnail} alt={wordData.word} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             )}
 
+            {/* Bộ chuyển đổi 3 góc quay VSL400 */}
             <div style={{
               position: 'absolute',
               bottom: '0.6rem',
               right: '0.6rem',
               display: 'flex',
               gap: '0.3rem',
-              backgroundColor: 'rgba(15,23,42,0.8)',
+              backgroundColor: 'rgba(15,23,42,0.85)',
               padding: '0.25rem',
-              borderRadius: 'var(--radius-pill)'
+              borderRadius: 'var(--radius-pill)',
+              backdropFilter: 'blur(4px)'
             }}>
               <button
                 className={`btn-pill btn-sm ${viewAngle === 'front' ? 'btn-primary' : 'btn-secondary'}`}
-                style={{ padding: '0.2rem 0.6rem', fontSize: '0.72rem' }}
+                style={{ padding: '0.2rem 0.55rem', fontSize: '0.72rem', fontWeight: 700 }}
                 onClick={() => setViewAngle('front')}
               >
                 Chính diện
               </button>
               <button
-                className={`btn-pill btn-sm ${viewAngle === 'side' ? 'btn-primary' : 'btn-secondary'}`}
-                style={{ padding: '0.2rem 0.6rem', fontSize: '0.72rem' }}
-                onClick={() => setViewAngle('side')}
+                className={`btn-pill btn-sm ${viewAngle === 'left' ? 'btn-primary' : 'btn-secondary'}`}
+                style={{ padding: '0.2rem 0.55rem', fontSize: '0.72rem', fontWeight: 700 }}
+                onClick={() => setViewAngle('left')}
               >
-                Góc 45°
+                Góc trái
+              </button>
+              <button
+                className={`btn-pill btn-sm ${viewAngle === 'right' ? 'btn-primary' : 'btn-secondary'}`}
+                style={{ padding: '0.2rem 0.55rem', fontSize: '0.72rem', fontWeight: 700 }}
+                onClick={() => setViewAngle('right')}
+              >
+                Góc phải
               </button>
             </div>
           </div>

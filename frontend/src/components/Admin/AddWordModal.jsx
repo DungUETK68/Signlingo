@@ -120,7 +120,7 @@ export default function AddWordModal({ isOpen, onClose, onSuccess, initialWord =
   };
 
   // Chọn video mẫu nhanh có sẵn trong hệ thống
-  const handleUsePresetVideo = (path = '/chao.mp4') => {
+  const handleUsePresetVideo = (path = '/vsl400_videos/cam_on_front.mp4') => {
     setVideoMethod('url');
     setVideoUrl(path);
     setVideoPreviewUrl(path);
@@ -159,7 +159,7 @@ export default function AddWordModal({ isOpen, onClose, onSuccess, initialWord =
 
       if (!finalVideoUrl) {
         // Mặc định dùng video chuẩn nếu chưa chọn
-        finalVideoUrl = '/chao.mp4';
+        finalVideoUrl = '/vsl400_videos/cam_on_front.mp4';
       }
 
       const selectedTopicObj = PRESET_TOPICS.find(t => t.id === topic);
@@ -507,7 +507,7 @@ export default function AddWordModal({ isOpen, onClose, onSuccess, initialWord =
                       setVideoUrl(e.target.value);
                       setVideoPreviewUrl(e.target.value);
                     }}
-                    placeholder="Nhập đường dẫn URL video (VD: /chao.mp4 hoặc https://...)"
+                    placeholder="Nhập đường dẫn URL video (VD: /vsl400_videos/... hoặc https://...)"
                     style={{
                       flex: 1,
                       padding: '0.65rem 0.85rem',
@@ -522,9 +522,9 @@ export default function AddWordModal({ isOpen, onClose, onSuccess, initialWord =
                     type="button"
                     className="btn-pill btn-secondary btn-sm"
                     style={{ whiteSpace: 'nowrap', fontSize: '0.78rem', fontWeight: 700, color: '#0284c7', borderColor: '#bae6fd' }}
-                    onClick={() => handleUsePresetVideo('/chao.mp4')}
+                    onClick={() => handleUsePresetVideo('/vsl400_videos/cam_on_front.mp4')}
                   >
-                    🎬 Dùng video mẫu (/chao.mp4)
+                    🎬 Dùng video mẫu
                   </button>
                 </div>
               </div>

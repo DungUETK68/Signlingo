@@ -36,8 +36,14 @@ export class Word {
   @JoinColumn({ name: 'topic_id' })
   topic: Topic;
 
-  @Column({ name: 'video_url', default: '/chao.mp4' })
+  @Column({ name: 'video_url', nullable: true })
   videoUrl: string;
+
+  @Column({ name: 'video_left', nullable: true })
+  videoLeft: string;
+
+  @Column({ name: 'video_right', nullable: true })
+  videoRight: string;
 
   @Column({ name: 'thumbnail_url', nullable: true })
   thumbnailUrl: string;

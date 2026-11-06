@@ -22,12 +22,22 @@ export class CreateWordDto {
   @IsString()
   category?: string;
 
-  @ApiProperty({ example: '/chao.mp4' })
+  @ApiProperty({ example: '/vsl400_videos/cam_on_front.mp4' })
   @IsString()
   @IsNotEmpty({ message: 'Video URL không được để trống' })
   videoUrl: string;
 
-  @ApiProperty({ example: '/chao_thumb.jpg', required: false })
+  @ApiProperty({ example: '/vsl400_videos/cam_on_left.mp4', required: false })
+  @IsOptional()
+  @IsString()
+  videoLeft?: string;
+
+  @ApiProperty({ example: '/vsl400_videos/cam_on_right.mp4', required: false })
+  @IsOptional()
+  @IsString()
+  videoRight?: string;
+
+  @ApiProperty({ example: '/vsl400_videos/cam_on_thumb.jpg', required: false })
   @IsOptional()
   @IsString()
   thumbnailUrl?: string;

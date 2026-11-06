@@ -1,23 +1,26 @@
 import { VSL400_WORDS } from './vsl400Words';
 
-// Định nghĩa từ "Chào" chuẩn
+// Định nghĩa từ chào hỏi / cảm ơn chuẩn
 const CHAO_WORD = {
-  id: 'vsl-chao',
-  word: 'Chào',
-  slug: 'chao',
+  id: 'vsl-cam-on',
+  word: 'Cảm ơn',
+  slug: 'cam_on',
   topic: 'greeting',
   topicLabel: 'Chào hỏi',
   dialect: 'Toàn quốc',
   difficulty: 'Dễ',
-  description: 'Bàn tay mở 5 ngón thẳng (Open-B), đầu ngón trỏ và ngón giữa chạm nhẹ vùng thái dương rồi vươn dứt khoát ra ngoài.',
-  details: 'Cử chỉ chào hỏi tiêu chuẩn và trang trọng nhất trong Ngôn ngữ Ký hiệu Việt Nam (VSL).',
-  videoFront: '/chao.mp4',
-  videoSide: '/chao.mp4'
+  description: 'Bàn tay mở chạm nhẹ cằm rồi đưa thẳng dứt khoát về phía trước.',
+  details: 'Cử chỉ giao tiếp tiêu chuẩn trong Ngôn ngữ Ký hiệu Việt Nam (VSL).',
+  videoFront: '/vsl400_videos/cam_on_front.mp4',
+  videoSide: '/vsl400_videos/cam_on_left.mp4'
 };
 
 // Helper để lấy metadata của từ theo slug
 export function getWordBySlug(slug) {
-  if (slug === 'chao') return CHAO_WORD;
+  if (slug === 'chao' || slug === 'cam_on') {
+    const camOn = VSL400_WORDS.find(w => w.slug === 'cam_on');
+    return camOn || CHAO_WORD;
+  }
   const found = VSL400_WORDS.find(w => w.slug === slug);
   if (found) return found;
   return {

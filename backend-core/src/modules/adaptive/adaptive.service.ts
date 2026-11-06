@@ -37,7 +37,7 @@ export class AdaptiveService {
         });
         return {
           ...item,
-          videoUrl: word?.videoUrl || '/chao.mp4',
+          videoUrl: word?.videoUrl || '/vsl400_videos/cam_on_front.mp4',
           thumbnailUrl: word?.thumbnailUrl || null,
           category: word?.category || 'Từ vựng cần ôn',
           meaning: word?.meaning || '',

@@ -13,8 +13,7 @@ export default function DictionaryView({ onStartPracticeWord, onOpenLesson }) {
   const getThumbnailSrc = (word) => {
     if (word.thumbnail) return word.thumbnail;
     if (word.slug) return `/vsl400_videos/${word.slug}_thumb.jpg`;
-    if (word.id === 'w-hello' || (word.word && word.word.toLowerCase() === 'chào')) return '/chao_thumb.jpg';
-    return word.videoFront;
+    return word.videoFront || '/vsl400_videos/cam_on_thumb.jpg';
   };
 
   // Điều hướng sang màn hình Bước 1: Học & Quan sát cử chỉ
@@ -85,14 +84,19 @@ export default function DictionaryView({ onStartPracticeWord, onOpenLesson }) {
       {/* Category Pills */}
       <div style={{ display: 'flex', gap: '0.4rem', overflowX: 'auto', paddingBottom: '0.5rem', marginBottom: '1.25rem' }}>
         {[
-          { id: 'all', label: 'Tất cả' },
-          { id: 'greeting', label: 'Chào hỏi' },
+          { id: 'all', label: `Tất cả (${words.length})` },
           { id: 'family', label: 'Gia đình' },
+          { id: 'greeting', label: 'Chào hỏi' },
           { id: 'food', label: 'Ẩm thực' },
-          { id: 'daily', label: 'Giao tiếp' },
+          { id: 'health', label: 'Y tế' },
+          { id: 'education', label: 'Giáo dục & Nghề' },
           { id: 'sports', label: 'Thể thao' },
-          { id: 'numbers', label: 'Số đếm' },
-          { id: 'alphabet', label: 'Chữ cái' }
+          { id: 'nature', label: 'Thiên nhiên' },
+          { id: 'travel', label: 'Địa điểm & Xe' },
+          { id: 'time', label: 'Thời gian' },
+          { id: 'daily', label: 'Đời sống' },
+          { id: 'emotions', label: 'Cảm xúc' },
+          { id: 'actions', label: 'Hành động' }
         ].map(cat => (
           <button
             key={cat.id}

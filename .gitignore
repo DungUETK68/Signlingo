@@ -68,7 +68,18 @@ Thumbs.db
 *.webm
 *.mov
 *.avi
-!frontend/public/chao.mp4
 frontend/public/uploads/*
 !frontend/public/uploads/.gitkeep
+
+# AI Benchmarks & Model Landmarks (VSL400)
+backend-ai/models/benchmarks/
+backend/models/benchmarks/
+*.npy
+*_meta.json
+
+# Thumbnails
+*_thumb.jpg
+frontend/public/vsl400_videos/*.jpg
+frontend/public/vsl400_videos/*.jpeg
+frontend/public/vsl400_videos/*.png
 

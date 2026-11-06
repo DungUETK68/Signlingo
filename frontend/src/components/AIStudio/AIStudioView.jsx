@@ -132,29 +132,22 @@ export default function AIStudioView({ initialWord = 'Chào', onBack }) {
     return {
       ...(allWords[0] || DICTIONARY_WORDS[0]),
       id: `custom-${selectedWord}`,
-      word: selectedWord || 'Chào',
+      word: selectedWord || 'Cảm ơn',
       topicLabel: 'Giao tiếp hàng ngày',
       description: `Thực hiện động tác ký hiệu chuẩn cho "${selectedWord}".`
     };
   }, [selectedWord]);
 
-  // Xác định video mẫu: Hỗ trợ từ "chào" hoặc mọi từ có video mp4 trong vsl400_videos
-  const isChaoWord = React.useMemo(() => {
-    const s = (selectedWord || '').toLowerCase().trim();
-    return s === 'chào' || s === 'chao';
-  }, [selectedWord]);
-
   const isVideoAvailable = React.useMemo(() => {
     const src = currentWordObj.videoFront || '';
-    return isChaoWord || 
-      src.endsWith('.mp4') || 
+    return src.endsWith('.mp4') || 
       src.endsWith('.webm') || 
       src.includes('/vsl400_videos/') || 
       src.startsWith('blob:') || 
       src.startsWith('/uploads/');
-  }, [currentWordObj, isChaoWord]);
+  }, [currentWordObj]);
 
-  const sampleVideoSrc = isChaoWord ? '/chao.mp4' : (currentWordObj.videoFront || '/chao.mp4');
+  const sampleVideoSrc = currentWordObj.videoFront || '/vsl400_videos/cam_on_front.mp4';
 
   // Đổi tốc độ phát video mẫu (1.0x hoặc 0.5x)
   const changeSpeed = (rate) => {
@@ -585,13 +578,11 @@ export default function AIStudioView({ initialWord = 'Chào', onBack }) {
       try {
         const framesToSend = recordedFramesRef.current;
         const wordSlug = currentWordObj.slug || (
-          isChaoWord ? 'chao' : (
-            currentWordObj.word ? currentWordObj.word.toLowerCase()
-              .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-              .replace(/đ/g, 'd').replace(/Đ/g, 'd')
-              .replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '')
-            : 'chao'
-          )
+          currentWordObj.word ? currentWordObj.word.toLowerCase()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            .replace(/đ/g, 'd').replace(/Đ/g, 'd')
+            .replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '')
+          : 'cam_on'
         );
         const endpoint = `http://localhost:8000/api/evaluate/${wordSlug}`;
 
@@ -604,13 +595,6 @@ export default function AIStudioView({ initialWord = 'Chào', onBack }) {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ landmarks: framesToSend })
             });
-            if (!res.ok && wordSlug !== 'chao') {
-              res = await fetch('http://localhost:8000/api/evaluate/chao', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ landmarks: framesToSend })
-              });
-            }
             if (res.ok) {
               data = await res.json();
             }

@@ -53,8 +53,7 @@ export const TOPICS = [
     bgColor: '#fef3c7',
     accentColor: '#fbbf24',
     lessons: [
-      { id: 'greet-hello', title: 'Chào', description: 'Bàn tay mở chạm nhẹ thái dương và đưa nhẹ ra ngoài kèm nụ cười', duration: '2 phút', level: 'Dễ', completed: true, score: 94, videoUrl: '/chao.mp4' },
-      { id: 'vsl-cam-on', title: 'Cảm ơn', description: 'Đặt đầu ngón tay lên cằm rồi hạ nhẹ bàn tay về phía trước', duration: '2 phút', level: 'Dễ', completed: true, score: 97, videoUrl: '/vsl400_videos/cam_on_front.mp4' },
+      { id: 'greet-cam-on', title: 'Cảm ơn', description: 'Đặt đầu ngón tay lên cằm rồi hạ nhẹ bàn tay về phía trước', duration: '2 phút', level: 'Dễ', completed: true, score: 97, videoUrl: '/vsl400_videos/cam_on_front.mp4' },
       { id: 'vsl-xin-loi', title: 'Xin lỗi', description: 'Bàn tay nắm lại, xoay tròn nhẹ nhàng trên ngực trái', duration: '3 phút', level: 'Trung bình', completed: true, score: 95, videoUrl: '/vsl400_videos/xin_loi_front.mp4' },
       { id: 'vsl-giup-do', title: 'Giúp đỡ', description: 'Bàn tay mở đặt dưới mu bàn tay còn lại đưa về phía trước hỗ trợ', duration: '3 phút', level: 'Trung bình', completed: true, score: 96, videoUrl: '/vsl400_videos/giup_do_front.mp4' },
       { id: 'vsl-khoe', title: 'Khỏe', description: 'Hai bàn tay nắm gập vuông góc trước ngực thể hiện sức mạnh', duration: '2 phút', level: 'Dễ', completed: false, score: 0, videoUrl: '/vsl400_videos/khoe_front.mp4' },
@@ -152,27 +151,9 @@ export const TOPICS = [
 ];
 
 export const DICTIONARY_WORDS = [
-  {
-    id: 'w-hello',
-    word: 'Chào',
-    slug: 'chao',
-    topic: 'greeting',
-    topicLabel: 'Chào hỏi',
-    dialect: 'Toàn quốc',
-    difficulty: 'Dễ',
-    description: 'Đưa bàn tay mở chạm nhẹ lên vùng thái dương, sau đó đưa nhẹ ra phía trước kèm nụ cười thân thiện.',
-    details: 'Cử chỉ chuẩn VSL được sử dụng trong mọi tình huống giao tiếp lịch sự cả ở miền Bắc, Trung và Nam.',
-    handShape: 'Bàn tay mở 5 ngón khép tự nhiên (Open-B)',
-    movement: 'Chạm thái dương -> Đưa về phía đối tác (Vòng cung nhỏ)',
-    faceExpression: 'Mắt nhìn đối diện, nụ cười vui tươi',
-    videoFront: '/chao.mp4',
-    videoSide: '/chao.mp4',
-    benchmarkId: 'BM_HELLO_01',
-    benchmarkLandmarksExtracted: true,
-    benchmarkAccuracy: 98.4
-  },
   ...VSL400_WORDS.map(w => ({
     ...w,
+    id: w.id || `vsl-${w.slug}`,
     benchmarkLandmarksExtracted: true,
     handShape: w.handShape || 'Bàn tay mở hoặc định hình chuẩn VSL400',
     movement: w.movement || 'Chuyển động dứt khoát theo video mẫu VSL400',
@@ -371,12 +352,12 @@ export const QUIZ_QUESTIONS = [
   {
     id: 'q1',
     question: 'Quan sát cử chỉ trong video dưới đây và cho biết đây là từ nào?',
-    videoUrl: '/chao.mp4',
+    videoUrl: '/vsl400_videos/cam_on_front.mp4',
     isVideo: true,
-    signSymbol: '👋',
-    options: ['Cảm ơn', 'Chào', 'Tạm biệt', 'Xin lỗi'],
-    correctIndex: 1,
-    explanation: 'Đây là ký hiệu "Chào" chuẩn Ngôn ngữ Ký hiệu Việt Nam (VSL).'
+    signSymbol: '🙏',
+    options: ['Cảm ơn', 'Tạm biệt', 'Xin lỗi', 'Giúp đỡ'],
+    correctIndex: 0,
+    explanation: 'Đây là ký hiệu "Cảm ơn" chuẩn Ngôn ngữ Ký hiệu Việt Nam (VSL).'
   },
   {
     id: 'q2',

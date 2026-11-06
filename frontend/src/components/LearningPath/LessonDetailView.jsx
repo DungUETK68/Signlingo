@@ -35,7 +35,7 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
   ) || {
     word: lesson.title,
     description: lesson.description,
-    videoFront: lesson.videoUrl || '/chao.mp4',
+    videoFront: lesson.videoUrl || '/vsl400_videos/cam_on_front.mp4',
     handShape: 'Bàn tay mở tự nhiên chuẩn VSL',
     movement: 'Thực hiện động tác dứt khoát theo video mẫu'
   };
@@ -48,11 +48,11 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
       if (lesson.videoUrl && lesson.videoUrl.includes('_front.mp4')) {
         return lesson.videoUrl.replace('_front.mp4', '_side.mp4');
       }
-      return matchedWord.videoSide || matchedWord.videoFront || lesson.videoUrl || '/chao.mp4';
+      return matchedWord.videoSide || matchedWord.videoFront || lesson.videoUrl || '/vsl400_videos/cam_on_front.mp4';
     }
 
     // viewAngle === 'front'
-    return matchedWord.videoFront || lesson.videoUrl || '/chao.mp4';
+    return matchedWord.videoFront || lesson.videoUrl || '/vsl400_videos/cam_on_front.mp4';
   }, [viewAngle, matchedWord, lesson]);
 
   const isVideoFormat = currentVideo && (
@@ -60,7 +60,7 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
     currentVideo.endsWith('.webm') || 
     currentVideo.startsWith('blob:') ||
     currentVideo.startsWith('/uploads/') ||
-    currentVideo.includes('chao.mp4')
+    currentVideo.startsWith('/vsl400_videos/')
   );
 
   const handleSetSpeed = (newSpeed) => {

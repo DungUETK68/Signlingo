@@ -88,9 +88,8 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
 
   // Video mẫu của từ hiện tại
   const sampleVideoSrc = React.useMemo(() => {
-    if (!currentWord) return '/chao.mp4';
-    if (currentWord.slug === 'chao') return '/chao.mp4';
-    return currentWord.videoFront || '/chao.mp4';
+    if (!currentWord) return '/vsl400_videos/cam_on_front.mp4';
+    return currentWord.videoFront || '/vsl400_videos/cam_on_front.mp4';
   }, [currentWord]);
 
   // Đổi tốc độ phát video mẫu (1.0x hoặc 0.5x)
@@ -576,7 +575,7 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
     try {
       const evalPromises = words.map(async (w, idx) => {
         const frames = recordedFramesByWordRef.current[idx] || [];
-        const slug = w.slug || 'chao';
+        const slug = w.slug || 'cam_on';
         let data = null;
 
         if (frames.length >= 5) {
@@ -586,14 +585,6 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ landmarks: frames })
             });
-
-            if (!res.ok && slug !== 'chao') {
-              res = await fetch('http://localhost:8000/api/evaluate/chao', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ landmarks: frames })
-              });
-            }
 
             if (res.ok) {
               data = await res.json();

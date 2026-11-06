@@ -26,11 +26,11 @@ export default function SentenceDetailView({ sentence, onBack, onStartPractice }
 
   // Xác định đường dẫn video mẫu theo góc quay (Chính diện hoặc Góc nghiêng)
   const currentVideoSrc = React.useMemo(() => {
-    if (!currentWord) return '/chao.mp4';
+    if (!currentWord) return '/vsl400_videos/cam_on_front.mp4';
     if (viewAngle === 'side' && currentWord.videoSide) {
       return currentWord.videoSide;
     }
-    return currentWord.videoFront || '/chao.mp4';
+    return currentWord.videoFront || '/vsl400_videos/cam_on_front.mp4';
   }, [currentWord, viewAngle]);
 
   // Cập nhật tốc độ phát video

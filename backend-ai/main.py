@@ -30,45 +30,62 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 MODELS_DIR = os.path.join(CURRENT_DIR, "models")
 BENCHMARKS_DIR = os.path.join(MODELS_DIR, "benchmarks")
 
-REF_SEQ = None
-META = {}
-
-def load_benchmark():
-    global REF_SEQ, META
-    benchmark_file = os.path.join(MODELS_DIR, "chao_benchmark.npy")
-    meta_file = os.path.join(MODELS_DIR, "chao_meta.json")
-    if os.path.exists(benchmark_file) and os.path.exists(meta_file):
-        try:
-            REF_SEQ = np.load(benchmark_file)
-            with open(meta_file, "r", encoding="utf-8") as f:
-                META = json.load(f)
-        except Exception as e:
-            print(f"Error loading {benchmark_file}: {e}")
-
-load_benchmark()
+BENCHMARK_CACHE = {}
 
 def get_word_benchmark(word_slug: str):
-    """Nạp benchmark động theo slug từ vựng VSL400"""
-    clean_slug = (word_slug or "chao").lower().replace("-", "_").strip()
+    """Nạp benchmark động theo slug từ vựng VSL400 (hỗ trợ toàn bộ 400 từ vựng)"""
+    clean_slug = (word_slug or "").lower().replace("-", "_").strip()
     
-    # 1. Thử tìm trong benchmarks directory
+    if clean_slug in BENCHMARK_CACHE:
+        return BENCHMARK_CACHE[clean_slug]
+        
     if os.path.exists(BENCHMARKS_DIR):
-        npy_path = os.path.join(BENCHMARKS_DIR, f"{clean_slug}_benchmark.npy")
-        meta_path = os.path.join(BENCHMARKS_DIR, f"{clean_slug}_meta.json")
-        if os.path.exists(npy_path) and os.path.exists(meta_path):
-            try:
-                seq = np.load(npy_path)
-                with open(meta_path, "r", encoding="utf-8") as jf:
-                    meta = json.load(jf)
-                return seq, meta
-            except Exception as e:
-                print(f"Error loading {npy_path}: {e}")
+        # 1. Khớp chính xác slug
+        if clean_slug:
+            npy_path = os.path.join(BENCHMARKS_DIR, f"{clean_slug}_benchmark.npy")
+            meta_path = os.path.join(BENCHMARKS_DIR, f"{clean_slug}_meta.json")
+            if os.path.exists(npy_path) and os.path.exists(meta_path):
+                try:
+                    seq = np.load(npy_path)
+                    with open(meta_path, "r", encoding="utf-8") as jf:
+                        meta = json.load(jf)
+                    BENCHMARK_CACHE[clean_slug] = (seq, meta)
+                    return seq, meta
+                except Exception as e:
+                    print(f"Error loading {npy_path}: {e}")
+                
+        # 2. Thử tìm gần đúng
+        all_npys = [f for f in os.listdir(BENCHMARKS_DIR) if f.endswith("_benchmark.npy")]
+        for f in all_npys:
+            base = f.replace("_benchmark.npy", "")
+            if clean_slug and (clean_slug in base or base in clean_slug):
+                try:
+                    seq = np.load(os.path.join(BENCHMARKS_DIR, f))
+                    meta_p = os.path.join(BENCHMARKS_DIR, f"{base}_meta.json")
+                    meta = {}
+                    if os.path.exists(meta_p):
+                        with open(meta_p, "r", encoding="utf-8") as jf:
+                            meta = json.load(jf)
+                    BENCHMARK_CACHE[clean_slug] = (seq, meta)
+                    return seq, meta
+                except Exception:
+                    pass
 
-    # 2. Fallback về chao_benchmark
-    global REF_SEQ, META
-    if REF_SEQ is None:
-        load_benchmark()
-    return REF_SEQ, META
+        # 3. Fallback lấy benchmark đầu tiên có sẵn trong thư mục
+        if all_npys:
+            first_base = all_npys[0].replace("_benchmark.npy", "")
+            try:
+                seq = np.load(os.path.join(BENCHMARKS_DIR, all_npys[0]))
+                meta_p = os.path.join(BENCHMARKS_DIR, f"{first_base}_meta.json")
+                meta = {}
+                if os.path.exists(meta_p):
+                    with open(meta_p, "r", encoding="utf-8") as jf:
+                        meta = json.load(jf)
+                return seq, meta
+            except Exception:
+                pass
+
+    return None, {}
 
 # Chuỗi xương từng ngón tay theo MediaPipe (gốc khớp nối -> đầu ngón)
 FINGER_CHAINS = {
@@ -192,12 +209,28 @@ def detect_active_motion_range(hand_seq: np.ndarray, fps: float = 25.0):
     end_sec = round(end_frame / fps, 2)
     return start_frame, end_frame, start_sec, end_sec
 
-def process_evaluation(landmarks: List[List[List[float]]], word_slug: str = "chao") -> dict:
-    clean_slug = (word_slug or "chao").lower().replace("-", "_").strip()
+def process_evaluation(landmarks: List[List[List[float]]], word_slug: str = "") -> dict:
+    clean_slug = (word_slug or "").lower().replace("-", "_").strip()
     ref_seq, meta = get_word_benchmark(clean_slug)
-    word_display = meta.get("word", meta.get("gloss", clean_slug.capitalize()))
+    word_display = meta.get("word", meta.get("gloss", clean_slug.capitalize() if clean_slug else "Từ vựng"))
     ref_fps = float(meta.get("fps", 25.0))
     user_fps = 25.0
+
+    if ref_seq is None or len(ref_seq) == 0:
+        return {
+            "word": word_display,
+            "word_slug": clean_slug,
+            "overall_score": 0.0,
+            "passed": False,
+            "dtw_score": 0.0,
+            "angle_score": 0.0,
+            "position_score": 0.0,
+            "user_action_start_sec": 0.0,
+            "ref_action_start_sec": 0.0,
+            "time_offset_sec": 0.0,
+            "bad_joints": [],
+            "feedbacks": ["Chưa tìm thấy dữ liệu mẫu benchmark cho từ vựng này. Vui lòng chọn từ có sẵn trong từ điển!"],
+        }
 
     usr_raw = np.array(landmarks, dtype=np.float32)
     if usr_raw.shape[0] < 5:
@@ -283,170 +316,81 @@ def process_evaluation(landmarks: List[List[List[float]]], word_slug: str = "cha
     bad_joints = []
 
     # =========================================================================
-    # 3A. ĐÁNH GIÁ CHUẨN XÁC RIÊNG CHO TỪ "CHÀO" (CHẶT CHẼ HƠN THEO YÊU CẦU)
+    # 3. ĐÁNH GIÁ CỬ CHỈ DỰA TRÊN KHUÔN MẪU CHUẨN CỦA TỪ ĐÓ (VSL400 BENCHMARK)
     # =========================================================================
-    if clean_slug == "chao":
-        finger_scores = {}
-        # Đánh giá 5 ngón mở thẳng Open-B chuẩn
-        for f_name, chain in FINGER_CHAINS.items():
-            exts = [get_finger_extension(h, chain) for h in active_u_hand if np.any(h != 0)]
-            avg_ext = float(np.mean(exts)) if exts else 0.5
-            if avg_ext >= 0.93:
-                sc = 90.0 + (avg_ext - 0.93) / 0.07 * 10.0
-            elif avg_ext >= 0.85:
-                sc = 70.0 + (avg_ext - 0.85) / 0.08 * 19.0
-            elif avg_ext >= 0.72:
-                sc = 50.0 + (avg_ext - 0.72) / 0.13 * 19.0
-            else:
-                sc = max(15.0, avg_ext / 0.72 * 48.0)
-            sc = min(100.0, round(sc, 1))
-            finger_scores[f_name] = sc
-            if sc < 80.0:
-                bad_joints.extend(chain[1:])
-                feedbacks.append(f"{f_name} chưa duỗi thẳng chuẩn xác ({sc}%)")
-
-        angle_score = round(float(np.mean(list(finger_scores.values()))), 1)
-
-        # Cự ly chạm thái dương (chấm chặt hơn, giảm dung sai khoảng cách Euclidean)
-        temple_dists = []
-        for t_idx, h in enumerate(active_u_hand):
-            p = active_u_pose[t_idx] if t_idx < len(active_u_pose) else np.zeros((33, 3))
-            if u_side == "right":
-                temple_pos = (p[5][:2] + p[8][:2]) / 2.0 if (np.any(p[5] != 0) and np.any(p[8] != 0)) else np.array([-0.25, -0.9])
-            else:
-                temple_pos = (p[2][:2] + p[7][:2]) / 2.0 if (np.any(p[2] != 0) and np.any(p[7] != 0)) else np.array([0.25, -0.9])
-
-            f_dists = [float(np.linalg.norm(h[tip_i][:2] - temple_pos)) + max(0.0, float(h[tip_i][1] - (temple_pos[1] + 0.04))) * 4.0 for tip_i in [8, 12]]
-            temple_dists.append(min(f_dists))
-
-        min_temple_dist = float(np.min(temple_dists)) if temple_dists else 1.0
-
-        # Ngưỡng Euclidean chặt chẽ:
-        # <= 0.20: Chạm chuẩn sát thái dương -> 92 - 100%
-        # 0.20 - 0.28: Hơi xa thái dương -> 70 - 89%
-        # 0.28 - 0.42: Ở má / miệng / lệch ra ngoài -> 35 - 69%
-        # > 0.42: Không chạm thái dương -> 10 - 30%
-        if min_temple_dist <= 0.20:
-            temple_loc_score = 92.0 + min(8.0, (0.20 - min_temple_dist) * 45.0)
-        elif min_temple_dist <= 0.28:
-            temple_loc_score = 70.0 + (0.28 - min_temple_dist) / 0.08 * 21.0
-            feedbacks.append("Đầu ngón tay chưa chạm sát vào vùng thái dương (cần áp sát đuôi mắt/thái dương trước khi vươn ra)")
-        elif min_temple_dist <= 0.42:
-            temple_loc_score = 35.0 + (0.42 - min_temple_dist) / 0.14 * 34.0
-            feedbacks.append("Vị trí tay đang ở vùng má/miệng hoặc lệch ra ngoài thay vì thái dương")
+    # 1. So khớp hình thái bàn tay (Handshape / Finger Extensions)
+    finger_scores = {}
+    for f_name, chain in FINGER_CHAINS.items():
+        u_exts = [get_finger_extension(h, chain) for h in active_u_hand if np.any(h != 0)]
+        r_exts = [get_finger_extension(h, chain) for h in active_r_hand if np.any(h != 0)]
+        u_avg = float(np.mean(u_exts)) if u_exts else 0.5
+        r_avg = float(np.mean(r_exts)) if r_exts else 0.85
+        diff = abs(u_avg - r_avg)
+        if diff <= 0.14:
+            sc = 90.0 + (0.14 - diff) / 0.14 * 10.0
+        elif diff <= 0.24:
+            sc = 72.0 + (0.24 - diff) / 0.10 * 17.0
+        elif diff <= 0.36:
+            sc = 45.0 + (0.36 - diff) / 0.12 * 26.0
         else:
-            temple_loc_score = max(10.0, 30.0 - (min_temple_dist - 0.42) * 40.0)
-            feedbacks.append("Chưa đưa tay lên vùng thái dương (đặc trưng cốt lõi của ký hiệu 'Chào')")
+            sc = max(10.0, 45.0 - (diff - 0.36) * 70.0)
+        sc = min(100.0, round(sc, 1))
+        finger_scores[f_name] = sc
+        if sc < 75.0:
+            bad_joints.extend(chain[1:])
+            feedbacks.append(f"{f_name} tư thế ngón tay chưa khớp mẫu từ '{word_display}' ({sc}%)")
 
-        # Cự ly vươn ra ngoài dứt khoát
-        peak_dist = float(np.max(temple_dists)) if temple_dists else 0.5
-        stroke_range = peak_dist - min_temple_dist
-        if stroke_range >= 0.26:
-            stroke_score = 90.0 + min(10.0, (stroke_range - 0.26) * 40.0)
-        elif stroke_range >= 0.16:
-            stroke_score = 65.0 + (stroke_range - 0.16) / 0.10 * 24.0
-            feedbacks.append("Động tác vươn tay ra ngoài còn hơi ngắn, hãy đưa dứt khoát hơn")
-        else:
-            stroke_score = 30.0
-            feedbacks.append("Chưa có động tác đưa tay dứt khoát ra ngoài phía trước sau khi chạm thái dương")
+    angle_score = round(float(np.mean(list(finger_scores.values()))), 1)
 
-        # Kiểm tra vẫy tay
-        wrist_x = active_u_hand[:, 0, 0]
-        oscillations = count_macro_oscillations(wrist_x, min_amplitude=0.12)
-        is_waving = oscillations >= 3 and len(active_u_hand) >= 12
-        if is_waving:
-            feedbacks.append("Động tác đang là vẫy tay qua lại. Ký hiệu 'Chào' chạm nhẹ thái dương rồi đưa dứt khoát ra ngoài.")
+    # 2. Vị trí không gian của bàn tay (Hand Location Euclidean Distance)
+    # Đồng bộ trục x nếu người học thực hiện bằng tay trái
+    u_hand_eval = active_u_hand.copy()
+    if u_side != r_side:
+        u_hand_eval[:, :, 0] = -u_hand_eval[:, :, 0]
 
-        # Điểm vị trí & chuyển động: KHÔNG nhân hệ số 1.2 phóng đại để đảm bảo chấm chặt hơn
-        position_score = min(100.0, round(0.50 * temple_loc_score + 0.50 * stroke_score, 1))
-        overall_score = min(100.0, round(0.25 * angle_score + 0.75 * position_score, 1))
-        if is_waving:
-            overall_score = min(overall_score, 45.0)
+    u_loc = np.mean(u_hand_eval[:, 0, :2], axis=0) if len(u_hand_eval) > 0 else np.array([0.0, 0.0])
+    r_loc = np.mean(active_r_hand[:, 0, :2], axis=0) if len(active_r_hand) > 0 else np.array([0.0, 0.0])
+    dist_loc = float(np.linalg.norm(u_loc - r_loc))
 
-    # =========================================================================
-    # 3B. ĐÁNH GIÁ CÁC TỪ VỰNG KHÁC THEO ĐẶC TRƯNG CHUẨN CỦA TỪ ĐÓ
-    # =========================================================================
+    if dist_loc <= 0.15:
+        loc_score = 90.0 + (0.15 - dist_loc) / 0.15 * 10.0
+    elif dist_loc <= 0.26:
+        loc_score = 70.0 + (0.26 - dist_loc) / 0.11 * 19.0
+        feedbacks.append(f"Vị trí bàn tay hơi lệch so với mẫu cử chỉ '{word_display}'")
+    elif dist_loc <= 0.40:
+        loc_score = 35.0 + (0.40 - dist_loc) / 0.14 * 34.0
+        feedbacks.append(f"Vị trí đặt tay chưa đúng khu vực cử chỉ của từ '{word_display}'")
     else:
-        # 1. So khớp hình thái bàn tay (Handshape / Finger Extensions)
-        finger_scores = {}
-        for f_name, chain in FINGER_CHAINS.items():
-            u_exts = [get_finger_extension(h, chain) for h in active_u_hand if np.any(h != 0)]
-            r_exts = [get_finger_extension(h, chain) for h in active_r_hand if np.any(h != 0)]
-            u_avg = float(np.mean(u_exts)) if u_exts else 0.5
-            r_avg = float(np.mean(r_exts)) if r_exts else 0.85
-            diff = abs(u_avg - r_avg)
-            if diff <= 0.14:
-                sc = 90.0 + (0.14 - diff) / 0.14 * 10.0
-            elif diff <= 0.24:
-                sc = 72.0 + (0.24 - diff) / 0.10 * 17.0
-            elif diff <= 0.36:
-                sc = 45.0 + (0.36 - diff) / 0.12 * 26.0
-            else:
-                sc = max(10.0, 45.0 - (diff - 0.36) * 70.0)
-            sc = min(100.0, round(sc, 1))
-            finger_scores[f_name] = sc
-            if sc < 75.0:
-                bad_joints.extend(chain[1:])
-                feedbacks.append(f"{f_name} tư thế ngón tay chưa khớp mẫu từ '{word_display}' ({sc}%)")
+        loc_score = max(10.0, 30.0 - (dist_loc - 0.40) * 50.0)
+        feedbacks.append(f"Sai vị trí: cử chỉ '{word_display}' cần thực hiện đúng vị trí mẫu.")
 
-        angle_score = round(float(np.mean(list(finger_scores.values()))), 1)
+    # Kiểm tra hai tay nếu từ vựng yêu cầu 2 tay
+    if r_is_two_handed and not u_is_two_handed:
+        loc_score = max(15.0, loc_score - 30.0)
+        feedbacks.append(f"Ký hiệu '{word_display}' yêu cầu thực hiện bằng CẢ 2 BÀN TAY!")
 
-        # 2. Vị trí không gian của bàn tay (Hand Location Euclidean Distance)
-        # Đồng bộ trục x nếu người học thực hiện bằng tay trái
-        u_hand_eval = active_u_hand.copy()
-        if u_side != r_side:
-            u_hand_eval[:, :, 0] = -u_hand_eval[:, :, 0]
+    # 3. Quỹ đạo chuyển động (Movement Trajectory / Stroke)
+    u_stroke_vec = u_hand_eval[-1, 0, :2] - u_hand_eval[0, 0, :2] if len(u_hand_eval) >= 2 else np.array([0.0, 0.0])
+    r_stroke_vec = active_r_hand[-1, 0, :2] - active_r_hand[0, 0, :2] if len(active_r_hand) >= 2 else np.array([0.0, 0.0])
 
-        u_loc = np.mean(u_hand_eval[:, 0, :2], axis=0) if len(u_hand_eval) > 0 else np.array([0.0, 0.0])
-        r_loc = np.mean(active_r_hand[:, 0, :2], axis=0) if len(active_r_hand) > 0 else np.array([0.0, 0.0])
-        dist_loc = float(np.linalg.norm(u_loc - r_loc))
+    u_mag = float(np.linalg.norm(u_stroke_vec))
+    r_mag = float(np.linalg.norm(r_stroke_vec))
 
-        # Tiêu chuẩn chấm vị trí khắt khe (Euclidean Distance chặt chẽ):
-        # <= 0.15: Rất chuẩn xác vị trí -> 90 - 100%
-        # 0.15 - 0.26: Khớp tương đối -> 70 - 89%
-        # 0.26 - 0.40: Lệch vị trí khá xa -> 35 - 69%
-        # > 0.40: Sai hoàn toàn vị trí thực hiện (ví dụ làm ở thái dương thay vì ở miệng/ngực) -> 10 - 30%
-        if dist_loc <= 0.15:
-            loc_score = 90.0 + (0.15 - dist_loc) / 0.15 * 10.0
-        elif dist_loc <= 0.26:
-            loc_score = 70.0 + (0.26 - dist_loc) / 0.11 * 19.0
-            feedbacks.append(f"Vị trí bàn tay hơi lệch so với mẫu cử chỉ '{word_display}'")
-        elif dist_loc <= 0.40:
-            loc_score = 35.0 + (0.40 - dist_loc) / 0.14 * 34.0
-            feedbacks.append(f"Vị trí đặt tay chưa đúng khu vực cử chỉ của từ '{word_display}'")
+    if r_mag >= 0.10 and u_mag >= 0.08:
+        cos_sim = float(np.dot(u_stroke_vec, r_stroke_vec) / (u_mag * r_mag + 1e-6))
+        if cos_sim >= 0.70:
+            m_score = 90.0 + min(10.0, (cos_sim - 0.70) / 0.30 * 10.0)
+        elif cos_sim >= 0.20:
+            m_score = 65.0 + (cos_sim - 0.20) / 0.50 * 24.0
+            feedbacks.append(f"Hướng di chuyển tay hơi lệch so với cử chỉ '{word_display}'")
         else:
-            loc_score = max(10.0, 30.0 - (dist_loc - 0.40) * 50.0)
-            feedbacks.append(f"Sai vị trí: cử chỉ '{word_display}' cần thực hiện đúng vị trí mẫu (không đưa lên thái dương hoặc sai chỗ).")
+            m_score = 30.0
+            feedbacks.append(f"Hướng chuyển động của tay đi ngược hoặc sai hướng mẫu của từ '{word_display}'")
+    else:
+        m_score = 85.0 if abs(u_mag - r_mag) < 0.18 else 50.0
 
-        # Kiểm tra hai tay nếu từ vựng yêu cầu 2 tay
-        if r_is_two_handed and not u_is_two_handed:
-            loc_score = max(15.0, loc_score - 30.0)
-            feedbacks.append(f"Ký hiệu '{word_display}' yêu cầu thực hiện bằng CẢ 2 BÀN TAY!")
-
-        # 3. Quỹ đạo chuyển động (Movement Trajectory / Stroke)
-        u_stroke_vec = u_hand_eval[-1, 0, :2] - u_hand_eval[0, 0, :2] if len(u_hand_eval) >= 2 else np.array([0.0, 0.0])
-        r_stroke_vec = active_r_hand[-1, 0, :2] - active_r_hand[0, 0, :2] if len(active_r_hand) >= 2 else np.array([0.0, 0.0])
-
-        u_mag = float(np.linalg.norm(u_stroke_vec))
-        r_mag = float(np.linalg.norm(r_stroke_vec))
-
-        if r_mag >= 0.10 and u_mag >= 0.08:
-            # So sánh hướng chuyển động (cosine similarity)
-            cos_sim = float(np.dot(u_stroke_vec, r_stroke_vec) / (u_mag * r_mag + 1e-6))
-            if cos_sim >= 0.70:
-                m_score = 90.0 + min(10.0, (cos_sim - 0.70) / 0.30 * 10.0)
-            elif cos_sim >= 0.20:
-                m_score = 65.0 + (cos_sim - 0.20) / 0.50 * 24.0
-                feedbacks.append(f"Hướng di chuyển tay hơi lệch so với cử chỉ '{word_display}'")
-            else:
-                m_score = 30.0
-                feedbacks.append(f"Hướng chuyển động của tay đi ngược hoặc sai hướng mẫu của từ '{word_display}'")
-        else:
-            # Ký hiệu tĩnh hoặc biên độ chuyển động nhỏ
-            m_score = 85.0 if abs(u_mag - r_mag) < 0.18 else 50.0
-
-        position_score = min(100.0, round(0.60 * loc_score + 0.40 * m_score, 1))
-        overall_score = min(100.0, round(0.40 * angle_score + 0.60 * position_score, 1))
+    position_score = min(100.0, round(0.60 * loc_score + 0.40 * m_score, 1))
+    overall_score = min(100.0, round(0.40 * angle_score + 0.60 * position_score, 1))
 
     passed = overall_score >= 80.0
     if not feedbacks and passed:
@@ -473,8 +417,8 @@ def evaluate_word(word_slug: str, req: EvaluateRequest):
     return process_evaluation(req.landmarks, word_slug=word_slug)
 
 @app.post("/api/evaluate/chao")
-def evaluate_chao(req: EvaluateRequest):
-    return process_evaluation(req.landmarks, word_slug="chao")
+def evaluate_chao_legacy(req: EvaluateRequest):
+    return process_evaluation(req.landmarks, word_slug="")
 
 @app.get("/api/benchmarks")
 def list_benchmarks():
@@ -492,18 +436,26 @@ def list_benchmarks():
 
 @app.get("/")
 def root():
+    benchmarks_count = len([f for f in os.listdir(BENCHMARKS_DIR) if f.endswith("_benchmark.npy")]) if os.path.exists(BENCHMARKS_DIR) else 0
     return {
         "app": "Signlingo AI Scoring Service",
         "status": "online",
-        "target_word": "chao",
-        "benchmark_loaded": REF_SEQ is not None,
+        "dataset": "VSL400",
+        "benchmarks_loaded": benchmarks_count,
         "passing_threshold": 80.0,
-        "endpoints": ["/api/evaluate/chao", "/api/evaluate/{word_slug}"]
+        "endpoints": ["/api/evaluate/{word_slug}", "/api/benchmarks"]
     }
 
 @app.get("/api/health")
 def health():
-    return {"status": "healthy", "service": "signlingo-backend", "target_word": "chao", "passing_threshold": 80.0}
+    benchmarks_count = len([f for f in os.listdir(BENCHMARKS_DIR) if f.endswith("_benchmark.npy")]) if os.path.exists(BENCHMARKS_DIR) else 0
+    return {
+        "status": "healthy",
+        "service": "signlingo-backend-ai",
+        "dataset": "VSL400",
+        "benchmarks": benchmarks_count,
+        "passing_threshold": 80.0
+    }
 
 DATA_DIR = os.path.join(CURRENT_DIR, "data")
 os.makedirs(DATA_DIR, exist_ok=True)

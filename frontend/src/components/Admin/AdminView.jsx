@@ -245,7 +245,7 @@ export default function AdminView() {
                         w.videoFront.endsWith('.webm') ||
                         w.videoFront.startsWith('blob:') ||
                         w.videoFront.startsWith('/uploads/') ||
-                        w.videoFront.includes('chao.mp4')
+                        w.videoFront.includes('/vsl400_videos/')
                       );
 
                       return (
@@ -506,7 +506,7 @@ export default function AdminView() {
                 previewWord.videoFront.endsWith('.webm') ||
                 previewWord.videoFront.startsWith('blob:') ||
                 previewWord.videoFront.startsWith('/uploads/') ||
-                previewWord.videoFront.includes('chao.mp4')
+                previewWord.videoFront.includes('/vsl400_videos/')
               ) ? (
                 <video
                   src={previewWord.videoFront}
