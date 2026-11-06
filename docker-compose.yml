@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  # ========================================================
+  # 1. Cơ sở dữ liệu PostgreSQL
+  # ========================================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: signlingo-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-signlingo}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d signlingo"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - signlingo-net
+
+  # ========================================================
+  # 2. Python AI Evaluation Service (FastAPI + MediaPipe)
+  # ========================================================
+  backend-ai:
+    build:
+      context: ./backend-ai
+      dockerfile: Dockerfile
+    container_name: signlingo-backend-ai
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./frontend/public/uploads:/app/frontend_uploads
+    networks:
+      - signlingo-net
+
+  # ========================================================
+  # 3. Core Business Backend (NestJS + TypeORM)
+  # ========================================================
+  backend-core:
+    build:
+      context: ./backend-core
+      dockerfile: Dockerfile
+    container_name: signlingo-backend-core
+    restart: unless-stopped
+    environment:
+      PORT: 3000
+      NODE_ENV: production
+      DB_TYPE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      DB_NAME: ${DB_NAME:-signlingo}
+      DB_SYNCHRONIZE: "true"
+      JWT_SECRET: ${JWT_SECRET:-signlingo_super_secret_jwt_key_2026_very_secure}
+      JWT_EXPIRATION: "7d"
+      AI_SERVICE_URL: http://backend-ai:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      backend-ai:
+        condition: service_started
+    networks:
+      - signlingo-net
+
+  # ========================================================
+  # 4. Frontend Web App (React + Nginx)
+  # ========================================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: signlingo-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "5173:80"
+    depends_on:
+      - backend-core
+      - backend-ai
+    networks:
+      - signlingo-net
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  signlingo-net:
+    driver: bridge
+

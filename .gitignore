@@ -4,7 +4,27 @@ frontend/dist/
 frontend/dist-ssr/
 frontend/*.local
 
-# Backend / Python
+# Backend Core (NestJS)
+backend-core/node_modules/
+backend-core/dist/
+backend-core/*.local
+backend-core/*.sqlite
+backend-core/*.sqlite3
+backend-core/data/
+*.sqlite
+*.sqlite3
+
+# Backend AI (Python / FastAPI)
+backend-ai/__pycache__/
+backend-ai/*.py[cod]
+backend-ai/*$py.class
+backend-ai/.pytest_cache/
+backend-ai/venv/
+backend-ai/.venv/
+backend-ai/env/
+backend-ai/*.env
+
+# Legacy Backend
 backend/__pycache__/
 backend/*.py[cod]
 backend/*$py.class

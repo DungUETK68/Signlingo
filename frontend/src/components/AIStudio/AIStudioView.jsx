@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { DICTIONARY_WORDS } from '../../data/mockData';
 import { getAllWords } from '../../data/wordsStore';
 import { recordPracticeSession } from '../../data/personalizedStore';
+import { progressApi } from '../../services/api';
 import CanvasSkeleton from '../CanvasSkeleton';
 import confetti from 'canvas-confetti';
 import {
@@ -659,6 +660,17 @@ export default function AIStudioView({ initialWord = 'Chào', onBack }) {
           score: Math.round(data.overall_score),
           passed: data.passed,
           badJoints: data.bad_joints || []
+        });
+
+        // Đồng bộ lưu kết quả thực hành lên NestJS Backend Core
+        progressApi.logPractice({
+          wordSlug,
+          wordName: currentWordObj.word,
+          score: Math.round(data.overall_score),
+          isPassed: data.passed,
+          badJoints: data.bad_joints || [],
+          mode: 'camera',
+          durationSeconds: 3
         });
 
         if (data.passed) {

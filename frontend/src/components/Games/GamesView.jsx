@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { getAllWords } from '../../data/wordsStore';
 import { LEADERBOARD } from '../../data/mockData';
+import { progressApi } from '../../services/api';
 import CanvasSkeleton from '../CanvasSkeleton';
 import confetti from 'canvas-confetti';
 import { 
@@ -567,6 +568,17 @@ export default function GamesView({ onStartPracticeWord }) {
     setCurrentEvalResult(evalData);
     setBadJoints(evalData.bad_joints || []);
     badJointsRef.current = evalData.bad_joints || [];
+
+    // Ghi nhận điểm số Thử thách 5s về NestJS Backend
+    progressApi.logPractice({
+      wordSlug: currentWordObj.slug || 'chao',
+      wordName: currentWordObj.word,
+      score: finalScore,
+      isPassed: passed,
+      badJoints: evalData.bad_joints || [],
+      mode: '5s_challenge',
+      durationSeconds: 5
+    });
 
     if (passed) {
       setReflexScore(prev => prev + 100);

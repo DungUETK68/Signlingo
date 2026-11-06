@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import CanvasSkeleton from '../CanvasSkeleton';
 import confetti from 'canvas-confetti';
+import { progressApi } from '../../services/api';
 
 // Singleton Cache: Giữ mô hình trong bộ nhớ, lần sau mở lại là sẵn sàng ngay lập tức (0 giây)
 let globalHolisticInstance = null;
@@ -638,6 +639,17 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
 
       const total = results.reduce((acc, r) => acc + r.score, 0);
       const avg = Math.round(total / results.length);
+
+      // Ghi nhận điểm số bài luyện câu về NestJS Backend
+      progressApi.logPractice({
+        wordSlug: sentence.id || 'sentence',
+        wordName: sentence.title,
+        score: avg,
+        isPassed: avg >= 80,
+        badJoints: results.flatMap(r => r.bad_joints || []),
+        mode: 'sentence',
+        durationSeconds: wordsToPractice.length * 3
+      });
 
       if (avg >= 80) {
         setStatusMessage(`🎉 Chúc mừng! Bạn đã hoàn thành câu "${sentence.title}" đạt ${avg}/100 điểm.`);
