@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import RightSidebar from './components/RightSidebar';
 import PersonalizedPathView from './components/LearningPath/PersonalizedPathView';
@@ -11,7 +11,8 @@ import ReviewView from './components/Review/ReviewView';
 import DashboardView from './components/Dashboard/DashboardView';
 import AdminView from './components/Admin/AdminView';
 import AuthModal from './components/AuthModal';
-import { getUserProfile } from './data/personalizedStore';
+import { getUserProfile, saveUserProfile } from './data/personalizedStore';
+import { getStoredToken, authApi } from './services/api';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('personalized');
@@ -22,6 +23,66 @@ export default function App() {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [forceOnboarding, setForceOnboarding] = useState(false);
   const [userProfile, setUserProfile] = useState(() => getUserProfile());
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+
+  // 1. Kiểm tra Token JWT & Xác thực người dùng tự động khi tải web
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      const token = getStoredToken();
+      if (!token) {
+        setIsAuthenticated(false);
+        setIsAuthOpen(true);
+        setIsCheckingAuth(false);
+        return;
+      }
+
+      try {
+        const user = await authApi.getMe();
+        if (user && user.id) {
+          const profile = {
+            id: user.id,
+            name: user.fullName || 'Học viên Signlingo',
+            email: user.email,
+            role: user.role === 'ADMIN' ? 'Quản trị viên' : 'Học viên chăm chỉ',
+            isAdmin: user.role === 'ADMIN',
+            learningLevel: user.learningLevel || 'beginner',
+            dailyGoalMinutes: user.dailyGoalMinutes || 15,
+            priorityTopic: user.priorityTopic || 'greeting',
+            streakDays: user.streak || 1,
+            totalXp: user.xp || 0,
+            hearts: user.hearts ?? 5,
+            gems: user.gems ?? 100,
+            isLoggedIn: true,
+            hasCompletedOnboarding: true,
+          };
+          setUserProfile(profile);
+          saveUserProfile(profile);
+          setIsAuthenticated(true);
+          setIsAuthOpen(false);
+        } else {
+          // Token không hợp lệ hoặc hết hạn -> xóa token và bắt buộc đăng nhập
+          authApi.logout();
+          setIsAuthenticated(false);
+          setIsAuthOpen(true);
+        }
+      } catch (err) {
+        console.warn('Lỗi kết nối kiểm tra tài khoản từ Backend:', err);
+        const current = getUserProfile();
+        if (current && current.isLoggedIn && token) {
+          setIsAuthenticated(true);
+          setIsAuthOpen(false);
+        } else {
+          setIsAuthenticated(false);
+          setIsAuthOpen(true);
+        }
+      } finally {
+        setIsCheckingAuth(false);
+      }
+    };
+
+    checkAuthStatus();
+  }, []);
 
   const handleStartPracticeWord = (wordName) => {
     setPreviousTab(activeTab === 'practice' ? 'personalized' : activeTab);
@@ -50,6 +111,20 @@ export default function App() {
   };
 
   const handleOpenAuthGeneral = () => {
+    setForceOnboarding(false);
+    setIsAuthOpen(true);
+  };
+
+  // Đăng xuất: xóa JWT token, chuyển về trạng thái chưa xác thực
+  const handleLogout = () => {
+    authApi.logout();
+    const guestProfile = {
+      ...userProfile,
+      isLoggedIn: false
+    };
+    saveUserProfile(guestProfile);
+    setUserProfile(guestProfile);
+    setIsAuthenticated(false);
     setForceOnboarding(false);
     setIsAuthOpen(true);
   };
@@ -100,53 +175,40 @@ export default function App() {
             onStartPracticeWord={handleStartPracticeWord}
             initialLesson={selectedLearningLesson}
             initialTopic={selectedLearningTopic}
-            onClearInitialLesson={() => {
-              setSelectedLearningLesson(null);
-              setSelectedLearningTopic(null);
-            }}
           />
         )}
 
-        {/* TAB 3: TỪ ĐIỂN */}
+        {/* TAB 3: TỪ ĐIỂN VSL */}
         {activeTab === 'dictionary' && (
           <DictionaryView 
-            onStartPracticeWord={handleStartPracticeWord}
+            onStartPracticeWord={handleStartPracticeWord} 
             onOpenLesson={handleOpenLesson}
           />
         )}
 
-        {/* TAB MỚI: CÂU THƯỜNG GẶP (VSL SENTENCES) */}
+        {/* TAB 3.5: CÂU THƯỜNG GẶP (VSL SENTENCES) */}
         {activeTab === 'sentences' && (
-          <SentencesView 
-            onStartPracticeWord={handleStartPracticeWord}
-          />
+          <SentencesView onStartPracticeWord={handleStartPracticeWord} />
         )}
 
         {/* TAB 4: LUYỆN TẬP CAMERA AI */}
         {activeTab === 'practice' && (
           <AIStudioView 
-            key={practiceTargetWord}
-            initialWord={practiceTargetWord} 
-            onBack={handleBackFromPractice}
+            targetWord={practiceTargetWord} 
+            onBack={handleBackFromPractice} 
           />
         )}
 
-        {/* TAB 5: TRÒ CHƠI & THỬ THÁCH */}
+        {/* TAB 5: MINIGAME & THỬ THÁCH */}
         {activeTab === 'games' && (
           <GamesView onStartPracticeWord={handleStartPracticeWord} />
         )}
 
-        {/* TAB 6: ÔN TẬP BÀI ĐÃ LƯU */}
+        {/* TAB 6: ÔN TẬP (SPACED REPETITION) */}
         {activeTab === 'review' && (
-          <ReviewView
-            onOpenLesson={handleOpenLessonFromReview}
+          <ReviewView 
             onStartPracticeWord={handleStartPracticeWord}
-            onNavigateLearning={() => {
-              setSelectedLearningLesson(null);
-              setSelectedLearningTopic(null);
-              setActiveTab('personalized');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
+            onOpenLesson={handleOpenLessonFromReview}
           />
         )}
 
@@ -168,15 +230,23 @@ export default function App() {
         onOpenSurvey={handleOpenAuthForSurvey}
         onStartPractice={handleStartPracticeWord}
         onSelectTab={setActiveTab}
+        onLogout={handleLogout}
       />
 
-      {/* 4. Auth Modal & Onboarding Assessment */}
+      {/* 4. Auth Modal & Onboarding Assessment (Chặn vào web nếu chưa đăng nhập) */}
       <AuthModal
-        isOpen={isAuthOpen}
+        isOpen={isAuthOpen || (!isAuthenticated && !isCheckingAuth)}
+        isMandatory={!isAuthenticated && !isCheckingAuth}
         forceOnboarding={forceOnboarding}
-        onClose={() => setIsAuthOpen(false)}
+        onClose={() => {
+          if (isAuthenticated) {
+            setIsAuthOpen(false);
+          }
+        }}
         onLoginSuccess={(newUserData, level) => {
           setUserProfile(newUserData);
+          setIsAuthenticated(true);
+          setIsAuthOpen(false);
           setActiveTab('personalized');
         }}
       />

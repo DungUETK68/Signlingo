@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSavedLessons, useSignWords } from '../../data/wordsStore';
+import { adaptiveApi } from '../../services/api';
 import { 
   BookmarkCheck, 
   Play, 
@@ -8,13 +9,29 @@ import {
   BookOpen, 
   ArrowRight,
   Clock,
-  Sparkles
+  Sparkles,
+  Zap,
+  CheckCircle2
 } from 'lucide-react';
 
 export default function ReviewView({ onOpenLesson, onStartPracticeWord, onNavigateLearning }) {
   const { savedLessons, removeSaved } = useSavedLessons();
   const { topics } = useSignWords();
   const [searchQuery, setSearchQuery] = useState('');
+  const [dueItems, setDueItems] = useState([]);
+
+  // Tải danh sách từ đến hạn ôn tập từ thuật toán Spaced Repetition (SRS) trên NestJS
+  useEffect(() => {
+    const fetchDue = async () => {
+      try {
+        const items = await adaptiveApi.getDueReviewQueue();
+        if (Array.isArray(items)) {
+          setDueItems(items);
+        }
+      } catch (e) {}
+    };
+    fetchDue();
+  }, []);
 
   // Lọc theo từ khóa tìm kiếm
   const filteredLessons = savedLessons.filter(item => {
@@ -137,6 +154,45 @@ export default function ReviewView({ onOpenLesson, onStartPracticeWord, onNaviga
           </div>
         )}
       </div>
+
+      {/* 1.5. SRS Banner: Các từ đến hạn ôn tập hôm nay */}
+      {dueItems.length > 0 && (
+        <div style={{
+          backgroundColor: '#eff6ff',
+          border: '1.5px solid #bfdbfe',
+          borderRadius: 'var(--radius-xl)',
+          padding: '1.25rem',
+          marginBottom: '1.25rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '1rem'
+        }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#1d4ed8', fontWeight: 800, fontSize: '0.92rem', marginBottom: '0.2rem' }}>
+              <Zap size={16} fill="#1d4ed8" />
+              <span>THUẬT TOÁN LẶP LẠI NGẮT QUÃNG (SPACED REPETITION)</span>
+            </div>
+            <p style={{ fontSize: '0.84rem', color: '#334155', margin: 0 }}>
+              Hệ thống phát hiện bạn có <b>{dueItems.length} từ</b> đến hạn cần ôn lại hôm nay để khắc sâu vào trí nhớ dài hạn.
+            </p>
+          </div>
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            {dueItems.slice(0, 3).map(item => (
+              <button
+                key={item.id}
+                onClick={() => onStartPracticeWord(item.wordName)}
+                className="btn-pill btn-primary"
+                style={{ fontSize: '0.8rem', padding: '0.4rem 0.8rem', gap: '0.3rem' }}
+              >
+                <span>Ôn "{item.wordName}"</span>
+                <ArrowRight size={14} />
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* 2. Danh sách bài học / Từ vựng đã lưu */}
       {savedLessons.length === 0 ? (

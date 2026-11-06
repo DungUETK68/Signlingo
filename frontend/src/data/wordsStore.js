@@ -234,17 +234,35 @@ export function useSignWords() {
   const [topics, setTopics] = useState(getAllTopics());
 
   useEffect(() => {
-    // Lấy dữ liệu từ backend nếu có lúc khởi chạy
+    // Lấy dữ liệu từ backend NestJS nếu có lúc khởi chạy
     const syncBackendWords = async () => {
       try {
-        const res = await fetch('http://127.0.0.1:8000/api/words');
+        let res = await fetch('http://localhost:3000/api/words');
+        if (!res.ok) {
+          res = await fetch('http://127.0.0.1:8000/api/words');
+        }
         if (res.ok) {
           const backendWords = await res.json();
           if (Array.isArray(backendWords) && backendWords.length > 0) {
+            const formatted = backendWords.map(bw => ({
+              id: bw.id,
+              word: bw.name || bw.word,
+              slug: bw.slug,
+              topic: bw.topicId || bw.topic || 'general',
+              topicLabel: bw.category || bw.topicLabel || 'Từ vựng thông dụng',
+              description: bw.meaning || bw.description || 'Thực hiện cử chỉ theo video mẫu.',
+              details: bw.usageTips || bw.details || '',
+              videoFront: bw.videoUrl || bw.videoFront || '/chao.mp4',
+              videoSide: bw.videoUrl || bw.videoSide || '/chao.mp4',
+              thumbnail: bw.thumbnailUrl || bw.thumbnail || (bw.slug ? `/vsl400_videos/${bw.slug}_thumb.jpg` : '/chao_thumb.jpg'),
+              difficulty: bw.difficulty || 'Dễ',
+              dialect: 'Toàn quốc'
+            }));
+
             const local = getCustomWords();
-            const merged = [...backendWords];
+            const merged = [...formatted];
             local.forEach(lw => {
-              if (!merged.some(bw => bw.id === lw.id)) {
+              if (!merged.some(bw => bw.id === lw.id || bw.slug === lw.slug)) {
                 merged.push(lw);
               }
             });
