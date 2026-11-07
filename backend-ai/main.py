@@ -418,7 +418,7 @@ def evaluate_word(word_slug: str, req: EvaluateRequest):
 
 @app.post("/api/evaluate/chao")
 def evaluate_chao_legacy(req: EvaluateRequest):
-    return process_evaluation(req.landmarks, word_slug="")
+    return process_evaluation(req.landmarks, word_slug="chao")
 
 @app.get("/api/benchmarks")
 def list_benchmarks():

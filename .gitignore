@@ -83,3 +83,7 @@ frontend/public/vsl400_videos/*.jpg
 frontend/public/vsl400_videos/*.jpeg
 frontend/public/vsl400_videos/*.png
 
+# Temporary Scratch
+scratch/
+scratch_*
+

@@ -1,5 +1,24 @@
 [
   {
+    "word": "Chào",
+    "slug": "chao",
+    "video_id": "000000_chao",
+    "signer_id": "001",
+    "fps": 29.97,
+    "num_frames": 56,
+    "length_seconds": 2.2,
+    "topic": "greeting",
+    "topicLabel": "Chào hỏi & Giao tiếp",
+    "difficulty": "Dễ",
+    "videoFront": "/vsl400_videos/chao_front.mp4",
+    "videoLeft": "/vsl400_videos/chao_left.mp4",
+    "videoRight": "/vsl400_videos/chao_right.mp4",
+    "videoSide": "/vsl400_videos/chao_left.mp4",
+    "thumbnail": "/vsl400_videos/chao_thumb.jpg",
+    "benchmarkReady": true,
+    "dominantHand": "right"
+  },
+  {
     "word": "Anh",
     "slug": "anh",
     "video_id": "000000",

@@ -17,12 +17,11 @@ const CHAO_WORD = {
 
 // Helper để lấy metadata của từ theo slug
 export function getWordBySlug(slug) {
-  if (slug === 'chao' || slug === 'cam_on') {
-    const camOn = VSL400_WORDS.find(w => w.slug === 'cam_on');
-    return camOn || CHAO_WORD;
-  }
   const found = VSL400_WORDS.find(w => w.slug === slug);
   if (found) return found;
+  if (slug === 'chao') {
+    return CHAO_WORD;
+  }
   return {
     id: `vsl-${slug}`,
     word: slug.toUpperCase(),

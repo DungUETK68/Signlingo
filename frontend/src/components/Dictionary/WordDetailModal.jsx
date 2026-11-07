@@ -6,11 +6,11 @@ export default function WordDetailModal({ wordData, onClose, onStartPractice, on
 
   if (!wordData) return null;
   
-  let currentVideo = wordData.videoFront;
+  let currentVideo = wordData.videoFront || wordData.videoUrl;
   if (viewAngle === 'left') {
-    currentVideo = wordData.videoLeft || wordData.videoSide || wordData.videoFront;
+    currentVideo = wordData.videoLeft || wordData.videoSide || wordData.videoFront || wordData.videoUrl;
   } else if (viewAngle === 'right') {
-    currentVideo = wordData.videoRight || wordData.videoFront;
+    currentVideo = wordData.videoRight || wordData.videoFront || wordData.videoUrl;
   }
 
   const isVideo = currentVideo && (
@@ -18,7 +18,8 @@ export default function WordDetailModal({ wordData, onClose, onStartPractice, on
     currentVideo.endsWith('.webm') || 
     currentVideo.startsWith('blob:') ||
     currentVideo.startsWith('/uploads/') ||
-    currentVideo.startsWith('/vsl400_videos/')
+    currentVideo.startsWith('/vsl400_videos/') ||
+    currentVideo.includes('.mp4')
   );
 
   return (

@@ -28,7 +28,6 @@ dist-ssr
 *.webm
 *.mov
 *.avi
-!public/chao.mp4
 public/uploads/*
 !public/uploads/.gitkeep
 

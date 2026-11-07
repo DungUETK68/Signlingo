@@ -5,12 +5,31 @@ const STORAGE_KEY = 'signlingo_custom_words';
 const TOPICS_STORAGE_KEY = 'signlingo_custom_topics';
 const EVENT_NAME = 'signlingo_data_updated';
 
+// Danh sách các ID từ seeding mẫu cần loại bỏ triệt để
+const LEGACY_SEEDING_IDS = new Set(['w-hello', 'w-bye', 'w-family', 'w-alpha-a', 'w-num-5']);
+
 // Lấy danh sách từ tùy chỉnh từ localStorage
 export function getCustomWords() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
-    return JSON.parse(raw);
+    const list = JSON.parse(raw);
+    if (!Array.isArray(list)) return [];
+
+    // Lọc bỏ triệt để các từ seeding ảnh/mock cũ (chứa ảnh stock unsplash hoặc ID mẫu)
+    const cleaned = list.filter(w => {
+      if (!w || !w.id) return false;
+      if (LEGACY_SEEDING_IDS.has(w.id)) return false;
+      const vFront = String(w.videoFront || '');
+      const vThumb = String(w.thumbnail || '');
+      if (vFront.includes('unsplash.com') || vThumb.includes('unsplash.com')) return false;
+      return true;
+    });
+
+    if (cleaned.length !== list.length) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(cleaned));
+    }
+    return cleaned;
   } catch (e) {
     console.error('Lỗi đọc custom words từ localStorage:', e);
     return [];
@@ -254,7 +273,8 @@ export function useSignWords() {
               topicLabel: bw.category || bw.topicLabel || 'Từ vựng thông dụng',
               description: bw.meaning || bw.description || 'Thực hiện cử chỉ theo video mẫu.',
               details: bw.usageTips || bw.details || '',
-              videoFront: bw.videoUrl || bw.videoFront || '/vsl400_videos/cam_on_front.mp4',
+              videoFront: bw.videoFront || bw.videoUrl || '/vsl400_videos/cam_on_front.mp4',
+              videoUrl: bw.videoUrl || bw.videoFront || '/vsl400_videos/cam_on_front.mp4',
               videoLeft: bw.videoLeft || bw.videoSide || '/vsl400_videos/cam_on_left.mp4',
               videoRight: bw.videoRight || '/vsl400_videos/cam_on_right.mp4',
               videoSide: bw.videoLeft || bw.videoSide || bw.videoUrl || '/vsl400_videos/cam_on_left.mp4',

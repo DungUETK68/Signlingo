@@ -1,6 +1,30 @@
 // Danh mục đầy đủ 400 từ vựng VSL400 chuẩn hóa đa góc quay
 export const VSL400_WORDS = [
   {
+    "word": "Chào",
+    "slug": "chao",
+    "video_id": "000000_chao",
+    "signer_id": "001",
+    "fps": 29.97,
+    "num_frames": 56,
+    "length_seconds": 2.2,
+    "topic": "greeting",
+    "topicLabel": "Chào hỏi & Giao tiếp",
+    "difficulty": "Dễ",
+    "description": "Đưa bàn tay mở chạm nhẹ lên vùng thái dương, sau đó đưa nhẹ dứt khoát ra phía trước kèm nụ cười thân thiện.",
+    "details": "Ký hiệu chuẩn Ngôn ngữ ký hiệu Việt Nam (VSL) cho từ 'Chào' (hoặc 'Xin chào') dùng khi gặp gỡ.",
+    "handShape": "Bàn tay mở 5 ngón khép tự nhiên (Open-B)",
+    "movement": "Chạm thái dương -> Đưa về phía đối tác (Vòng cung nhỏ)",
+    "faceExpression": "Mắt nhìn đối diện, nụ cười vui tươi",
+    "videoFront": "/vsl400_videos/chao_front.mp4",
+    "videoLeft": "/vsl400_videos/chao_left.mp4",
+    "videoRight": "/vsl400_videos/chao_right.mp4",
+    "videoSide": "/vsl400_videos/chao_left.mp4",
+    "thumbnail": "/vsl400_videos/chao_thumb.jpg",
+    "benchmarkReady": true,
+    "dominantHand": "right"
+  },
+  {
     "word": "Anh",
     "slug": "anh",
     "video_id": "000000",
