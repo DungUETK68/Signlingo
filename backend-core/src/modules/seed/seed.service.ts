@@ -322,92 +322,41 @@ export class SeedService implements OnApplicationBootstrap {
   }
 
   private async seedSentences() {
-    const count = await this.sentenceRepository.count();
-    if (count > 0) return;
-
-    const sentences = [
-      {
-        title: 'Em cảm ơn anh',
-        slug: 'em-cam-on-anh',
-        meaning: 'Lời cảm ơn chân thành của em gửi tới người anh.',
-        structure: 'SOV: Chủ ngữ (Em) + Đối tượng (Anh) + Hành động (Cảm ơn)',
-        category: 'Chào hỏi & Giao tiếp',
-        difficulty: 'Dễ',
-        explanation: 'Trong VSL, chủ thể và người nhận cử chỉ được xác định trước, sau đó mới thực hiện ký hiệu Cảm ơn.',
-        orderIndex: 1,
-        words: [
-          { id: 1, name: 'Em', slug: 'em', role: 'Chủ ngữ', video: '/vsl400_videos/em_front.mp4', hint: 'Ký hiệu Em chỉ vào bản thân' },
-          { id: 2, name: 'Anh', slug: 'anh', role: 'Đối tượng', video: '/vsl400_videos/anh_front.mp4', hint: 'Ký hiệu Anh chỉ người đối diện' },
-          { id: 3, name: 'Cảm ơn', slug: 'cam_on', role: 'Hành động', video: '/vsl400_videos/cam_on_front.mp4', hint: 'Bàn tay mở chạm nhẹ cằm đưa ra phía trước' },
-        ],
-      },
-      {
-        title: 'Anh ăn phở',
-        slug: 'anh-an-pho',
-        meaning: 'Anh đang thưởng thức món phở truyền thống.',
-        structure: 'SOV: Chủ (Anh) + Món ăn (Phở) + Động từ (Ăn)',
-        category: 'Ẩm thực & Đồ uống',
-        difficulty: 'Dễ',
-        explanation: 'Theo quy tắc Chủ đề - Lời dẫn VSL, món ăn (bổ ngữ) được đưa ra trước hành động Ăn.',
-        orderIndex: 2,
-        words: [
-          { id: 1, name: 'Anh', slug: 'anh', role: 'Chủ ngữ', video: '/vsl400_videos/anh_front.mp4', hint: 'Ký hiệu Anh' },
-          { id: 2, name: 'Phở', slug: 'pho', role: 'Món ăn', video: '/vsl400_videos/pho_front.mp4', hint: 'Ký hiệu Phở hai tay gấp sợi' },
-          { id: 3, name: 'Ăn', slug: 'an', role: 'Động từ', video: '/vsl400_videos/an_front.mp4', hint: 'Ký hiệu Ăn chụm ngón đưa vào miệng' },
-        ],
-      },
-      {
-        title: 'Em ăn bánh bao',
-        slug: 'em-an-banh-bao',
-        meaning: 'Em đang ăn bánh bao nóng hổi.',
-        structure: 'SOV: Chủ (Em) + Món ăn (Bánh bao) + Động từ (Ăn)',
-        category: 'Ẩm thực & Đồ uống',
-        difficulty: 'Dễ',
-        explanation: 'Ký hiệu món ăn (Bánh bao) đứng trước hành động Ăn.',
-        orderIndex: 3,
-        words: [
-          { id: 1, name: 'Em', slug: 'em', role: 'Chủ ngữ', video: '/vsl400_videos/em_front.mp4', hint: 'Ký hiệu Em' },
-          { id: 2, name: 'Bánh bao', slug: 'banh_bao', role: 'Món ăn', video: '/vsl400_videos/banh_bao_front.mp4', hint: 'Ký hiệu Bánh bao chụm tròn hai tay' },
-          { id: 3, name: 'Ăn', slug: 'an', role: 'Động từ', video: '/vsl400_videos/an_front.mp4', hint: 'Ký hiệu Ăn' },
-        ],
-      },
-      {
-        title: 'Mẹ uống sữa',
-        slug: 'me-uong-sua',
-        meaning: 'Mẹ đang uống sữa dinh dưỡng.',
-        structure: 'SOV: Chủ (Mẹ) + Đồ uống (Sữa) + Động từ (Uống)',
-        category: 'Ẩm thực & Đồ uống',
-        difficulty: 'Dễ',
-        explanation: 'Danh từ thức uống (Sữa) đi trước hành động (Uống).',
-        orderIndex: 4,
-        words: [
-          { id: 1, name: 'Mẹ', slug: 'me', role: 'Chủ ngữ', video: '/vsl400_videos/me_front.mp4', hint: 'Ký hiệu Mẹ' },
-          { id: 2, name: 'Sữa', slug: 'sua', role: 'Đồ uống', video: '/vsl400_videos/sua_front.mp4', hint: 'Ký hiệu Sữa bóp nhẹ lòng bàn tay' },
-          { id: 3, name: 'Uống', slug: 'uong', role: 'Động từ', video: '/vsl400_videos/uong_front.mp4', hint: 'Ký hiệu Uống tay cong nâng ly' },
-        ],
-      },
-      {
-        title: 'Em cảm ơn bác',
-        slug: 'em-cam-on-bac',
-        meaning: 'Em gửi lời cảm ơn chân thành tới bác.',
-        structure: 'Chủ (Em) + Người nhận (Bác) + Động từ (Cảm ơn)',
-        category: 'Chào hỏi & Giao tiếp',
-        difficulty: 'Dễ',
-        explanation: 'Ký hiệu Cảm ơn đưa từ cằm hướng về phía bác.',
-        orderIndex: 5,
-        words: [
-          { id: 1, name: 'Em', slug: 'em', role: 'Chủ ngữ', video: '/vsl400_videos/em_front.mp4', hint: 'Ký hiệu Em' },
-          { id: 2, name: 'Bác', slug: 'bac', role: 'Đối tượng', video: '/vsl400_videos/bac_front.mp4', hint: 'Ký hiệu Bác tôn kính' },
-          { id: 3, name: 'Cảm ơn', slug: 'cam_on', role: 'Động từ', video: '/vsl400_videos/cam_on_front.mp4', hint: 'Ký hiệu Cảm ơn' },
-        ],
-      },
+    const possiblePaths = [
+      path.join(__dirname, 'vsl400-sentences-seed.json'),
+      path.join(process.cwd(), 'src', 'modules', 'seed', 'vsl400-sentences-seed.json'),
+      path.join(process.cwd(), 'dist', 'modules', 'seed', 'vsl400-sentences-seed.json'),
+      path.join(process.cwd(), 'backend-core', 'src', 'modules', 'seed', 'vsl400-sentences-seed.json'),
     ];
+    const seedJsonPath = possiblePaths.find((p) => fs.existsSync(p));
+    let sentencesToSeed: any[] = [];
 
-    for (const s of sentences) {
-      const sentence = this.sentenceRepository.create(s);
-      await this.sentenceRepository.save(sentence);
+    if (seedJsonPath && fs.existsSync(seedJsonPath)) {
+      try {
+        const raw = fs.readFileSync(seedJsonPath, 'utf-8');
+        sentencesToSeed = JSON.parse(raw);
+      } catch (e) {
+        this.logger.error('Lỗi đọc vsl400-sentences-seed.json:', e);
+      }
     }
-    this.logger.log(`Đã nạp thành công ${sentences.length} câu VSL chuẩn vào CSDL.`);
+
+    if (!sentencesToSeed || sentencesToSeed.length === 0) {
+      this.logger.warn('Không tìm thấy tệp vsl400-sentences-seed.json.');
+      return;
+    }
+
+    this.logger.log(`Đang nạp/đồng bộ ${sentencesToSeed.length} câu VSL chuẩn vào CSDL...`);
+    for (const s of sentencesToSeed) {
+      const existing = await this.sentenceRepository.findOne({ where: { slug: s.slug } });
+      if (!existing) {
+        const sentence = this.sentenceRepository.create(s);
+        await this.sentenceRepository.save(sentence);
+      } else {
+        Object.assign(existing, s);
+        await this.sentenceRepository.save(existing);
+      }
+    }
+    this.logger.log(`Hoàn tất đồng bộ ${sentencesToSeed.length} câu VSL chuẩn vào CSDL.`);
   }
 
   private async seedDemoActivity() {

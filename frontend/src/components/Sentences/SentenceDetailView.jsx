@@ -27,10 +27,10 @@ export default function SentenceDetailView({ sentence, onBack, onStartPractice }
   // Xác định đường dẫn video mẫu theo góc quay (Chính diện hoặc Góc nghiêng)
   const currentVideoSrc = React.useMemo(() => {
     if (!currentWord) return '/vsl400_videos/cam_on_front.mp4';
-    if (viewAngle === 'side' && currentWord.videoSide) {
-      return currentWord.videoSide;
+    if (viewAngle === 'side' && (currentWord.videoSide || currentWord.videoLeft || currentWord.videoRight)) {
+      return currentWord.videoSide || currentWord.videoLeft || currentWord.videoRight;
     }
-    return currentWord.videoFront || '/vsl400_videos/cam_on_front.mp4';
+    return currentWord.videoFront || currentWord.video || currentWord.videoUrl || (currentWord.slug ? `/vsl400_videos/${currentWord.slug}_front.mp4` : '/vsl400_videos/cam_on_front.mp4');
   }, [currentWord, viewAngle]);
 
   // Cập nhật tốc độ phát video
@@ -210,7 +210,7 @@ export default function SentenceDetailView({ sentence, onBack, onStartPractice }
               <span>Đang phát: Từ {currentWordIndex + 1}/{words.length}</span>
             </span>
             <span style={{ fontSize: '1.05rem', fontWeight: 900, color: '#0f172a' }}>
-              {currentWord?.word}
+              {currentWord?.word || currentWord?.name}
             </span>
             <span style={{ fontSize: '0.8rem', color: '#64748b', fontStyle: 'italic' }}>
               ({currentWord?.role})
@@ -315,7 +315,7 @@ export default function SentenceDetailView({ sentence, onBack, onStartPractice }
             fontWeight: 800
           }}>
             <span style={{ color: '#38bdf8' }}>{currentWordIndex + 1}/{words.length}:</span>
-            <span>{currentWord?.word}</span>
+            <span>{currentWord?.word || currentWord?.name}</span>
           </div>
 
           {/* Nút bấm Play/Pause nhanh ở giữa khi pause */}
@@ -437,7 +437,7 @@ export default function SentenceDetailView({ sentence, onBack, onStartPractice }
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
                   <span style={{ fontSize: '1.05rem', fontWeight: 900, color: '#0f172a' }}>
-                    {w.word}
+                    {w.word || w.name}
                   </span>
                   <span style={{
                     fontSize: '0.75rem',
@@ -451,7 +451,7 @@ export default function SentenceDetailView({ sentence, onBack, onStartPractice }
                   </span>
                 </div>
                 <div style={{ fontSize: '0.88rem', color: '#475569', lineHeight: 1.5 }}>
-                  {w.description || 'Thực hiện cử chỉ theo chuẩn bộ dữ liệu VSL400.'}
+                  {w.hint || w.description || 'Thực hiện cử chỉ theo chuẩn bộ dữ liệu VSL400.'}
                 </div>
               </div>
 

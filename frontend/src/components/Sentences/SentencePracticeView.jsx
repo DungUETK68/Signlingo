@@ -34,7 +34,15 @@ function getShortRole(role) {
 }
 
 export default function SentencePracticeView({ sentence, onBack, onFinish }) {
-  const words = sentence?.words || [];
+  const rawWords = sentence?.words || [];
+  const words = React.useMemo(() => {
+    return rawWords.map((w) => ({
+      ...w,
+      word: w.name || w.word,
+      name: w.name || w.word,
+      videoFront: w.videoFront || w.video || (w.slug ? `/vsl400_videos/${w.slug}_front.mp4` : '/vsl400_videos/cam_on_front.mp4'),
+    }));
+  }, [rawWords]);
 
   // Trạng thái từ vựng & tiến trình câu
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -89,7 +97,7 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
   // Video mẫu của từ hiện tại
   const sampleVideoSrc = React.useMemo(() => {
     if (!currentWord) return '/vsl400_videos/cam_on_front.mp4';
-    return currentWord.videoFront || '/vsl400_videos/cam_on_front.mp4';
+    return currentWord.videoFront || currentWord.video || (currentWord.slug ? `/vsl400_videos/${currentWord.slug}_front.mp4` : '/vsl400_videos/cam_on_front.mp4');
   }, [currentWord]);
 
   // Đổi tốc độ phát video mẫu (1.0x hoặc 0.5x)

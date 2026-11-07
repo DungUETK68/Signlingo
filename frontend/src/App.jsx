@@ -3,6 +3,7 @@ import Sidebar from './components/Sidebar';
 import RightSidebar from './components/RightSidebar';
 import PersonalizedPathView from './components/LearningPath/PersonalizedPathView';
 import LearningPathView from './components/LearningPath/LearningPathView';
+import GrammarView from './components/Grammar/GrammarView';
 import DictionaryView from './components/Dictionary/DictionaryView';
 import SentencesView from './components/Sentences/SentencesView';
 import AIStudioView from './components/AIStudio/AIStudioView';
@@ -21,6 +22,7 @@ export default function App() {
   const [practiceTargetWord, setPracticeTargetWord] = useState('Cảm ơn');
   const [selectedLearningLesson, setSelectedLearningLesson] = useState(null);
   const [selectedLearningTopic, setSelectedLearningTopic] = useState(null);
+  const [selectedSentenceId, setSelectedSentenceId] = useState(null);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login'); // 'login' | 'register'
   const [forceOnboarding, setForceOnboarding] = useState(false);
@@ -244,6 +246,18 @@ export default function App() {
           />
         )}
 
+        {/* TAB 2.5: NGỮ PHÁP VSL */}
+        {activeTab === 'grammar' && (
+          <GrammarView
+            onSelectTab={setActiveTab}
+            onOpenSentenceDetail={(sentenceId) => {
+              setSelectedSentenceId(sentenceId);
+              setActiveTab('sentences');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
+        )}
+
         {/* TAB 3: TỪ ĐIỂN VSL */}
         {activeTab === 'dictionary' && (
           <DictionaryView 
@@ -254,7 +268,10 @@ export default function App() {
 
         {/* TAB 3.5: CÂU THƯỜNG GẶP (VSL SENTENCES) */}
         {activeTab === 'sentences' && (
-          <SentencesView onStartPracticeWord={handleStartPracticeWord} />
+          <SentencesView
+            onStartPracticeWord={handleStartPracticeWord}
+            initialSentenceId={selectedSentenceId}
+          />
         )}
 
         {/* TAB 4: LUYỆN TẬP CAMERA AI */}

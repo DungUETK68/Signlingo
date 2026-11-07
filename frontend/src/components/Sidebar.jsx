@@ -9,15 +9,17 @@ import {
   Settings,
   Hand,
   Sparkles,
-  MessageSquareQuote
+  MessageSquareQuote,
+  GraduationCap
 } from 'lucide-react';
 import { useSavedLessons } from '../data/wordsStore';
 
 const NAV_ITEMS = [
   { id: 'personalized', label: 'Lộ trình cá nhân', icon: Sparkles, isAi: true },
   { id: 'learning', label: 'Lộ trình chuẩn', icon: BookOpen },
-  { id: 'dictionary', label: 'Từ điển', icon: Search },
+  { id: 'grammar', label: 'Ngữ pháp', icon: GraduationCap },
   { id: 'sentences', label: 'Câu thường gặp', icon: MessageSquareQuote },
+  { id: 'dictionary', label: 'Từ điển', icon: Search },
   { id: 'practice', label: 'Luyện tập AI', icon: Camera, highlight: true },
   { id: 'games', label: 'Thử thách', icon: Zap },
   { id: 'review', label: 'Ôn tập', icon: BookmarkCheck },
