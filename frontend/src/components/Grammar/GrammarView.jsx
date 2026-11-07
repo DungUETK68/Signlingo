@@ -309,13 +309,22 @@ export default function GrammarView({ onSelectTab, onOpenSentenceDetail }) {
                 padding: '1.25rem',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.65rem' }}>
-                <span style={{ fontSize: '0.8rem', fontWeight: 900, color: '#991b1b', textTransform: 'uppercase' }}>
-                  🗣️ Tiếng Việt Nói (SVO)
-                </span>
-                <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#b91c1c' }}>
+              <div style={{ marginBottom: '0.65rem' }}>
+                <div style={{ fontSize: '0.82rem', fontWeight: 900, color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                  🗣️ Tiếng Việt Nói
+                </div>
+                <div style={{
+                  display: 'inline-block',
+                  fontSize: '0.74rem',
+                  fontWeight: 800,
+                  color: '#b91c1c',
+                  backgroundColor: '#fee2e2',
+                  padding: '0.18rem 0.55rem',
+                  borderRadius: 'var(--radius-pill)',
+                  marginTop: '0.35rem'
+                }}>
                   {activeRule.spokenExample.type}
-                </span>
+                </div>
               </div>
               <div style={{ fontSize: '1.15rem', fontWeight: 900, color: '#7f1d1d', marginBottom: '0.75rem' }}>
                 "{activeRule.spokenExample.text}"
@@ -339,13 +348,22 @@ export default function GrammarView({ onSelectTab, onOpenSentenceDetail }) {
                 padding: '1.25rem',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.65rem' }}>
-                <span style={{ fontSize: '0.8rem', fontWeight: 900, color: '#166534', textTransform: 'uppercase' }}>
+              <div style={{ marginBottom: '0.65rem' }}>
+                <div style={{ fontSize: '0.82rem', fontWeight: 900, color: '#166534', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
                   🤟 VSL Ký Hiệu (Chủ đề - Lời dẫn)
-                </span>
-                <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#15803d' }}>
+                </div>
+                <div style={{
+                  display: 'inline-block',
+                  fontSize: '0.74rem',
+                  fontWeight: 800,
+                  color: '#15803d',
+                  backgroundColor: '#dcfce7',
+                  padding: '0.18rem 0.55rem',
+                  borderRadius: 'var(--radius-pill)',
+                  marginTop: '0.35rem'
+                }}>
                   {activeRule.signExample.type}
-                </span>
+                </div>
               </div>
               <div style={{ fontSize: '1.15rem', fontWeight: 900, color: '#14532d', marginBottom: '0.75rem' }}>
                 "{activeRule.signExample.text}"

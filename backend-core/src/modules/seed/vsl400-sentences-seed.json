@@ -3,17 +3,17 @@
     "orderIndex": 1,
     "slug": "em-cam-on-anh",
     "title": "Em cảm ơn anh",
-    "meaning": "Lời cảm ơn chân thành, lễ phép của em gửi tới người anh.",
+    "meaning": "Lời cảm kích chân thành, lễ phép của em gửi tới người anh.",
     "structure": "SOV: Chủ (Em) + Người nhận (Anh) + Động từ (Cảm ơn)",
-    "category": "Chào hỏi & Giao tiếp",
+    "category": "Giao tiếp & Xã giao",
     "difficulty": "Dễ",
-    "explanation": "Theo quy tắc ngữ pháp VSL, khi bày tỏ sự cảm kích lễ phép, người điếc xác định rõ chủ thể (Em) và đối tượng nhận (Anh) trước, sau đó thực hiện cử chỉ Cảm ơn hướng về phía người đối diện.",
+    "explanation": "Xác định chủ thể (Em) và đối tượng nhận (Anh) trước, sau đó thực hiện cử chỉ Cảm ơn hướng về phía người đối diện.",
     "words": [
       {
         "id": 1,
         "name": "Em",
         "slug": "em",
-        "role": "Chủ ngữ (Người nói nhỏ tuổi)",
+        "role": "Chủ ngữ",
         "video": "/vsl400_videos/em_front.mp4",
         "videoFront": "/vsl400_videos/em_front.mp4",
         "videoSide": "/vsl400_videos/em_left.mp4",
@@ -23,7 +23,7 @@
         "id": 2,
         "name": "Anh",
         "slug": "anh",
-        "role": "Đối tượng tiếp nhận",
+        "role": "Đối tượng nhận",
         "video": "/vsl400_videos/anh_front.mp4",
         "videoFront": "/vsl400_videos/anh_front.mp4",
         "videoSide": "/vsl400_videos/anh_left.mp4",
@@ -33,11 +33,11 @@
         "id": 3,
         "name": "Cảm ơn",
         "slug": "cam_on",
-        "role": "Hành động cảm ơn",
+        "role": "Động từ",
         "video": "/vsl400_videos/cam_on_front.mp4",
         "videoFront": "/vsl400_videos/cam_on_front.mp4",
         "videoSide": "/vsl400_videos/cam_on_left.mp4",
-        "hint": "Các ngón tay khép chạm cằm rồi đưa thẳng ra trước"
+        "hint": "Các ngón tay khép chạm cằm đưa thẳng ra trước"
       }
     ]
   },
@@ -47,15 +47,15 @@
     "title": "Em cảm ơn bác",
     "meaning": "Em gửi lời cảm ơn kính trọng tới bác.",
     "structure": "SOV: Chủ (Em) + Người tôn kính (Bác) + Động từ (Cảm ơn)",
-    "category": "Chào hỏi & Giao tiếp",
+    "category": "Giao tiếp & Xã giao",
     "difficulty": "Dễ",
-    "explanation": "Ký hiệu Bác được làm trước để biểu thị sự kính trọng với bậc tiền bối, sau đó động từ Cảm ơn được thực hiện với thái độ hơi cúi đầu nhẹ.",
+    "explanation": "Ký hiệu Bác được làm trước để biểu thị sự kính trọng, sau đó làm động từ Cảm ơn.",
     "words": [
       {
         "id": 1,
         "name": "Em",
         "slug": "em",
-        "role": "Chủ ngữ (Em)",
+        "role": "Chủ ngữ",
         "video": "/vsl400_videos/em_front.mp4",
         "videoFront": "/vsl400_videos/em_front.mp4",
         "videoSide": "/vsl400_videos/em_left.mp4",
@@ -65,17 +65,17 @@
         "id": 2,
         "name": "Bác",
         "slug": "bac",
-        "role": "Đối tượng kính trọng (Bác)",
+        "role": "Đối tượng kính trọng",
         "video": "/vsl400_videos/bac_front.mp4",
         "videoFront": "/vsl400_videos/bac_front.mp4",
         "videoSide": "/vsl400_videos/bac_left.mp4",
-        "hint": "Bàn tay khum chạm thái dương hoặc má tôn kính"
+        "hint": "Bàn tay khum chạm má tôn kính"
       },
       {
         "id": 3,
         "name": "Cảm ơn",
         "slug": "cam_on",
-        "role": "Động từ tri ân (Cảm ơn)",
+        "role": "Động từ tri ân",
         "video": "/vsl400_videos/cam_on_front.mp4",
         "videoFront": "/vsl400_videos/cam_on_front.mp4",
         "videoSide": "/vsl400_videos/cam_on_left.mp4",
@@ -85,19 +85,61 @@
   },
   {
     "orderIndex": 3,
-    "slug": "em-xin-loi-co",
-    "title": "Em xin lỗi cô",
-    "meaning": "Em nhận lỗi chân thành với cô giáo hoặc người cô.",
-    "structure": "SOV: Chủ (Em) + Đối tượng (Cô) + Động từ (Xin lỗi)",
-    "category": "Chào hỏi & Giao tiếp",
+    "slug": "em-cam-on-co",
+    "title": "Em cảm ơn cô",
+    "meaning": "Em gửi lời tri ân chân thành tới cô.",
+    "structure": "SOV: Chủ (Em) + Người nhận (Cô) + Động từ (Cảm ơn)",
+    "category": "Giao tiếp & Xã giao",
     "difficulty": "Dễ",
-    "explanation": "Xác định đối tượng xưng hô (Cô) trước, sau đó thực hiện cử chỉ tay xoay nhẹ trước ngực trái kèm nét mặt hối lỗi chân thành.",
+    "explanation": "Ký hiệu Cô được làm trước, sau đó đưa tay từ cằm hướng về phía cô để cảm ơn.",
     "words": [
       {
         "id": 1,
         "name": "Em",
         "slug": "em",
-        "role": "Chủ ngữ (Em)",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Chỉ tay vào ngực"
+      },
+      {
+        "id": 2,
+        "name": "Cô",
+        "slug": "co",
+        "role": "Người nhận",
+        "video": "/vsl400_videos/co_front.mp4",
+        "videoFront": "/vsl400_videos/co_front.mp4",
+        "videoSide": "/vsl400_videos/co_left.mp4",
+        "hint": "Ký hiệu Cô"
+      },
+      {
+        "id": 3,
+        "name": "Cảm ơn",
+        "slug": "cam_on",
+        "role": "Động từ",
+        "video": "/vsl400_videos/cam_on_front.mp4",
+        "videoFront": "/vsl400_videos/cam_on_front.mp4",
+        "videoSide": "/vsl400_videos/cam_on_left.mp4",
+        "hint": "Tay chạm cằm đưa ra trước"
+      }
+    ]
+  },
+  {
+    "orderIndex": 4,
+    "slug": "em-xin-loi-co",
+    "title": "Em xin lỗi cô",
+    "meaning": "Em nhận lỗi chân thành với cô giáo hoặc người cô.",
+    "structure": "SOV: Chủ (Em) + Đối tượng (Cô) + Động từ (Xin lỗi)",
+    "category": "Giao tiếp & Xã giao",
+    "difficulty": "Dễ",
+    "explanation": "Xác định đối tượng xưng hô (Cô) trước, sau đó thực hiện cử chỉ tay xoay nhẹ trước ngực trái kèm nét mặt hối lỗi.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ ngữ",
         "video": "/vsl400_videos/em_front.mp4",
         "videoFront": "/vsl400_videos/em_front.mp4",
         "videoSide": "/vsl400_videos/em_left.mp4",
@@ -107,17 +149,17 @@
         "id": 2,
         "name": "Cô",
         "slug": "co",
-        "role": "Đối tượng xưng hô (Cô)",
+        "role": "Đối tượng xưng hô",
         "video": "/vsl400_videos/co_front.mp4",
         "videoFront": "/vsl400_videos/co_front.mp4",
         "videoSide": "/vsl400_videos/co_left.mp4",
-        "hint": "Ký hiệu Cô xưng hô"
+        "hint": "Ký hiệu Cô"
       },
       {
         "id": 3,
         "name": "Xin lỗi",
         "slug": "xin_loi",
-        "role": "Cử chỉ hối lỗi (Xin lỗi)",
+        "role": "Động từ nhận lỗi",
         "video": "/vsl400_videos/xin_loi_front.mp4",
         "videoFront": "/vsl400_videos/xin_loi_front.mp4",
         "videoSide": "/vsl400_videos/xin_loi_left.mp4",
@@ -126,20 +168,62 @@
     ]
   },
   {
-    "orderIndex": 4,
+    "orderIndex": 5,
+    "slug": "anh-xin-loi-em",
+    "title": "Anh xin lỗi em",
+    "meaning": "Anh chân thành xin lỗi người em.",
+    "structure": "SOV: Chủ (Anh) + Đối tượng (Em) + Động từ (Xin lỗi)",
+    "category": "Giao tiếp & Xã giao",
+    "difficulty": "Dễ",
+    "explanation": "Chủ thể Anh hướng về Em và thực hiện cử chỉ xin lỗi thể hiện thái độ hòa nhã.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Anh",
+        "slug": "anh",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/anh_front.mp4",
+        "videoFront": "/vsl400_videos/anh_front.mp4",
+        "videoSide": "/vsl400_videos/anh_left.mp4",
+        "hint": "Ký hiệu Anh"
+      },
+      {
+        "id": 2,
+        "name": "Em",
+        "slug": "em",
+        "role": "Đối tượng nhận",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 3,
+        "name": "Xin lỗi",
+        "slug": "xin_loi",
+        "role": "Động từ",
+        "video": "/vsl400_videos/xin_loi_front.mp4",
+        "videoFront": "/vsl400_videos/xin_loi_front.mp4",
+        "videoSide": "/vsl400_videos/xin_loi_left.mp4",
+        "hint": "Nắm tay xoay nhẹ trước ngực"
+      }
+    ]
+  },
+  {
+    "orderIndex": 6,
     "slug": "bac-khoe",
     "title": "Bác có khỏe không?",
     "meaning": "Lời thăm hỏi ân cần về sức khỏe gửi tới bác.",
     "structure": "Câu hỏi Yes/No: Chủ đề (Bác) + Trạng thái (Khỏe) [Ngữ điệu NMMs]",
-    "category": "Chào hỏi & Giao tiếp",
+    "category": "Giao tiếp & Xã giao",
     "difficulty": "Dễ",
-    "explanation": "Quy tắc câu hỏi Có/Không trong VSL: Không cần từ hư \"có... không\". Nêu Chủ đề (Bác) trước, trạng thái (Khỏe) sau, kết hợp hơi rướn đầu, nhướng mày và ánh mắt thăm dò.",
+    "explanation": "Nêu Chủ đề (Bác) trước, trạng thái (Khỏe) sau, kết hợp hơi rướn đầu, nhướng mày và ánh mắt thăm dò.",
     "words": [
       {
         "id": 1,
         "name": "Bác",
         "slug": "bac",
-        "role": "Chủ đề hỏi thăm (Bác)",
+        "role": "Chủ đề thăm hỏi",
         "video": "/vsl400_videos/bac_front.mp4",
         "videoFront": "/vsl400_videos/bac_front.mp4",
         "videoSide": "/vsl400_videos/bac_left.mp4",
@@ -149,7 +233,7 @@
         "id": 2,
         "name": "Khỏe",
         "slug": "khoe",
-        "role": "Trạng thái sức khỏe (Khỏe)",
+        "role": "Trạng thái sức khỏe",
         "video": "/vsl400_videos/khoe_front.mp4",
         "videoFront": "/vsl400_videos/khoe_front.mp4",
         "videoSide": "/vsl400_videos/khoe_left.mp4",
@@ -158,52 +242,242 @@
     ]
   },
   {
-    "orderIndex": 5,
-    "slug": "anh-gioi-thieu",
-    "title": "Anh xin tự giới thiệu",
-    "meaning": "Anh chủ động mở lời tự giới thiệu bản thân trong giao tiếp.",
-    "structure": "Chủ thể (Anh) + Động từ định hướng (Giới thiệu)",
-    "category": "Chào hỏi & Giao tiếp",
+    "orderIndex": 7,
+    "slug": "anh-khoe",
+    "title": "Anh có khỏe không?",
+    "meaning": "Lời hỏi thăm sức khỏe thân mật giữa bạn bè, người quen.",
+    "structure": "Câu hỏi Yes/No: Chủ đề (Anh) + Trạng thái (Khỏe) [Ngữ điệu NMMs]",
+    "category": "Giao tiếp & Xã giao",
     "difficulty": "Dễ",
-    "explanation": "Ký hiệu Giới thiệu có bàn tay mở đưa nhẹ sang hai bên thể hiện sự rộng mở, làm quen với người đối diện.",
+    "explanation": "Ký hiệu Anh kết hợp Khỏe kèm cử chỉ nhướng mày hỏi han.",
     "words": [
       {
         "id": 1,
         "name": "Anh",
         "slug": "anh",
-        "role": "Chủ thể (Anh)",
+        "role": "Chủ đề",
         "video": "/vsl400_videos/anh_front.mp4",
         "videoFront": "/vsl400_videos/anh_front.mp4",
         "videoSide": "/vsl400_videos/anh_left.mp4",
-        "hint": "Chỉ tay người đối diện hoặc ngôi thứ nhất"
+        "hint": "Ký hiệu Anh"
+      },
+      {
+        "id": 2,
+        "name": "Khỏe",
+        "slug": "khoe",
+        "role": "Trạng thái",
+        "video": "/vsl400_videos/khoe_front.mp4",
+        "videoFront": "/vsl400_videos/khoe_front.mp4",
+        "videoSide": "/vsl400_videos/khoe_left.mp4",
+        "hint": "Nắm tay gập khuỷu khẳng định sức khỏe"
+      }
+    ]
+  },
+  {
+    "orderIndex": 8,
+    "slug": "anh-gioi-thieu",
+    "title": "Anh xin tự giới thiệu",
+    "meaning": "Anh chủ động mở lời tự giới thiệu bản thân trong giao tiếp.",
+    "structure": "Chủ thể (Anh) + Động từ định hướng (Giới thiệu)",
+    "category": "Giao tiếp & Xã giao",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Giới thiệu có bàn tay mở đưa nhẹ sang hai bên thể hiện sự cởi mở làm quen.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Anh",
+        "slug": "anh",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/anh_front.mp4",
+        "videoFront": "/vsl400_videos/anh_front.mp4",
+        "videoSide": "/vsl400_videos/anh_left.mp4",
+        "hint": "Chỉ tay người đối diện hoặc bản thân"
       },
       {
         "id": 2,
         "name": "Giới thiệu",
         "slug": "gioi_thieu",
-        "role": "Hành động mở lời (Giới thiệu)",
+        "role": "Động từ",
         "video": "/vsl400_videos/gioi_thieu_front.mp4",
         "videoFront": "/vsl400_videos/gioi_thieu_front.mp4",
         "videoSide": "/vsl400_videos/gioi_thieu_left.mp4",
-        "hint": "Hai bàn tay mở hướng lòng lên mở rộng sang hai bên"
+        "hint": "Hai bàn tay mở hướng lòng lên đưa sang hai bên"
       }
     ]
   },
   {
-    "orderIndex": 6,
-    "slug": "anh-an-pho",
-    "title": "Anh ăn phở",
-    "meaning": "Anh đang thưởng thức món phở truyền thống.",
-    "structure": "SOV: Chủ (Anh) + Bổ ngữ món ăn (Phở) + Động từ (Ăn)",
-    "category": "Ẩm thực & Thức uống",
+    "orderIndex": 9,
+    "slug": "em-gioi-thieu-ban",
+    "title": "Em giới thiệu người bạn",
+    "meaning": "Em trân trọng giới thiệu người bạn của mình.",
+    "structure": "Chủ (Em) + Đối tượng (Bạn) + Động từ (Giới thiệu)",
+    "category": "Giao tiếp & Xã giao",
     "difficulty": "Dễ",
-    "explanation": "Quy tắc vàng SOV trong VSL: Món ăn/sự vật chính (Phở) là chủ đề cần đưa lên trước, hành động thưởng thức (Ăn) thực hiện sau cùng.",
+    "explanation": "Xác định người bạn trước, sau đó đưa tay giới thiệu.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 2,
+        "name": "Bận",
+        "slug": "ban",
+        "role": "Đối tượng bạn bè",
+        "video": "/vsl400_videos/ban_front.mp4",
+        "videoFront": "/vsl400_videos/ban_front.mp4",
+        "videoSide": "/vsl400_videos/ban_left.mp4",
+        "hint": "Ký hiệu Bạn"
+      },
+      {
+        "id": 3,
+        "name": "Giới thiệu",
+        "slug": "gioi_thieu",
+        "role": "Động từ",
+        "video": "/vsl400_videos/gioi_thieu_front.mp4",
+        "videoFront": "/vsl400_videos/gioi_thieu_front.mp4",
+        "videoSide": "/vsl400_videos/gioi_thieu_left.mp4",
+        "hint": "Hai tay mở rộng giới thiệu"
+      }
+    ]
+  },
+  {
+    "orderIndex": 10,
+    "slug": "em-dong-y",
+    "title": "Em hoàn toàn đồng ý",
+    "meaning": "Em bày tỏ sự đồng thuận với ý kiến vừa nêu.",
+    "structure": "Chủ thể (Em) + Động từ khẳng định (Đồng ý)",
+    "category": "Giao tiếp & Xã giao",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Đồng ý gật đầu nhẹ kết hợp bàn tay hạ dứt khoát.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 2,
+        "name": "Đồng ý",
+        "slug": "dong_y",
+        "role": "Khẳng định",
+        "video": "/vsl400_videos/dong_y_front.mp4",
+        "videoFront": "/vsl400_videos/dong_y_front.mp4",
+        "videoSide": "/vsl400_videos/dong_y_left.mp4",
+        "hint": "Ký hiệu Đồng ý"
+      }
+    ]
+  },
+  {
+    "orderIndex": 11,
+    "slug": "anh-chi-noi-chuyen",
+    "title": "Anh và chị đang nói chuyện",
+    "meaning": "Hai anh chị đang trò chuyện tâm sự vui vẻ.",
+    "structure": "Chủ thể (Anh, Chị) + Động từ giao tiếp (Nói chuyện)",
+    "category": "Giao tiếp & Xã giao",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Nói chuyện với hai bàn tay mở khép ngón đối diện nhau.",
     "words": [
       {
         "id": 1,
         "name": "Anh",
         "slug": "anh",
-        "role": "Chủ ngữ (Anh)",
+        "role": "Chủ thể 1",
+        "video": "/vsl400_videos/anh_front.mp4",
+        "videoFront": "/vsl400_videos/anh_front.mp4",
+        "videoSide": "/vsl400_videos/anh_left.mp4",
+        "hint": "Ký hiệu Anh"
+      },
+      {
+        "id": 2,
+        "name": "Chị",
+        "slug": "chi",
+        "role": "Chủ thể 2",
+        "video": "/vsl400_videos/chi_front.mp4",
+        "videoFront": "/vsl400_videos/chi_front.mp4",
+        "videoSide": "/vsl400_videos/chi_left.mp4",
+        "hint": "Ký hiệu Chị"
+      },
+      {
+        "id": 3,
+        "name": "Nói chuyện",
+        "slug": "noi_chuyen",
+        "role": "Hành động",
+        "video": "/vsl400_videos/noi_chuyen_front.mp4",
+        "videoFront": "/vsl400_videos/noi_chuyen_front.mp4",
+        "videoSide": "/vsl400_videos/noi_chuyen_left.mp4",
+        "hint": "Hai tay làm cử chỉ trao đổi lời nói"
+      }
+    ]
+  },
+  {
+    "orderIndex": 12,
+    "slug": "em-xin-giup-do",
+    "title": "Em xin được giúp đỡ",
+    "meaning": "Em mong nhận được sự hỗ trợ từ mọi người.",
+    "structure": "Chủ thể (Em) + Động từ cầu thị (Xin) + Hành động (Giúp đỡ)",
+    "category": "Giao tiếp & Xã giao",
+    "difficulty": "Trung bình",
+    "explanation": "Ký hiệu Xin hai tay chắp nhẹ, sau đó là cử chỉ Giúp đỡ.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 2,
+        "name": "Xin",
+        "slug": "xin",
+        "role": "Cầu thị",
+        "video": "/vsl400_videos/xin_front.mp4",
+        "videoFront": "/vsl400_videos/xin_front.mp4",
+        "videoSide": "/vsl400_videos/xin_left.mp4",
+        "hint": "Hai lòng bàn tay khép lại trước ngực"
+      },
+      {
+        "id": 3,
+        "name": "Giúp đỡ",
+        "slug": "giup_do",
+        "role": "Hành động",
+        "video": "/vsl400_videos/giup_do_front.mp4",
+        "videoFront": "/vsl400_videos/giup_do_front.mp4",
+        "videoSide": "/vsl400_videos/giup_do_left.mp4",
+        "hint": "Ký hiệu Giúp đỡ"
+      }
+    ]
+  },
+  {
+    "orderIndex": 13,
+    "slug": "anh-an-pho",
+    "title": "Anh ăn phở",
+    "meaning": "Anh đang thưởng thức món phở truyền thống.",
+    "structure": "SOV: Chủ (Anh) + Bổ ngữ (Phở) + Động từ (Ăn)",
+    "category": "Ẩm thực & Thức uống",
+    "difficulty": "Dễ",
+    "explanation": "Món ăn (Phở) là chủ đề đưa lên trước, hành động Ăn thực hiện sau.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Anh",
+        "slug": "anh",
+        "role": "Chủ ngữ",
         "video": "/vsl400_videos/anh_front.mp4",
         "videoFront": "/vsl400_videos/anh_front.mp4",
         "videoSide": "/vsl400_videos/anh_left.mp4",
@@ -213,39 +487,39 @@
         "id": 2,
         "name": "Phở",
         "slug": "pho",
-        "role": "Món ăn / Bổ ngữ (Phở)",
+        "role": "Món ăn",
         "video": "/vsl400_videos/pho_front.mp4",
         "videoFront": "/vsl400_videos/pho_front.mp4",
         "videoSide": "/vsl400_videos/pho_left.mp4",
-        "hint": "Hai tay làm cử chỉ gắp sợi phở"
+        "hint": "Hai tay gắp sợi phở"
       },
       {
         "id": 3,
         "name": "Ăn",
         "slug": "an",
-        "role": "Hành động vị ngữ (Ăn)",
+        "role": "Động từ",
         "video": "/vsl400_videos/an_front.mp4",
         "videoFront": "/vsl400_videos/an_front.mp4",
         "videoSide": "/vsl400_videos/an_left.mp4",
-        "hint": "Các đầu ngón tay chụm đưa vào miệng"
+        "hint": "Các ngón tay chụm đưa vào miệng"
       }
     ]
   },
   {
-    "orderIndex": 7,
+    "orderIndex": 14,
     "slug": "chi-an-bun",
     "title": "Chị ăn bún",
     "meaning": "Chị đang ăn món bún tươi thơm ngon.",
     "structure": "SOV: Chủ (Chị) + Món ăn (Bún) + Động từ (Ăn)",
     "category": "Ẩm thực & Thức uống",
     "difficulty": "Dễ",
-    "explanation": "Ký hiệu Bún được làm rõ trước bằng hai tay miêu tả sợi bún, tiếp nối là động từ Ăn.",
+    "explanation": "Ký hiệu Bún được làm trước, tiếp nối là động từ Ăn.",
     "words": [
       {
         "id": 1,
         "name": "Chị",
         "slug": "chi",
-        "role": "Chủ ngữ (Chị)",
+        "role": "Chủ ngữ",
         "video": "/vsl400_videos/chi_front.mp4",
         "videoFront": "/vsl400_videos/chi_front.mp4",
         "videoSide": "/vsl400_videos/chi_left.mp4",
@@ -255,17 +529,17 @@
         "id": 2,
         "name": "Bún",
         "slug": "bun",
-        "role": "Món ăn (Bún)",
+        "role": "Món ăn",
         "video": "/vsl400_videos/bun_front.mp4",
         "videoFront": "/vsl400_videos/bun_front.mp4",
         "videoSide": "/vsl400_videos/bun_left.mp4",
-        "hint": "Hai bàn tay đan sợi bún đặc trưng"
+        "hint": "Hai tay đan sợi bún"
       },
       {
         "id": 3,
         "name": "Ăn",
         "slug": "an",
-        "role": "Hành động (Ăn)",
+        "role": "Động từ",
         "video": "/vsl400_videos/an_front.mp4",
         "videoFront": "/vsl400_videos/an_front.mp4",
         "videoSide": "/vsl400_videos/an_left.mp4",
@@ -274,20 +548,20 @@
     ]
   },
   {
-    "orderIndex": 8,
+    "orderIndex": 15,
     "slug": "em-an-banh-bao",
     "title": "Em ăn bánh bao",
     "meaning": "Em đang ăn chiếc bánh bao nóng hổi.",
     "structure": "SOV: Chủ (Em) + Món ăn (Bánh bao) + Động từ (Ăn)",
     "category": "Ẩm thực & Thức uống",
     "difficulty": "Dễ",
-    "explanation": "Món ăn cụ thể (Bánh bao) được tạo hình khum tròn bằng hai tay trước khi làm động từ Ăn.",
+    "explanation": "Ký hiệu Bánh bao khum tròn hai tay đặt trước động từ Ăn.",
     "words": [
       {
         "id": 1,
         "name": "Em",
         "slug": "em",
-        "role": "Chủ ngữ (Em)",
+        "role": "Chủ ngữ",
         "video": "/vsl400_videos/em_front.mp4",
         "videoFront": "/vsl400_videos/em_front.mp4",
         "videoSide": "/vsl400_videos/em_left.mp4",
@@ -297,17 +571,17 @@
         "id": 2,
         "name": "Bánh bao",
         "slug": "banh_bao",
-        "role": "Món ăn (Bánh bao)",
+        "role": "Món ăn",
         "video": "/vsl400_videos/banh_bao_front.mp4",
         "videoFront": "/vsl400_videos/banh_bao_front.mp4",
         "videoSide": "/vsl400_videos/banh_bao_left.mp4",
-        "hint": "Hai tay khum tròn tạo hình chiếc bánh bao"
+        "hint": "Hai tay khum tròn tạo hình bánh"
       },
       {
         "id": 3,
         "name": "Ăn",
         "slug": "an",
-        "role": "Động từ (Ăn)",
+        "role": "Động từ",
         "video": "/vsl400_videos/an_front.mp4",
         "videoFront": "/vsl400_videos/an_front.mp4",
         "videoSide": "/vsl400_videos/an_left.mp4",
@@ -316,7 +590,7 @@
     ]
   },
   {
-    "orderIndex": 9,
+    "orderIndex": 16,
     "slug": "me-an-banh-xeo",
     "title": "Mẹ ăn bánh xèo",
     "meaning": "Mẹ đang thưởng thức món bánh xèo vàng giòn.",
@@ -329,7 +603,7 @@
         "id": 1,
         "name": "Mẹ",
         "slug": "me",
-        "role": "Chủ ngữ (Mẹ)",
+        "role": "Chủ ngữ",
         "video": "/vsl400_videos/me_front.mp4",
         "videoFront": "/vsl400_videos/me_front.mp4",
         "videoSide": "/vsl400_videos/me_left.mp4",
@@ -339,17 +613,17 @@
         "id": 2,
         "name": "Bánh xèo",
         "slug": "banh_xeo",
-        "role": "Món ăn dân dã (Bánh xèo)",
+        "role": "Món ăn",
         "video": "/vsl400_videos/banh_xeo_front.mp4",
         "videoFront": "/vsl400_videos/banh_xeo_front.mp4",
         "videoSide": "/vsl400_videos/banh_xeo_left.mp4",
-        "hint": "Hai tay làm cử chỉ tráng chảo tròn"
+        "hint": "Hai tay tráng chảo tròn"
       },
       {
         "id": 3,
         "name": "Ăn",
         "slug": "an",
-        "role": "Động từ (Ăn)",
+        "role": "Động từ",
         "video": "/vsl400_videos/an_front.mp4",
         "videoFront": "/vsl400_videos/an_front.mp4",
         "videoSide": "/vsl400_videos/an_left.mp4",
@@ -358,20 +632,188 @@
     ]
   },
   {
-    "orderIndex": 10,
+    "orderIndex": 17,
+    "slug": "bo-an-banh-chung",
+    "title": "Bố ăn bánh chưng",
+    "meaning": "Bố thưởng thức bánh chưng ngày Tết.",
+    "structure": "SOV: Chủ (Bố) + Món ăn (Bánh chưng) + Động từ (Ăn)",
+    "category": "Ẩm thực & Thức uống",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Bánh chưng gói vuông đặt trước động từ Ăn.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Bố",
+        "slug": "bo",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/bo_front.mp4",
+        "videoFront": "/vsl400_videos/bo_front.mp4",
+        "videoSide": "/vsl400_videos/bo_left.mp4",
+        "hint": "Ký hiệu Bố"
+      },
+      {
+        "id": 2,
+        "name": "Bánh chưng",
+        "slug": "banh_chung",
+        "role": "Món ăn",
+        "video": "/vsl400_videos/banh_chung_front.mp4",
+        "videoFront": "/vsl400_videos/banh_chung_front.mp4",
+        "videoSide": "/vsl400_videos/banh_chung_left.mp4",
+        "hint": "Hai tay tạo hình khối vuông bánh chưng"
+      },
+      {
+        "id": 3,
+        "name": "Ăn",
+        "slug": "an",
+        "role": "Động từ",
+        "video": "/vsl400_videos/an_front.mp4",
+        "videoFront": "/vsl400_videos/an_front.mp4",
+        "videoSide": "/vsl400_videos/an_left.mp4",
+        "hint": "Ký hiệu Ăn"
+      }
+    ]
+  },
+  {
+    "orderIndex": 18,
+    "slug": "ong-noi-an-xoi",
+    "title": "Ông nội ăn xôi",
+    "meaning": "Ông nội ăn đĩa xôi nếp dẻo thơm.",
+    "structure": "SOV: Chủ (Ông nội) + Món ăn (Xôi) + Động từ (Ăn)",
+    "category": "Ẩm thực & Thức uống",
+    "difficulty": "Dễ",
+    "explanation": "Nêu món Xôi dẻo trước khi làm động tác Ăn.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Ông nội",
+        "slug": "ong_noi",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/ong_noi_front.mp4",
+        "videoFront": "/vsl400_videos/ong_noi_front.mp4",
+        "videoSide": "/vsl400_videos/ong_noi_left.mp4",
+        "hint": "Ký hiệu Ông nội"
+      },
+      {
+        "id": 2,
+        "name": "Xôi",
+        "slug": "xoi",
+        "role": "Món ăn",
+        "video": "/vsl400_videos/xoi_front.mp4",
+        "videoFront": "/vsl400_videos/xoi_front.mp4",
+        "videoSide": "/vsl400_videos/xoi_left.mp4",
+        "hint": "Ký hiệu Xôi nếp dẻo"
+      },
+      {
+        "id": 3,
+        "name": "Ăn",
+        "slug": "an",
+        "role": "Động từ",
+        "video": "/vsl400_videos/an_front.mp4",
+        "videoFront": "/vsl400_videos/an_front.mp4",
+        "videoSide": "/vsl400_videos/an_left.mp4",
+        "hint": "Ký hiệu Ăn"
+      }
+    ]
+  },
+  {
+    "orderIndex": 19,
+    "slug": "ba-noi-an-banh-tet",
+    "title": "Bà nội ăn bánh tét",
+    "meaning": "Bà nội thưởng thức bánh tét truyền thống.",
+    "structure": "SOV: Chủ (Bà nội) + Món ăn (Bánh tét) + Động từ (Ăn)",
+    "category": "Ẩm thực & Thức uống",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Bánh tét hình trụ dài làm trước động từ Ăn.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Bà nội",
+        "slug": "ba_noi",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/ba_noi_front.mp4",
+        "videoFront": "/vsl400_videos/ba_noi_front.mp4",
+        "videoSide": "/vsl400_videos/ba_noi_left.mp4",
+        "hint": "Ký hiệu Bà nội"
+      },
+      {
+        "id": 2,
+        "name": "Bánh tét",
+        "slug": "banh_tet",
+        "role": "Món ăn",
+        "video": "/vsl400_videos/banh_tet_front.mp4",
+        "videoFront": "/vsl400_videos/banh_tet_front.mp4",
+        "videoSide": "/vsl400_videos/banh_tet_left.mp4",
+        "hint": "Hai tay vuốt đòn bánh tét dài"
+      },
+      {
+        "id": 3,
+        "name": "Ăn",
+        "slug": "an",
+        "role": "Động từ",
+        "video": "/vsl400_videos/an_front.mp4",
+        "videoFront": "/vsl400_videos/an_front.mp4",
+        "videoSide": "/vsl400_videos/an_left.mp4",
+        "hint": "Ký hiệu Ăn"
+      }
+    ]
+  },
+  {
+    "orderIndex": 20,
+    "slug": "em-an-mi-goi",
+    "title": "Em ăn mì gói",
+    "meaning": "Em ăn một bát mì gói ăn liền.",
+    "structure": "SOV: Chủ (Em) + Món ăn (Mì gói) + Động từ (Ăn)",
+    "category": "Ẩm thực & Thức uống",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Mì gói xoăn sợi đặt trước động từ Ăn.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 2,
+        "name": "Mì gói",
+        "slug": "mi_goi",
+        "role": "Món ăn",
+        "video": "/vsl400_videos/mi_goi_front.mp4",
+        "videoFront": "/vsl400_videos/mi_goi_front.mp4",
+        "videoSide": "/vsl400_videos/mi_goi_left.mp4",
+        "hint": "Ký hiệu sợi mì gói xoăn"
+      },
+      {
+        "id": 3,
+        "name": "Ăn",
+        "slug": "an",
+        "role": "Động từ",
+        "video": "/vsl400_videos/an_front.mp4",
+        "videoFront": "/vsl400_videos/an_front.mp4",
+        "videoSide": "/vsl400_videos/an_left.mp4",
+        "hint": "Ký hiệu Ăn"
+      }
+    ]
+  },
+  {
+    "orderIndex": 21,
     "slug": "bac-uong-tra",
     "title": "Bác uống trà",
     "meaning": "Bác ngồi thưởng thức tách trà nóng thơm.",
     "structure": "SOV: Chủ (Bác) + Thức uống (Trà) + Động từ (Uống)",
     "category": "Ẩm thực & Thức uống",
     "difficulty": "Dễ",
-    "explanation": "Theo trật tự VSL, danh từ chỉ chất lỏng/đồ uống (Trà) đi trước cử chỉ nâng ly (Uống).",
+    "explanation": "Thức uống (Trà) đi trước cử chỉ nâng ly (Uống).",
     "words": [
       {
         "id": 1,
         "name": "Bác",
         "slug": "bac",
-        "role": "Chủ ngữ (Bác)",
+        "role": "Chủ ngữ",
         "video": "/vsl400_videos/bac_front.mp4",
         "videoFront": "/vsl400_videos/bac_front.mp4",
         "videoSide": "/vsl400_videos/bac_left.mp4",
@@ -381,7 +823,7 @@
         "id": 2,
         "name": "Trà",
         "slug": "tra",
-        "role": "Thức uống (Trà)",
+        "role": "Thức uống",
         "video": "/vsl400_videos/tra_front.mp4",
         "videoFront": "/vsl400_videos/tra_front.mp4",
         "videoSide": "/vsl400_videos/tra_left.mp4",
@@ -391,29 +833,29 @@
         "id": 3,
         "name": "Uống",
         "slug": "uong",
-        "role": "Động từ (Uống)",
+        "role": "Động từ",
         "video": "/vsl400_videos/uong_front.mp4",
         "videoFront": "/vsl400_videos/uong_front.mp4",
         "videoSide": "/vsl400_videos/uong_left.mp4",
-        "hint": "Tay làm động tác cầm chén trà nâng lên miệng"
+        "hint": "Cầm chén trà nâng lên miệng"
       }
     ]
   },
   {
-    "orderIndex": 11,
+    "orderIndex": 22,
     "slug": "em-uong-sua",
     "title": "Em uống sữa",
     "meaning": "Em uống một ly sữa tươi bổ dưỡng.",
     "structure": "SOV: Chủ (Em) + Thức uống (Sữa) + Động từ (Uống)",
     "category": "Ẩm thực & Thức uống",
     "difficulty": "Dễ",
-    "explanation": "Ký hiệu Sữa (bóp nhẹ hai bàn tay mô phỏng vắt sữa) làm trước, sau đó là động tác Uống.",
+    "explanation": "Ký hiệu Sữa làm trước, sau đó là động tác Uống.",
     "words": [
       {
         "id": 1,
         "name": "Em",
         "slug": "em",
-        "role": "Chủ ngữ (Em)",
+        "role": "Chủ ngữ",
         "video": "/vsl400_videos/em_front.mp4",
         "videoFront": "/vsl400_videos/em_front.mp4",
         "videoSide": "/vsl400_videos/em_left.mp4",
@@ -423,17 +865,17 @@
         "id": 2,
         "name": "Sữa",
         "slug": "sua",
-        "role": "Đồ uống (Sữa)",
+        "role": "Thức uống",
         "video": "/vsl400_videos/sua_front.mp4",
         "videoFront": "/vsl400_videos/sua_front.mp4",
         "videoSide": "/vsl400_videos/sua_left.mp4",
-        "hint": "Bàn tay nắm mở nhịp nhàng"
+        "hint": "Bàn tay nắm mở vắt sữa"
       },
       {
         "id": 3,
         "name": "Uống",
         "slug": "uong",
-        "role": "Động từ (Uống)",
+        "role": "Động từ",
         "video": "/vsl400_videos/uong_front.mp4",
         "videoFront": "/vsl400_videos/uong_front.mp4",
         "videoSide": "/vsl400_videos/uong_left.mp4",
@@ -442,62 +884,230 @@
     ]
   },
   {
-    "orderIndex": 12,
+    "orderIndex": 23,
     "slug": "bo-uong-ca-phe",
     "title": "Bố uống cà phê",
     "meaning": "Bố đang uống một ly cà phê đậm đà buổi sớm.",
     "structure": "SOV: Chủ (Bố) + Thức uống (Cà phê) + Động từ (Uống)",
     "category": "Ẩm thực & Thức uống",
     "difficulty": "Dễ",
-    "explanation": "Ký hiệu Cà phê (xoay nhẹ ngón tay mô phỏng khuấy thìa trong tách) đặt trước hành động Uống.",
+    "explanation": "Ký hiệu Cà phê khuấy thìa đặt trước hành động Uống.",
     "words": [
       {
         "id": 1,
         "name": "Bố",
         "slug": "bo",
-        "role": "Chủ ngữ (Bố)",
+        "role": "Chủ ngữ",
         "video": "/vsl400_videos/bo_front.mp4",
         "videoFront": "/vsl400_videos/bo_front.mp4",
         "videoSide": "/vsl400_videos/bo_left.mp4",
-        "hint": "Ký hiệu Bố vuốt ria mép"
+        "hint": "Ký hiệu Bố"
       },
       {
         "id": 2,
         "name": "Cà phê",
         "slug": "ca_phe",
-        "role": "Thức uống (Cà phê)",
+        "role": "Thức uống",
         "video": "/vsl400_videos/ca_phe_front.mp4",
         "videoFront": "/vsl400_videos/ca_phe_front.mp4",
         "videoSide": "/vsl400_videos/ca_phe_left.mp4",
-        "hint": "Ngón tay xoay tròn khuấy thìa cà phê"
+        "hint": "Ngón tay xoay tròn khuấy tách cà phê"
       },
       {
         "id": 3,
         "name": "Uống",
         "slug": "uong",
-        "role": "Động từ (Uống)",
+        "role": "Động từ",
         "video": "/vsl400_videos/uong_front.mp4",
         "videoFront": "/vsl400_videos/uong_front.mp4",
         "videoSide": "/vsl400_videos/uong_left.mp4",
-        "hint": "Nâng ly cà phê uống"
+        "hint": "Nâng ly uống"
       }
     ]
   },
   {
-    "orderIndex": 13,
+    "orderIndex": 24,
+    "slug": "ba-noi-uong-nuoc",
+    "title": "Bà nội uống nước",
+    "meaning": "Bà nội uống một cốc nước mát.",
+    "structure": "SOV: Chủ (Bà nội) + Đồ uống (Nước) + Động từ (Uống)",
+    "category": "Ẩm thực & Thức uống",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Nước đặt ngón tay dưới cằm rồi làm cử chỉ Uống.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Bà nội",
+        "slug": "ba_noi",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/ba_noi_front.mp4",
+        "videoFront": "/vsl400_videos/ba_noi_front.mp4",
+        "videoSide": "/vsl400_videos/ba_noi_left.mp4",
+        "hint": "Ký hiệu Bà nội"
+      },
+      {
+        "id": 2,
+        "name": "Nước",
+        "slug": "nuoc",
+        "role": "Thức uống",
+        "video": "/vsl400_videos/nuoc_front.mp4",
+        "videoFront": "/vsl400_videos/nuoc_front.mp4",
+        "videoSide": "/vsl400_videos/nuoc_left.mp4",
+        "hint": "Chạm ngón tay dưới cằm"
+      },
+      {
+        "id": 3,
+        "name": "Uống",
+        "slug": "uong",
+        "role": "Động từ",
+        "video": "/vsl400_videos/uong_front.mp4",
+        "videoFront": "/vsl400_videos/uong_front.mp4",
+        "videoSide": "/vsl400_videos/uong_left.mp4",
+        "hint": "Cầm cốc nước uống"
+      }
+    ]
+  },
+  {
+    "orderIndex": 25,
+    "slug": "em-thich-kem",
+    "title": "Em thích ăn kem",
+    "meaning": "Em rất thích những cây kem que mát lạnh.",
+    "structure": "Chủ (Em) + Món tráng miệng (Kem) + Cảm xúc (Thích)",
+    "category": "Ẩm thực & Thức uống",
+    "difficulty": "Dễ",
+    "explanation": "Nêu món Kem trước rồi bày tỏ cảm xúc Thích.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 2,
+        "name": "Kem",
+        "slug": "kem",
+        "role": "Món tráng miệng",
+        "video": "/vsl400_videos/kem_front.mp4",
+        "videoFront": "/vsl400_videos/kem_front.mp4",
+        "videoSide": "/vsl400_videos/kem_left.mp4",
+        "hint": "Ký hiệu cây kem mút"
+      },
+      {
+        "id": 3,
+        "name": "Thích",
+        "slug": "thich",
+        "role": "Cảm xúc",
+        "video": "/vsl400_videos/thich_front.mp4",
+        "videoFront": "/vsl400_videos/thich_front.mp4",
+        "videoSide": "/vsl400_videos/thich_left.mp4",
+        "hint": "Bàn tay xoa nhẹ trước ngực"
+      }
+    ]
+  },
+  {
+    "orderIndex": 26,
+    "slug": "chi-an-qua-cam",
+    "title": "Chị ăn quả cam",
+    "meaning": "Chị bóc quả cam mọng nước để ăn.",
+    "structure": "Chủ (Chị) + Trái cây (Quả cam) + Động từ (Ăn)",
+    "category": "Ẩm thực & Thức uống",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Quả cam tròn xoay bàn tay đặt trước động từ Ăn.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Chị",
+        "slug": "chi",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/chi_front.mp4",
+        "videoFront": "/vsl400_videos/chi_front.mp4",
+        "videoSide": "/vsl400_videos/chi_left.mp4",
+        "hint": "Ký hiệu Chị"
+      },
+      {
+        "id": 2,
+        "name": "Quả cam",
+        "slug": "qua_cam",
+        "role": "Trái cây",
+        "video": "/vsl400_videos/qua_cam_front.mp4",
+        "videoFront": "/vsl400_videos/qua_cam_front.mp4",
+        "videoSide": "/vsl400_videos/qua_cam_left.mp4",
+        "hint": "Tay khum tròn xoay vắt cam"
+      },
+      {
+        "id": 3,
+        "name": "Ăn",
+        "slug": "an",
+        "role": "Động từ",
+        "video": "/vsl400_videos/an_front.mp4",
+        "videoFront": "/vsl400_videos/an_front.mp4",
+        "videoSide": "/vsl400_videos/an_left.mp4",
+        "hint": "Ký hiệu Ăn"
+      }
+    ]
+  },
+  {
+    "orderIndex": 27,
+    "slug": "chau-an-qua-chuoi",
+    "title": "Cháu ăn quả chuối",
+    "meaning": "Đứa cháu đang lột vỏ quả chuối chín thơm.",
+    "structure": "Chủ (Cháu) + Trái cây (Quả chuối) + Động từ (Ăn)",
+    "category": "Ẩm thực & Thức uống",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu bóc vỏ chuối đặt trước cử chỉ Ăn.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Cháu",
+        "slug": "chau",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/chau_front.mp4",
+        "videoFront": "/vsl400_videos/chau_front.mp4",
+        "videoSide": "/vsl400_videos/chau_left.mp4",
+        "hint": "Ký hiệu Cháu"
+      },
+      {
+        "id": 2,
+        "name": "Quả chuối",
+        "slug": "qua_chuoi",
+        "role": "Trái cây",
+        "video": "/vsl400_videos/qua_chuoi_front.mp4",
+        "videoFront": "/vsl400_videos/qua_chuoi_front.mp4",
+        "videoSide": "/vsl400_videos/qua_chuoi_left.mp4",
+        "hint": "Ngón tay lột vỏ chuối"
+      },
+      {
+        "id": 3,
+        "name": "Ăn",
+        "slug": "an",
+        "role": "Động từ",
+        "video": "/vsl400_videos/an_front.mp4",
+        "videoFront": "/vsl400_videos/an_front.mp4",
+        "videoSide": "/vsl400_videos/an_left.mp4",
+        "hint": "Ký hiệu Ăn"
+      }
+    ]
+  },
+  {
+    "orderIndex": 28,
     "slug": "bo-me-giup-do-em",
     "title": "Bố mẹ giúp đỡ em",
-    "meaning": "Bố mẹ luôn hết lòng hỗ trợ, chở che cho em.",
-    "structure": "Chủ ngữ liên hợp (Bố, Mẹ) + Đối tượng (Em) + Động từ có hướng (Giúp đỡ)",
-    "category": "Gia đình & Đời sống",
+    "meaning": "Bố mẹ luôn hỗ trợ, chăm lo cho em.",
+    "structure": "Chủ ngữ (Bố, Mẹ) + Đối tượng (Em) + Động từ có hướng (Giúp đỡ)",
+    "category": "Gia đình & Xưng hô",
     "difficulty": "Trung bình",
-    "explanation": "Động từ Giúp đỡ trong VSL có tính định hướng không gian: Tay đặt ngửa dưới bàn tay kia và đẩy từ vị trí Bố Mẹ hướng về phía Em.",
+    "explanation": "Ký hiệu Giúp đỡ đẩy từ vị trí Bố Mẹ hướng về phía Em.",
     "words": [
       {
         "id": 1,
         "name": "Bố",
         "slug": "bo",
-        "role": "Chủ ngữ 1 (Bố)",
+        "role": "Chủ ngữ 1",
         "video": "/vsl400_videos/bo_front.mp4",
         "videoFront": "/vsl400_videos/bo_front.mp4",
         "videoSide": "/vsl400_videos/bo_left.mp4",
@@ -507,7 +1117,7 @@
         "id": 2,
         "name": "Mẹ",
         "slug": "me",
-        "role": "Chủ ngữ 2 (Mẹ)",
+        "role": "Chủ ngữ 2",
         "video": "/vsl400_videos/me_front.mp4",
         "videoFront": "/vsl400_videos/me_front.mp4",
         "videoSide": "/vsl400_videos/me_left.mp4",
@@ -517,7 +1127,7 @@
         "id": 3,
         "name": "Em",
         "slug": "em",
-        "role": "Đối tượng nhận (Em)",
+        "role": "Đối tượng nhận",
         "video": "/vsl400_videos/em_front.mp4",
         "videoFront": "/vsl400_videos/em_front.mp4",
         "videoSide": "/vsl400_videos/em_left.mp4",
@@ -527,7 +1137,7 @@
         "id": 4,
         "name": "Giúp đỡ",
         "slug": "giup_do",
-        "role": "Động từ định hướng (Giúp đỡ)",
+        "role": "Động từ",
         "video": "/vsl400_videos/giup_do_front.mp4",
         "videoFront": "/vsl400_videos/giup_do_front.mp4",
         "videoSide": "/vsl400_videos/giup_do_left.mp4",
@@ -536,62 +1146,136 @@
     ]
   },
   {
-    "orderIndex": 14,
+    "orderIndex": 29,
     "slug": "ong-noi-yeu-thuong-chau",
     "title": "Ông nội yêu thương cháu",
-    "meaning": "Tình cảm ấm áp, thương yêu của ông nội dành cho đứa cháu.",
+    "meaning": "Tình cảm ấm áp của ông nội dành cho cháu.",
     "structure": "Chủ thể (Ông nội) + Đối tượng (Cháu) + Động từ cảm xúc (Yêu thương)",
-    "category": "Gia đình & Đời sống",
+    "category": "Gia đình & Xưng hô",
     "difficulty": "Trung bình",
-    "explanation": "Cấu trúc Chủ đề - Lời dẫn: Nêu rõ Ông nội và Cháu, sau đó làm ký hiệu Yêu thương ôm trước ngực thể hiện tình cảm dạt dào.",
+    "explanation": "Nêu rõ Ông nội và Cháu, sau đó ôm tay trước ngực thể hiện Yêu thương.",
     "words": [
       {
         "id": 1,
         "name": "Ông nội",
         "slug": "ong_noi",
-        "role": "Chủ thể kính yêu (Ông nội)",
+        "role": "Chủ thể",
         "video": "/vsl400_videos/ong_noi_front.mp4",
         "videoFront": "/vsl400_videos/ong_noi_front.mp4",
         "videoSide": "/vsl400_videos/ong_noi_left.mp4",
-        "hint": "Ký hiệu râu dài và vuốt trán ông nội"
+        "hint": "Ký hiệu Ông nội"
       },
       {
         "id": 2,
         "name": "Cháu",
         "slug": "chau",
-        "role": "Đối tượng yêu thương (Cháu)",
+        "role": "Đối tượng",
         "video": "/vsl400_videos/chau_front.mp4",
         "videoFront": "/vsl400_videos/chau_front.mp4",
         "videoSide": "/vsl400_videos/chau_left.mp4",
-        "hint": "Ký hiệu Cháu nhỏ tuổi"
+        "hint": "Ký hiệu Cháu"
       },
       {
         "id": 3,
         "name": "Yêu thương",
         "slug": "yeu_thuong",
-        "role": "Động từ cảm xúc (Yêu thương)",
+        "role": "Động từ",
         "video": "/vsl400_videos/yeu_thuong_front.mp4",
         "videoFront": "/vsl400_videos/yeu_thuong_front.mp4",
         "videoSide": "/vsl400_videos/yeu_thuong_left.mp4",
-        "hint": "Hai tay bắt chéo ôm nhẹ trước ngực"
+        "hint": "Hai tay bắt chéo ôm trước ngực"
       }
     ]
   },
   {
-    "orderIndex": 15,
+    "orderIndex": 30,
+    "slug": "ba-ngoai-yeu-thuong-chau",
+    "title": "Bà ngoại yêu thương cháu",
+    "meaning": "Bà ngoại luôn âu yếm, yêu quý đứa cháu nhỏ.",
+    "structure": "Chủ thể (Bà ngoại) + Đối tượng (Cháu) + Động từ (Yêu thương)",
+    "category": "Gia đình & Xưng hô",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Bà ngoại kết hợp Cháu và ôm trước ngực (Yêu thương).",
+    "words": [
+      {
+        "id": 1,
+        "name": "Bà ngoại",
+        "slug": "ba_ngoai",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/ba_ngoai_front.mp4",
+        "videoFront": "/vsl400_videos/ba_ngoai_front.mp4",
+        "videoSide": "/vsl400_videos/ba_ngoai_left.mp4",
+        "hint": "Ký hiệu Bà ngoại"
+      },
+      {
+        "id": 2,
+        "name": "Cháu",
+        "slug": "chau",
+        "role": "Đối tượng",
+        "video": "/vsl400_videos/chau_front.mp4",
+        "videoFront": "/vsl400_videos/chau_front.mp4",
+        "videoSide": "/vsl400_videos/chau_left.mp4",
+        "hint": "Ký hiệu Cháu"
+      },
+      {
+        "id": 3,
+        "name": "Yêu thương",
+        "slug": "yeu_thuong",
+        "role": "Động từ",
+        "video": "/vsl400_videos/yeu_thuong_front.mp4",
+        "videoFront": "/vsl400_videos/yeu_thuong_front.mp4",
+        "videoSide": "/vsl400_videos/yeu_thuong_left.mp4",
+        "hint": "Hai tay chéo ôm nhẹ ngực"
+      }
+    ]
+  },
+  {
+    "orderIndex": 31,
+    "slug": "ong-ngoai-cham-chi",
+    "title": "Ông ngoại rất chăm chỉ",
+    "meaning": "Ông ngoại luôn cần mẫn, siêng năng làm việc vườn tược.",
+    "structure": "Chủ đề (Ông ngoại) + Phẩm chất (Chăm chỉ)",
+    "category": "Gia đình & Xưng hô",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Ông ngoại đưa lên trước, tính từ Chăm chỉ làm sau dứt khoát.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Ông ngoại",
+        "slug": "ong_ngoai",
+        "role": "Chủ đề",
+        "video": "/vsl400_videos/ong_ngoai_front.mp4",
+        "videoFront": "/vsl400_videos/ong_ngoai_front.mp4",
+        "videoSide": "/vsl400_videos/ong_ngoai_left.mp4",
+        "hint": "Ký hiệu Ông ngoại"
+      },
+      {
+        "id": 2,
+        "name": "Chăm chỉ",
+        "slug": "cham_chi",
+        "role": "Phẩm chất",
+        "video": "/vsl400_videos/cham_chi_front.mp4",
+        "videoFront": "/vsl400_videos/cham_chi_front.mp4",
+        "videoSide": "/vsl400_videos/cham_chi_left.mp4",
+        "hint": "Hai cổ tay gập chuyển động siêng năng"
+      }
+    ]
+  },
+  {
+    "orderIndex": 32,
     "slug": "em-giup-do-ba-noi",
     "title": "Em giúp đỡ bà nội",
-    "meaning": "Em hiếu thảo đỡ đần, chăm sóc bà nội tuổi già.",
-    "structure": "Chủ (Em) + Đối tượng nhận (Bà nội) + Động từ định hướng (Giúp đỡ)",
-    "category": "Gia đình & Đời sống",
+    "meaning": "Em hiếu thảo đỡ đần, chăm sóc bà nội.",
+    "structure": "Chủ (Em) + Đối tượng (Bà nội) + Động từ định hướng (Giúp đỡ)",
+    "category": "Gia đình & Xưng hô",
     "difficulty": "Trung bình",
-    "explanation": "Hướng của động từ Giúp đỡ xuất phát từ ngực của Em hướng sang phía Bà nội, thể hiện rõ vai trò chủ động tương trợ.",
+    "explanation": "Hướng của động từ Giúp đỡ từ ngực Em hướng sang Bà nội.",
     "words": [
       {
         "id": 1,
         "name": "Em",
         "slug": "em",
-        "role": "Chủ ngữ (Em)",
+        "role": "Chủ ngữ",
         "video": "/vsl400_videos/em_front.mp4",
         "videoFront": "/vsl400_videos/em_front.mp4",
         "videoSide": "/vsl400_videos/em_left.mp4",
@@ -601,17 +1285,17 @@
         "id": 2,
         "name": "Bà nội",
         "slug": "ba_noi",
-        "role": "Đối tượng nhận (Bà nội)",
+        "role": "Đối tượng nhận",
         "video": "/vsl400_videos/ba_noi_front.mp4",
         "videoFront": "/vsl400_videos/ba_noi_front.mp4",
         "videoSide": "/vsl400_videos/ba_noi_left.mp4",
-        "hint": "Ký hiệu Bà nội chống gậy hoặc búi tóc"
+        "hint": "Ký hiệu Bà nội"
       },
       {
         "id": 3,
         "name": "Giúp đỡ",
         "slug": "giup_do",
-        "role": "Động từ định hướng (Giúp đỡ)",
+        "role": "Động từ",
         "video": "/vsl400_videos/giup_do_front.mp4",
         "videoFront": "/vsl400_videos/giup_do_front.mp4",
         "videoSide": "/vsl400_videos/giup_do_left.mp4",
@@ -620,20 +1304,20 @@
     ]
   },
   {
-    "orderIndex": 16,
+    "orderIndex": 33,
     "slug": "me-cho-nang-em",
     "title": "Mẹ chở che cho em",
-    "meaning": "Mẹ bao bọc, bảo bọc con cái trong vòng tay yêu thương.",
-    "structure": "Chủ (Mẹ) + Đối tượng (Em) + Động từ che chở (Chở che / Che chở)",
-    "category": "Gia đình & Đời sống",
+    "meaning": "Mẹ bao bọc, bảo vệ con cái trong vòng tay ấm áp.",
+    "structure": "Chủ (Mẹ) + Đối tượng (Em) + Động từ (Chở che / Che chở)",
+    "category": "Gia đình & Xưng hô",
     "difficulty": "Trung bình",
-    "explanation": "Cử chỉ che chở bao bọc với hai tay ôm tròn khép lại, diễn tả tình mẫu tử thiêng liêng.",
+    "explanation": "Hai tay khum tròn bảo vệ hướng về phía người con.",
     "words": [
       {
         "id": 1,
         "name": "Mẹ",
         "slug": "me",
-        "role": "Chủ ngữ (Mẹ)",
+        "role": "Chủ ngữ",
         "video": "/vsl400_videos/me_front.mp4",
         "videoFront": "/vsl400_videos/me_front.mp4",
         "videoSide": "/vsl400_videos/me_left.mp4",
@@ -643,7 +1327,7 @@
         "id": 2,
         "name": "Em",
         "slug": "em",
-        "role": "Người con (Em)",
+        "role": "Người con",
         "video": "/vsl400_videos/em_front.mp4",
         "videoFront": "/vsl400_videos/em_front.mp4",
         "videoSide": "/vsl400_videos/em_left.mp4",
@@ -653,7 +1337,7 @@
         "id": 3,
         "name": "Chợ",
         "slug": "cho_nang",
-        "role": "Hành động che chở",
+        "role": "Động từ",
         "video": "/vsl400_videos/cho_nang_front.mp4",
         "videoFront": "/vsl400_videos/cho_nang_front.mp4",
         "videoSide": "/vsl400_videos/cho_nang_left.mp4",
@@ -662,20 +1346,232 @@
     ]
   },
   {
-    "orderIndex": 17,
+    "orderIndex": 34,
+    "slug": "chu-tot-bung",
+    "title": "Chú rất tốt bụng",
+    "meaning": "Người chú có tấm lòng rộng mở, nhân hậu.",
+    "structure": "Chủ đề (Chú) + Phẩm chất (Tốt bụng)",
+    "category": "Gia đình & Xưng hô",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Chú đặt trước, sau đó chạm ngực giơ ngón cái khen ngợi (Tốt bụng).",
+    "words": [
+      {
+        "id": 1,
+        "name": "Chú",
+        "slug": "chu",
+        "role": "Chủ đề",
+        "video": "/vsl400_videos/chu_front.mp4",
+        "videoFront": "/vsl400_videos/chu_front.mp4",
+        "videoSide": "/vsl400_videos/chu_left.mp4",
+        "hint": "Ký hiệu Chú"
+      },
+      {
+        "id": 2,
+        "name": "Tốt bụng",
+        "slug": "tot_bung",
+        "role": "Phẩm chất",
+        "video": "/vsl400_videos/tot_bung_front.mp4",
+        "videoFront": "/vsl400_videos/tot_bung_front.mp4",
+        "videoSide": "/vsl400_videos/tot_bung_left.mp4",
+        "hint": "Chạm ngực giơ ngón cái mỉm cười"
+      }
+    ]
+  },
+  {
+    "orderIndex": 35,
+    "slug": "co-hien",
+    "title": "Cô rất hiền lành",
+    "meaning": "Cô có tính tình ôn hòa, nhân từ.",
+    "structure": "Chủ đề (Cô) + Tính cách (Hiền)",
+    "category": "Gia đình & Xưng hô",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Cô xưng hô kết hợp vuốt má nhẹ nhàng biểu thị nét Hiền.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Cô",
+        "slug": "co",
+        "role": "Chủ đề",
+        "video": "/vsl400_videos/co_front.mp4",
+        "videoFront": "/vsl400_videos/co_front.mp4",
+        "videoSide": "/vsl400_videos/co_left.mp4",
+        "hint": "Ký hiệu Cô"
+      },
+      {
+        "id": 2,
+        "name": "Hiền",
+        "slug": "hien",
+        "role": "Tính cách",
+        "video": "/vsl400_videos/hien_front.mp4",
+        "videoFront": "/vsl400_videos/hien_front.mp4",
+        "videoSide": "/vsl400_videos/hien_left.mp4",
+        "hint": "Ký hiệu vuốt má dịu dàng"
+      }
+    ]
+  },
+  {
+    "orderIndex": 36,
+    "slug": "con-trai-ngoan",
+    "title": "Con trai rất ngoan ngoãn",
+    "meaning": "Cậu con trai luôn vâng lời và lễ độ.",
+    "structure": "Chủ thể (Con trai) + Phẩm chất (Ngoan)",
+    "category": "Gia đình & Xưng hô",
+    "difficulty": "Dễ",
+    "explanation": "Nêu Con trai trước, làm ký hiệu Ngoan vuốt cằm sau.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Con trai",
+        "slug": "con_trai",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/con_trai_front.mp4",
+        "videoFront": "/vsl400_videos/con_trai_front.mp4",
+        "videoSide": "/vsl400_videos/con_trai_left.mp4",
+        "hint": "Ký hiệu Con trai"
+      },
+      {
+        "id": 2,
+        "name": "Ngoan",
+        "slug": "ngoan",
+        "role": "Phẩm chất",
+        "video": "/vsl400_videos/ngoan_front.mp4",
+        "videoFront": "/vsl400_videos/ngoan_front.mp4",
+        "videoSide": "/vsl400_videos/ngoan_left.mp4",
+        "hint": "Tay vuốt cằm gật đầu khen ngoan"
+      }
+    ]
+  },
+  {
+    "orderIndex": 37,
+    "slug": "con-gai-dep",
+    "title": "Con gái rất xinh đẹp",
+    "meaning": "Cô con gái có nét mặt tươi tắn, xinh xắn.",
+    "structure": "Chủ thể (Con gái) + Miêu tả (Đẹp)",
+    "category": "Gia đình & Xưng hô",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Con gái kết hợp Đẹp xoay quanh gương mặt.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Con gái",
+        "slug": "con_gai",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/con_gai_front.mp4",
+        "videoFront": "/vsl400_videos/con_gai_front.mp4",
+        "videoSide": "/vsl400_videos/con_gai_left.mp4",
+        "hint": "Ký hiệu Con gái"
+      },
+      {
+        "id": 2,
+        "name": "Dép",
+        "slug": "dep",
+        "role": "Nhan sắc",
+        "video": "/vsl400_videos/dep_front.mp4",
+        "videoFront": "/vsl400_videos/dep_front.mp4",
+        "videoSide": "/vsl400_videos/dep_left.mp4",
+        "hint": "Ngón tay xoay quanh mặt nở nụ cười"
+      }
+    ]
+  },
+  {
+    "orderIndex": 38,
+    "slug": "chong-yeu-thuong-vo",
+    "title": "Chồng yêu thương vợ",
+    "meaning": "Người chồng luôn yêu thương, gắn bó với vợ.",
+    "structure": "Chủ (Chồng) + Đối tượng (Vợ) + Động từ (Yêu thương)",
+    "category": "Gia đình & Xưng hô",
+    "difficulty": "Trung bình",
+    "explanation": "Nêu Chồng và Vợ, sau đó ôm chéo ngực biểu đạt Yêu thương.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Chồng",
+        "slug": "chong",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/chong_front.mp4",
+        "videoFront": "/vsl400_videos/chong_front.mp4",
+        "videoSide": "/vsl400_videos/chong_left.mp4",
+        "hint": "Ký hiệu Chồng"
+      },
+      {
+        "id": 2,
+        "name": "Vở",
+        "slug": "vo_hoi",
+        "role": "Đối tượng",
+        "video": "/vsl400_videos/vo_hoi_front.mp4",
+        "videoFront": "/vsl400_videos/vo_hoi_front.mp4",
+        "videoSide": "/vsl400_videos/vo_hoi_left.mp4",
+        "hint": "Ký hiệu Vợ"
+      },
+      {
+        "id": 3,
+        "name": "Yêu thương",
+        "slug": "yeu_thuong",
+        "role": "Động từ",
+        "video": "/vsl400_videos/yeu_thuong_front.mp4",
+        "videoFront": "/vsl400_videos/yeu_thuong_front.mp4",
+        "videoSide": "/vsl400_videos/yeu_thuong_left.mp4",
+        "hint": "Hai tay chéo ôm trước ngực"
+      }
+    ]
+  },
+  {
+    "orderIndex": 39,
+    "slug": "ho-hang-gap-mat",
+    "title": "Họ hàng nói chuyện vui vẻ",
+    "meaning": "Bà con họ hàng sum họp trò chuyện rôm rả.",
+    "structure": "Chủ thể (Họ hàng) + Động từ (Nói chuyện) + Cảm xúc (Cười)",
+    "category": "Gia đình & Xưng hô",
+    "difficulty": "Trung bình",
+    "explanation": "Ký hiệu Họ hàng liên kết dòng tộc rồi làm ký hiệu Nói chuyện và Cười tươi.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Họ hàng",
+        "slug": "ho_hang",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/ho_hang_front.mp4",
+        "videoFront": "/vsl400_videos/ho_hang_front.mp4",
+        "videoSide": "/vsl400_videos/ho_hang_left.mp4",
+        "hint": "Ký hiệu Họ hàng"
+      },
+      {
+        "id": 2,
+        "name": "Nói chuyện",
+        "slug": "noi_chuyen",
+        "role": "Hành động",
+        "video": "/vsl400_videos/noi_chuyen_front.mp4",
+        "videoFront": "/vsl400_videos/noi_chuyen_front.mp4",
+        "videoSide": "/vsl400_videos/noi_chuyen_left.mp4",
+        "hint": "Hai tay trao đổi nói chuyện"
+      },
+      {
+        "id": 3,
+        "name": "Cười",
+        "slug": "cuoi",
+        "role": "Cảm xúc",
+        "video": "/vsl400_videos/cuoi_front.mp4",
+        "videoFront": "/vsl400_videos/cuoi_front.mp4",
+        "videoSide": "/vsl400_videos/cuoi_left.mp4",
+        "hint": "Khóe môi mở rộng cười vui vẻ"
+      }
+    ]
+  },
+  {
+    "orderIndex": 40,
     "slug": "hoc-sinh-doc-sach",
     "title": "Học sinh đọc sách",
     "meaning": "Các bạn học sinh đang chăm chú mở sách học bài.",
     "structure": "SOV: Chủ (Học sinh) + Vật thể (Sách) + Động từ (Đọc)",
     "category": "Giáo dục & Học đường",
     "difficulty": "Dễ",
-    "explanation": "Ký hiệu Sách (hai bàn tay mở ra như trang sách) đặt trước động từ Đọc (ngón tay trỏ quét theo dòng chữ).",
+    "explanation": "Ký hiệu Sách mở ra đặt trước động từ Đọc quét ngón tay.",
     "words": [
       {
         "id": 1,
         "name": "Học sinh",
         "slug": "hoc_sinh",
-        "role": "Chủ ngữ (Học sinh)",
+        "role": "Chủ ngữ",
         "video": "/vsl400_videos/hoc_sinh_front.mp4",
         "videoFront": "/vsl400_videos/hoc_sinh_front.mp4",
         "videoSide": "/vsl400_videos/hoc_sinh_left.mp4",
@@ -685,7 +1581,7 @@
         "id": 2,
         "name": "Sách",
         "slug": "sach",
-        "role": "Vật thể (Sách)",
+        "role": "Vật thể",
         "video": "/vsl400_videos/sach_front.mp4",
         "videoFront": "/vsl400_videos/sach_front.mp4",
         "videoSide": "/vsl400_videos/sach_left.mp4",
@@ -695,29 +1591,29 @@
         "id": 3,
         "name": "Đọc",
         "slug": "doc",
-        "role": "Động từ (Đọc)",
+        "role": "Động từ",
         "video": "/vsl400_videos/doc_front.mp4",
         "videoFront": "/vsl400_videos/doc_front.mp4",
         "videoSide": "/vsl400_videos/doc_left.mp4",
-        "hint": "Hai ngón tay hướng quét trang sách"
+        "hint": "Ngón tay hướng quét trang sách"
       }
     ]
   },
   {
-    "orderIndex": 18,
+    "orderIndex": 41,
     "slug": "em-hoc-o-truong-hoc",
     "title": "Em học ở trường học",
     "meaning": "Em đang theo học tại ngôi trường thân thương.",
     "structure": "Chủ (Em) + Nơi chốn (Trường học) + Hành động (Học) [Rút gọn từ \"ở\"]",
     "category": "Giáo dục & Học đường",
     "difficulty": "Trung bình",
-    "explanation": "Quy tắc rút gọn VSL: Lược bỏ hoàn toàn giới từ \"ở\". Người khiếm thính chỉ cần nêu địa điểm (Trường học) rồi đến hành động (Học).",
+    "explanation": "Lược bỏ hoàn toàn giới từ \"ở\". Nêu địa điểm (Trường học) rồi đến hành động (Học).",
     "words": [
       {
         "id": 1,
         "name": "Em",
         "slug": "em",
-        "role": "Chủ ngữ (Em)",
+        "role": "Chủ ngữ",
         "video": "/vsl400_videos/em_front.mp4",
         "videoFront": "/vsl400_videos/em_front.mp4",
         "videoSide": "/vsl400_videos/em_left.mp4",
@@ -727,7 +1623,7 @@
         "id": 2,
         "name": "Trường học",
         "slug": "truong_hoc",
-        "role": "Địa điểm (Trường học)",
+        "role": "Địa điểm",
         "video": "/vsl400_videos/truong_hoc_front.mp4",
         "videoFront": "/vsl400_videos/truong_hoc_front.mp4",
         "videoSide": "/vsl400_videos/truong_hoc_left.mp4",
@@ -737,7 +1633,7 @@
         "id": 3,
         "name": "Học",
         "slug": "hoc",
-        "role": "Hành động vị ngữ (Học)",
+        "role": "Động từ",
         "video": "/vsl400_videos/hoc_front.mp4",
         "videoFront": "/vsl400_videos/hoc_front.mp4",
         "videoSide": "/vsl400_videos/hoc_left.mp4",
@@ -746,11 +1642,11 @@
     ]
   },
   {
-    "orderIndex": 19,
+    "orderIndex": 42,
     "slug": "em-lam-bai-tap",
     "title": "Em chăm chỉ làm bài tập",
     "meaning": "Em tự giác ngồi vào bàn hoàn thành bài tập về nhà.",
-    "structure": "Chủ thể (Em) + Cụm hành động (Làm bài tập)",
+    "structure": "Chủ thể (Em) + Hành động (Làm bài tập)",
     "category": "Giáo dục & Học đường",
     "difficulty": "Dễ",
     "explanation": "Ký hiệu Làm bài tập mô phỏng động tác viết và tính toán trên trang vở.",
@@ -759,7 +1655,7 @@
         "id": 1,
         "name": "Em",
         "slug": "em",
-        "role": "Chủ thể (Em)",
+        "role": "Chủ thể",
         "video": "/vsl400_videos/em_front.mp4",
         "videoFront": "/vsl400_videos/em_front.mp4",
         "videoSide": "/vsl400_videos/em_left.mp4",
@@ -769,39 +1665,39 @@
         "id": 2,
         "name": "Làm bài tập",
         "slug": "lam_bai_tap",
-        "role": "Hành động học tập (Làm bài tập)",
+        "role": "Hành động",
         "video": "/vsl400_videos/lam_bai_tap_front.mp4",
         "videoFront": "/vsl400_videos/lam_bai_tap_front.mp4",
         "videoSide": "/vsl400_videos/lam_bai_tap_left.mp4",
-        "hint": "Cử chỉ tay ghi chép hoàn thành bài vở"
+        "hint": "Cử chỉ ghi chép hoàn thành bài vở"
       }
     ]
   },
   {
-    "orderIndex": 20,
+    "orderIndex": 43,
     "slug": "sinh-vien-viet-sach",
     "title": "Sinh viên viết sách",
     "meaning": "Bạn sinh viên đại học đang say mê viết công trình sách.",
     "structure": "SOV: Chủ (Sinh viên) + Bổ ngữ (Sách) + Động từ (Viết)",
     "category": "Giáo dục & Học đường",
     "difficulty": "Trung bình",
-    "explanation": "Nêu đối tượng vật chất (Sách) trước, sau đó thực hiện cử chỉ cầm bút nắn nót (Viết).",
+    "explanation": "Nêu Sách trước, sau đó thực hiện cử chỉ cầm bút viết.",
     "words": [
       {
         "id": 1,
         "name": "Sinh viên",
         "slug": "sinh_vien",
-        "role": "Chủ ngữ (Sinh viên)",
+        "role": "Chủ ngữ",
         "video": "/vsl400_videos/sinh_vien_front.mp4",
         "videoFront": "/vsl400_videos/sinh_vien_front.mp4",
         "videoSide": "/vsl400_videos/sinh_vien_left.mp4",
-        "hint": "Ký hiệu Sinh viên trường lớn"
+        "hint": "Ký hiệu Sinh viên"
       },
       {
         "id": 2,
         "name": "Sách",
         "slug": "sach",
-        "role": "Vật thể (Sách)",
+        "role": "Vật thể",
         "video": "/vsl400_videos/sach_front.mp4",
         "videoFront": "/vsl400_videos/sach_front.mp4",
         "videoSide": "/vsl400_videos/sach_left.mp4",
@@ -811,29 +1707,345 @@
         "id": 3,
         "name": "Viết",
         "slug": "viet",
-        "role": "Động từ (Viết)",
+        "role": "Động từ",
         "video": "/vsl400_videos/viet_front.mp4",
         "videoFront": "/vsl400_videos/viet_front.mp4",
         "videoSide": "/vsl400_videos/viet_left.mp4",
-        "hint": "Ngón tay giả lập cầm bút viết lên lòng bàn tay kia"
+        "hint": "Ngón tay giả lập cầm bút viết"
       }
     ]
   },
   {
-    "orderIndex": 21,
+    "orderIndex": 44,
+    "slug": "hoc-sinh-viet-but-bi",
+    "title": "Học sinh viết bằng bút bi",
+    "meaning": "Học sinh dùng bút bi để ghi bài vào vở.",
+    "structure": "Chủ (Học sinh) + Dụng cụ (Bút bi) + Động từ (Viết) [Rút gọn \"bằng\"]",
+    "category": "Giáo dục & Học đường",
+    "difficulty": "Dễ",
+    "explanation": "Lược bỏ từ \"bằng\", nêu dụng cụ Bút bi rồi đến động tác Viết.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Học sinh",
+        "slug": "hoc_sinh",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/hoc_sinh_front.mp4",
+        "videoFront": "/vsl400_videos/hoc_sinh_front.mp4",
+        "videoSide": "/vsl400_videos/hoc_sinh_left.mp4",
+        "hint": "Ký hiệu Học sinh"
+      },
+      {
+        "id": 2,
+        "name": "Bút bi",
+        "slug": "but_bi",
+        "role": "Dụng cụ",
+        "video": "/vsl400_videos/but_bi_front.mp4",
+        "videoFront": "/vsl400_videos/but_bi_front.mp4",
+        "videoSide": "/vsl400_videos/but_bi_left.mp4",
+        "hint": "Ký hiệu bấm ngòi bút bi"
+      },
+      {
+        "id": 3,
+        "name": "Viết",
+        "slug": "viet",
+        "role": "Động từ",
+        "video": "/vsl400_videos/viet_front.mp4",
+        "videoFront": "/vsl400_videos/viet_front.mp4",
+        "videoSide": "/vsl400_videos/viet_left.mp4",
+        "hint": "Cầm bút viết"
+      }
+    ]
+  },
+  {
+    "orderIndex": 45,
+    "slug": "sinh-vien-hoc-truong-dai-hoc",
+    "title": "Sinh viên học trường đại học",
+    "meaning": "Các bạn sinh viên đang theo học tại trường đại học.",
+    "structure": "Chủ (Sinh viên) + Nơi học (Trường đại học) + Hành động (Học)",
+    "category": "Giáo dục & Học đường",
+    "difficulty": "Trung bình",
+    "explanation": "Nêu Sinh viên, Trường đại học rồi chốt bằng động tác Học.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Sinh viên",
+        "slug": "sinh_vien",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/sinh_vien_front.mp4",
+        "videoFront": "/vsl400_videos/sinh_vien_front.mp4",
+        "videoSide": "/vsl400_videos/sinh_vien_left.mp4",
+        "hint": "Ký hiệu Sinh viên"
+      },
+      {
+        "id": 2,
+        "name": "Trường Đại học",
+        "slug": "truong_dai_hoc",
+        "role": "Trường học",
+        "video": "/vsl400_videos/truong_dai_hoc_front.mp4",
+        "videoFront": "/vsl400_videos/truong_dai_hoc_front.mp4",
+        "videoSide": "/vsl400_videos/truong_dai_hoc_left.mp4",
+        "hint": "Ký hiệu Trường đại học"
+      },
+      {
+        "id": 3,
+        "name": "Học",
+        "slug": "hoc",
+        "role": "Động từ",
+        "video": "/vsl400_videos/hoc_front.mp4",
+        "videoFront": "/vsl400_videos/hoc_front.mp4",
+        "videoSide": "/vsl400_videos/hoc_left.mp4",
+        "hint": "Ký hiệu Học"
+      }
+    ]
+  },
+  {
+    "orderIndex": 46,
+    "slug": "hieu-truong-tot-bung",
+    "title": "Thầy hiệu trưởng rất tốt bụng",
+    "meaning": "Thầy hiệu trưởng luôn quan tâm, thương yêu học sinh.",
+    "structure": "Chủ đề (Hiệu trưởng) + Phẩm chất (Tốt bụng)",
+    "category": "Giáo dục & Học đường",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Hiệu trưởng lãnh đạo trường kết hợp biểu đạt Tốt bụng.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Hiệu trưởng",
+        "slug": "hieu_truong",
+        "role": "Chủ đề",
+        "video": "/vsl400_videos/hieu_truong_front.mp4",
+        "videoFront": "/vsl400_videos/hieu_truong_front.mp4",
+        "videoSide": "/vsl400_videos/hieu_truong_left.mp4",
+        "hint": "Ký hiệu Hiệu trưởng"
+      },
+      {
+        "id": 2,
+        "name": "Tốt bụng",
+        "slug": "tot_bung",
+        "role": "Phẩm chất",
+        "video": "/vsl400_videos/tot_bung_front.mp4",
+        "videoFront": "/vsl400_videos/tot_bung_front.mp4",
+        "videoSide": "/vsl400_videos/tot_bung_left.mp4",
+        "hint": "Chạm ngực giơ ngón cái khen"
+      }
+    ]
+  },
+  {
+    "orderIndex": 47,
+    "slug": "hoc-sinh-dung-thuoc-ke",
+    "title": "Học sinh dùng thước kẻ vẽ",
+    "meaning": "Bạn học sinh dùng cây thước kẻ ngay ngắn.",
+    "structure": "Chủ (Học sinh) + Dụng cụ (Thước kẻ) + Quan sát (Quan sát)",
+    "category": "Giáo dục & Học đường",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Thước kẻ đo thẳng và quan sát nắn nót.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Học sinh",
+        "slug": "hoc_sinh",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/hoc_sinh_front.mp4",
+        "videoFront": "/vsl400_videos/hoc_sinh_front.mp4",
+        "videoSide": "/vsl400_videos/hoc_sinh_left.mp4",
+        "hint": "Ký hiệu Học sinh"
+      },
+      {
+        "id": 2,
+        "name": "Thước kẻ",
+        "slug": "thuoc_ke",
+        "role": "Dụng cụ",
+        "video": "/vsl400_videos/thuoc_ke_front.mp4",
+        "videoFront": "/vsl400_videos/thuoc_ke_front.mp4",
+        "videoSide": "/vsl400_videos/thuoc_ke_left.mp4",
+        "hint": "Hai ngón tay kéo đường thẳng thước kẻ"
+      },
+      {
+        "id": 3,
+        "name": "Quan sát",
+        "slug": "quan_sat",
+        "role": "Hành động",
+        "video": "/vsl400_videos/quan_sat_front.mp4",
+        "videoFront": "/vsl400_videos/quan_sat_front.mp4",
+        "videoSide": "/vsl400_videos/quan_sat_left.mp4",
+        "hint": "Mắt nhìn tập trung quan sát"
+      }
+    ]
+  },
+  {
+    "orderIndex": 48,
+    "slug": "em-di-nha-sach",
+    "title": "Em đi đến nhà sách",
+    "meaning": "Em ghé nhà sách để mua thêm đồ dùng học tập.",
+    "structure": "Chủ (Em) + Điểm đến (Nhà sách) + Động từ (Đi)",
+    "category": "Giáo dục & Học đường",
+    "difficulty": "Dễ",
+    "explanation": "Điểm đến Nhà sách đưa lên trước động từ di chuyển Đi.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 2,
+        "name": "Nhà sách",
+        "slug": "nha_sach",
+        "role": "Địa điểm",
+        "video": "/vsl400_videos/nha_sach_front.mp4",
+        "videoFront": "/vsl400_videos/nha_sach_front.mp4",
+        "videoSide": "/vsl400_videos/nha_sach_left.mp4",
+        "hint": "Ký hiệu Nhà và Sách"
+      },
+      {
+        "id": 3,
+        "name": "Đi",
+        "slug": "di",
+        "role": "Động từ",
+        "video": "/vsl400_videos/di_front.mp4",
+        "videoFront": "/vsl400_videos/di_front.mp4",
+        "videoSide": "/vsl400_videos/di_left.mp4",
+        "hint": "Ngón tay bước đi"
+      }
+    ]
+  },
+  {
+    "orderIndex": 49,
+    "slug": "em-mua-ba-lo",
+    "title": "Em mua chiếc ba lô",
+    "meaning": "Em sắm chiếc ba lô mới để đựng sách vở đến trường.",
+    "structure": "Chủ (Em) + Đồ vật (Ba lô) + Động từ (Mua)",
+    "category": "Giáo dục & Học đường",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Ba lô đeo hai quai trên vai đặt trước hành vi Mua.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 2,
+        "name": "Ba lô",
+        "slug": "ba_lo",
+        "role": "Đồ dùng",
+        "video": "/vsl400_videos/ba_lo_front.mp4",
+        "videoFront": "/vsl400_videos/ba_lo_front.mp4",
+        "videoSide": "/vsl400_videos/ba_lo_left.mp4",
+        "hint": "Hai tay nắm hai quai ba lô trước ngực"
+      },
+      {
+        "id": 3,
+        "name": "Múa",
+        "slug": "mua_sac",
+        "role": "Động từ",
+        "video": "/vsl400_videos/mua_sac_front.mp4",
+        "videoFront": "/vsl400_videos/mua_sac_front.mp4",
+        "videoSide": "/vsl400_videos/mua_sac_left.mp4",
+        "hint": "Tay đưa tiền mua sắm"
+      }
+    ]
+  },
+  {
+    "orderIndex": 50,
+    "slug": "hoc-sinh-thong-minh",
+    "title": "Học sinh rất thông minh",
+    "meaning": "Các bạn học sinh tiếp thu bài rất nhanh nhạy.",
+    "structure": "Chủ đề (Học sinh) + Năng lực (Thông minh)",
+    "category": "Giáo dục & Học đường",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Thông minh chạm ngón trỏ vào thái dương búng nhẹ.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Học sinh",
+        "slug": "hoc_sinh",
+        "role": "Chủ đề",
+        "video": "/vsl400_videos/hoc_sinh_front.mp4",
+        "videoFront": "/vsl400_videos/hoc_sinh_front.mp4",
+        "videoSide": "/vsl400_videos/hoc_sinh_left.mp4",
+        "hint": "Ký hiệu Học sinh"
+      },
+      {
+        "id": 2,
+        "name": "Thông minh",
+        "slug": "thong_minh",
+        "role": "Năng lực",
+        "video": "/vsl400_videos/thong_minh_front.mp4",
+        "videoFront": "/vsl400_videos/thong_minh_front.mp4",
+        "videoSide": "/vsl400_videos/thong_minh_left.mp4",
+        "hint": "Chạm ngón tay lên trán búng sáng dạ"
+      }
+    ]
+  },
+  {
+    "orderIndex": 51,
+    "slug": "sinh-vien-dung-laptop",
+    "title": "Sinh viên dùng máy tính xách tay",
+    "meaning": "Sinh viên mở máy tính xách tay làm đồ án.",
+    "structure": "Chủ (Sinh viên) + Thiết bị (Laptop) + Thao tác (Làm việc)",
+    "category": "Giáo dục & Học đường",
+    "difficulty": "Trung bình",
+    "explanation": "Ký hiệu Laptop mở nắp gập rồi làm động tác gõ phím làm việc.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Sinh viên",
+        "slug": "sinh_vien",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/sinh_vien_front.mp4",
+        "videoFront": "/vsl400_videos/sinh_vien_front.mp4",
+        "videoSide": "/vsl400_videos/sinh_vien_left.mp4",
+        "hint": "Ký hiệu Sinh viên"
+      },
+      {
+        "id": 2,
+        "name": "Laptop",
+        "slug": "laptop",
+        "role": "Thiết bị",
+        "video": "/vsl400_videos/laptop_front.mp4",
+        "videoFront": "/vsl400_videos/laptop_front.mp4",
+        "videoSide": "/vsl400_videos/laptop_left.mp4",
+        "hint": "Hai bàn tay mở nắp máy tính gập"
+      },
+      {
+        "id": 3,
+        "name": "Làm việc",
+        "slug": "lam_viec",
+        "role": "Hành động",
+        "video": "/vsl400_videos/lam_viec_front.mp4",
+        "videoFront": "/vsl400_videos/lam_viec_front.mp4",
+        "videoSide": "/vsl400_videos/lam_viec_left.mp4",
+        "hint": "Hai cổ tay gõ thao tác làm việc"
+      }
+    ]
+  },
+  {
+    "orderIndex": 52,
     "slug": "bac-si-kham-benh-em",
     "title": "Bác sĩ khám bệnh cho em",
     "meaning": "Bác sĩ cẩn thận thăm khám, chẩn đoán cho em.",
-    "structure": "Chủ (Bác sĩ) + Bệnh nhân (Em) + Động từ định hướng (Khám bệnh)",
-    "category": "Y tế & Bệnh viện",
+    "structure": "Chủ (Bác sĩ) + Bệnh nhân (Em) + Động từ có hướng (Khám bệnh)",
+    "category": "Y tế & Sức khỏe",
     "difficulty": "Trung bình",
-    "explanation": "Ký hiệu Khám bệnh có hướng cử chỉ từ phía Bác sĩ đưa ống nghe/bắt mạch hướng về người bệnh (Em).",
+    "explanation": "Cử chỉ Khám bệnh hướng từ phía Bác sĩ sang người bệnh (Em).",
     "words": [
       {
         "id": 1,
         "name": "Bác sĩ",
         "slug": "bac_si",
-        "role": "Chủ ngữ (Bác sĩ)",
+        "role": "Chủ ngữ",
         "video": "/vsl400_videos/bac_si_front.mp4",
         "videoFront": "/vsl400_videos/bac_si_front.mp4",
         "videoSide": "/vsl400_videos/bac_si_left.mp4",
@@ -843,7 +2055,7 @@
         "id": 2,
         "name": "Em",
         "slug": "em",
-        "role": "Bệnh nhân (Em)",
+        "role": "Bệnh nhân",
         "video": "/vsl400_videos/em_front.mp4",
         "videoFront": "/vsl400_videos/em_front.mp4",
         "videoSide": "/vsl400_videos/em_left.mp4",
@@ -853,29 +2065,29 @@
         "id": 3,
         "name": "Khám bệnh",
         "slug": "kham_benh",
-        "role": "Động từ định hướng (Khám bệnh)",
+        "role": "Động từ",
         "video": "/vsl400_videos/kham_benh_front.mp4",
         "videoFront": "/vsl400_videos/kham_benh_front.mp4",
         "videoSide": "/vsl400_videos/kham_benh_left.mp4",
-        "hint": "Cử chỉ đặt ống nghe thăm khám người bệnh"
+        "hint": "Cử chỉ đặt ống nghe thăm khám"
       }
     ]
   },
   {
-    "orderIndex": 22,
+    "orderIndex": 53,
     "slug": "anh-di-benh-vien",
     "title": "Anh đi đến bệnh viện",
     "meaning": "Anh chủ động di chuyển đến bệnh viện để khám sức khỏe.",
-    "structure": "Chủ (Anh) + Điểm đến (Bệnh viện) + Động từ di chuyển (Đi) [Rút gọn từ \"đến\"]",
-    "category": "Y tế & Bệnh viện",
+    "structure": "Chủ (Anh) + Điểm đến (Bệnh viện) + Động từ (Đi)",
+    "category": "Y tế & Sức khỏe",
     "difficulty": "Dễ",
-    "explanation": "Lược bỏ hư từ \"đến\". Đưa đích đến quan trọng (Bệnh viện) lên trước hành động di chuyển (Đi).",
+    "explanation": "Điểm đến Bệnh viện đưa lên trước hành động di chuyển Đi.",
     "words": [
       {
         "id": 1,
         "name": "Anh",
         "slug": "anh",
-        "role": "Chủ thể (Anh)",
+        "role": "Chủ thể",
         "video": "/vsl400_videos/anh_front.mp4",
         "videoFront": "/vsl400_videos/anh_front.mp4",
         "videoSide": "/vsl400_videos/anh_left.mp4",
@@ -885,7 +2097,7 @@
         "id": 2,
         "name": "Bệnh viện",
         "slug": "benh_vien",
-        "role": "Nơi chốn (Bệnh viện)",
+        "role": "Nơi chốn",
         "video": "/vsl400_videos/benh_vien_front.mp4",
         "videoFront": "/vsl400_videos/benh_vien_front.mp4",
         "videoSide": "/vsl400_videos/benh_vien_left.mp4",
@@ -895,39 +2107,39 @@
         "id": 3,
         "name": "Đi",
         "slug": "di",
-        "role": "Hành động di chuyển (Đi)",
+        "role": "Động từ",
         "video": "/vsl400_videos/di_front.mp4",
         "videoFront": "/vsl400_videos/di_front.mp4",
         "videoSide": "/vsl400_videos/di_left.mp4",
-        "hint": "Hai ngón tay bước đi dứt khoát"
+        "hint": "Ngón tay bước đi"
       }
     ]
   },
   {
-    "orderIndex": 23,
-    "slug": "y-ta-giup-do-benh-nhan",
+    "orderIndex": 54,
+    "slug": "y-ta-giup-do-em",
     "title": "Y tá giúp đỡ em",
-    "meaning": "Cô y tá dịu dàng chăm sóc, hỗ trợ em trong phòng bệnh.",
-    "structure": "Chủ (Y tá) + Người nhận (Em) + Động từ định hướng (Giúp đỡ)",
-    "category": "Y tế & Bệnh viện",
+    "meaning": "Cô y tá dịu dàng chăm sóc, hỗ trợ em.",
+    "structure": "Chủ (Y tá) + Người nhận (Em) + Động từ (Giúp đỡ)",
+    "category": "Y tế & Sức khỏe",
     "difficulty": "Dễ",
-    "explanation": "Bàn tay của ký hiệu Y tá định hướng cử chỉ Giúp đỡ về phía người đang cần chăm sóc.",
+    "explanation": "Bàn tay của Y tá định hướng cử chỉ Giúp đỡ về phía Em.",
     "words": [
       {
         "id": 1,
         "name": "Y tá",
         "slug": "y_ta",
-        "role": "Chủ ngữ (Y tá)",
+        "role": "Chủ ngữ",
         "video": "/vsl400_videos/y_ta_front.mp4",
         "videoFront": "/vsl400_videos/y_ta_front.mp4",
         "videoSide": "/vsl400_videos/y_ta_left.mp4",
-        "hint": "Ký hiệu Y tá đội mũ chữ thập"
+        "hint": "Ký hiệu Y tá mũ chữ thập"
       },
       {
         "id": 2,
         "name": "Em",
         "slug": "em",
-        "role": "Người được giúp (Em)",
+        "role": "Người nhận",
         "video": "/vsl400_videos/em_front.mp4",
         "videoFront": "/vsl400_videos/em_front.mp4",
         "videoSide": "/vsl400_videos/em_left.mp4",
@@ -937,7 +2149,7 @@
         "id": 3,
         "name": "Giúp đỡ",
         "slug": "giup_do",
-        "role": "Hành động hỗ trợ (Giúp đỡ)",
+        "role": "Động từ",
         "video": "/vsl400_videos/giup_do_front.mp4",
         "videoFront": "/vsl400_videos/giup_do_front.mp4",
         "videoSide": "/vsl400_videos/giup_do_left.mp4",
@@ -946,344 +2158,20 @@
     ]
   },
   {
-    "orderIndex": 24,
-    "slug": "buoi-sang-em-thuc-day",
-    "title": "Buổi sáng em thức dậy",
-    "meaning": "Bình minh lên, em thức giấc chào ngày mới đầy năng lượng.",
-    "structure": "Trạng ngữ thời gian (Buổi sáng) + Chủ ngữ (Em) + Hành động (Thức dậy)",
-    "category": "Thời gian & Sinh hoạt",
+    "orderIndex": 55,
+    "slug": "em-bi-dau",
+    "title": "Em cảm thấy bị đau",
+    "meaning": "Em đang bị đau nhức trên người.",
+    "structure": "Chủ (Em) + Trạng thái cảm giác (Cảm thấy) + Triệu chứng (Đau)",
+    "category": "Y tế & Sức khỏe",
     "difficulty": "Dễ",
-    "explanation": "Ngữ pháp VSL ưu tiên yếu tố thời gian làm Chủ đề đặt ở đầu câu, giúp người xem định vị ngay bối cảnh của câu chuyện.",
-    "words": [
-      {
-        "id": 1,
-        "name": "Buổi sáng",
-        "slug": "buoi_sang",
-        "role": "Thời gian bối cảnh (Buổi sáng)",
-        "video": "/vsl400_videos/buoi_sang_front.mp4",
-        "videoFront": "/vsl400_videos/buoi_sang_front.mp4",
-        "videoSide": "/vsl400_videos/buoi_sang_left.mp4",
-        "hint": "Bàn tay vươn lên đón mặt trời mọc"
-      },
-      {
-        "id": 2,
-        "name": "Em",
-        "slug": "em",
-        "role": "Chủ ngữ (Em)",
-        "video": "/vsl400_videos/em_front.mp4",
-        "videoFront": "/vsl400_videos/em_front.mp4",
-        "videoSide": "/vsl400_videos/em_left.mp4",
-        "hint": "Ký hiệu Em"
-      },
-      {
-        "id": 3,
-        "name": "Thức dậy",
-        "slug": "thuc_day",
-        "role": "Hành động (Thức dậy)",
-        "video": "/vsl400_videos/thuc_day_front.mp4",
-        "videoFront": "/vsl400_videos/thuc_day_front.mp4",
-        "videoSide": "/vsl400_videos/thuc_day_left.mp4",
-        "hint": "Hai ngón tay mở mắt bừng tỉnh"
-      }
-    ]
-  },
-  {
-    "orderIndex": 25,
-    "slug": "buoi-toi-bo-xem-tivi",
-    "title": "Buổi tối bố xem tivi",
-    "meaning": "Vào buổi tối, bố thư giãn xem các chương trình truyền hình.",
-    "structure": "Thời gian (Buổi tối) + Chủ (Bố) + Thiết bị (Tivi) + Động từ (Xem)",
-    "category": "Thời gian & Sinh hoạt",
-    "difficulty": "Trung bình",
-    "explanation": "Thời gian (Buổi tối) đứng đầu, sau đó theo cấu trúc SOV: Bố + Tivi (bổ ngữ) + Xem (động từ).",
-    "words": [
-      {
-        "id": 1,
-        "name": "Buổi tối",
-        "slug": "buoi_toi",
-        "role": "Thời gian (Buổi tối)",
-        "video": "/vsl400_videos/buoi_toi_front.mp4",
-        "videoFront": "/vsl400_videos/buoi_toi_front.mp4",
-        "videoSide": "/vsl400_videos/buoi_toi_left.mp4",
-        "hint": "Mặt trời lặn xuống đường chân trời"
-      },
-      {
-        "id": 2,
-        "name": "Bố",
-        "slug": "bo",
-        "role": "Chủ ngữ (Bố)",
-        "video": "/vsl400_videos/bo_front.mp4",
-        "videoFront": "/vsl400_videos/bo_front.mp4",
-        "videoSide": "/vsl400_videos/bo_left.mp4",
-        "hint": "Ký hiệu Bố"
-      },
-      {
-        "id": 3,
-        "name": "Tivi",
-        "slug": "tivi",
-        "role": "Thiết bị (Tivi)",
-        "video": "/vsl400_videos/tivi_front.mp4",
-        "videoFront": "/vsl400_videos/tivi_front.mp4",
-        "videoSide": "/vsl400_videos/tivi_left.mp4",
-        "hint": "Tạo khung hình chữ nhật tivi"
-      },
-      {
-        "id": 4,
-        "name": "Xem",
-        "slug": "xem",
-        "role": "Động từ (Xem)",
-        "video": "/vsl400_videos/xem_front.mp4",
-        "videoFront": "/vsl400_videos/xem_front.mp4",
-        "videoSide": "/vsl400_videos/xem_left.mp4",
-        "hint": "Hai ngón tay hướng từ mắt nhìn về phía trước"
-      }
-    ]
-  },
-  {
-    "orderIndex": 26,
-    "slug": "chu-nhat-em-di-cong-vien",
-    "title": "Chủ nhật em đi công viên",
-    "meaning": "Ngày chủ nhật rảnh rỗi, em đi dạo chơi ở công viên xanh mát.",
-    "structure": "Thời gian (Chủ nhật) + Chủ (Em) + Điểm đến (Công viên) + Động từ (Đi)",
-    "category": "Thời gian & Sinh hoạt",
-    "difficulty": "Trung bình",
-    "explanation": "Quy tắc Chủ đề - Lời dẫn: Nêu mốc Chủ nhật trước, điểm đến Công viên tiếp theo, và hành động Đi sau cùng.",
-    "words": [
-      {
-        "id": 1,
-        "name": "Chủ nhật",
-        "slug": "chu_nhat",
-        "role": "Mốc thời gian (Chủ nhật)",
-        "video": "/vsl400_videos/chu_nhat_front.mp4",
-        "videoFront": "/vsl400_videos/chu_nhat_front.mp4",
-        "videoSide": "/vsl400_videos/chu_nhat_left.mp4",
-        "hint": "Ký hiệu ngày Chủ nhật"
-      },
-      {
-        "id": 2,
-        "name": "Em",
-        "slug": "em",
-        "role": "Chủ thể (Em)",
-        "video": "/vsl400_videos/em_front.mp4",
-        "videoFront": "/vsl400_videos/em_front.mp4",
-        "videoSide": "/vsl400_videos/em_left.mp4",
-        "hint": "Ký hiệu Em"
-      },
-      {
-        "id": 3,
-        "name": "Công viên",
-        "slug": "cong_vien",
-        "role": "Địa điểm vui chơi (Công viên)",
-        "video": "/vsl400_videos/cong_vien_front.mp4",
-        "videoFront": "/vsl400_videos/cong_vien_front.mp4",
-        "videoSide": "/vsl400_videos/cong_vien_left.mp4",
-        "hint": "Ký hiệu cây xanh và không gian rộng"
-      },
-      {
-        "id": 4,
-        "name": "Đi",
-        "slug": "di",
-        "role": "Hành động di chuyển (Đi)",
-        "video": "/vsl400_videos/di_front.mp4",
-        "videoFront": "/vsl400_videos/di_front.mp4",
-        "videoSide": "/vsl400_videos/di_left.mp4",
-        "hint": "Ngón tay bước đi"
-      }
-    ]
-  },
-  {
-    "orderIndex": 27,
-    "slug": "bay-gio-anh-di-lam-viec",
-    "title": "Bây giờ anh đi làm việc",
-    "meaning": "Đã đến giờ anh bắt đầu công việc của một ngày mới.",
-    "structure": "Thời gian hiện tại (Bây giờ) + Chủ (Anh) + Hành động (Làm việc)",
-    "category": "Thời gian & Sinh hoạt",
-    "difficulty": "Dễ",
-    "explanation": "Ký hiệu Bây giờ (nhấn hai bàn tay xuống trước ngực) xác định tức thời mốc thời gian trước hành vi Làm việc.",
-    "words": [
-      {
-        "id": 1,
-        "name": "Bây giờ",
-        "slug": "bay_gio",
-        "role": "Thời điểm (Bây giờ)",
-        "video": "/vsl400_videos/bay_gio_front.mp4",
-        "videoFront": "/vsl400_videos/bay_gio_front.mp4",
-        "videoSide": "/vsl400_videos/bay_gio_left.mp4",
-        "hint": "Hai tay gập ngón cái và trỏ nhấn nhẹ xuống"
-      },
-      {
-        "id": 2,
-        "name": "Anh",
-        "slug": "anh",
-        "role": "Chủ thể (Anh)",
-        "video": "/vsl400_videos/anh_front.mp4",
-        "videoFront": "/vsl400_videos/anh_front.mp4",
-        "videoSide": "/vsl400_videos/anh_left.mp4",
-        "hint": "Ký hiệu Anh"
-      },
-      {
-        "id": 3,
-        "name": "Làm việc",
-        "slug": "lam_viec",
-        "role": "Hành động lao động (Làm việc)",
-        "video": "/vsl400_videos/lam_viec_front.mp4",
-        "videoFront": "/vsl400_videos/lam_viec_front.mp4",
-        "videoSide": "/vsl400_videos/lam_viec_left.mp4",
-        "hint": "Hai cổ tay gõ nhẹ vào nhau mô phỏng thao tác"
-      }
-    ]
-  },
-  {
-    "orderIndex": 28,
-    "slug": "anh-da-bong",
-    "title": "Anh chơi đá bóng",
-    "meaning": "Anh hăng hái ra sân tham gia trận bóng đá cùng bạn bè.",
-    "structure": "Chủ (Anh) + Môn thể thao (Bóng đá) + Động từ vận động (Chạy)",
-    "category": "Thể thao & Vận động",
-    "difficulty": "Dễ",
-    "explanation": "Ký hiệu Bóng đá đặc tả quả bóng tròn lăn trên sân, kết hợp động tác chạy bứt tốc thể hiện tinh thần thể thao.",
-    "words": [
-      {
-        "id": 1,
-        "name": "Anh",
-        "slug": "anh",
-        "role": "Chủ ngữ (Anh)",
-        "video": "/vsl400_videos/anh_front.mp4",
-        "videoFront": "/vsl400_videos/anh_front.mp4",
-        "videoSide": "/vsl400_videos/anh_left.mp4",
-        "hint": "Ký hiệu Anh"
-      },
-      {
-        "id": 2,
-        "name": "Bóng đá",
-        "slug": "bong_da",
-        "role": "Môn thể thao (Bóng đá)",
-        "video": "/vsl400_videos/bong_da_front.mp4",
-        "videoFront": "/vsl400_videos/bong_da_front.mp4",
-        "videoSide": "/vsl400_videos/bong_da_left.mp4",
-        "hint": "Hai bàn tay đá gót mô phỏng lăn bóng"
-      },
-      {
-        "id": 3,
-        "name": "Chạy",
-        "slug": "chay",
-        "role": "Hành động vận động (Chạy)",
-        "video": "/vsl400_videos/chay_front.mp4",
-        "videoFront": "/vsl400_videos/chay_front.mp4",
-        "videoSide": "/vsl400_videos/chay_left.mp4",
-        "hint": "Hai bàn tay nắm đánh tay sải bước"
-      }
-    ]
-  },
-  {
-    "orderIndex": 29,
-    "slug": "chi-di-boi-loi",
-    "title": "Chị thích bơi lội",
-    "meaning": "Chị rất yêu thích môn thể thao bơi lội dưới làn nước mát.",
-    "structure": "Chủ (Chị) + Môn thể thao (Bơi lội) + Cảm xúc (Thích)",
-    "category": "Thể thao & Vận động",
-    "difficulty": "Dễ",
-    "explanation": "Nêu sự vật/hoạt động (Bơi lội) làm bổ ngữ trước, sau đó mới thể hiện thái độ cảm xúc (Thích) ở cuối câu.",
-    "words": [
-      {
-        "id": 1,
-        "name": "Chị",
-        "slug": "chi",
-        "role": "Chủ thể (Chị)",
-        "video": "/vsl400_videos/chi_front.mp4",
-        "videoFront": "/vsl400_videos/chi_front.mp4",
-        "videoSide": "/vsl400_videos/chi_left.mp4",
-        "hint": "Ký hiệu Chị"
-      },
-      {
-        "id": 2,
-        "name": "Bơi lội",
-        "slug": "boi_loi",
-        "role": "Hoạt động (Bơi lội)",
-        "video": "/vsl400_videos/boi_loi_front.mp4",
-        "videoFront": "/vsl400_videos/boi_loi_front.mp4",
-        "videoSide": "/vsl400_videos/boi_loi_left.mp4",
-        "hint": "Hai tay sải bơi nhịp nhàng"
-      },
-      {
-        "id": 3,
-        "name": "Thích",
-        "slug": "thich",
-        "role": "Thái độ cảm xúc (Thích)",
-        "video": "/vsl400_videos/thich_front.mp4",
-        "videoFront": "/vsl400_videos/thich_front.mp4",
-        "videoSide": "/vsl400_videos/thich_left.mp4",
-        "hint": "Bàn tay xoa nhẹ trước ngực mặt rạng rỡ"
-      }
-    ]
-  },
-  {
-    "orderIndex": 30,
-    "slug": "anh-tu-choi-uong-ruou",
-    "title": "Anh từ chối uống rượu",
-    "meaning": "Anh kiên quyết từ chối khi được mời uống rượu để bảo vệ sức khỏe.",
-    "structure": "Chủ (Anh) + Đồ uống (Rượu) + Động từ (Uống) + Hành vi phủ định (Từ chối)",
-    "category": "Phủ định & Khước từ",
-    "difficulty": "Nâng cao",
-    "explanation": "Quy tắc phủ định VSL: Trong ngôn ngữ nói từ \"từ chối\" đứng trước, nhưng trong VSL sự việc (Uống rượu) được nêu trước, ký hiệu Từ chối (gạt tay dứt khoát kết hợp lắc đầu) đặt ở CUỐI CÂU.",
-    "words": [
-      {
-        "id": 1,
-        "name": "Anh",
-        "slug": "anh",
-        "role": "Chủ ngữ (Anh)",
-        "video": "/vsl400_videos/anh_front.mp4",
-        "videoFront": "/vsl400_videos/anh_front.mp4",
-        "videoSide": "/vsl400_videos/anh_left.mp4",
-        "hint": "Ký hiệu Anh"
-      },
-      {
-        "id": 2,
-        "name": "Rượu",
-        "slug": "ruou",
-        "role": "Đồ uống có cồn (Rượu)",
-        "video": "/vsl400_videos/ruou_front.mp4",
-        "videoFront": "/vsl400_videos/ruou_front.mp4",
-        "videoSide": "/vsl400_videos/ruou_left.mp4",
-        "hint": "Ký hiệu chai rượu nâng ly"
-      },
-      {
-        "id": 3,
-        "name": "Uống",
-        "slug": "uong",
-        "role": "Hành động (Uống)",
-        "video": "/vsl400_videos/uong_front.mp4",
-        "videoFront": "/vsl400_videos/uong_front.mp4",
-        "videoSide": "/vsl400_videos/uong_left.mp4",
-        "hint": "Ký hiệu Uống"
-      },
-      {
-        "id": 4,
-        "name": "Từ chối",
-        "slug": "tu_choi",
-        "role": "Yếu tố phủ định khước từ (Từ chối)",
-        "video": "/vsl400_videos/tu_choi_front.mp4",
-        "videoFront": "/vsl400_videos/tu_choi_front.mp4",
-        "videoSide": "/vsl400_videos/tu_choi_left.mp4",
-        "hint": "Lòng bàn tay đẩy thẳng ra ngoài lắc đầu dứt khoát"
-      }
-    ]
-  },
-  {
-    "orderIndex": 31,
-    "slug": "em-khong-nen-uong-bia",
-    "title": "Em không nên uống bia",
-    "meaning": "Em nhận thức rõ lứa tuổi nhỏ thì không nên dùng đồ uống có cồn.",
-    "structure": "Chủ (Em) + Đồ uống (Bia) + Động từ (Uống) + Lời khuyên phủ định (Không nên)",
-    "category": "Phủ định & Khước từ",
-    "difficulty": "Trung bình",
-    "explanation": "Theo ngữ pháp VSL, lời khuyên phủ định \"Không nên\" được đưa về cuối câu sau khi đã nêu hành vi cụ thể (Uống bia).",
+    "explanation": "Ký hiệu Đau nhăn mặt nhói ngón tay xoắn nhẹ.",
     "words": [
       {
         "id": 1,
         "name": "Em",
         "slug": "em",
-        "role": "Chủ ngữ (Em)",
+        "role": "Chủ thể",
         "video": "/vsl400_videos/em_front.mp4",
         "videoFront": "/vsl400_videos/em_front.mp4",
         "videoSide": "/vsl400_videos/em_left.mp4",
@@ -1291,51 +2179,41 @@
       },
       {
         "id": 2,
-        "name": "Bia",
-        "slug": "bia",
-        "role": "Đồ uống (Bia)",
-        "video": "/vsl400_videos/bia_front.mp4",
-        "videoFront": "/vsl400_videos/bia_front.mp4",
-        "videoSide": "/vsl400_videos/bia_left.mp4",
-        "hint": "Cử chỉ bọt bia nâng cốc"
+        "name": "Cảm thấy",
+        "slug": "cam_thay",
+        "role": "Cảm giác",
+        "video": "/vsl400_videos/cam_thay_front.mp4",
+        "videoFront": "/vsl400_videos/cam_thay_front.mp4",
+        "videoSide": "/vsl400_videos/cam_thay_left.mp4",
+        "hint": "Ngón giữa chạm ngực cảm nhận"
       },
       {
         "id": 3,
-        "name": "Uống",
-        "slug": "uong",
-        "role": "Hành động (Uống)",
-        "video": "/vsl400_videos/uong_front.mp4",
-        "videoFront": "/vsl400_videos/uong_front.mp4",
-        "videoSide": "/vsl400_videos/uong_left.mp4",
-        "hint": "Ký hiệu Uống"
-      },
-      {
-        "id": 4,
-        "name": "Không nên",
-        "slug": "khong_nen",
-        "role": "Lời khuyên phủ định (Không nên)",
-        "video": "/vsl400_videos/khong_nen_front.mp4",
-        "videoFront": "/vsl400_videos/khong_nen_front.mp4",
-        "videoSide": "/vsl400_videos/khong_nen_left.mp4",
-        "hint": "Ngón tay trỏ lắc nhẹ sang hai bên cảnh báo"
+        "name": "Đau",
+        "slug": "dau",
+        "role": "Triệu chứng",
+        "video": "/vsl400_videos/dau_front.mp4",
+        "videoFront": "/vsl400_videos/dau_front.mp4",
+        "videoSide": "/vsl400_videos/dau_left.mp4",
+        "hint": "Ngón tay xoắn nhói mặt nhăn vì đau"
       }
     ]
   },
   {
-    "orderIndex": 32,
-    "slug": "em-khong-quen-lam-bai-tap",
-    "title": "Em không bao giờ quên làm bài tập",
-    "meaning": "Em luôn có trách nhiệm nhớ làm bài tập đầy đủ mỗi ngày.",
-    "structure": "Chủ (Em) + Việc cần làm (Làm bài tập) + Phủ định đãng trí (Không quên)",
-    "category": "Phủ định & Khước từ",
-    "difficulty": "Trung bình",
-    "explanation": "Đối tượng công việc (Làm bài tập) được nêu rõ, sau đó khẳng định sự ghi nhớ bằng ký hiệu Không quen/Không quên.",
+    "orderIndex": 56,
+    "slug": "em-rua-tay-sach-se",
+    "title": "Em rửa tay sạch sẽ",
+    "meaning": "Em xoa xà phòng rửa tay sạch bong phòng bệnh.",
+    "structure": "Chủ (Em) + Hành động (Rửa tay) + Trạng thái (Sạch sẽ)",
+    "category": "Y tế & Sức khỏe",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Rửa tay xoa hai lòng bàn tay rồi làm ký hiệu Sạch sẽ.",
     "words": [
       {
         "id": 1,
         "name": "Em",
         "slug": "em",
-        "role": "Chủ thể (Em)",
+        "role": "Chủ thể",
         "video": "/vsl400_videos/em_front.mp4",
         "videoFront": "/vsl400_videos/em_front.mp4",
         "videoSide": "/vsl400_videos/em_left.mp4",
@@ -1343,115 +2221,41 @@
       },
       {
         "id": 2,
-        "name": "Làm bài tập",
-        "slug": "lam_bai_tap",
-        "role": "Nhiệm vụ (Làm bài tập)",
-        "video": "/vsl400_videos/lam_bai_tap_front.mp4",
-        "videoFront": "/vsl400_videos/lam_bai_tap_front.mp4",
-        "videoSide": "/vsl400_videos/lam_bai_tap_left.mp4",
-        "hint": "Ký hiệu Làm bài tập"
+        "name": "Rửa tay",
+        "slug": "rua_tay",
+        "role": "Hành động",
+        "video": "/vsl400_videos/rua_tay_front.mp4",
+        "videoFront": "/vsl400_videos/rua_tay_front.mp4",
+        "videoSide": "/vsl400_videos/rua_tay_left.mp4",
+        "hint": "Hai bàn tay xoa xà phòng rửa tay"
       },
       {
         "id": 3,
-        "name": "Không quen",
-        "slug": "khong_quen",
-        "role": "Trạng thái ghi nhớ (Không quên)",
-        "video": "/vsl400_videos/khong_quen_front.mp4",
-        "videoFront": "/vsl400_videos/khong_quen_front.mp4",
-        "videoSide": "/vsl400_videos/khong_quen_left.mp4",
-        "hint": "Chạm nhẹ trán rồi lắc ngón tay khẳng định nhớ"
+        "name": "Sạch sẽ",
+        "slug": "sach_se",
+        "role": "Trạng thái",
+        "video": "/vsl400_videos/sach_se_front.mp4",
+        "videoFront": "/vsl400_videos/sach_se_front.mp4",
+        "videoSide": "/vsl400_videos/sach_se_left.mp4",
+        "hint": "Bàn tay quét phẳng thanh thoát sạch bóng"
       }
     ]
   },
   {
-    "orderIndex": 33,
-    "slug": "banh-xeo-rat-ngon-mieng",
-    "title": "Bánh xèo rất ngon miệng",
-    "meaning": "Món bánh xèo có hương vị giòn thơm vô cùng hấp dẫn.",
-    "structure": "Chủ đề (Bánh xèo) + Tính chất vị giác (Ngon miệng) [Kèm biểu cảm thán phục]",
-    "category": "Tính từ & Miêu tả",
-    "difficulty": "Dễ",
-    "explanation": "Quy tắc Tính từ trong VSL: Không cần từ đệm \"rất\". Ký hiệu Ngon miệng được nhấn mạnh bằng khóe miệng mỉm cười và cử chỉ tay dứt khoát.",
-    "words": [
-      {
-        "id": 1,
-        "name": "Bánh xèo",
-        "slug": "banh_xeo",
-        "role": "Chủ đề ẩm thực (Bánh xèo)",
-        "video": "/vsl400_videos/banh_xeo_front.mp4",
-        "videoFront": "/vsl400_videos/banh_xeo_front.mp4",
-        "videoSide": "/vsl400_videos/banh_xeo_left.mp4",
-        "hint": "Ký hiệu Bánh xèo tráng chảo"
-      },
-      {
-        "id": 2,
-        "name": "Ngon miệng",
-        "slug": "ngon_mieng",
-        "role": "Đặc tính hương vị (Ngon miệng)",
-        "video": "/vsl400_videos/ngon_mieng_front.mp4",
-        "videoFront": "/vsl400_videos/ngon_mieng_front.mp4",
-        "videoSide": "/vsl400_videos/ngon_mieng_left.mp4",
-        "hint": "Ngón tay quẹt nhẹ khóe môi mặt thỏa mãn"
-      }
-    ]
-  },
-  {
-    "orderIndex": 34,
-    "slug": "mua-he-thoi-tiet-nong",
-    "title": "Mùa hè thời tiết rất nóng bức",
-    "meaning": "Thời tiết vào mùa hè oi ả với nhiệt độ tăng cao.",
-    "structure": "Bối cảnh (Mùa hè) + Chủ đề (Thời tiết) + Cảm giác nhiệt (Nóng)",
-    "category": "Tính từ & Miêu tả",
-    "difficulty": "Dễ",
-    "explanation": "Lược bỏ từ láy \"nóng bức\", chỉ dùng ký hiệu gốc Nóng kết hợp động tác quạt tay và nét mặt cau nhẹ vì oi nóng.",
-    "words": [
-      {
-        "id": 1,
-        "name": "Mùa hè",
-        "slug": "mua_he",
-        "role": "Thời điểm mùa vụ (Mùa hè)",
-        "video": "/vsl400_videos/mua_he_front.mp4",
-        "videoFront": "/vsl400_videos/mua_he_front.mp4",
-        "videoSide": "/vsl400_videos/mua_he_left.mp4",
-        "hint": "Ký hiệu ve kêu và ánh nắng hè"
-      },
-      {
-        "id": 2,
-        "name": "Thời tiết",
-        "slug": "thoi_tiet",
-        "role": "Chủ đề (Thời tiết)",
-        "video": "/vsl400_videos/thoi_tiet_front.mp4",
-        "videoFront": "/vsl400_videos/thoi_tiet_front.mp4",
-        "videoSide": "/vsl400_videos/thoi_tiet_left.mp4",
-        "hint": "Hai bàn tay mở xoay miêu tả khí hậu"
-      },
-      {
-        "id": 3,
-        "name": "Nóng",
-        "slug": "nong",
-        "role": "Tính từ nhiệt độ (Nóng)",
-        "video": "/vsl400_videos/nong_front.mp4",
-        "videoFront": "/vsl400_videos/nong_front.mp4",
-        "videoSide": "/vsl400_videos/nong_left.mp4",
-        "hint": "Bàn tay kéo cổ áo quạt phẩy mặt nhăn vì nóng"
-      }
-    ]
-  },
-  {
-    "orderIndex": 35,
+    "orderIndex": 57,
     "slug": "bac-si-tot-bung",
     "title": "Bác sĩ rất tốt bụng",
-    "meaning": "Vị bác sĩ có tấm lòng nhân ái, tận tình vì người bệnh.",
-    "structure": "Chủ đề (Bác sĩ) + Phẩm chất đạo đức (Tốt bụng)",
-    "category": "Tính từ & Miêu tả",
+    "meaning": "Vị bác sĩ có tấm lòng nhân ái, tận tình vì bệnh nhân.",
+    "structure": "Chủ đề (Bác sĩ) + Phẩm chất (Tốt bụng)",
+    "category": "Y tế & Sức khỏe",
     "difficulty": "Dễ",
-    "explanation": "Ký hiệu Tốt bụng đặt tay lên ngực và đưa ngón cái khen ngợi, biểu lộ sự kính trọng và cảm kích.",
+    "explanation": "Ký hiệu Bác sĩ đặt tay lên ngực và giơ ngón cái khen ngợi.",
     "words": [
       {
         "id": 1,
         "name": "Bác sĩ",
         "slug": "bac_si",
-        "role": "Chủ đề (Bác sĩ)",
+        "role": "Chủ đề",
         "video": "/vsl400_videos/bac_si_front.mp4",
         "videoFront": "/vsl400_videos/bac_si_front.mp4",
         "videoSide": "/vsl400_videos/bac_si_left.mp4",
@@ -1461,29 +2265,1781 @@
         "id": 2,
         "name": "Tốt bụng",
         "slug": "tot_bung",
-        "role": "Phẩm chất (Tốt bụng)",
+        "role": "Phẩm chất",
         "video": "/vsl400_videos/tot_bung_front.mp4",
         "videoFront": "/vsl400_videos/tot_bung_front.mp4",
         "videoSide": "/vsl400_videos/tot_bung_left.mp4",
-        "hint": "Bàn tay mở chạm ngực rồi giơ ngón cái nở nụ cười"
+        "hint": "Chạm ngực giơ ngón cái mỉm cười"
       }
     ]
   },
   {
-    "orderIndex": 36,
-    "slug": "em-thich-mau-do",
-    "title": "Em thích màu đỏ",
-    "meaning": "Em đặc biệt yêu thích màu sắc đỏ rực rỡ tươi sáng.",
-    "structure": "SOV: Chủ (Em) + Bổ ngữ màu sắc (Màu đỏ) + Cảm xúc (Thích)",
-    "category": "Tính từ & Miêu tả",
+    "orderIndex": 58,
+    "slug": "em-met-nghi-ngoi",
+    "title": "Em thấy mệt nên nghỉ ngơi",
+    "meaning": "Cơ thể mỏi mệt nên em dừng lại nghỉ một lát.",
+    "structure": "Chủ (Em) + Trạng thái (Mệt) + Hành động (Nghỉ ngơi)",
+    "category": "Y tế & Sức khỏe",
     "difficulty": "Dễ",
-    "explanation": "Màu đỏ (bổ ngữ) đứng trước động từ Thích. Đây là câu ví dụ kinh điển trong ngữ pháp VSL minh chứng cho trật tự SOV (Tôi / Màu đỏ / Thích).",
+    "explanation": "Nêu trạng thái Mệt trước rồi làm cử chỉ Nghỉ ngơi thả lỏng hai vai.",
     "words": [
       {
         "id": 1,
         "name": "Em",
         "slug": "em",
-        "role": "Chủ ngữ (Em)",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 2,
+        "name": "Mệt",
+        "slug": "met",
+        "role": "Trạng thái",
+        "video": "/vsl400_videos/met_front.mp4",
+        "videoFront": "/vsl400_videos/met_front.mp4",
+        "videoSide": "/vsl400_videos/met_left.mp4",
+        "hint": "Hai tay hạ buông thở dài vì mệt"
+      },
+      {
+        "id": 3,
+        "name": "Nghỉ ngơi",
+        "slug": "nghi_ngoi",
+        "role": "Hành động",
+        "video": "/vsl400_videos/nghi_ngoi_front.mp4",
+        "videoFront": "/vsl400_videos/nghi_ngoi_front.mp4",
+        "videoSide": "/vsl400_videos/nghi_ngoi_left.mp4",
+        "hint": "Hai tay buông nhẹ thư giãn"
+      }
+    ]
+  },
+  {
+    "orderIndex": 59,
+    "slug": "ba-noi-khoe-manh",
+    "title": "Bà nội khỏe mạnh",
+    "meaning": "Bà nội tuy cao tuổi nhưng sức khỏe vẫn dẻo dai.",
+    "structure": "Chủ đề (Bà nội) + Sức khỏe (Khỏe) + Cường độ (Mạnh)",
+    "category": "Y tế & Sức khỏe",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Khỏe gập khuỷu tay kết hợp nhấn mạnh sức Mạnh.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Bà nội",
+        "slug": "ba_noi",
+        "role": "Chủ đề",
+        "video": "/vsl400_videos/ba_noi_front.mp4",
+        "videoFront": "/vsl400_videos/ba_noi_front.mp4",
+        "videoSide": "/vsl400_videos/ba_noi_left.mp4",
+        "hint": "Ký hiệu Bà nội"
+      },
+      {
+        "id": 2,
+        "name": "Khỏe",
+        "slug": "khoe",
+        "role": "Sức khỏe",
+        "video": "/vsl400_videos/khoe_front.mp4",
+        "videoFront": "/vsl400_videos/khoe_front.mp4",
+        "videoSide": "/vsl400_videos/khoe_left.mp4",
+        "hint": "Gập khuỷu tay dứt khoát"
+      },
+      {
+        "id": 3,
+        "name": "Mạnh",
+        "slug": "manh",
+        "role": "Cường độ",
+        "video": "/vsl400_videos/manh_front.mp4",
+        "videoFront": "/vsl400_videos/manh_front.mp4",
+        "videoSide": "/vsl400_videos/manh_left.mp4",
+        "hint": "Hai nắm tay siết dũng mãnh"
+      }
+    ]
+  },
+  {
+    "orderIndex": 60,
+    "slug": "ong-noi-di-benh-vien",
+    "title": "Ông nội đi bệnh viện khám",
+    "meaning": "Ông nội đi tới bệnh viện định kỳ kiểm tra sức khỏe.",
+    "structure": "Chủ (Ông nội) + Nơi chốn (Bệnh viện) + Động từ (Đi)",
+    "category": "Y tế & Sức khỏe",
+    "difficulty": "Dễ",
+    "explanation": "Nêu Ông nội và Bệnh viện rồi làm ký hiệu Đi.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Ông nội",
+        "slug": "ong_noi",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/ong_noi_front.mp4",
+        "videoFront": "/vsl400_videos/ong_noi_front.mp4",
+        "videoSide": "/vsl400_videos/ong_noi_left.mp4",
+        "hint": "Ký hiệu Ông nội"
+      },
+      {
+        "id": 2,
+        "name": "Bệnh viện",
+        "slug": "benh_vien",
+        "role": "Địa điểm",
+        "video": "/vsl400_videos/benh_vien_front.mp4",
+        "videoFront": "/vsl400_videos/benh_vien_front.mp4",
+        "videoSide": "/vsl400_videos/benh_vien_left.mp4",
+        "hint": "Ký hiệu Bệnh viện chữ thập"
+      },
+      {
+        "id": 3,
+        "name": "Đi",
+        "slug": "di",
+        "role": "Động từ",
+        "video": "/vsl400_videos/di_front.mp4",
+        "videoFront": "/vsl400_videos/di_front.mp4",
+        "videoSide": "/vsl400_videos/di_left.mp4",
+        "hint": "Ngón tay bước đi"
+      }
+    ]
+  },
+  {
+    "orderIndex": 61,
+    "slug": "em-tam-rua-sach-se",
+    "title": "Em tắm rửa sạch sẽ",
+    "meaning": "Em tắm gội mát mẻ và sạch sẽ sau một ngày dài.",
+    "structure": "Chủ (Em) + Vệ sinh (Tắm rửa) + Kết quả (Sạch sẽ)",
+    "category": "Y tế & Sức khỏe",
+    "difficulty": "Dễ",
+    "explanation": "Cử chỉ Tắm rửa dội nước rồi làm ký hiệu Sạch sẽ.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 2,
+        "name": "Tắm rửa",
+        "slug": "tam_rua",
+        "role": "Vệ sinh",
+        "video": "/vsl400_videos/tam_rua_front.mp4",
+        "videoFront": "/vsl400_videos/tam_rua_front.mp4",
+        "videoSide": "/vsl400_videos/tam_rua_left.mp4",
+        "hint": "Hai tay chà nhẹ hai vai tắm"
+      },
+      {
+        "id": 3,
+        "name": "Sạch sẽ",
+        "slug": "sach_se",
+        "role": "Kết quả",
+        "video": "/vsl400_videos/sach_se_front.mp4",
+        "videoFront": "/vsl400_videos/sach_se_front.mp4",
+        "videoSide": "/vsl400_videos/sach_se_left.mp4",
+        "hint": "Ký hiệu Sạch sẽ sáng sủa"
+      }
+    ]
+  },
+  {
+    "orderIndex": 62,
+    "slug": "buoi-sang-em-thuc-day",
+    "title": "Buổi sáng em thức dậy",
+    "meaning": "Bình minh lên, em thức giấc đón ngày mới đầy năng lượng.",
+    "structure": "Thời gian (Buổi sáng) + Chủ ngữ (Em) + Hành động (Thức dậy)",
+    "category": "Thời gian & Sinh hoạt",
+    "difficulty": "Dễ",
+    "explanation": "Thời gian làm Chủ đề đặt ở đầu câu, sau đó là người và hành vi Thức dậy.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Buổi sáng",
+        "slug": "buoi_sang",
+        "role": "Thời gian bối cảnh",
+        "video": "/vsl400_videos/buoi_sang_front.mp4",
+        "videoFront": "/vsl400_videos/buoi_sang_front.mp4",
+        "videoSide": "/vsl400_videos/buoi_sang_left.mp4",
+        "hint": "Bàn tay vươn lên đón mặt trời mọc"
+      },
+      {
+        "id": 2,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 3,
+        "name": "Thức dậy",
+        "slug": "thuc_day",
+        "role": "Hành động",
+        "video": "/vsl400_videos/thuc_day_front.mp4",
+        "videoFront": "/vsl400_videos/thuc_day_front.mp4",
+        "videoSide": "/vsl400_videos/thuc_day_left.mp4",
+        "hint": "Hai ngón tay mở mắt bừng tỉnh"
+      }
+    ]
+  },
+  {
+    "orderIndex": 63,
+    "slug": "buoi-toi-bo-xem-tivi",
+    "title": "Buổi tối bố xem tivi",
+    "meaning": "Vào buổi tối, bố thư giãn xem truyền hình.",
+    "structure": "Thời gian (Buổi tối) + Chủ (Bố) + Thiết bị (Tivi) + Động từ (Xem)",
+    "category": "Thời gian & Sinh hoạt",
+    "difficulty": "Trung bình",
+    "explanation": "Thời gian (Buổi tối) đứng đầu, sau đó theo cấu trúc SOV: Bố + Tivi + Xem.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Buổi tối",
+        "slug": "buoi_toi",
+        "role": "Thời gian",
+        "video": "/vsl400_videos/buoi_toi_front.mp4",
+        "videoFront": "/vsl400_videos/buoi_toi_front.mp4",
+        "videoSide": "/vsl400_videos/buoi_toi_left.mp4",
+        "hint": "Mặt trời lặn xuống đường chân trời"
+      },
+      {
+        "id": 2,
+        "name": "Bố",
+        "slug": "bo",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/bo_front.mp4",
+        "videoFront": "/vsl400_videos/bo_front.mp4",
+        "videoSide": "/vsl400_videos/bo_left.mp4",
+        "hint": "Ký hiệu Bố"
+      },
+      {
+        "id": 3,
+        "name": "Tivi",
+        "slug": "tivi",
+        "role": "Thiết bị",
+        "video": "/vsl400_videos/tivi_front.mp4",
+        "videoFront": "/vsl400_videos/tivi_front.mp4",
+        "videoSide": "/vsl400_videos/tivi_left.mp4",
+        "hint": "Khung hình chữ nhật tivi"
+      },
+      {
+        "id": 4,
+        "name": "Xem",
+        "slug": "xem",
+        "role": "Động từ",
+        "video": "/vsl400_videos/xem_front.mp4",
+        "videoFront": "/vsl400_videos/xem_front.mp4",
+        "videoSide": "/vsl400_videos/xem_left.mp4",
+        "hint": "Hai ngón tay hướng từ mắt nhìn"
+      }
+    ]
+  },
+  {
+    "orderIndex": 64,
+    "slug": "chu-nhat-em-di-cong-vien",
+    "title": "Chủ nhật em đi công viên",
+    "meaning": "Ngày chủ nhật rảnh rỗi, em đi dạo chơi ở công viên.",
+    "structure": "Thời gian (Chủ nhật) + Chủ (Em) + Điểm đến (Công viên) + Động từ (Đi)",
+    "category": "Thời gian & Sinh hoạt",
+    "difficulty": "Trung bình",
+    "explanation": "Mốc Chủ nhật trước, điểm đến Công viên tiếp theo, và hành động Đi sau cùng.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Chủ nhật",
+        "slug": "chu_nhat",
+        "role": "Mốc thời gian",
+        "video": "/vsl400_videos/chu_nhat_front.mp4",
+        "videoFront": "/vsl400_videos/chu_nhat_front.mp4",
+        "videoSide": "/vsl400_videos/chu_nhat_left.mp4",
+        "hint": "Ký hiệu Chủ nhật"
+      },
+      {
+        "id": 2,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 3,
+        "name": "Công viên",
+        "slug": "cong_vien",
+        "role": "Địa điểm",
+        "video": "/vsl400_videos/cong_vien_front.mp4",
+        "videoFront": "/vsl400_videos/cong_vien_front.mp4",
+        "videoSide": "/vsl400_videos/cong_vien_left.mp4",
+        "hint": "Ký hiệu cây xanh không gian rộng"
+      },
+      {
+        "id": 4,
+        "name": "Đi",
+        "slug": "di",
+        "role": "Động từ",
+        "video": "/vsl400_videos/di_front.mp4",
+        "videoFront": "/vsl400_videos/di_front.mp4",
+        "videoSide": "/vsl400_videos/di_left.mp4",
+        "hint": "Ngón tay bước đi"
+      }
+    ]
+  },
+  {
+    "orderIndex": 65,
+    "slug": "bay-gio-anh-di-lam-viec",
+    "title": "Bây giờ anh đi làm việc",
+    "meaning": "Đã đến giờ anh bắt đầu công việc của một ngày mới.",
+    "structure": "Thời gian (Bây giờ) + Chủ (Anh) + Hành động (Làm việc)",
+    "category": "Thời gian & Sinh hoạt",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Bây giờ nhấn hai bàn tay xuống trước ngực xác định thời điểm tức thời.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Bây giờ",
+        "slug": "bay_gio",
+        "role": "Thời điểm",
+        "video": "/vsl400_videos/bay_gio_front.mp4",
+        "videoFront": "/vsl400_videos/bay_gio_front.mp4",
+        "videoSide": "/vsl400_videos/bay_gio_left.mp4",
+        "hint": "Hai tay gập ngón cái và trỏ nhấn nhẹ xuống"
+      },
+      {
+        "id": 2,
+        "name": "Anh",
+        "slug": "anh",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/anh_front.mp4",
+        "videoFront": "/vsl400_videos/anh_front.mp4",
+        "videoSide": "/vsl400_videos/anh_left.mp4",
+        "hint": "Ký hiệu Anh"
+      },
+      {
+        "id": 3,
+        "name": "Làm việc",
+        "slug": "lam_viec",
+        "role": "Hành động",
+        "video": "/vsl400_videos/lam_viec_front.mp4",
+        "videoFront": "/vsl400_videos/lam_viec_front.mp4",
+        "videoSide": "/vsl400_videos/lam_viec_left.mp4",
+        "hint": "Hai cổ tay gõ thao tác lao động"
+      }
+    ]
+  },
+  {
+    "orderIndex": 66,
+    "slug": "buoi-trua-em-ngu",
+    "title": "Buổi trưa em ngủ trưa",
+    "meaning": "Buổi trưa em chợp mắt ngủ một giấc ngắn lấy lại sức.",
+    "structure": "Thời gian (Buổi trưa) + Chủ (Em) + Hành động (Ngủ)",
+    "category": "Thời gian & Sinh hoạt",
+    "difficulty": "Dễ",
+    "explanation": "Thời gian Buổi trưa đưa lên đầu câu, kết thúc bằng ký hiệu Ngủ áp má nghiêng đầu.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Buổi trưa",
+        "slug": "buoi_trua",
+        "role": "Thời gian",
+        "video": "/vsl400_videos/buoi_trua_front.mp4",
+        "videoFront": "/vsl400_videos/buoi_trua_front.mp4",
+        "videoSide": "/vsl400_videos/buoi_trua_left.mp4",
+        "hint": "Mặt trời đứng bóng trên đỉnh đầu"
+      },
+      {
+        "id": 2,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 3,
+        "name": "Ngủ",
+        "slug": "ngu",
+        "role": "Hành động",
+        "video": "/vsl400_videos/ngu_front.mp4",
+        "videoFront": "/vsl400_videos/ngu_front.mp4",
+        "videoSide": "/vsl400_videos/ngu_left.mp4",
+        "hint": "Áp lòng bàn tay vào má nghiêng đầu ngủ"
+      }
+    ]
+  },
+  {
+    "orderIndex": 67,
+    "slug": "buoi-chieu-me-nau-an",
+    "title": "Buổi chiều mẹ nấu ăn",
+    "meaning": "Vào buổi chiều, mẹ chuẩn bị bữa cơm nóng sốt.",
+    "structure": "Thời gian (Buổi chiều) + Chủ (Mẹ) + Hành động (Nấu)",
+    "category": "Thời gian & Sinh hoạt",
+    "difficulty": "Dễ",
+    "explanation": "Buổi chiều đứng đầu, theo sau là người mẹ và động tác Nấu nướng.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Buổi chiều",
+        "slug": "buoi_chieu",
+        "role": "Thời gian",
+        "video": "/vsl400_videos/buoi_chieu_front.mp4",
+        "videoFront": "/vsl400_videos/buoi_chieu_front.mp4",
+        "videoSide": "/vsl400_videos/buoi_chieu_left.mp4",
+        "hint": "Mặt trời xế tà buông dần"
+      },
+      {
+        "id": 2,
+        "name": "Mẹ",
+        "slug": "me",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/me_front.mp4",
+        "videoFront": "/vsl400_videos/me_front.mp4",
+        "videoSide": "/vsl400_videos/me_left.mp4",
+        "hint": "Ký hiệu Mẹ"
+      },
+      {
+        "id": 3,
+        "name": "Nấu",
+        "slug": "nau",
+        "role": "Hành động",
+        "video": "/vsl400_videos/nau_front.mp4",
+        "videoFront": "/vsl400_videos/nau_front.mp4",
+        "videoSide": "/vsl400_videos/nau_left.mp4",
+        "hint": "Cử chỉ đảo xào nấu nướng thức ăn"
+      }
+    ]
+  },
+  {
+    "orderIndex": 68,
+    "slug": "thu-hai-em-di-hoc",
+    "title": "Thứ hai em đi học",
+    "meaning": "Ngày thứ hai đầu tuần em hào hứng cắp sách đến trường.",
+    "structure": "Thời gian (Thứ hai) + Chủ (Em) + Hoạt động (Học) + Di chuyển (Đi)",
+    "category": "Thời gian & Sinh hoạt",
+    "difficulty": "Dễ",
+    "explanation": "Thứ hai làm mốc thời gian dẫn đầu câu.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Thứ hai",
+        "slug": "thu_hai",
+        "role": "Thời gian",
+        "video": "/vsl400_videos/thu_hai_front.mp4",
+        "videoFront": "/vsl400_videos/thu_hai_front.mp4",
+        "videoSide": "/vsl400_videos/thu_hai_left.mp4",
+        "hint": "Ký hiệu ngón tay số 2 ngày Thứ hai"
+      },
+      {
+        "id": 2,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 3,
+        "name": "Học",
+        "slug": "hoc",
+        "role": "Học tập",
+        "video": "/vsl400_videos/hoc_front.mp4",
+        "videoFront": "/vsl400_videos/hoc_front.mp4",
+        "videoSide": "/vsl400_videos/hoc_left.mp4",
+        "hint": "Ký hiệu Học"
+      },
+      {
+        "id": 4,
+        "name": "Đi",
+        "slug": "di",
+        "role": "Di chuyển",
+        "video": "/vsl400_videos/di_front.mp4",
+        "videoFront": "/vsl400_videos/di_front.mp4",
+        "videoSide": "/vsl400_videos/di_left.mp4",
+        "hint": "Ký hiệu Đi"
+      }
+    ]
+  },
+  {
+    "orderIndex": 69,
+    "slug": "thu-bay-em-giat-do",
+    "title": "Thứ bảy em giặt đồ",
+    "meaning": "Thứ bảy cuối tuần em giặt giũ quần áo gọn gàng.",
+    "structure": "Thời gian (Thứ bảy) + Chủ (Em) + Việc nhà (Giặt đồ)",
+    "category": "Thời gian & Sinh hoạt",
+    "difficulty": "Dễ",
+    "explanation": "Mốc Thứ bảy mở đầu, sau đó làm cử chỉ vò giặt quần áo.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Thứ bảy",
+        "slug": "thu_bay",
+        "role": "Thời gian",
+        "video": "/vsl400_videos/thu_bay_front.mp4",
+        "videoFront": "/vsl400_videos/thu_bay_front.mp4",
+        "videoSide": "/vsl400_videos/thu_bay_left.mp4",
+        "hint": "Ký hiệu ngày Thứ bảy"
+      },
+      {
+        "id": 2,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 3,
+        "name": "Giặt đồ",
+        "slug": "giat_do",
+        "role": "Hành động",
+        "video": "/vsl400_videos/giat_do_front.mp4",
+        "videoFront": "/vsl400_videos/giat_do_front.mp4",
+        "videoSide": "/vsl400_videos/giat_do_left.mp4",
+        "hint": "Hai bàn tay nắm vò quần áo giặt giũ"
+      }
+    ]
+  },
+  {
+    "orderIndex": 70,
+    "slug": "me-phoi-do",
+    "title": "Mẹ phơi đồ ngoài sân",
+    "meaning": "Mẹ mang quần áo vừa giặt ra phơi dưới ánh nắng.",
+    "structure": "Chủ (Mẹ) + Hành động (Phơi đồ)",
+    "category": "Thời gian & Sinh hoạt",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Phơi đồ nâng hai tay móc quần áo lên dây phơi.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Mẹ",
+        "slug": "me",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/me_front.mp4",
+        "videoFront": "/vsl400_videos/me_front.mp4",
+        "videoSide": "/vsl400_videos/me_left.mp4",
+        "hint": "Ký hiệu Mẹ"
+      },
+      {
+        "id": 2,
+        "name": "Phơi đồ",
+        "slug": "phoi_do",
+        "role": "Hành động",
+        "video": "/vsl400_videos/phoi_do_front.mp4",
+        "videoFront": "/vsl400_videos/phoi_do_front.mp4",
+        "videoSide": "/vsl400_videos/phoi_do_left.mp4",
+        "hint": "Hai tay nâng móc quần áo lên sào"
+      }
+    ]
+  },
+  {
+    "orderIndex": 71,
+    "slug": "em-rua-chen",
+    "title": "Em rửa chén bát sau bữa cơm",
+    "meaning": "Ăn xong, em phụ rửa sạch sẽ chén bát.",
+    "structure": "Chủ (Em) + Việc nhà (Rửa chén)",
+    "category": "Thời gian & Sinh hoạt",
+    "difficulty": "Dễ",
+    "explanation": "Tay trái đỡ lòng bát, tay phải xoay tròn rửa chén.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 2,
+        "name": "Rửa chén",
+        "slug": "rua_chen",
+        "role": "Hành động",
+        "video": "/vsl400_videos/rua_chen_front.mp4",
+        "videoFront": "/vsl400_videos/rua_chen_front.mp4",
+        "videoSide": "/vsl400_videos/rua_chen_left.mp4",
+        "hint": "Bàn tay xoay cọ rửa bát đĩa"
+      }
+    ]
+  },
+  {
+    "orderIndex": 72,
+    "slug": "anh-nghe-dien-thoai",
+    "title": "Anh nghe điện thoại",
+    "meaning": "Có chuông gọi đến, anh cầm điện thoại lên nghe.",
+    "structure": "Chủ (Anh) + Thiết bị (Điện thoại) + Động từ (Nghe)",
+    "category": "Thời gian & Sinh hoạt",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu ngón cái và ngón út tạo hình ống nghe áp sát tai.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Anh",
+        "slug": "anh",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/anh_front.mp4",
+        "videoFront": "/vsl400_videos/anh_front.mp4",
+        "videoSide": "/vsl400_videos/anh_left.mp4",
+        "hint": "Ký hiệu Anh"
+      },
+      {
+        "id": 2,
+        "name": "Điện thoại",
+        "slug": "dien_thoai",
+        "role": "Thiết bị",
+        "video": "/vsl400_videos/dien_thoai_front.mp4",
+        "videoFront": "/vsl400_videos/dien_thoai_front.mp4",
+        "videoSide": "/vsl400_videos/dien_thoai_left.mp4",
+        "hint": "Tay tạo hình ống nghe áp tai"
+      },
+      {
+        "id": 3,
+        "name": "Nghe",
+        "slug": "nghe",
+        "role": "Động từ",
+        "video": "/vsl400_videos/nghe_front.mp4",
+        "videoFront": "/vsl400_videos/nghe_front.mp4",
+        "videoSide": "/vsl400_videos/nghe_left.mp4",
+        "hint": "Ngón tay trỏ chỉ vào tai nghe"
+      }
+    ]
+  },
+  {
+    "orderIndex": 73,
+    "slug": "chi-chup-hinh",
+    "title": "Chị chụp hình lưu niệm",
+    "meaning": "Chị giơ máy ảnh lên bấm chụp bức hình đẹp.",
+    "structure": "Chủ (Chị) + Hành động (Chụp hình)",
+    "category": "Thời gian & Sinh hoạt",
+    "difficulty": "Dễ",
+    "explanation": "Hai tay cầm máy ảnh và ngón trỏ bấm nút chụp.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Chị",
+        "slug": "chi",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/chi_front.mp4",
+        "videoFront": "/vsl400_videos/chi_front.mp4",
+        "videoSide": "/vsl400_videos/chi_left.mp4",
+        "hint": "Ký hiệu Chị"
+      },
+      {
+        "id": 2,
+        "name": "Chụp hình",
+        "slug": "chup_hinh",
+        "role": "Hành động",
+        "video": "/vsl400_videos/chup_hinh_front.mp4",
+        "videoFront": "/vsl400_videos/chup_hinh_front.mp4",
+        "videoSide": "/vsl400_videos/chup_hinh_left.mp4",
+        "hint": "Hai tay giữ máy bấm ngón trỏ chụp"
+      }
+    ]
+  },
+  {
+    "orderIndex": 74,
+    "slug": "em-xem-rap-chieu-phim",
+    "title": "Em đi xem phim ở rạp chiếu phim",
+    "meaning": "Em cùng bạn tới rạp chiếu phim thưởng thức bộ phim mới.",
+    "structure": "Chủ (Em) + Địa điểm (Rạp chiếu phim) + Động từ (Xem)",
+    "category": "Thời gian & Sinh hoạt",
+    "difficulty": "Trung bình",
+    "explanation": "Rạp chiếu phim đưa lên trước hành động Xem.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 2,
+        "name": "Rạp chiếu phim",
+        "slug": "rap_chieu_phim",
+        "role": "Địa điểm",
+        "video": "/vsl400_videos/rap_chieu_phim_front.mp4",
+        "videoFront": "/vsl400_videos/rap_chieu_phim_front.mp4",
+        "videoSide": "/vsl400_videos/rap_chieu_phim_left.mp4",
+        "hint": "Ký hiệu màn ảnh rộng rạp phim"
+      },
+      {
+        "id": 3,
+        "name": "Xem",
+        "slug": "xem",
+        "role": "Động từ",
+        "video": "/vsl400_videos/xem_front.mp4",
+        "videoFront": "/vsl400_videos/xem_front.mp4",
+        "videoSide": "/vsl400_videos/xem_left.mp4",
+        "hint": "Ký hiệu Xem"
+      }
+    ]
+  },
+  {
+    "orderIndex": 75,
+    "slug": "anh-da-bong",
+    "title": "Anh chơi đá bóng",
+    "meaning": "Anh hăng hái ra sân tham gia trận bóng đá cùng bạn bè.",
+    "structure": "Chủ (Anh) + Môn thể thao (Bóng đá) + Động từ (Chạy)",
+    "category": "Thể thao & Vận động",
+    "difficulty": "Dễ",
+    "explanation": "Bóng đá đặc tả quả bóng tròn lăn, kết hợp chạy bứt tốc thể thao.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Anh",
+        "slug": "anh",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/anh_front.mp4",
+        "videoFront": "/vsl400_videos/anh_front.mp4",
+        "videoSide": "/vsl400_videos/anh_left.mp4",
+        "hint": "Ký hiệu Anh"
+      },
+      {
+        "id": 2,
+        "name": "Bóng đá",
+        "slug": "bong_da",
+        "role": "Môn thể thao",
+        "video": "/vsl400_videos/bong_da_front.mp4",
+        "videoFront": "/vsl400_videos/bong_da_front.mp4",
+        "videoSide": "/vsl400_videos/bong_da_left.mp4",
+        "hint": "Hai bàn tay đá gót mô phỏng bóng lăn"
+      },
+      {
+        "id": 3,
+        "name": "Chạy",
+        "slug": "chay",
+        "role": "Động từ",
+        "video": "/vsl400_videos/chay_front.mp4",
+        "videoFront": "/vsl400_videos/chay_front.mp4",
+        "videoSide": "/vsl400_videos/chay_left.mp4",
+        "hint": "Hai bàn tay nắm đánh tay sải bước"
+      }
+    ]
+  },
+  {
+    "orderIndex": 76,
+    "slug": "chi-thich-boi-loi",
+    "title": "Chị thích bơi lội",
+    "meaning": "Chị rất yêu thích môn thể thao bơi lội dưới làn nước mát.",
+    "structure": "Chủ (Chị) + Hoạt động (Bơi lội) + Cảm xúc (Thích)",
+    "category": "Thể thao & Vận động",
+    "difficulty": "Dễ",
+    "explanation": "Nêu hoạt động Bơi lội trước, sau đó biểu đạt cảm xúc Thích.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Chị",
+        "slug": "chi",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/chi_front.mp4",
+        "videoFront": "/vsl400_videos/chi_front.mp4",
+        "videoSide": "/vsl400_videos/chi_left.mp4",
+        "hint": "Ký hiệu Chị"
+      },
+      {
+        "id": 2,
+        "name": "Bơi lội",
+        "slug": "boi_loi",
+        "role": "Hoạt động",
+        "video": "/vsl400_videos/boi_loi_front.mp4",
+        "videoFront": "/vsl400_videos/boi_loi_front.mp4",
+        "videoSide": "/vsl400_videos/boi_loi_left.mp4",
+        "hint": "Hai tay sải bơi nhịp nhàng"
+      },
+      {
+        "id": 3,
+        "name": "Thích",
+        "slug": "thich",
+        "role": "Cảm xúc",
+        "video": "/vsl400_videos/thich_front.mp4",
+        "videoFront": "/vsl400_videos/thich_front.mp4",
+        "videoSide": "/vsl400_videos/thich_left.mp4",
+        "hint": "Bàn tay xoa nhẹ trước ngực"
+      }
+    ]
+  },
+  {
+    "orderIndex": 77,
+    "slug": "em-thich-bong-ro",
+    "title": "Em thích chơi bóng rổ",
+    "meaning": "Em đam mê ném bóng vào rổ cùng đội bóng trường.",
+    "structure": "Chủ (Em) + Môn chơi (Bóng rổ) + Cảm xúc (Thích)",
+    "category": "Thể thao & Vận động",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu nhồi bóng và ném rổ đặt trước thái độ Thích.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 2,
+        "name": "Bóng rổ",
+        "slug": "bong_ro",
+        "role": "Môn thể thao",
+        "video": "/vsl400_videos/bong_ro_front.mp4",
+        "videoFront": "/vsl400_videos/bong_ro_front.mp4",
+        "videoSide": "/vsl400_videos/bong_ro_left.mp4",
+        "hint": "Hai tay ném bóng vào rổ"
+      },
+      {
+        "id": 3,
+        "name": "Thích",
+        "slug": "thich",
+        "role": "Cảm xúc",
+        "video": "/vsl400_videos/thich_front.mp4",
+        "videoFront": "/vsl400_videos/thich_front.mp4",
+        "videoSide": "/vsl400_videos/thich_left.mp4",
+        "hint": "Xoa ngực cười"
+      }
+    ]
+  },
+  {
+    "orderIndex": 78,
+    "slug": "anh-choi-bong-ban",
+    "title": "Anh chơi bóng bàn",
+    "meaning": "Anh cầm vợt giao đấu bóng bàn dứt khoát.",
+    "structure": "Chủ (Anh) + Môn chơi (Bóng bàn) + Nhanh nhẹn (Nhanh)",
+    "category": "Thể thao & Vận động",
+    "difficulty": "Dễ",
+    "explanation": "Cử chỉ vung vợt bóng bàn nhỏ kết hợp tính chất Nhanh.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Anh",
+        "slug": "anh",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/anh_front.mp4",
+        "videoFront": "/vsl400_videos/anh_front.mp4",
+        "videoSide": "/vsl400_videos/anh_left.mp4",
+        "hint": "Ký hiệu Anh"
+      },
+      {
+        "id": 2,
+        "name": "Bóng bàn",
+        "slug": "bong_ban",
+        "role": "Môn thể thao",
+        "video": "/vsl400_videos/bong_ban_front.mp4",
+        "videoFront": "/vsl400_videos/bong_ban_front.mp4",
+        "videoSide": "/vsl400_videos/bong_ban_left.mp4",
+        "hint": "Tay cầm vợt bóng bàn vung đánh"
+      },
+      {
+        "id": 3,
+        "name": "Nhanh",
+        "slug": "nhanh",
+        "role": "Tốc độ",
+        "video": "/vsl400_videos/nhanh_front.mp4",
+        "videoFront": "/vsl400_videos/nhanh_front.mp4",
+        "videoSide": "/vsl400_videos/nhanh_left.mp4",
+        "hint": "Tay lướt nhanh dứt khoát"
+      }
+    ]
+  },
+  {
+    "orderIndex": 79,
+    "slug": "chi-choi-cau-long",
+    "title": "Chị chơi cầu lông",
+    "meaning": "Chị đánh cầu lông rèn luyện sức khỏe mỗi chiều.",
+    "structure": "Chủ (Chị) + Môn chơi (Cầu lông) + Hành động (Chạy)",
+    "category": "Thể thao & Vận động",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu vung vợt cầu lông đập cầu.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Chị",
+        "slug": "chi",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/chi_front.mp4",
+        "videoFront": "/vsl400_videos/chi_front.mp4",
+        "videoSide": "/vsl400_videos/chi_left.mp4",
+        "hint": "Ký hiệu Chị"
+      },
+      {
+        "id": 2,
+        "name": "Cầu lông",
+        "slug": "cau_long",
+        "role": "Môn thể thao",
+        "video": "/vsl400_videos/cau_long_front.mp4",
+        "videoFront": "/vsl400_videos/cau_long_front.mp4",
+        "videoSide": "/vsl400_videos/cau_long_left.mp4",
+        "hint": "Tay cầm vợt cầu lông vung đập"
+      },
+      {
+        "id": 3,
+        "name": "Chạy",
+        "slug": "chay",
+        "role": "Vận động",
+        "video": "/vsl400_videos/chay_front.mp4",
+        "videoFront": "/vsl400_videos/chay_front.mp4",
+        "videoSide": "/vsl400_videos/chay_left.mp4",
+        "hint": "Đánh tay chạy linh hoạt"
+      }
+    ]
+  },
+  {
+    "orderIndex": 80,
+    "slug": "em-choi-da-cau",
+    "title": "Em chơi đá cầu",
+    "meaning": "Giờ ra chơi, em cùng các bạn tung tăng đá cầu.",
+    "structure": "Chủ (Em) + Trò chơi (Đá cầu) + Cảm xúc (Vui vẻ/Cười)",
+    "category": "Thể thao & Vận động",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu tâng quả cầu lông chân kết hợp nụ cười rạng rỡ.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 2,
+        "name": "Đá cầu",
+        "slug": "da_cau",
+        "role": "Trò chơi",
+        "video": "/vsl400_videos/da_cau_front.mp4",
+        "videoFront": "/vsl400_videos/da_cau_front.mp4",
+        "videoSide": "/vsl400_videos/da_cau_left.mp4",
+        "hint": "Ký hiệu tâng quả cầu đá"
+      },
+      {
+        "id": 3,
+        "name": "Cười",
+        "slug": "cuoi",
+        "role": "Cảm xúc",
+        "video": "/vsl400_videos/cuoi_front.mp4",
+        "videoFront": "/vsl400_videos/cuoi_front.mp4",
+        "videoSide": "/vsl400_videos/cuoi_left.mp4",
+        "hint": "Ký hiệu Cười tươi"
+      }
+    ]
+  },
+  {
+    "orderIndex": 81,
+    "slug": "anh-chay-dien-kinh",
+    "title": "Anh thi chạy điền kinh",
+    "meaning": "Anh là vận động viên sải bước thi chạy điền kinh tốc độ.",
+    "structure": "Chủ (Anh) + Môn thi (Điền kinh) + Hành động (Nhanh)",
+    "category": "Thể thao & Vận động",
+    "difficulty": "Trung bình",
+    "explanation": "Ký hiệu Điền kinh đường chạy kết hợp cử chỉ Nhanh.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Anh",
+        "slug": "anh",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/anh_front.mp4",
+        "videoFront": "/vsl400_videos/anh_front.mp4",
+        "videoSide": "/vsl400_videos/anh_left.mp4",
+        "hint": "Ký hiệu Anh"
+      },
+      {
+        "id": 2,
+        "name": "Điền kinh",
+        "slug": "dien_kinh",
+        "role": "Môn thi đấu",
+        "video": "/vsl400_videos/dien_kinh_front.mp4",
+        "videoFront": "/vsl400_videos/dien_kinh_front.mp4",
+        "videoSide": "/vsl400_videos/dien_kinh_left.mp4",
+        "hint": "Ký hiệu Điền kinh sải chân"
+      },
+      {
+        "id": 3,
+        "name": "Nhanh",
+        "slug": "nhanh",
+        "role": "Tốc độ",
+        "video": "/vsl400_videos/nhanh_front.mp4",
+        "videoFront": "/vsl400_videos/nhanh_front.mp4",
+        "videoSide": "/vsl400_videos/nhanh_left.mp4",
+        "hint": "Cử chỉ Nhanh vun vút"
+      }
+    ]
+  },
+  {
+    "orderIndex": 82,
+    "slug": "em-nhay-day",
+    "title": "Em tập nhảy dây",
+    "meaning": "Em quay dây nhảy nhịp nhàng rèn luyện thể lực.",
+    "structure": "Chủ (Em) + Môn tập (Nhảy dây) + Cảm xúc (Thích)",
+    "category": "Thể thao & Vận động",
+    "difficulty": "Dễ",
+    "explanation": "Hai tay xoay dây nhảy quanh người rồi làm ký hiệu Thích.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 2,
+        "name": "Nhảy dây",
+        "slug": "nhay_day",
+        "role": "Hoạt động",
+        "video": "/vsl400_videos/nhay_day_front.mp4",
+        "videoFront": "/vsl400_videos/nhay_day_front.mp4",
+        "videoSide": "/vsl400_videos/nhay_day_left.mp4",
+        "hint": "Hai tay quay cổ tay nhảy dây"
+      },
+      {
+        "id": 3,
+        "name": "Thích",
+        "slug": "thich",
+        "role": "Cảm xúc",
+        "video": "/vsl400_videos/thich_front.mp4",
+        "videoFront": "/vsl400_videos/thich_front.mp4",
+        "videoSide": "/vsl400_videos/thich_left.mp4",
+        "hint": "Xoa ngực thích thú"
+      }
+    ]
+  },
+  {
+    "orderIndex": 83,
+    "slug": "anh-choi-bong-chuyen",
+    "title": "Anh chơi bóng chuyền",
+    "meaning": "Anh cùng đồng đội đệm bóng và đập bóng chuyền.",
+    "structure": "Chủ (Anh) + Môn chơi (Bóng chuyền) + Sức mạnh (Mạnh)",
+    "category": "Thể thao & Vận động",
+    "difficulty": "Dễ",
+    "explanation": "Hai tay chụm đệm bóng chuyền lên cao.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Anh",
+        "slug": "anh",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/anh_front.mp4",
+        "videoFront": "/vsl400_videos/anh_front.mp4",
+        "videoSide": "/vsl400_videos/anh_left.mp4",
+        "hint": "Ký hiệu Anh"
+      },
+      {
+        "id": 2,
+        "name": "Bóng chuyền",
+        "slug": "bong_chuyen",
+        "role": "Môn thể thao",
+        "video": "/vsl400_videos/bong_chuyen_front.mp4",
+        "videoFront": "/vsl400_videos/bong_chuyen_front.mp4",
+        "videoSide": "/vsl400_videos/bong_chuyen_left.mp4",
+        "hint": "Hai bàn tay chụm đón đệm bóng chuyền"
+      },
+      {
+        "id": 3,
+        "name": "Mạnh",
+        "slug": "manh",
+        "role": "Cường độ",
+        "video": "/vsl400_videos/manh_front.mp4",
+        "videoFront": "/vsl400_videos/manh_front.mp4",
+        "videoSide": "/vsl400_videos/manh_left.mp4",
+        "hint": "Nắm tay siết dũng mãnh"
+      }
+    ]
+  },
+  {
+    "orderIndex": 84,
+    "slug": "ong-noi-tap-the-duc",
+    "title": "Ông nội tập thể dục thể thao",
+    "meaning": "Mỗi sáng ông nội đều đặn tập thể dục giữ gìn sức khỏe.",
+    "structure": "Chủ (Ông nội) + Hoạt động (Thể dục thể thao) + Sức khỏe (Khỏe)",
+    "category": "Thể thao & Vận động",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Thể dục thể thao vung hai cánh tay rồi làm ký hiệu Khỏe.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Ông nội",
+        "slug": "ong_noi",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/ong_noi_front.mp4",
+        "videoFront": "/vsl400_videos/ong_noi_front.mp4",
+        "videoSide": "/vsl400_videos/ong_noi_left.mp4",
+        "hint": "Ký hiệu Ông nội"
+      },
+      {
+        "id": 2,
+        "name": "Thể dục (thể thao)",
+        "slug": "the_duc_the_thao",
+        "role": "Hoạt động",
+        "video": "/vsl400_videos/the_duc_the_thao_front.mp4",
+        "videoFront": "/vsl400_videos/the_duc_the_thao_front.mp4",
+        "videoSide": "/vsl400_videos/the_duc_the_thao_left.mp4",
+        "hint": "Vung hai tay co gập tập thể dục"
+      },
+      {
+        "id": 3,
+        "name": "Khỏe",
+        "slug": "khoe",
+        "role": "Kết quả",
+        "video": "/vsl400_videos/khoe_front.mp4",
+        "videoFront": "/vsl400_videos/khoe_front.mp4",
+        "videoSide": "/vsl400_videos/khoe_left.mp4",
+        "hint": "Gập khuỷu tay khỏe khoắn"
+      }
+    ]
+  },
+  {
+    "orderIndex": 85,
+    "slug": "anh-tu-choi-uong-ruou",
+    "title": "Anh từ chối uống rượu",
+    "meaning": "Anh kiên quyết từ chối khi được mời uống rượu.",
+    "structure": "Chủ (Anh) + Đồ uống (Rượu) + Động từ (Uống) + Phủ định (Từ chối)",
+    "category": "Phủ định & Khước từ",
+    "difficulty": "Nâng cao",
+    "explanation": "Sự việc (Uống rượu) nêu trước, ký hiệu Từ chối đặt ở CUỐI CÂU kèm lắc đầu dứt khoát.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Anh",
+        "slug": "anh",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/anh_front.mp4",
+        "videoFront": "/vsl400_videos/anh_front.mp4",
+        "videoSide": "/vsl400_videos/anh_left.mp4",
+        "hint": "Ký hiệu Anh"
+      },
+      {
+        "id": 2,
+        "name": "Rượu",
+        "slug": "ruou",
+        "role": "Đồ uống có cồn",
+        "video": "/vsl400_videos/ruou_front.mp4",
+        "videoFront": "/vsl400_videos/ruou_front.mp4",
+        "videoSide": "/vsl400_videos/ruou_left.mp4",
+        "hint": "Ký hiệu chai rượu nâng ly"
+      },
+      {
+        "id": 3,
+        "name": "Uống",
+        "slug": "uong",
+        "role": "Hành động",
+        "video": "/vsl400_videos/uong_front.mp4",
+        "videoFront": "/vsl400_videos/uong_front.mp4",
+        "videoSide": "/vsl400_videos/uong_left.mp4",
+        "hint": "Ký hiệu Uống"
+      },
+      {
+        "id": 4,
+        "name": "Từ chối",
+        "slug": "tu_choi",
+        "role": "Phủ định khước từ",
+        "video": "/vsl400_videos/tu_choi_front.mp4",
+        "videoFront": "/vsl400_videos/tu_choi_front.mp4",
+        "videoSide": "/vsl400_videos/tu_choi_left.mp4",
+        "hint": "Lòng bàn tay đẩy ra ngoài lắc đầu dứt khoát"
+      }
+    ]
+  },
+  {
+    "orderIndex": 86,
+    "slug": "em-khong-nen-uong-bia",
+    "title": "Em không nên uống bia",
+    "meaning": "Em nhận thức rõ nhỏ tuổi thì không nên dùng đồ uống có cồn.",
+    "structure": "Chủ (Em) + Đồ uống (Bia) + Động từ (Uống) + Lời khuyên (Không nên)",
+    "category": "Phủ định & Khước từ",
+    "difficulty": "Trung bình",
+    "explanation": "Lời khuyên phủ định \"Không nên\" đưa về cuối câu sau hành vi Uống bia.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 2,
+        "name": "Bia",
+        "slug": "bia",
+        "role": "Đồ uống",
+        "video": "/vsl400_videos/bia_front.mp4",
+        "videoFront": "/vsl400_videos/bia_front.mp4",
+        "videoSide": "/vsl400_videos/bia_left.mp4",
+        "hint": "Cử chỉ bọt bia nâng cốc"
+      },
+      {
+        "id": 3,
+        "name": "Uống",
+        "slug": "uong",
+        "role": "Hành động",
+        "video": "/vsl400_videos/uong_front.mp4",
+        "videoFront": "/vsl400_videos/uong_front.mp4",
+        "videoSide": "/vsl400_videos/uong_left.mp4",
+        "hint": "Ký hiệu Uống"
+      },
+      {
+        "id": 4,
+        "name": "Không nên",
+        "slug": "khong_nen",
+        "role": "Phủ định",
+        "video": "/vsl400_videos/khong_nen_front.mp4",
+        "videoFront": "/vsl400_videos/khong_nen_front.mp4",
+        "videoSide": "/vsl400_videos/khong_nen_left.mp4",
+        "hint": "Ngón trỏ lắc sang hai bên cảnh báo"
+      }
+    ]
+  },
+  {
+    "orderIndex": 87,
+    "slug": "em-khong-quen-lam-bai-tap",
+    "title": "Em không bao giờ quên làm bài tập",
+    "meaning": "Em luôn có trách nhiệm nhớ hoàn thành bài tập đầy đủ.",
+    "structure": "Chủ (Em) + Việc (Làm bài tập) + Khẳng định nhớ (Không quên)",
+    "category": "Phủ định & Khước từ",
+    "difficulty": "Trung bình",
+    "explanation": "Đối tượng công việc nêu trước, sau đó chốt bằng ký hiệu Không quên.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 2,
+        "name": "Làm bài tập",
+        "slug": "lam_bai_tap",
+        "role": "Nhiệm vụ",
+        "video": "/vsl400_videos/lam_bai_tap_front.mp4",
+        "videoFront": "/vsl400_videos/lam_bai_tap_front.mp4",
+        "videoSide": "/vsl400_videos/lam_bai_tap_left.mp4",
+        "hint": "Ký hiệu Làm bài tập"
+      },
+      {
+        "id": 3,
+        "name": "Không quen",
+        "slug": "khong_quen",
+        "role": "Ghi nhớ",
+        "video": "/vsl400_videos/khong_quen_front.mp4",
+        "videoFront": "/vsl400_videos/khong_quen_front.mp4",
+        "videoSide": "/vsl400_videos/khong_quen_left.mp4",
+        "hint": "Chạm trán rồi lắc ngón khẳng định nhớ"
+      }
+    ]
+  },
+  {
+    "orderIndex": 88,
+    "slug": "anh-khong-can-mua-o-to",
+    "title": "Anh không cần mua ô tô",
+    "meaning": "Nhu cầu đi lại gần nên anh chưa cần thiết mua xe ô tô.",
+    "structure": "Chủ (Anh) + Phương tiện (Ô tô) + Mua (Mua) + Phủ định (Không cần)",
+    "category": "Phủ định & Khước từ",
+    "difficulty": "Trung bình",
+    "explanation": "Sự vật và hành động mua nêu trước, từ Không cần đặt ở cuối.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Anh",
+        "slug": "anh",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/anh_front.mp4",
+        "videoFront": "/vsl400_videos/anh_front.mp4",
+        "videoSide": "/vsl400_videos/anh_left.mp4",
+        "hint": "Ký hiệu Anh"
+      },
+      {
+        "id": 2,
+        "name": "Ô tô",
+        "slug": "o_to",
+        "role": "Phương tiện",
+        "video": "/vsl400_videos/o_to_front.mp4",
+        "videoFront": "/vsl400_videos/o_to_front.mp4",
+        "videoSide": "/vsl400_videos/o_to_left.mp4",
+        "hint": "Hai tay cầm vô lăng lái ô tô"
+      },
+      {
+        "id": 3,
+        "name": "Múa",
+        "slug": "mua_sac",
+        "role": "Giao dịch",
+        "video": "/vsl400_videos/mua_sac_front.mp4",
+        "videoFront": "/vsl400_videos/mua_sac_front.mp4",
+        "videoSide": "/vsl400_videos/mua_sac_left.mp4",
+        "hint": "Ký hiệu Mua"
+      },
+      {
+        "id": 4,
+        "name": "Không cần",
+        "slug": "khong_can",
+        "role": "Phủ định nhu cầu",
+        "video": "/vsl400_videos/khong_can_front.mp4",
+        "videoFront": "/vsl400_videos/khong_can_front.mp4",
+        "videoSide": "/vsl400_videos/khong_can_left.mp4",
+        "hint": "Gạt tay ngang ngực lắc đầu không cần"
+      }
+    ]
+  },
+  {
+    "orderIndex": 89,
+    "slug": "me-khong-cho-em-di",
+    "title": "Mẹ không cho em đi chơi một mình",
+    "meaning": "Mẹ không đồng ý cho phép em đi ra ngoài khi trời tối.",
+    "structure": "Chủ (Mẹ) + Người nhận (Em) + Hành động (Đi) + Phủ định (Không cho)",
+    "category": "Phủ định & Khước từ",
+    "difficulty": "Trung bình",
+    "explanation": "Hành động Đi nêu trước, từ cấm đoán Không cho đặt cuối.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Mẹ",
+        "slug": "me",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/me_front.mp4",
+        "videoFront": "/vsl400_videos/me_front.mp4",
+        "videoSide": "/vsl400_videos/me_left.mp4",
+        "hint": "Ký hiệu Mẹ"
+      },
+      {
+        "id": 2,
+        "name": "Em",
+        "slug": "em",
+        "role": "Người con",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Chỉ tay vào em"
+      },
+      {
+        "id": 3,
+        "name": "Đi",
+        "slug": "di",
+        "role": "Hành động",
+        "video": "/vsl400_videos/di_front.mp4",
+        "videoFront": "/vsl400_videos/di_front.mp4",
+        "videoSide": "/vsl400_videos/di_left.mp4",
+        "hint": "Ngón tay bước đi"
+      },
+      {
+        "id": 4,
+        "name": "Không cho",
+        "slug": "khong_cho",
+        "role": "Cấm đoán",
+        "video": "/vsl400_videos/khong_cho_front.mp4",
+        "videoFront": "/vsl400_videos/khong_cho_front.mp4",
+        "videoSide": "/vsl400_videos/khong_cho_left.mp4",
+        "hint": "Chém tay xuống lắc đầu dứt khoát"
+      }
+    ]
+  },
+  {
+    "orderIndex": 90,
+    "slug": "em-tu-choi-an-thit",
+    "title": "Em từ chối ăn thịt",
+    "meaning": "Hôm nay ăn chay nên em từ chối dùng món thịt.",
+    "structure": "Chủ (Em) + Món ăn (Thịt) + Ăn (Ăn) + Khước từ (Từ chối)",
+    "category": "Phủ định & Khước từ",
+    "difficulty": "Dễ",
+    "explanation": "Món thịt và hành động ăn đưa lên trước, từ chối ở cuối.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 2,
+        "name": "Thịt",
+        "slug": "thit",
+        "role": "Món ăn",
+        "video": "/vsl400_videos/thit_front.mp4",
+        "videoFront": "/vsl400_videos/thit_front.mp4",
+        "videoSide": "/vsl400_videos/thit_left.mp4",
+        "hint": "Ký hiệu miếng thịt cắn"
+      },
+      {
+        "id": 3,
+        "name": "Ăn",
+        "slug": "an",
+        "role": "Động từ",
+        "video": "/vsl400_videos/an_front.mp4",
+        "videoFront": "/vsl400_videos/an_front.mp4",
+        "videoSide": "/vsl400_videos/an_left.mp4",
+        "hint": "Ký hiệu Ăn"
+      },
+      {
+        "id": 4,
+        "name": "Từ chối",
+        "slug": "tu_choi",
+        "role": "Khước từ",
+        "video": "/vsl400_videos/tu_choi_front.mp4",
+        "videoFront": "/vsl400_videos/tu_choi_front.mp4",
+        "videoSide": "/vsl400_videos/tu_choi_left.mp4",
+        "hint": "Lòng bàn tay đẩy ra ngoài"
+      }
+    ]
+  },
+  {
+    "orderIndex": 91,
+    "slug": "hoc-sinh-khong-nghe-loi-sai",
+    "title": "Học sinh không nghe lời là sai",
+    "meaning": "Việc không vâng lời thầy cô cha mẹ là hành vi chưa đúng.",
+    "structure": "Chủ (Học sinh) + Hành vi (Không nghe lời) + Đánh giá (Sai)",
+    "category": "Phủ định & Khước từ",
+    "difficulty": "Trung bình",
+    "explanation": "Ký hiệu Không nghe lời kết hợp đánh giá Sai bắt chéo tay.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Học sinh",
+        "slug": "hoc_sinh",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/hoc_sinh_front.mp4",
+        "videoFront": "/vsl400_videos/hoc_sinh_front.mp4",
+        "videoSide": "/vsl400_videos/hoc_sinh_left.mp4",
+        "hint": "Ký hiệu Học sinh"
+      },
+      {
+        "id": 2,
+        "name": "Không nghe lời",
+        "slug": "khong_nghe_loi",
+        "role": "Hành vi",
+        "video": "/vsl400_videos/khong_nghe_loi_front.mp4",
+        "videoFront": "/vsl400_videos/khong_nghe_loi_front.mp4",
+        "videoSide": "/vsl400_videos/khong_nghe_loi_left.mp4",
+        "hint": "Chỉ tai rồi lắc tay không nghe"
+      },
+      {
+        "id": 3,
+        "name": "Sai",
+        "slug": "sai",
+        "role": "Đánh giá",
+        "video": "/vsl400_videos/sai_front.mp4",
+        "videoFront": "/vsl400_videos/sai_front.mp4",
+        "videoSide": "/vsl400_videos/sai_left.mp4",
+        "hint": "Ngón trỏ gạt má biểu thị sai"
+      }
+    ]
+  },
+  {
+    "orderIndex": 92,
+    "slug": "anh-khong-quen-ban",
+    "title": "Anh không hề quen người đó",
+    "meaning": "Người này xa lạ nên anh không có quen biết từ trước.",
+    "structure": "Chủ (Anh) + Người kia (Bạn) + Phủ định nhận biết (Không quen)",
+    "category": "Phủ định & Khước từ",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Không quen làm sau cùng thể hiện sự xa lạ.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Anh",
+        "slug": "anh",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/anh_front.mp4",
+        "videoFront": "/vsl400_videos/anh_front.mp4",
+        "videoSide": "/vsl400_videos/anh_left.mp4",
+        "hint": "Ký hiệu Anh"
+      },
+      {
+        "id": 2,
+        "name": "Bận",
+        "slug": "ban",
+        "role": "Người đối diện",
+        "video": "/vsl400_videos/ban_front.mp4",
+        "videoFront": "/vsl400_videos/ban_front.mp4",
+        "videoSide": "/vsl400_videos/ban_left.mp4",
+        "hint": "Ký hiệu Bạn"
+      },
+      {
+        "id": 3,
+        "name": "Không quen",
+        "slug": "khong_quen",
+        "role": "Phủ định",
+        "video": "/vsl400_videos/khong_quen_front.mp4",
+        "videoFront": "/vsl400_videos/khong_quen_front.mp4",
+        "videoSide": "/vsl400_videos/khong_quen_left.mp4",
+        "hint": "Chạm cằm rồi gạt tay lắc đầu"
+      }
+    ]
+  },
+  {
+    "orderIndex": 93,
+    "slug": "em-dung-lai-khong-chay",
+    "title": "Em dừng lại không chạy nữa",
+    "meaning": "Đã đến đích hoặc thấy mệt nên em dừng chân.",
+    "structure": "Chủ (Em) + Chạy (Chạy) + Mệnh lệnh dừng (Dừng lại)",
+    "category": "Phủ định & Khước từ",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Dừng lại chặt bàn tay xuống lòng tay kia ngăn hành động.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 2,
+        "name": "Chạy",
+        "slug": "chay",
+        "role": "Hành động",
+        "video": "/vsl400_videos/chay_front.mp4",
+        "videoFront": "/vsl400_videos/chay_front.mp4",
+        "videoSide": "/vsl400_videos/chay_left.mp4",
+        "hint": "Đánh tay chạy"
+      },
+      {
+        "id": 3,
+        "name": "Dừng lại",
+        "slug": "dung_lai",
+        "role": "Dừng lại",
+        "video": "/vsl400_videos/dung_lai_front.mp4",
+        "videoFront": "/vsl400_videos/dung_lai_front.mp4",
+        "videoSide": "/vsl400_videos/dung_lai_left.mp4",
+        "hint": "Chặt cạnh bàn tay dứt khoát"
+      }
+    ]
+  },
+  {
+    "orderIndex": 94,
+    "slug": "em-khong-nen-luoi-bieng",
+    "title": "Em không nên lười biếng",
+    "meaning": "Bản thân cần tự nhắc nhở chăm chỉ, không được lười nhác.",
+    "structure": "Chủ (Em) + Thói xấu (Lười biếng) + Lời khuyên (Không nên)",
+    "category": "Phủ định & Khước từ",
+    "difficulty": "Dễ",
+    "explanation": "Nêu tật xấu Lười biếng trước rồi cảnh báo Không nên.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ thể",
+        "video": "/vsl400_videos/em_front.mp4",
+        "videoFront": "/vsl400_videos/em_front.mp4",
+        "videoSide": "/vsl400_videos/em_left.mp4",
+        "hint": "Ký hiệu Em"
+      },
+      {
+        "id": 2,
+        "name": "Lười biếng",
+        "slug": "luoi_bieng",
+        "role": "Thói xấu",
+        "video": "/vsl400_videos/luoi_bieng_front.mp4",
+        "videoFront": "/vsl400_videos/luoi_bieng_front.mp4",
+        "videoSide": "/vsl400_videos/luoi_bieng_left.mp4",
+        "hint": "Ký hiệu Lười biếng ủ rũ"
+      },
+      {
+        "id": 3,
+        "name": "Không nên",
+        "slug": "khong_nen",
+        "role": "Cảnh báo",
+        "video": "/vsl400_videos/khong_nen_front.mp4",
+        "videoFront": "/vsl400_videos/khong_nen_front.mp4",
+        "videoSide": "/vsl400_videos/khong_nen_left.mp4",
+        "hint": "Lắc ngón trỏ cảnh báo"
+      }
+    ]
+  },
+  {
+    "orderIndex": 95,
+    "slug": "banh-xeo-rat-ngon-mieng",
+    "title": "Bánh xèo rất ngon miệng",
+    "meaning": "Món bánh xèo có hương vị giòn thơm hấp dẫn.",
+    "structure": "Chủ đề (Bánh xèo) + Tính chất vị giác (Ngon miệng)",
+    "category": "Tính từ & Miêu tả",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Ngon miệng nhấn mạnh bằng nụ cười thỏa mãn.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Bánh xèo",
+        "slug": "banh_xeo",
+        "role": "Chủ đề ẩm thực",
+        "video": "/vsl400_videos/banh_xeo_front.mp4",
+        "videoFront": "/vsl400_videos/banh_xeo_front.mp4",
+        "videoSide": "/vsl400_videos/banh_xeo_left.mp4",
+        "hint": "Ký hiệu Bánh xèo tráng chảo"
+      },
+      {
+        "id": 2,
+        "name": "Ngon miệng",
+        "slug": "ngon_mieng",
+        "role": "Đặc tính",
+        "video": "/vsl400_videos/ngon_mieng_front.mp4",
+        "videoFront": "/vsl400_videos/ngon_mieng_front.mp4",
+        "videoSide": "/vsl400_videos/ngon_mieng_left.mp4",
+        "hint": "Ngón tay quẹt khóe môi mặt thỏa mãn"
+      }
+    ]
+  },
+  {
+    "orderIndex": 96,
+    "slug": "mua-he-thoi-tiet-nong",
+    "title": "Mùa hè thời tiết rất nóng bức",
+    "meaning": "Thời tiết vào mùa hè oi ả với nhiệt độ cao.",
+    "structure": "Bối cảnh (Mùa hè) + Chủ đề (Thời tiết) + Cảm giác nhiệt (Nóng)",
+    "category": "Tính từ & Miêu tả",
+    "difficulty": "Dễ",
+    "explanation": "Lược bỏ từ láy nóng bức, chỉ dùng ký hiệu gốc Nóng kết hợp quạt tay cau mày.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Mùa hè",
+        "slug": "mua_he",
+        "role": "Thời điểm mùa vụ",
+        "video": "/vsl400_videos/mua_he_front.mp4",
+        "videoFront": "/vsl400_videos/mua_he_front.mp4",
+        "videoSide": "/vsl400_videos/mua_he_left.mp4",
+        "hint": "Ký hiệu ánh nắng chói hè"
+      },
+      {
+        "id": 2,
+        "name": "Thời tiết",
+        "slug": "thoi_tiet",
+        "role": "Chủ đề",
+        "video": "/vsl400_videos/thoi_tiet_front.mp4",
+        "videoFront": "/vsl400_videos/thoi_tiet_front.mp4",
+        "videoSide": "/vsl400_videos/thoi_tiet_left.mp4",
+        "hint": "Hai bàn tay mở xoay khí hậu"
+      },
+      {
+        "id": 3,
+        "name": "Nóng",
+        "slug": "nong",
+        "role": "Nhiệt độ",
+        "video": "/vsl400_videos/nong_front.mp4",
+        "videoFront": "/vsl400_videos/nong_front.mp4",
+        "videoSide": "/vsl400_videos/nong_left.mp4",
+        "hint": "Kéo cổ áo quạt phẩy mặt nhăn nóng"
+      }
+    ]
+  },
+  {
+    "orderIndex": 97,
+    "slug": "mua-dong-thoi-tiet-lanh",
+    "title": "Mùa đông thời tiết rất lạnh giá",
+    "meaning": "Vào mùa đông không khí buốt giá cần mặc thêm áo ấm.",
+    "structure": "Bối cảnh (Mùa đông) + Chủ đề (Thời tiết) + Cảm giác nhiệt (Lạnh)",
+    "category": "Tính từ & Miêu tả",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Lạnh run hai cánh tay ôm sát ngực.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Mùa đông",
+        "slug": "mua_dong",
+        "role": "Thời điểm",
+        "video": "/vsl400_videos/mua_dong_front.mp4",
+        "videoFront": "/vsl400_videos/mua_dong_front.mp4",
+        "videoSide": "/vsl400_videos/mua_dong_left.mp4",
+        "hint": "Ký hiệu Mùa đông gió bấc"
+      },
+      {
+        "id": 2,
+        "name": "Thời tiết",
+        "slug": "thoi_tiet",
+        "role": "Chủ đề",
+        "video": "/vsl400_videos/thoi_tiet_front.mp4",
+        "videoFront": "/vsl400_videos/thoi_tiet_front.mp4",
+        "videoSide": "/vsl400_videos/thoi_tiet_left.mp4",
+        "hint": "Ký hiệu Thời tiết"
+      },
+      {
+        "id": 3,
+        "name": "Lạnh",
+        "slug": "lanh",
+        "role": "Nhiệt độ",
+        "video": "/vsl400_videos/lanh_front.mp4",
+        "videoFront": "/vsl400_videos/lanh_front.mp4",
+        "videoSide": "/vsl400_videos/lanh_left.mp4",
+        "hint": "Hai tay ôm cánh tay run vì lạnh"
+      }
+    ]
+  },
+  {
+    "orderIndex": 98,
+    "slug": "cong-vien-mat-me",
+    "title": "Công viên rất mát mẻ",
+    "meaning": "Hàng cây xanh trong công viên mang lại cảm giác dễ chịu.",
+    "structure": "Địa điểm (Công viên) + Cảm giác (Mát mẻ)",
+    "category": "Tính từ & Miêu tả",
+    "difficulty": "Dễ",
+    "explanation": "Ký hiệu Mát mẻ xòe hai tay phe phẩy trước mặt mỉm cười sảng khoái.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Công viên",
+        "slug": "cong_vien",
+        "role": "Địa điểm",
+        "video": "/vsl400_videos/cong_vien_front.mp4",
+        "videoFront": "/vsl400_videos/cong_vien_front.mp4",
+        "videoSide": "/vsl400_videos/cong_vien_left.mp4",
+        "hint": "Ký hiệu Công viên cây xanh"
+      },
+      {
+        "id": 2,
+        "name": "Mát mẻ",
+        "slug": "mat_me",
+        "role": "Không khí",
+        "video": "/vsl400_videos/mat_me_front.mp4",
+        "videoFront": "/vsl400_videos/mat_me_front.mp4",
+        "videoSide": "/vsl400_videos/mat_me_left.mp4",
+        "hint": "Hai tay phẩy gió mát trước mặt"
+      }
+    ]
+  },
+  {
+    "orderIndex": 99,
+    "slug": "em-thich-mau-do",
+    "title": "Em thích màu đỏ",
+    "meaning": "Em đặc biệt yêu thích màu sắc đỏ tươi sáng.",
+    "structure": "SOV: Chủ (Em) + Bổ ngữ (Màu đỏ) + Cảm xúc (Thích)",
+    "category": "Tính từ & Miêu tả",
+    "difficulty": "Dễ",
+    "explanation": "Màu đỏ (bổ ngữ) đứng trước động từ Thích theo chuẩn SOV.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Em",
+        "slug": "em",
+        "role": "Chủ ngữ",
         "video": "/vsl400_videos/em_front.mp4",
         "videoFront": "/vsl400_videos/em_front.mp4",
         "videoSide": "/vsl400_videos/em_left.mp4",
@@ -1493,7 +4049,7 @@
         "id": 2,
         "name": "Màu đỏ",
         "slug": "mau_do",
-        "role": "Bổ ngữ màu sắc (Màu đỏ)",
+        "role": "Màu sắc",
         "video": "/vsl400_videos/mau_do_front.mp4",
         "videoFront": "/vsl400_videos/mau_do_front.mp4",
         "videoSide": "/vsl400_videos/mau_do_left.mp4",
@@ -1503,11 +4059,53 @@
         "id": 3,
         "name": "Thích",
         "slug": "thich",
-        "role": "Động từ cảm xúc (Thích)",
+        "role": "Cảm xúc",
         "video": "/vsl400_videos/thich_front.mp4",
         "videoFront": "/vsl400_videos/thich_front.mp4",
         "videoSide": "/vsl400_videos/thich_left.mp4",
-        "hint": "Xoa nhẹ ngực mỉm cười tán thành"
+        "hint": "Xoa nhẹ ngực mỉm cười"
+      }
+    ]
+  },
+  {
+    "orderIndex": 100,
+    "slug": "anh-thich-mau-xanh-la-cay",
+    "title": "Anh thích màu xanh lá cây",
+    "meaning": "Anh yêu thích gam màu xanh lá cây tươi mát của thiên nhiên.",
+    "structure": "SOV: Chủ (Anh) + Bổ ngữ (Màu xanh lá cây) + Cảm xúc (Thích)",
+    "category": "Tính từ & Miêu tả",
+    "difficulty": "Dễ",
+    "explanation": "Màu xanh lá cây làm trước động từ Thích.",
+    "words": [
+      {
+        "id": 1,
+        "name": "Anh",
+        "slug": "anh",
+        "role": "Chủ ngữ",
+        "video": "/vsl400_videos/anh_front.mp4",
+        "videoFront": "/vsl400_videos/anh_front.mp4",
+        "videoSide": "/vsl400_videos/anh_left.mp4",
+        "hint": "Ký hiệu Anh"
+      },
+      {
+        "id": 2,
+        "name": "Màu xanh lá cây",
+        "slug": "mau_xanh_la_cay",
+        "role": "Màu sắc",
+        "video": "/vsl400_videos/mau_xanh_la_cay_front.mp4",
+        "videoFront": "/vsl400_videos/mau_xanh_la_cay_front.mp4",
+        "videoSide": "/vsl400_videos/mau_xanh_la_cay_left.mp4",
+        "hint": "Ký hiệu màu lá cây xòe ngón"
+      },
+      {
+        "id": 3,
+        "name": "Thích",
+        "slug": "thich",
+        "role": "Cảm xúc",
+        "video": "/vsl400_videos/thich_front.mp4",
+        "videoFront": "/vsl400_videos/thich_front.mp4",
+        "videoSide": "/vsl400_videos/thich_left.mp4",
+        "hint": "Xoa ngực tán thành"
       }
     ]
   }

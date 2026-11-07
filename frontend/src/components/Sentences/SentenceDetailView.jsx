@@ -11,8 +11,10 @@ import {
   Info,
   CheckCircle2,
   Video,
-  Volume2
+  Volume2,
+  Bookmark
 } from 'lucide-react';
+import { useSavedSentences } from '../../data/wordsStore';
 
 export default function SentenceDetailView({ sentence, onBack, onStartPractice }) {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -20,6 +22,7 @@ export default function SentenceDetailView({ sentence, onBack, onStartPractice }
   const [viewAngle, setViewAngle] = useState('front'); // 'front' | 'side'
   const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
   const videoRef = useRef(null);
+  const { isSaved, toggleSave } = useSavedSentences();
 
   const words = sentence?.words || [];
   const currentWord = words[currentWordIndex] || words[0];
@@ -104,7 +107,7 @@ export default function SentenceDetailView({ sentence, onBack, onStartPractice }
           <span>Danh sách câu</span>
         </button>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
           <span style={{
             fontSize: '0.78rem',
             fontWeight: 800,
@@ -113,7 +116,7 @@ export default function SentenceDetailView({ sentence, onBack, onStartPractice }
             backgroundColor: '#e0f2fe',
             color: '#0284c7'
           }}>
-            {sentence.topicLabel}
+            {sentence.topicLabel || sentence.category || 'Giao tiếp & Xã giao'}
           </span>
           <span style={{
             fontSize: '0.78rem',
@@ -125,6 +128,32 @@ export default function SentenceDetailView({ sentence, onBack, onStartPractice }
           }}>
             Độ khó: {sentence.difficulty}
           </span>
+          <button
+            onClick={() => toggleSave(sentence)}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.45rem',
+              padding: '0.35rem 0.85rem',
+              borderRadius: 'var(--radius-pill)',
+              fontSize: '0.82rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              backgroundColor: isSaved(sentence.id, sentence.slug) ? '#eff6ff' : '#ffffff',
+              color: isSaved(sentence.id, sentence.slug) ? '#0284c7' : '#64748b',
+              border: isSaved(sentence.id, sentence.slug) ? '1.5px solid #93c5fd' : '1.5px solid #cbd5e1',
+              boxShadow: isSaved(sentence.id, sentence.slug) ? '0 2px 6px rgba(2, 132, 199, 0.15)' : 'none',
+              flexShrink: 0
+            }}
+            title={isSaved(sentence.id, sentence.slug) ? 'Bấm để bỏ lưu câu' : 'Lưu câu để đưa vào danh sách Ôn tập'}
+          >
+            <Bookmark
+              size={15}
+              fill={isSaved(sentence.id, sentence.slug) ? '#0284c7' : 'none'}
+            />
+            <span>{isSaved(sentence.id, sentence.slug) ? 'Đã lưu câu' : 'Lưu câu'}</span>
+          </button>
         </div>
       </div>
 

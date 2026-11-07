@@ -292,6 +292,19 @@ export default function App() {
           <ReviewView 
             onStartPracticeWord={handleStartPracticeWord}
             onOpenLesson={handleOpenLessonFromReview}
+            onOpenSentenceDetail={(sentenceId) => {
+              setSelectedSentenceId(sentenceId);
+              setActiveTab('sentences');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onNavigateSentences={() => {
+              setActiveTab('sentences');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onNavigateLearning={() => {
+              setActiveTab('learning');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
           />
         )}
 

@@ -12,10 +12,12 @@ import {
   Clock,
   Compass,
   CheckCircle2,
-  Tag
+  Tag,
+  Bookmark
 } from 'lucide-react';
 import { VSL_SENTENCES, getSentenceById } from '../../data/sentencesData';
 import { dictionaryApi } from '../../services/api';
+import { useSavedSentences } from '../../data/wordsStore';
 import SentenceDetailView from './SentenceDetailView';
 import SentencePracticeView from './SentencePracticeView';
 
@@ -48,6 +50,14 @@ export default function SentencesView({ onStartPracticeWord, initialSentenceId =
   const [searchQuery, setSearchQuery] = useState('');
   const [activeSentenceId, setActiveSentenceId] = useState(initialSentenceId);
   const [viewMode, setViewMode] = useState(initialSentenceId ? 'detail' : 'list'); // 'list' | 'detail' | 'practice'
+  const { isSaved, toggleSave } = useSavedSentences();
+
+  useEffect(() => {
+    if (initialSentenceId) {
+      setActiveSentenceId(initialSentenceId);
+      setViewMode('detail');
+    }
+  }, [initialSentenceId]);
 
   // Tải danh sách câu VSL từ Backend API NestJS
   useEffect(() => {
@@ -338,15 +348,41 @@ export default function SentencesView({ onStartPracticeWord, initialSentenceId =
                     {sentence.topicLabel || sentence.topic}
                   </span>
 
-                  <span
-                    style={{
-                      fontSize: '0.72rem',
-                      fontWeight: 700,
-                      color: sentence.difficulty === 'Nâng cao' ? '#dc2626' : sentence.difficulty === 'Trung bình' ? '#d97706' : '#16a34a',
-                    }}
-                  >
-                    {sentence.difficulty}
-                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span
+                      style={{
+                        fontSize: '0.72rem',
+                        fontWeight: 700,
+                        color: sentence.difficulty === 'Nâng cao' ? '#dc2626' : sentence.difficulty === 'Trung bình' ? '#d97706' : '#16a34a',
+                      }}
+                    >
+                      {sentence.difficulty}
+                    </span>
+
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleSave(sentence);
+                      }}
+                      style={{
+                        background: isSaved(sentence.id, sentence.slug) ? '#eff6ff' : '#f8fafc',
+                        border: isSaved(sentence.id, sentence.slug) ? '1.5px solid #93c5fd' : '1px solid #cbd5e1',
+                        borderRadius: '50%',
+                        width: 28,
+                        height: 28,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        color: isSaved(sentence.id, sentence.slug) ? '#0284c7' : '#94a3b8',
+                        transition: 'all 0.15s ease',
+                      }}
+                      title={isSaved(sentence.id, sentence.slug) ? 'Bỏ lưu câu' : 'Lưu câu vào danh sách ôn tập'}
+                    >
+                      <Bookmark size={14} fill={isSaved(sentence.id, sentence.slug) ? '#0284c7' : 'none'} />
+                    </button>
+                  </div>
                 </div>
 
                 {/* Tiêu đề câu tiếng Việt */}

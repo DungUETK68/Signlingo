@@ -497,3 +497,116 @@ export function useSavedLessons() {
     reload: () => setSavedLessons(getSavedLessons())
   };
 }
+
+// ==================== QUẢN LÝ CÂU GIAO TIẾP ĐÃ LƯU (ÔN TẬP CÂU) ====================
+const SAVED_SENTENCES_KEY = 'signlingo_saved_sentences';
+const SAVED_SENTENCES_EVENT = 'signlingo_saved_sentences_updated';
+
+const DEFAULT_SAVED_SENTENCES = [
+  {
+    id: 'em-cam-on-anh',
+    slug: 'em-cam-on-anh',
+    title: 'Em cảm ơn anh',
+    meaning: 'Lời cảm kích chân thành, lễ phép của em gửi tới người anh.',
+    category: 'Giao tiếp & Xã giao',
+    difficulty: 'Dễ',
+    structure: 'SOV: Chủ (Em) + Người nhận (Anh) + Động từ (Cảm ơn)',
+    wordsCount: 3,
+    savedAt: new Date().toISOString()
+  },
+  {
+    id: 'anh-an-pho',
+    slug: 'anh-an-pho',
+    title: 'Anh ăn phở',
+    meaning: 'Anh đang thưởng thức món phở truyền thống.',
+    category: 'Ẩm thực & Thức uống',
+    difficulty: 'Dễ',
+    structure: 'SOV: Chủ (Anh) + Bổ ngữ (Phở) + Động từ (Ăn)',
+    wordsCount: 3,
+    savedAt: new Date(Date.now() - 3600000 * 24).toISOString()
+  }
+];
+
+export function getSavedSentences() {
+  try {
+    const raw = localStorage.getItem(SAVED_SENTENCES_KEY);
+    if (!raw) {
+      localStorage.setItem(SAVED_SENTENCES_KEY, JSON.stringify(DEFAULT_SAVED_SENTENCES));
+      return DEFAULT_SAVED_SENTENCES;
+    }
+    return JSON.parse(raw);
+  } catch (e) {
+    return DEFAULT_SAVED_SENTENCES;
+  }
+}
+
+export function isSentenceSaved(sentenceId, slug) {
+  const saved = getSavedSentences();
+  return saved.some(item => item.id === sentenceId || item.slug === sentenceId || (slug && (item.slug === slug || item.id === slug)));
+}
+
+export function toggleSaveSentence(sentence) {
+  if (!sentence) return false;
+  const saved = getSavedSentences();
+  const sid = sentence.id || sentence.slug;
+  const sslug = sentence.slug || sentence.id;
+  const exists = saved.some(item => item.id === sid || item.slug === sslug);
+
+  let updated;
+  let isNowSaved = false;
+
+  if (exists) {
+    updated = saved.filter(item => item.id !== sid && item.slug !== sslug);
+    isNowSaved = false;
+  } else {
+    const newItem = {
+      id: sid,
+      slug: sslug,
+      title: sentence.title,
+      meaning: sentence.meaning || '',
+      category: sentence.category || sentence.topicLabel || sentence.topic || 'Giao tiếp & Xã giao',
+      difficulty: sentence.difficulty || 'Dễ',
+      structure: sentence.structure || sentence.signOrderText || 'SOV (Chủ - Bổ - Động)',
+      explanation: sentence.explanation || sentence.grammarExplanation || '',
+      words: sentence.words || [],
+      wordsCount: (sentence.words || []).length,
+      savedAt: new Date().toISOString()
+    };
+    updated = [newItem, ...saved];
+    isNowSaved = true;
+  }
+
+  localStorage.setItem(SAVED_SENTENCES_KEY, JSON.stringify(updated));
+  window.dispatchEvent(new CustomEvent(SAVED_SENTENCES_EVENT, { detail: { sentenceId: sid, isSaved: isNowSaved, saved: updated } }));
+  return isNowSaved;
+}
+
+export function removeSavedSentence(sentenceId) {
+  const saved = getSavedSentences();
+  const updated = saved.filter(item => item.id !== sentenceId && item.slug !== sentenceId);
+  localStorage.setItem(SAVED_SENTENCES_KEY, JSON.stringify(updated));
+  window.dispatchEvent(new CustomEvent(SAVED_SENTENCES_EVENT, { detail: { sentenceId, isSaved: false, saved: updated } }));
+  return updated;
+}
+
+export function useSavedSentences() {
+  const [savedSentences, setSavedSentences] = useState(getSavedSentences());
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      setSavedSentences(getSavedSentences());
+    };
+    window.addEventListener(SAVED_SENTENCES_EVENT, handleUpdate);
+    return () => window.removeEventListener(SAVED_SENTENCES_EVENT, handleUpdate);
+  }, []);
+
+  const checkIsSaved = (sentenceId, slug) => isSentenceSaved(sentenceId, slug);
+
+  return {
+    savedSentences,
+    isSaved: checkIsSaved,
+    toggleSave: (sentence) => toggleSaveSentence(sentence),
+    removeSaved: (sentenceId) => removeSavedSentence(sentenceId),
+    reload: () => setSavedSentences(getSavedSentences())
+  };
+}
