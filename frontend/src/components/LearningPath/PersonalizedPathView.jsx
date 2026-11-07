@@ -13,14 +13,19 @@ import {
   AlertTriangle,
   Zap,
   TrendingUp,
-  ArrowRight
+  ArrowRight,
+  MessageSquareQuote,
+  GraduationCap,
+  BookOpen
 } from 'lucide-react';
 import { usePersonalizedPath } from '../../data/personalizedStore';
 
 export default function PersonalizedPathView({
   onStartPracticeWord,
   onOpenSurvey,
-  onOpenLesson
+  onOpenLesson,
+  onOpenSentenceDetail,
+  onOpenGrammar
 }) {
   const {
     profile,
@@ -258,8 +263,22 @@ export default function PersonalizedPathView({
                   <div
                     key={lesson.id}
                     style={{
-                      border: isBooster ? '1.5px solid #fdba74' : '1px solid #e2e8f0',
-                      backgroundColor: isBooster ? '#fffbeb' : lesson.completed ? '#f8fafc' : '#ffffff',
+                      border: isBooster 
+                        ? '1.5px solid #fdba74' 
+                        : lesson.type === 'sentence' 
+                          ? '1.5px solid #bae6fd' 
+                          : lesson.type === 'grammar' 
+                            ? '1.5px solid #e9d5ff' 
+                            : '1px solid #e2e8f0',
+                      backgroundColor: isBooster 
+                        ? '#fffbeb' 
+                        : lesson.type === 'sentence' 
+                          ? '#f0f9ff' 
+                          : lesson.type === 'grammar' 
+                            ? '#faf5ff' 
+                            : lesson.completed 
+                              ? '#f8fafc' 
+                              : '#ffffff',
                       borderRadius: 'var(--radius-lg)',
                       padding: '1rem 1.25rem',
                       display: 'flex',
@@ -273,14 +292,22 @@ export default function PersonalizedPathView({
                     {/* Cột 1: Thông tin bài học */}
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem', flex: 1, minWidth: 260 }}>
                       <div
-                        onClick={() => completeLesson(lesson.id, 92)}
+                        onClick={() => completeLesson(lesson.id, 95)}
                         title="Bấm để đánh dấu hoàn thành bài học"
                         style={{
-                          width: 34,
-                          height: 34,
+                          width: 36,
+                          height: 36,
                           borderRadius: '50%',
-                          backgroundColor: lesson.completed ? '#22c55e' : isBooster ? '#f97316' : '#e0f2fe',
-                          color: lesson.completed ? '#ffffff' : isBooster ? '#ffffff' : '#0284c7',
+                          backgroundColor: lesson.completed 
+                            ? '#22c55e' 
+                            : isBooster 
+                              ? '#f97316' 
+                              : lesson.type === 'sentence' 
+                                ? '#0284c7' 
+                                : lesson.type === 'grammar' 
+                                  ? '#7c3aed' 
+                                  : '#e0f2fe',
+                          color: (lesson.completed || isBooster || lesson.type === 'sentence' || lesson.type === 'grammar') ? '#ffffff' : '#0284c7',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -293,6 +320,10 @@ export default function PersonalizedPathView({
                           <Check size={18} strokeWidth={3} />
                         ) : isBooster ? (
                           <AlertTriangle size={18} />
+                        ) : lesson.type === 'sentence' ? (
+                          <MessageSquareQuote size={18} />
+                        ) : lesson.type === 'grammar' ? (
+                          <GraduationCap size={18} />
                         ) : (
                           <Play size={16} fill="currentColor" />
                         )}
@@ -310,8 +341,16 @@ export default function PersonalizedPathView({
                               fontWeight: 800,
                               padding: '0.15rem 0.5rem',
                               borderRadius: 'var(--radius-pill)',
-                              backgroundColor: isBooster ? '#ea580c' : lesson.highlight ? '#0284c7' : '#e0f2fe',
-                              color: isBooster || lesson.highlight ? '#ffffff' : '#0369a1'
+                              backgroundColor: isBooster 
+                                ? '#ea580c' 
+                                : lesson.type === 'sentence' 
+                                  ? '#0284c7' 
+                                  : lesson.type === 'grammar' 
+                                    ? '#7c3aed' 
+                                    : lesson.highlight 
+                                      ? '#0284c7' 
+                                      : '#e0f2fe',
+                              color: isBooster || lesson.highlight || lesson.type === 'sentence' || lesson.type === 'grammar' ? '#ffffff' : '#0369a1'
                             }}>
                               {lesson.badge}
                             </span>
@@ -341,48 +380,101 @@ export default function PersonalizedPathView({
                             {lesson.duration}
                           </span>
                           <span>•</span>
-                          <span>Độ khó: <strong>{lesson.level}</strong></span>
+                          <span>Phân loại: <strong>{lesson.level}</strong></span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Cột 2: Nút thao tác */}
+                    {/* Cột 2: Nút thao tác linh hoạt theo loại bài học */}
                     <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                      {lesson.word && (
+                      {/* 1. Nếu là bài luyện câu VSL */}
+                      {lesson.type === 'sentence' && (
                         <button
-                          onClick={() => onStartPracticeWord(lesson.word)}
-                          className="btn-pill btn-secondary"
+                          onClick={() => {
+                            completeLesson(lesson.id, 95);
+                            if (onOpenSentenceDetail && lesson.sentenceSlug) {
+                              onOpenSentenceDetail(lesson.sentenceSlug);
+                            }
+                          }}
+                          className="btn-pill btn-primary"
                           style={{
-                            fontSize: '0.8rem',
-                            padding: '0.4rem 0.85rem',
-                            gap: '0.35rem',
-                            fontWeight: 700
+                            fontSize: '0.82rem',
+                            padding: '0.45rem 1rem',
+                            fontWeight: 800,
+                            gap: '0.4rem',
+                            backgroundColor: '#0284c7'
                           }}
                         >
-                          <Camera size={15} color="#0284c7" />
-                          <span>Luyện AI</span>
+                          <MessageSquareQuote size={15} />
+                          <span>Luyện câu VSL</span>
                         </button>
                       )}
 
-                      <button
-                        onClick={() => {
-                          if (lesson.word) {
-                            onStartPracticeWord(lesson.word);
-                          } else if (onOpenLesson) {
-                            onOpenLesson(lesson, stage);
-                          }
-                        }}
-                        className={`btn-pill ${lesson.completed ? 'btn-secondary' : 'btn-primary'}`}
-                        style={{
-                          fontSize: '0.82rem',
-                          padding: '0.4rem 0.95rem',
-                          fontWeight: 800,
-                          gap: '0.35rem'
-                        }}
-                      >
-                        <span>{lesson.completed ? 'Ôn lại' : 'Học ngay'}</span>
-                        <ArrowRight size={15} />
-                      </button>
+                      {/* 2. Nếu là điểm ngữ pháp VSL */}
+                      {lesson.type === 'grammar' && (
+                        <button
+                          onClick={() => {
+                            completeLesson(lesson.id, 100);
+                            if (onOpenGrammar) {
+                              onOpenGrammar(lesson.grammarRuleId);
+                            }
+                          }}
+                          className="btn-pill btn-secondary"
+                          style={{
+                            fontSize: '0.82rem',
+                            padding: '0.45rem 1rem',
+                            fontWeight: 800,
+                            gap: '0.4rem',
+                            borderColor: '#7c3aed',
+                            color: '#7c3aed',
+                            backgroundColor: '#faf5ff'
+                          }}
+                        >
+                          <GraduationCap size={15} />
+                          <span>Xem ngữ pháp</span>
+                        </button>
+                      )}
+
+                      {/* 3. Nếu là bài từ vựng chuẩn */}
+                      {lesson.type !== 'sentence' && lesson.type !== 'grammar' && (
+                        <>
+                          {lesson.word && (
+                            <button
+                              onClick={() => onStartPracticeWord(lesson.word)}
+                              className="btn-pill btn-secondary"
+                              style={{
+                                fontSize: '0.8rem',
+                                padding: '0.4rem 0.85rem',
+                                gap: '0.35rem',
+                                fontWeight: 700
+                              }}
+                            >
+                              <Camera size={15} color="#0284c7" />
+                              <span>Luyện AI</span>
+                            </button>
+                          )}
+
+                          <button
+                            onClick={() => {
+                              if (lesson.word) {
+                                onStartPracticeWord(lesson.word);
+                              } else if (onOpenLesson) {
+                                onOpenLesson(lesson, stage);
+                              }
+                            }}
+                            className={`btn-pill ${lesson.completed ? 'btn-secondary' : 'btn-primary'}`}
+                            style={{
+                              fontSize: '0.82rem',
+                              padding: '0.4rem 0.95rem',
+                              fontWeight: 800,
+                              gap: '0.35rem'
+                            }}
+                          >
+                            <span>{lesson.completed ? 'Ôn lại' : 'Học ngay'}</span>
+                            <ArrowRight size={15} />
+                          </button>
+                        </>
+                      )}
                     </div>
                   </div>
                 );

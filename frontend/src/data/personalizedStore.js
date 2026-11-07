@@ -162,12 +162,17 @@ export function analyzeLearnerCapability() {
 export function generatePersonalizedPath(level, capability) {
   const currentLevel = level || 'beginner';
   const cap = capability || analyzeLearnerCapability();
+  const profile = getUserProfile();
+  const priority = profile.priorityTopic || 'greeting';
+
+  let stages = [];
 
   // MỨC 1: Người mới bắt đầu (Beginner)
   if (currentLevel === 'beginner') {
     const stage1Lessons = [
       {
         id: 'p-beg-1',
+        type: 'word',
         title: 'Ký hiệu "Cảm ơn" chuẩn VSL',
         desc: 'Đặt đầu ngón tay lên cằm rồi hạ nhẹ bàn tay về phía trước đối tác giao tiếp',
         duration: '2 phút',
@@ -179,34 +184,69 @@ export function generatePersonalizedPath(level, capability) {
       },
       {
         id: 'p-beg-2',
-        title: 'Ký hiệu "Tạm biệt" thân thiện',
-        desc: 'Nâng tay ngang tầm ngực và vẫy nhẹ các ngón tay sang hai bên',
-        duration: '2 phút',
-        level: 'Dễ',
-        badge: 'Khuyên học hôm nay',
-        highlight: true,
-        completed: true,
-        score: 92,
-        word: 'Tạm biệt'
-      },
-      {
-        id: 'p-beg-3',
+        type: 'word',
         title: 'Ký hiệu "Xin lỗi" chân thành',
         desc: 'Nắm bàn tay xoay tròn nhẹ nhàng trên ngực trái (vùng trái tim)',
         duration: '3 phút',
-        level: 'Trung bình',
+        level: 'Dễ',
+        badge: 'Khuyên học hôm nay',
+        highlight: true,
         completed: false,
         score: 0,
         word: 'Xin lỗi'
+      },
+      {
+        id: 'p-beg-3',
+        type: 'word',
+        title: 'Ký hiệu "Giúp đỡ"',
+        desc: 'Bàn tay mở đặt dưới mu bàn tay còn lại đưa về phía trước hỗ trợ',
+        duration: '2 phút',
+        level: 'Trung bình',
+        completed: false,
+        score: 0,
+        word: 'Giúp đỡ'
+      },
+      {
+        id: 'p-beg-4',
+        type: 'word',
+        title: 'Ký hiệu "Khỏe"',
+        desc: 'Hai bàn tay nắm gập vuông góc trước ngực thể hiện sức mạnh',
+        duration: '2 phút',
+        level: 'Dễ',
+        completed: false,
+        score: 0,
+        word: 'Khỏe'
+      },
+      {
+        id: 'p-beg-gram-1',
+        type: 'grammar',
+        title: '💡 Điểm hội tụ Ngữ pháp: Biểu cảm nét mặt khi giao tiếp',
+        desc: 'Nét mặt là ngữ điệu của người khiếm thính. Giữ ánh mắt ấm áp, miệng mỉm cười nhẹ khi cảm ơn và chào hỏi.',
+        duration: '3 phút',
+        level: 'Lý thuyết',
+        badge: 'Ngữ pháp VSL',
+        grammarRuleId: 'rule-facial-expression',
+        completed: false
+      },
+      {
+        id: 'p-beg-sent-1',
+        type: 'sentence',
+        sentenceSlug: 'em-cam-on-anh',
+        title: 'Câu thực hành: "Em cảm ơn anh"',
+        desc: 'Cấu trúc SOV: Em + Người nhận (Anh) + Động từ (Cảm ơn)',
+        duration: '4 phút',
+        level: 'Thực hành',
+        badge: 'Luyện câu VSL',
+        completed: false
       }
     ];
 
-    // Nếu AI phát hiện cần bổ trợ ngón tay -> Chèn bài thích ứng
     if (cap.hasBooster) {
       stage1Lessons.splice(2, 0, {
         id: 'p-booster-1',
-        title: '🤖 Bài bổ trợ AI: Tinh chỉnh góc mở ngón tay',
-        desc: 'AI tự động bổ sung dựa trên kết quả thực hành để sửa góc khép mở ngón tay',
+        type: 'word',
+        title: '🤖 Bài bổ trợ AI: Sửa góc mở ngón tay',
+        desc: 'AI tự động bổ sung dựa trên camera để sửa góc khép mở ngón tay đạt chuẩn VSL',
         duration: '2 phút',
         level: 'Dễ',
         isAiBooster: true,
@@ -217,40 +257,44 @@ export function generatePersonalizedPath(level, capability) {
       });
     }
 
-    const stages = [
+    stages = [
       {
         id: 'stage-1',
-        title: 'Chặng 1: Nền Tảng Chào Hỏi & Lịch Sự',
-        subtitle: 'Bắt đầu với các ký hiệu chào hỏi, cảm ơn, xin lỗi cốt lõi nhất của người khiếm thính',
+        topicId: 'greeting',
+        title: 'Chặng 1: Nền Tảng Xã Giao & Biểu Cảm Vỡ Lòng',
+        subtitle: 'Làm chủ các cử chỉ giao tiếp cốt lõi và nét mặt thân thiện chuẩn VSL',
         icon: '👋',
-        progress: cap.hasBooster ? 50 : 66,
+        progress: 16,
         color: '#0284c7',
         bgColor: '#f0f9ff',
         lessons: stage1Lessons
       },
       {
         id: 'stage-2',
+        topicId: 'family',
         title: 'Chặng 2: Xưng Hô Gia Đình Gần Gũi',
-        subtitle: 'Học cách xưng hô Bố, Mẹ, Anh, Chị, Em theo quy chuẩn VSL',
-        icon: '👨‍👩‍👧',
-        progress: 25,
+        subtitle: 'Định vị không gian người thân và xưng hô chuẩn mực theo quy ước VSL',
+        icon: '👨‍👩‍👧‍👦',
+        progress: 0,
         color: '#059669',
         bgColor: '#ecfdf5',
         lessons: [
           {
-            id: 'p-beg-4',
+            id: 'p-beg-5',
+            type: 'word',
             title: 'Ký hiệu "Bố"',
             desc: 'Ký hiệu vuốt nhẹ hai bên ria mép truyền thống thể hiện người cha',
             duration: '2 phút',
             level: 'Dễ',
-            completed: true,
-            score: 94,
+            completed: false,
+            score: 0,
             word: 'Bố'
           },
           {
-            id: 'p-beg-5',
+            id: 'p-beg-6',
+            type: 'word',
             title: 'Ký hiệu "Mẹ"',
-            desc: 'Ngón tay trỏ chạm nhẹ cạnh cằm hoặc dái tai biểu trưng cho khuyên tai người mẹ',
+            desc: 'Ngón tay trỏ chạm nhẹ cạnh cằm hoặc dái tai biểu trưng cho khuyên tai',
             duration: '2 phút',
             level: 'Dễ',
             completed: false,
@@ -258,7 +302,8 @@ export function generatePersonalizedPath(level, capability) {
             word: 'Mẹ'
           },
           {
-            id: 'p-beg-6',
+            id: 'p-beg-7',
+            type: 'word',
             title: 'Ký hiệu "Anh" & "Chị"',
             desc: 'Cử chỉ biểu thị bậc anh lớn và chị gái trong gia đình',
             duration: '2 phút',
@@ -268,7 +313,8 @@ export function generatePersonalizedPath(level, capability) {
             word: 'Anh'
           },
           {
-            id: 'p-beg-7',
+            id: 'p-beg-8',
+            type: 'word',
             title: 'Ký hiệu "Em"',
             desc: 'Bàn tay hạ thấp ngang ngực thể hiện người nhỏ tuổi hơn',
             duration: '2 phút',
@@ -276,92 +322,67 @@ export function generatePersonalizedPath(level, capability) {
             completed: false,
             score: 0,
             word: 'Em'
+          },
+          {
+            id: 'p-beg-gram-2',
+            type: 'grammar',
+            title: '💡 Điểm hội tụ Ngữ pháp: Điểm quy chiếu xưng hô gia đình',
+            desc: 'Người lớn tuổi hơn đặt ở vị trí cao hơn trước ngực, người nhỏ tuổi hơn hạ tay thấp hơn.',
+            duration: '3 phút',
+            level: 'Lý thuyết',
+            badge: 'Ngữ pháp VSL',
+            grammarRuleId: 'rule-spatial-grammar',
+            completed: false
+          },
+          {
+            id: 'p-beg-sent-2',
+            type: 'sentence',
+            sentenceSlug: 'bo-me-giup-do-em',
+            title: 'Câu thực hành: "Bố mẹ giúp đỡ em"',
+            desc: 'Chủ ngữ liên hợp + Động từ định hướng tương tác',
+            duration: '4 phút',
+            level: 'Thực hành',
+            badge: 'Luyện câu VSL',
+            completed: false
           }
         ]
       },
       {
         id: 'stage-3',
-        title: 'Chặng 3: Sức Khỏe & Sinh Hoạt Cơ Bản',
-        subtitle: 'Ký hiệu hỏi thăm thể trạng khỏe mạnh và các nhu cầu ăn uống hàng ngày',
-        icon: '🥣',
+        topicId: 'food',
+        title: 'Chặng 3: Ẩm Thực Cơ Bản & Nguyên Lý SOV',
+        subtitle: 'Khám phá quy tắc ngữ pháp cốt lõi VSL: Đưa món ăn lên trước động từ Ăn/Uống',
+        icon: '🍲',
         progress: 0,
         color: '#d97706',
         bgColor: '#fffbeb',
         lessons: [
           {
-            id: 'p-beg-8',
-            title: 'Ký hiệu "Khỏe"',
-            desc: 'Hai bàn tay nắm gập vuông góc trước ngực thể hiện sức mạnh và sức khỏe tốt',
-            duration: '2 phút',
-            level: 'Dễ',
-            completed: false,
-            score: 0,
-            word: 'Khỏe'
-          },
-          {
             id: 'p-beg-9',
-            title: 'Ký hiệu "Ăn"',
-            desc: 'Các ngón tay chụm lại đưa vào sát miệng 2 lần',
-            duration: '2 phút',
-            level: 'Dễ',
-            completed: false,
-            score: 0,
-            word: 'Ăn'
-          },
-          {
-            id: 'p-beg-10',
-            title: 'Ký hiệu "Uống" & "Nước"',
-            desc: 'Bàn tay cong chữ C như cầm cốc nâng lên miệng kết hợp chạm cằm',
-            duration: '2 phút',
-            level: 'Dễ',
-            completed: false,
-            score: 0,
-            word: 'Uống'
-          }
-        ]
-      }
-    ];
-
-    return stages;
-  }
-
-  // MỨC 2: Đã biết cơ bản (Elementary)
-  if (currentLevel === 'elementary') {
-    const stages = [
-      {
-        id: 'stage-1',
-        title: 'Chặng 1: Ẩm Thực & Món Ăn Truyền Thống VSL',
-        subtitle: 'Ký hiệu các món ăn Việt Nam quen thuộc và thức uống hàng ngày',
-        icon: '🍲',
-        progress: 40,
-        color: '#0284c7',
-        bgColor: '#f0f9ff',
-        lessons: [
-          {
-            id: 'p-elem-1',
-            title: 'Ký hiệu món "Phở"',
-            desc: 'Tay trái khum hình bát phở, tay phải hai ngón gắp đưa lên miệng',
+            type: 'word',
+            title: 'Ký hiệu "Phở"',
+            desc: 'Tay trái khum hình bát, tay phải chụm ngón gắp đưa lên miệng',
             duration: '3 phút',
             level: 'Trung bình',
-            badge: 'Khuyên học hôm nay',
-            highlight: true,
-            completed: true,
-            score: 92,
+            completed: false,
+            score: 0,
             word: 'Phở'
           },
           {
-            id: 'p-elem-2',
-            title: 'Ký hiệu món "Bún"',
+            id: 'p-beg-10',
+            type: 'word',
+            title: 'Ký hiệu "Bún"',
             desc: 'Ký hiệu sợi bún mềm cuộn tròn gắp ăn kèm nước dùng',
             duration: '3 phút',
             level: 'Trung bình',
-            completed: true,
-            score: 90,
+            completed: false,
+            score: 0,
             word: 'Bún'
           },
           {
-            id: 'p-elem-3',
-            title: 'Ký hiệu món "Bánh bao"',
+            id: 'p-beg-11',
+            type: 'word',
+            title: 'Ký hiệu "Bánh bao"',
             desc: 'Hai bàn tay chụm tròn lại tạo hình chiếc bánh bao xốp',
             duration: '3 phút',
             level: 'Trung bình',
@@ -370,60 +391,217 @@ export function generatePersonalizedPath(level, capability) {
             word: 'Bánh bao'
           },
           {
-            id: 'p-elem-4',
-            title: 'Ký hiệu "Trà" & "Sữa"',
-            desc: 'Ký hiệu nhấp tách trà thanh lịch và động tác vắt sữa nhịp nhàng',
+            id: 'p-beg-12',
+            type: 'word',
+            title: 'Ký hiệu "Cà phê"',
+            desc: 'Hai tay làm cử chỉ quấy thìa cà phê phin đậm đà thơm ngát',
             duration: '2 phút',
             level: 'Dễ',
             completed: false,
             score: 0,
-            word: 'Trà'
+            word: 'Cà phê'
           },
           {
-            id: 'p-elem-5',
-            title: 'Ký hiệu "Thịt"',
-            desc: 'Ngón cái và ngón trỏ véo nhẹ phần thịt mu bàn tay',
+            id: 'p-beg-gram-3',
+            type: 'grammar',
+            title: '💡 Điểm hội tụ Ngữ pháp: Trật tự SOV (Chủ - Bổ - Động)',
+            desc: 'Luôn đưa món ăn/thức uống lên trước hành động (Chủ ngữ + Món ăn + Ăn/Uống), khác với tiếng Việt nói SVO.',
+            duration: '3 phút',
+            level: 'Lý thuyết',
+            badge: 'Ngữ pháp VSL',
+            grammarRuleId: 'rule-sov',
+            completed: false
+          },
+          {
+            id: 'p-beg-sent-3',
+            type: 'sentence',
+            sentenceSlug: 'anh-an-pho',
+            title: 'Câu thực hành: "Anh ăn phở"',
+            desc: 'Cấu trúc SOV: Anh (Chủ) + Phở (Món ăn) + Ăn (Động từ)',
+            duration: '4 phút',
+            level: 'Thực hành',
+            badge: 'Luyện câu VSL',
+            completed: false
+          }
+        ]
+      },
+      {
+        id: 'stage-4',
+        topicId: 'daily',
+        title: 'Chặng 4: Sinh Hoạt Hàng Ngày & Đồ Dùng',
+        subtitle: 'Gọi tên đồ dùng sinh hoạt và áp dụng quy tắc từ ghép VSL',
+        icon: '🏠',
+        progress: 0,
+        color: '#7c3aed',
+        bgColor: '#faf5ff',
+        lessons: [
+          {
+            id: 'p-beg-13',
+            type: 'word',
+            title: 'Ký hiệu "Ba lô"',
+            desc: 'Hai tay nắm dây đeo vai ba lô nhấc nhẹ lên lưng',
             duration: '2 phút',
             level: 'Dễ',
             completed: false,
             score: 0,
-            word: 'Thịt'
+            word: 'Ba lô'
+          },
+          {
+            id: 'p-beg-14',
+            type: 'word',
+            title: 'Ký hiệu "Cái bàn"',
+            desc: 'Ký hiệu mặt bàn phẳng rộng kèm 4 chân bàn vuông vắn',
+            duration: '2 phút',
+            level: 'Dễ',
+            completed: false,
+            score: 0,
+            word: 'Cái bàn'
+          },
+          {
+            id: 'p-beg-15',
+            type: 'word',
+            title: 'Ký hiệu "Cái ghế"',
+            desc: 'Hai ngón tay uốn cong móc vào cạnh bàn tay kia mô phỏng người ngồi ghế',
+            duration: '2 phút',
+            level: 'Dễ',
+            completed: false,
+            score: 0,
+            word: 'Cái ghế'
+          },
+          {
+            id: 'p-beg-16',
+            type: 'word',
+            title: 'Ký hiệu "Cái cửa"',
+            desc: 'Hai lòng bàn tay khép mở nhịp nhàng mô phỏng hai cánh cửa',
+            duration: '2 phút',
+            level: 'Dễ',
+            completed: false,
+            score: 0,
+            word: 'Cái cửa'
+          },
+          {
+            id: 'p-beg-gram-4',
+            type: 'grammar',
+            title: '💡 Điểm hội tụ Ngữ pháp: Quy tắc từ ghép trong VSL',
+            desc: 'Ghép trực tiếp các ký hiệu đơn lẻ để tạo từ ghép: Cái + Bàn, Ba lô + Mua.',
+            duration: '3 phút',
+            level: 'Lý thuyết',
+            badge: 'Ngữ pháp VSL',
+            grammarRuleId: 'rule-compound-words',
+            completed: false
+          },
+          {
+            id: 'p-beg-sent-4',
+            type: 'sentence',
+            sentenceSlug: 'em-mua-ba-lo',
+            title: 'Câu thực hành: "Em mua chiếc ba lô"',
+            desc: 'Cấu trúc SOV: Em + Ba lô + Mua liên tiếp',
+            duration: '4 phút',
+            level: 'Thực hành',
+            badge: 'Luyện câu VSL',
+            completed: false
+          }
+        ]
+      }
+    ];
+  }
+
+  // MỨC 2: Sơ cấp (Elementary)
+  else if (currentLevel === 'elementary') {
+    stages = [
+      {
+        id: 'stage-1',
+        topicId: 'food',
+        title: 'Chặng 1: Ẩm Thực Truyền Thống & Kỹ Thuật Từ Ghép',
+        subtitle: 'Làm chủ các món ăn phức tạp và nguyên lý lắp ghép ký hiệu VSL',
+        icon: '🍲',
+        progress: 0,
+        color: '#0284c7',
+        bgColor: '#f0f9ff',
+        lessons: [
+          {
+            id: 'p-elem-1',
+            type: 'word',
+            title: 'Ký hiệu "Bánh chưng"',
+            desc: 'Hai bàn tay xếp vuông vắn tạo hình chiếc bánh chưng xanh ngày Tết',
+            duration: '3 phút',
+            level: 'Trung bình',
+            completed: false,
+            score: 0,
+            word: 'Bánh chưng'
+          },
+          {
+            id: 'p-elem-2',
+            type: 'word',
+            title: 'Ký hiệu "Bánh tét"',
+            desc: 'Hai bàn tay cuộn tròn dài mô phỏng đòn bánh tét truyền thống',
+            duration: '3 phút',
+            level: 'Trung bình',
+            completed: false,
+            score: 0,
+            word: 'Bánh tét'
+          },
+          {
+            id: 'p-elem-3',
+            type: 'word',
+            title: 'Ký hiệu "Bánh xèo"',
+            desc: 'Cử chỉ lật chiếc bánh xèo giòn rụm trên chảo nóng',
+            duration: '3 phút',
+            level: 'Trung bình',
+            completed: false,
+            score: 0,
+            word: 'Bánh xèo'
+          },
+          {
+            id: 'p-elem-4',
+            type: 'word',
+            title: 'Ký hiệu "Bia"',
+            desc: 'Cử chỉ nâng ly bia chúc mừng sủi bọt vui vẻ',
+            duration: '2 phút',
+            level: 'Dễ',
+            completed: false,
+            score: 0,
+            word: 'Bia'
+          },
+          {
+            id: 'p-elem-gram-1',
+            type: 'grammar',
+            title: '💡 Điểm hội tụ Ngữ pháp: Từ ghép ẩm thực và văn hóa VSL',
+            desc: 'Ghép ký hiệu loại hình bánh + hình dáng đặc trưng (vuông = bánh chưng, tròn dài = bánh tét).',
+            duration: '3 phút',
+            level: 'Lý thuyết',
+            badge: 'Ngữ pháp VSL',
+            grammarRuleId: 'rule-compound-words',
+            completed: false
+          },
+          {
+            id: 'p-elem-sent-1',
+            type: 'sentence',
+            sentenceSlug: 'bo-an-banh-chung',
+            title: 'Câu thực hành: "Bố ăn bánh chưng"',
+            desc: 'Cấu trúc SOV: Bố + Bánh chưng + Ăn',
+            duration: '4 phút',
+            level: 'Thực hành',
+            badge: 'Luyện câu VSL',
+            completed: false
           }
         ]
       },
       {
         id: 'stage-2',
-        title: 'Chặng 2: Họ Hàng & Đại Gia Đình',
-        subtitle: 'Học cách xưng hô Bác, Chú, Cô, Ông nội, Bà nội kính mến',
+        topicId: 'family',
+        title: 'Chặng 2: Họ Hàng & Không Gian Đại Gia Đình',
+        subtitle: 'Phân biệt chuẩn xác bên nội, bên ngoại và xưng hô nhiều thế hệ',
         icon: '🏡',
-        progress: 25,
+        progress: 0,
         color: '#e11d48',
         bgColor: '#fff1f2',
         lessons: [
           {
-            id: 'p-elem-6',
-            title: 'Ký hiệu "Bác"',
-            desc: 'Ký hiệu biểu thị người lớn tuổi hơn cha mẹ một bậc',
-            duration: '2 phút',
-            level: 'Dễ',
-            completed: true,
-            score: 95,
-            word: 'Bác'
-          },
-          {
-            id: 'p-elem-7',
-            title: 'Ký hiệu "Chú" & "Cô"',
-            desc: 'Ký hiệu nam giới và nữ giới bậc em của cha mẹ',
-            duration: '2 phút',
-            level: 'Dễ',
-            completed: false,
-            score: 0,
-            word: 'Chú'
-          },
-          {
-            id: 'p-elem-8',
-            title: 'Ký hiệu "Ông nội"',
-            desc: 'Ký hiệu vuốt chòm râu dài dưới cằm kết hợp chỉ bên nội',
+            id: 'p-elem-5',
+            type: 'word',
+            title: 'Ký hiệu "Ông nội" & "Bà nội"',
+            desc: 'Ký hiệu râu dài và búi tóc móm mém bên nội thân thương',
             duration: '3 phút',
             level: 'Trung bình',
             completed: false,
@@ -431,224 +609,546 @@ export function generatePersonalizedPath(level, capability) {
             word: 'Ông nội'
           },
           {
-            id: 'p-elem-9',
-            title: 'Ký hiệu "Bà nội"',
-            desc: 'Ký hiệu búi tóc móm mém của người bà kính yêu',
+            id: 'p-elem-6',
+            type: 'word',
+            title: 'Ký hiệu "Ông ngoại" & "Bà ngoại"',
+            desc: 'Định vị nhánh bên ngoại ở phía chếch phải trường nhìn',
             duration: '3 phút',
             level: 'Trung bình',
             completed: false,
             score: 0,
-            word: 'Bà nội'
+            word: 'Bà ngoại'
+          },
+          {
+            id: 'p-elem-7',
+            type: 'word',
+            title: 'Ký hiệu "Bác"',
+            desc: 'Ký hiệu người lớn tuổi hơn cha mẹ một bậc đầy kính trọng',
+            duration: '2 phút',
+            level: 'Dễ',
+            completed: false,
+            score: 0,
+            word: 'Bác'
+          },
+          {
+            id: 'p-elem-8',
+            type: 'word',
+            title: 'Ký hiệu "Chú" & "Cô"',
+            desc: 'Ký hiệu xưng hô nam giới và nữ giới bậc em của cha mẹ',
+            duration: '2 phút',
+            level: 'Dễ',
+            completed: false,
+            score: 0,
+            word: 'Chú'
+          },
+          {
+            id: 'p-elem-gram-2',
+            type: 'grammar',
+            title: '💡 Điểm hội tụ Ngữ pháp: Phân nhánh Không gian Nội vs Ngoại',
+            desc: 'Trường ký hiệu VSL định vị nhánh nội ở phía trước/trái và nhánh ngoại ở phía phải, giúp người đối diện nhận diện ngay lập tức.',
+            duration: '3 phút',
+            level: 'Lý thuyết',
+            badge: 'Ngữ pháp VSL',
+            grammarRuleId: 'rule-spatial-grammar',
+            completed: false
+          },
+          {
+            id: 'p-elem-sent-2',
+            type: 'sentence',
+            sentenceSlug: 'ba-ngoai-yeu-thuong-chau',
+            title: 'Câu thực hành: "Bà ngoại yêu thương cháu"',
+            desc: 'Định vị bà ngoại bên phải + Hành động yêu thương hướng về cháu',
+            duration: '4 phút',
+            level: 'Thực hành',
+            badge: 'Luyện câu VSL',
+            completed: false
           }
         ]
       },
       {
         id: 'stage-3',
-        title: 'Chặng 3: Ghép Câu Giao Tiếp Ẩm Thực (Quy Tắc SOV)',
-        subtitle: 'Luyện tập ghép câu hoàn chỉnh: Đưa món ăn lên trước hành động',
-        icon: '💬',
+        topicId: 'actions',
+        title: 'Chặng 3: Hành Động Tương Tác & Phủ Định VSL',
+        subtitle: 'Diễn đạt hành động chuyển động và khước từ dứt khoát bằng cử chỉ lắc đầu',
+        icon: '⚡',
+        progress: 0,
+        color: '#7c3aed',
+        bgColor: '#f5f3ff',
+        lessons: [
+          {
+            id: 'p-elem-9',
+            type: 'word',
+            title: 'Ký hiệu "Dừng lại"',
+            desc: 'Bàn tay dựng đứng dứt khoát trước ngực ra hiệu dừng lại',
+            duration: '2 phút',
+            level: 'Dễ',
+            completed: false,
+            score: 0,
+            word: 'Dừng lại'
+          },
+          {
+            id: 'p-elem-10',
+            type: 'word',
+            title: 'Ký hiệu "Không cho"',
+            desc: 'Bàn tay mở hất nhẹ từ chối dứt khoát',
+            duration: '2 phút',
+            level: 'Dễ',
+            completed: false,
+            score: 0,
+            word: 'Không cho'
+          },
+          {
+            id: 'p-elem-11',
+            type: 'word',
+            title: 'Ký hiệu "Không cần"',
+            desc: 'Hai tay gạt nhẹ sang hai bên thể hiện không có nhu cầu',
+            duration: '2 phút',
+            level: 'Dễ',
+            completed: false,
+            score: 0,
+            word: 'Không cần'
+          },
+          {
+            id: 'p-elem-12',
+            type: 'word',
+            title: 'Ký hiệu "Không nên"',
+            desc: 'Ngón trỏ lắc nhẹ sang hai bên nhắc nhở không nên làm',
+            duration: '2 phút',
+            level: 'Dễ',
+            completed: false,
+            score: 0,
+            word: 'Không nên'
+          },
+          {
+            id: 'p-elem-gram-3',
+            type: 'grammar',
+            title: '💡 Điểm hội tụ Ngữ pháp: Cấu trúc Câu phủ định trong VSL',
+            desc: 'Từ phủ định (Không, Chưa, Không cần) đứng sau động từ hoặc ở cuối câu kết hợp động tác lắc đầu dứt khoát.',
+            duration: '3 phút',
+            level: 'Lý thuyết',
+            badge: 'Ngữ pháp VSL',
+            grammarRuleId: 'rule-negation',
+            completed: false
+          },
+          {
+            id: 'p-elem-sent-3',
+            type: 'sentence',
+            sentenceSlug: 'em-dung-lai-khong-chay',
+            title: 'Câu thực hành: "Em dừng lại không chạy nữa"',
+            desc: 'Cấu trúc phủ định kép: Em + Dừng lại + Chạy + Không',
+            duration: '4 phút',
+            level: 'Thực hành',
+            badge: 'Luyện câu VSL',
+            completed: false
+          }
+        ]
+      },
+      {
+        id: 'stage-4',
+        topicId: 'time',
+        title: 'Chặng 4: Thời Gian, Lịch Trình & Kế Hoạch',
+        subtitle: 'Định vị mốc thời gian lên đầu câu để xác lập ngữ cảnh cho hành động',
+        icon: '⏰',
         progress: 0,
         color: '#ca8a04',
         bgColor: '#fefce8',
         lessons: [
           {
-            id: 'p-elem-10',
-            title: 'Câu thực hành: "Em ăn bánh bao"',
-            desc: 'Cấu trúc SOV: Em + Bánh bao + Ăn liên tiếp',
-            duration: '5 phút',
-            level: 'Trung bình',
-            badge: 'Luyện câu VSL',
+            id: 'p-elem-13',
+            type: 'word',
+            title: 'Ký hiệu "Buổi sáng"',
+            desc: 'Bàn tay mở hướng lên mô phỏng mặt trời mọc buổi sớm mai',
+            duration: '2 phút',
+            level: 'Dễ',
             completed: false,
             score: 0,
-            word: 'Bánh bao'
+            word: 'Buổi sáng'
           },
           {
-            id: 'p-elem-11',
-            title: 'Câu thực hành: "Anh ăn phở"',
-            desc: 'Cấu trúc SOV: Anh + Phở + Ăn liên tiếp',
-            duration: '5 phút',
-            level: 'Trung bình',
-            badge: 'Luyện câu VSL',
+            id: 'p-elem-14',
+            type: 'word',
+            title: 'Ký hiệu "Buổi tối"',
+            desc: 'Hai bàn tay đan chéo hạ xuống mô phỏng màn đêm buông',
+            duration: '2 phút',
+            level: 'Dễ',
             completed: false,
             score: 0,
-            word: 'Phở'
+            word: 'Buổi tối'
+          },
+          {
+            id: 'p-elem-15',
+            type: 'word',
+            title: 'Ký hiệu "Bây giờ"',
+            desc: 'Hai bàn tay uốn cong ngửa nhẹ hạ xuống dứt khoát trước ngực',
+            duration: '2 phút',
+            level: 'Dễ',
+            completed: false,
+            score: 0,
+            word: 'Bây giờ'
+          },
+          {
+            id: 'p-elem-16',
+            type: 'word',
+            title: 'Ký hiệu "Chủ nhật"',
+            desc: 'Ký hiệu ngày nghỉ cuối tuần vui vẻ chuẩn VSL',
+            duration: '2 phút',
+            level: 'Dễ',
+            completed: false,
+            score: 0,
+            word: 'Chủ nhật'
+          },
+          {
+            id: 'p-elem-gram-4',
+            type: 'grammar',
+            title: '💡 Điểm hội tụ Ngữ pháp: Vị trí của Từ chỉ Thời gian trong câu',
+            desc: 'VSL không chia động từ; luôn đặt từ chỉ thời gian ở đầu câu để xác lập khung thời gian tham chiếu cho toàn câu.',
+            duration: '3 phút',
+            level: 'Lý thuyết',
+            badge: 'Ngữ pháp VSL',
+            grammarRuleId: 'rule-tense-time',
+            completed: false
+          },
+          {
+            id: 'p-elem-sent-4',
+            type: 'sentence',
+            sentenceSlug: 'buoi-sang-em-thuc-day',
+            title: 'Câu thực hành: "Buổi sáng em thức dậy"',
+            desc: 'Thời gian (Buổi sáng) + Chủ (Em) + Hành động (Thức dậy)',
+            duration: '4 phút',
+            level: 'Thực hành',
+            badge: 'Luyện câu VSL',
+            completed: false
           }
         ]
       }
     ];
-
-    if (cap.hasBooster) {
-      stages[0].lessons.push({
-        id: 'p-booster-elem',
-        title: '🤖 Bài bổ trợ AI: Sửa độ cao bàn tay so với ngực',
-        desc: 'AI điều chỉnh vị trí cổ tay để đạt chuẩn không gian ký hiệu VSL',
-        duration: '2 phút',
-        level: 'Trung bình',
-        isAiBooster: true,
-        badge: 'Bài thích ứng AI',
-        completed: false,
-        score: 0,
-        word: 'Phở'
-      });
-    }
-
-    return stages;
   }
 
-  // MỨC 3: Đã có nền tảng / Nâng cao (Intermediate)
-  const stages = [
-    {
-      id: 'stage-1',
-      title: 'Chặng 1: Đời Sống Xã Hội & Học Tập',
-      subtitle: 'Ký hiệu nhà trường, tri thức, hỗ trợ và mốc thời gian',
-      icon: '🎓',
-      progress: 50,
-      color: '#7c3aed',
-      bgColor: '#faf5ff',
-      lessons: [
-        {
-          id: 'p-adv-1',
-          title: 'Ký hiệu "Học" tri thức',
-          desc: 'Mở tay như trang sách, tay kia nhặt kiến thức đưa lên trán',
-          duration: '2 phút',
-          level: 'Dễ',
-          badge: 'Khuyên học hôm nay',
-          highlight: true,
-          completed: true,
-          score: 93,
-          word: 'Học'
-        },
-        {
-          id: 'p-adv-2',
-          title: 'Ký hiệu "Trường học"',
-          desc: 'Ghép ký hiệu "Nhà" và ký hiệu "Học" biểu thị trường học',
-          duration: '3 phút',
-          level: 'Trung bình',
-          completed: true,
-          score: 91,
-          word: 'Trường học'
-        },
-        {
-          id: 'p-adv-3',
-          title: 'Ký hiệu "Bây giờ"',
-          desc: 'Hai bàn tay uốn cong ngửa nhẹ hạ xuống dứt khoát trước ngực',
-          duration: '2 phút',
-          level: 'Dễ',
-          completed: false,
-          score: 0,
-          word: 'Bây giờ'
-        },
-        {
-          id: 'p-adv-4',
-          title: 'Ký hiệu "Giúp đỡ"',
-          desc: 'Bàn tay mở đặt dưới mu bàn tay còn lại đưa về phía trước hỗ trợ',
-          duration: '3 phút',
-          level: 'Trung bình',
-          completed: false,
-          score: 0,
-          word: 'Giúp đỡ'
-        }
-      ]
-    },
-    {
-      id: 'stage-2',
-      title: 'Chặng 2: Y Tế & Hoạt Động Thể Chất',
-      subtitle: 'Ký hiệu ngành y, bệnh viện và các môn thể thao năng động',
-      icon: '⚽',
-      progress: 0,
-      color: '#0891b2',
-      bgColor: '#ecfeff',
-      lessons: [
-        {
-          id: 'p-adv-5',
-          title: 'Ký hiệu "Bác sĩ"',
-          desc: 'Ngón tay gõ nhẹ lên cổ tay bắt mạch y tế',
-          duration: '3 phút',
-          level: 'Trung bình',
-          completed: false,
-          score: 0,
-          word: 'Bác sĩ'
-        },
-        {
-          id: 'p-adv-6',
-          title: 'Ký hiệu "Bệnh viện"',
-          desc: 'Ký hiệu chữ thập đỏ trên cánh tay kết hợp mái nhà',
-          duration: '3 phút',
-          level: 'Trung bình',
-          completed: false,
-          score: 0,
-          word: 'Bệnh viện'
-        },
-        {
-          id: 'p-adv-7',
-          title: 'Ký hiệu "Bóng đá"',
-          desc: 'Tay trái khum tròn quả bóng, tay phải hai ngón chân đá dứt khoát',
-          duration: '3 phút',
-          level: 'Trung bình',
-          completed: false,
-          score: 0,
-          word: 'Bóng đá'
-        },
-        {
-          id: 'p-adv-8',
-          title: 'Ký hiệu "Bơi lội"',
-          desc: 'Hai cánh tay quạt so le về phía trước như động tác bơi sải',
-          duration: '3 phút',
-          level: 'Trung bình',
-          completed: false,
-          score: 0,
-          word: 'Bơi lội'
-        }
-      ]
-    },
-    {
-      id: 'stage-3',
-      title: 'Chặng 3: Phản Xạ Câu Giao Tiếp & Thử Thách AI',
-      subtitle: 'Ghép chuỗi câu phức tạp và chinh phục tốc độ phản xạ cao',
-      icon: '🏆',
-      progress: 0,
-      color: '#e11d48',
-      bgColor: '#fff1f2',
-      lessons: [
-        {
-          id: 'p-adv-9',
-          title: 'Câu thực hành: "Bố mẹ giúp đỡ em"',
-          desc: 'Chủ ngữ liên hợp + Bổ ngữ + Động từ định hướng',
-          duration: '6 phút',
-          level: 'Khá',
-          badge: 'Luyện câu VSL',
-          completed: false,
-          score: 0,
-          word: 'Giúp đỡ'
-        },
-        {
-          id: 'p-adv-10',
-          title: '⚡ Thử thách phản xạ tốc độ cao AI (5s)',
-          desc: 'Thực hiện chuẩn xác ký hiệu trong vòng 5 giây trước ống kính AI',
-          duration: '5 phút',
-          level: 'Chuyên gia',
-          badge: 'Thử thách 5s',
-          completed: false,
-          score: 0,
-          word: 'Cảm ơn'
-        }
-      ]
-    }
-  ];
+  // MỨC 3: Trung cấp (Intermediate)
+  else {
+    stages = [
+      {
+        id: 'stage-1',
+        topicId: 'education',
+        title: 'Chặng 1: Học Đường, Tri Thức & Nghề Nghiệp',
+        subtitle: 'Giao tiếp thành thạo trong môi trường làm việc, nhà trường và học tập',
+        icon: '🎓',
+        progress: 0,
+        color: '#4f46e5',
+        bgColor: '#eef2ff',
+        lessons: [
+          {
+            id: 'p-int-1',
+            type: 'word',
+            title: 'Ký hiệu "Học"',
+            desc: 'Mở tay như trang sách, tay kia nhặt kiến thức đưa lên trán',
+            duration: '2 phút',
+            level: 'Dễ',
+            completed: false,
+            score: 0,
+            word: 'Học'
+          },
+          {
+            id: 'p-int-2',
+            type: 'word',
+            title: 'Ký hiệu "Trường học"',
+            desc: 'Ghép ký hiệu "Nhà" và ký hiệu "Học" biểu thị trường học',
+            duration: '3 phút',
+            level: 'Trung bình',
+            completed: false,
+            score: 0,
+            word: 'Trường học'
+          },
+          {
+            id: 'p-int-3',
+            type: 'word',
+            title: 'Ký hiệu "Báo cáo"',
+            desc: 'Hai tay cầm xấp tài liệu báo cáo đưa ra trang trọng',
+            duration: '3 phút',
+            level: 'Trung bình',
+            completed: false,
+            score: 0,
+            word: 'Báo cáo'
+          },
+          {
+            id: 'p-int-4',
+            type: 'word',
+            title: 'Ký hiệu "Bút bi"',
+            desc: 'Ngón tay bấm ngòi bút bi và thao tác viết lượn sóng',
+            duration: '2 phút',
+            level: 'Dễ',
+            completed: false,
+            score: 0,
+            word: 'Bút bi'
+          },
+          {
+            id: 'p-int-gram-1',
+            type: 'grammar',
+            title: '💡 Điểm hội tụ Ngữ pháp: Cấu trúc cụm từ Danh từ + Số từ',
+            desc: 'Trong VSL luôn làm ký hiệu Danh từ trước rồi mới xòe ngón tay chỉ số lượng (Sinh viên + 4, Sách + 2).',
+            duration: '3 phút',
+            level: 'Lý thuyết',
+            badge: 'Ngữ pháp VSL',
+            grammarRuleId: 'rule-noun-numeral',
+            completed: false
+          },
+          {
+            id: 'p-int-sent-1',
+            type: 'sentence',
+            sentenceSlug: 'hoc-sinh-doc-sach',
+            title: 'Câu thực hành: "Học sinh đọc sách"',
+            desc: 'Cấu trúc SOV: Học sinh (Chủ) + Sách (Vật) + Đọc (Động từ)',
+            duration: '4 phút',
+            level: 'Thực hành',
+            badge: 'Luyện câu VSL',
+            completed: false
+          }
+        ]
+      },
+      {
+        id: 'stage-2',
+        topicId: 'health',
+        title: 'Chặng 2: Y Tế, Sức Khỏe & Câu Hỏi Nghi Vấn',
+        subtitle: 'Hỏi thăm tình trạng sức khỏe, giao tiếp y tế và đặt câu hỏi mở',
+        icon: '🩺',
+        progress: 0,
+        color: '#dc2626',
+        bgColor: '#fee2e2',
+        lessons: [
+          {
+            id: 'p-int-5',
+            type: 'word',
+            title: 'Ký hiệu "Bác sĩ"',
+            desc: 'Ngón tay gõ nhẹ lên cổ tay bắt mạch y tế',
+            duration: '3 phút',
+            level: 'Trung bình',
+            completed: false,
+            score: 0,
+            word: 'Bác sĩ'
+          },
+          {
+            id: 'p-int-6',
+            type: 'word',
+            title: 'Ký hiệu "Bệnh viện"',
+            desc: 'Ký hiệu chữ thập đỏ trên cánh tay kết hợp mái nhà',
+            duration: '3 phút',
+            level: 'Trung bình',
+            completed: false,
+            score: 0,
+            word: 'Bệnh viện'
+          },
+          {
+            id: 'p-int-7',
+            type: 'word',
+            title: 'Ký hiệu "Y tá"',
+            desc: 'Ký hiệu mũ y tá viền trắng kết hợp chăm sóc tận tình',
+            duration: '3 phút',
+            level: 'Trung bình',
+            completed: false,
+            score: 0,
+            word: 'Y tá'
+          },
+          {
+            id: 'p-int-8',
+            type: 'word',
+            title: 'Ký hiệu "Khám bệnh" & "Đau"',
+            desc: 'Đặt tay lên vùng bị đau kết hợp nét mặt nhăn nhó biểu cảm',
+            duration: '2 phút',
+            level: 'Dễ',
+            completed: false,
+            score: 0,
+            word: 'Khám bệnh'
+          },
+          {
+            id: 'p-int-gram-2',
+            type: 'grammar',
+            title: '💡 Điểm hội tụ Ngữ pháp: Quy tắc Câu hỏi trong VSL',
+            desc: 'Trong câu hỏi lấy thông tin, từ nghi vấn (Đâu, Bao nhiêu, Thế nào) đặt ở cuối câu kết hợp nét mặt nghi vấn.',
+            duration: '3 phút',
+            level: 'Lý thuyết',
+            badge: 'Ngữ pháp VSL',
+            grammarRuleId: 'rule-questions',
+            completed: false
+          },
+          {
+            id: 'p-int-sent-2',
+            type: 'sentence',
+            sentenceSlug: 'bac-si-kham-benh-em',
+            title: 'Câu thực hành: "Bác sĩ khám bệnh cho em"',
+            desc: 'Bác sĩ (Chủ) + Em (Đối tượng) + Khám bệnh (Hành động)',
+            duration: '4 phút',
+            level: 'Thực hành',
+            badge: 'Luyện câu VSL',
+            completed: false
+          }
+        ]
+      },
+      {
+        id: 'stage-3',
+        topicId: 'travel',
+        title: 'Chặng 3: Địa Điểm, Giao Thông & Di Chuyển 3D',
+        subtitle: 'Chỉ đường, sử dụng phương tiện giao thông và mô tả chuyển động thị giác',
+        icon: '🚗',
+        progress: 0,
+        color: '#0284c7',
+        bgColor: '#e0f2fe',
+        lessons: [
+          {
+            id: 'p-int-9',
+            type: 'word',
+            title: 'Ký hiệu "Chợ"',
+            desc: 'Hai tay gánh đôi giỏ hàng đi mua bán sầm uất',
+            duration: '2 phút',
+            level: 'Dễ',
+            completed: false,
+            score: 0,
+            word: 'Chợ'
+          },
+          {
+            id: 'p-int-10',
+            type: 'word',
+            title: 'Ký hiệu "Công viên"',
+            desc: 'Ký hiệu cây xanh thoáng mát kết hợp khu dạo bộ thư thái',
+            duration: '2 phút',
+            level: 'Dễ',
+            completed: false,
+            score: 0,
+            word: 'Công viên'
+          },
+          {
+            id: 'p-int-11',
+            type: 'word',
+            title: 'Ký hiệu "Máy bay"',
+            desc: 'Ngón cái, ngón trỏ và ngón út xòe cánh máy bay lượn trên cao',
+            duration: '2 phút',
+            level: 'Dễ',
+            completed: false,
+            score: 0,
+            word: 'Máy bay'
+          },
+          {
+            id: 'p-int-12',
+            type: 'word',
+            title: 'Ký hiệu "Bóng đá"',
+            desc: 'Tay trái khum tròn quả bóng, tay phải hai ngón chân đá dứt khoát',
+            duration: '3 phút',
+            level: 'Trung bình',
+            completed: false,
+            score: 0,
+            word: 'Bóng đá'
+          },
+          {
+            id: 'p-int-gram-3',
+            type: 'grammar',
+            title: '💡 Điểm hội tụ Ngữ pháp: Không gian 3D & Định hướng chuyển động',
+            desc: 'Mô phỏng chân thực hướng di chuyển từ điểm bắt đầu đến điểm đến trong không gian hình học trước ngực.',
+            duration: '3 phút',
+            level: 'Lý thuyết',
+            badge: 'Ngữ pháp VSL',
+            grammarRuleId: 'rule-spatial-grammar',
+            completed: false
+          },
+          {
+            id: 'p-int-sent-3',
+            type: 'sentence',
+            sentenceSlug: 'em-di-nha-sach',
+            title: 'Câu thực hành: "Em đi đến nhà sách"',
+            desc: 'Em + Nhà sách (Địa điểm) + Đi (Chuyển động)',
+            duration: '4 phút',
+            level: 'Thực hành',
+            badge: 'Luyện câu VSL',
+            completed: false
+          }
+        ]
+      },
+      {
+        id: 'stage-4',
+        topicId: 'emotions',
+        title: 'Chặng 4: Cảm Xúc, Tính Chất & Hội Thoại Tự Nhiên',
+        subtitle: 'Biểu đạt cảm xúc sâu sắc và phản xạ giao tiếp trôi chảy như người điếc bản ngữ',
+        icon: '💖',
+        progress: 0,
+        color: '#db2777',
+        bgColor: '#fdf2f8',
+        lessons: [
+          {
+            id: 'p-int-13',
+            type: 'word',
+            title: 'Ký hiệu "Yêu thương"',
+            desc: 'Hai tay bắt chéo ôm trước ngực thể hiện tình cảm dạt dào',
+            duration: '2 phút',
+            level: 'Dễ',
+            completed: false,
+            score: 0,
+            word: 'Yêu thương'
+          },
+          {
+            id: 'p-int-14',
+            type: 'word',
+            title: 'Ký hiệu "Chăm chỉ"',
+            desc: 'Hai tay nắm xoay đều trước ngực thể hiện sự cần mẫn siêng năng',
+            duration: '2 phút',
+            level: 'Dễ',
+            completed: false,
+            score: 0,
+            word: 'Chăm chỉ'
+          },
+          {
+            id: 'p-int-15',
+            type: 'word',
+            title: 'Ký hiệu "Bơi lội"',
+            desc: 'Hai cánh tay quạt so le về phía trước như động tác bơi sải',
+            duration: '3 phút',
+            level: 'Trung bình',
+            completed: false,
+            score: 0,
+            word: 'Bơi lội'
+          },
+          {
+            id: 'p-int-16',
+            type: 'word',
+            title: 'Ký hiệu "Bóng bàn"',
+            desc: 'Tay cầm vợt bóng bàn vung cắt bóng khéo léo',
+            duration: '3 phút',
+            level: 'Trung bình',
+            completed: false,
+            score: 0,
+            word: 'Bóng bàn'
+          },
+          {
+            id: 'p-int-gram-4',
+            type: 'grammar',
+            title: '💡 Điểm hội tụ Ngữ pháp: Ngữ điệu cơ thể toàn diện',
+            desc: 'Nét mặt biểu đạt sắc thái và cường độ của tính từ: mở to mắt khi ngạc nhiên, mỉm cười khi hạnh phúc.',
+            duration: '3 phút',
+            level: 'Lý thuyết',
+            badge: 'Ngữ pháp VSL',
+            grammarRuleId: 'rule-facial-expression',
+            completed: false
+          },
+          {
+            id: 'p-int-sent-4',
+            type: 'sentence',
+            sentenceSlug: 'banh-xeo-rat-ngon-mieng',
+            title: 'Câu thực hành: "Bánh xèo rất ngon miệng"',
+            desc: 'Chủ đề (Bánh xèo) + Lời dẫn (Rất ngon miệng)',
+            duration: '4 phút',
+            level: 'Thực hành',
+            badge: 'Luyện câu VSL',
+            completed: false
+          }
+        ]
+      }
+    ];
+  }
 
-  if (cap.hasBooster) {
-    stages[0].lessons.push({
-      id: 'p-booster-adv',
-      title: '🤖 Bài bổ trợ AI: Tinh chỉnh hướng chuyển động cổ tay',
-      desc: 'AI hỗ trợ góc chuyển động không gian 3 chiều theo mẫu Holistic',
-      duration: '2 phút',
-      level: 'Trung bình',
-      isAiBooster: true,
-      badge: 'Bài thích ứng AI',
-      completed: false,
-      score: 0,
-      word: 'Giúp đỡ'
-    });
+  // Nếu người học có chủ đề ưu tiên (priorityTopic) -> Ưu tiên đưa chặng đó lên đầu
+  if (priority && priority !== 'greeting') {
+    const pIdx = stages.findIndex(s => s.topicId === priority);
+    if (pIdx > 0) {
+      const targetStage = stages.splice(pIdx, 1)[0];
+      stages.unshift(targetStage);
+    }
   }
 
   return stages;
@@ -663,27 +1163,14 @@ export function getPersonalizedPath() {
     
     if (raw) {
       const parsed = JSON.parse(raw);
-      // Tự động kiểm tra và nâng cấp nếu cache cũ chứa các từ lỗi thời (như "Chữ cái A" hay "Số 5")
-      const isLegacy = parsed.some(stage =>
-        stage.lessons.some(l =>
-          l.word === 'Chữ cái A' ||
-          l.word === 'Số 5' ||
-          l.word === 'Tạm biệt' ||
-          l.word === 'Bố / Cha' ||
-          l.word === 'Gia đình' ||
-          l.word === 'Uống nước' ||
-          l.word === 'Bạn có cần giúp không?' ||
-          l.word === 'Mấy giờ rồi?'
-        )
-      );
-
-      if (!isLegacy) {
-        return parsed;
+      // Nâng cấp cache cũ: kiểm tra version === 4 hoặc kiểm tra tính hợp lệ
+      if (parsed && parsed.version === 4 && Array.isArray(parsed.stages) && parsed.stages.length > 0) {
+        return parsed.stages;
       }
     }
 
     const generated = generatePersonalizedPath(profile.learningLevel || 'beginner', capability);
-    localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify(generated));
+    localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: 4, stages: generated }));
     return generated;
   } catch (e) {
     return generatePersonalizedPath('beginner');
@@ -695,7 +1182,7 @@ export function recalculateAdaptivePath() {
   const profile = getUserProfile();
   const capability = analyzeLearnerCapability();
   const newPath = generatePersonalizedPath(profile.learningLevel || 'beginner', capability);
-  localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify(newPath));
+  localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: 4, stages: newPath }));
   window.dispatchEvent(new CustomEvent(PERSONALIZED_EVENT, { detail: { path: newPath, capability } }));
   return newPath;
 }
@@ -721,7 +1208,7 @@ export function usePersonalizedPath() {
     const updatedProf = saveUserProfile({ learningLevel: newLevel });
     const newCapability = analyzeLearnerCapability();
     const newPath = generatePersonalizedPath(newLevel, newCapability);
-    localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify(newPath));
+    localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: 4, stages: newPath }));
     setProfile(updatedProf);
     setCapability(newCapability);
     setPath(newPath);
@@ -741,7 +1228,7 @@ export function usePersonalizedPath() {
       return { ...stage, lessons: updatedLessons, progress };
     });
 
-    localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify(updatedPath));
+    localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: 4, stages: updatedPath }));
     setPath(updatedPath);
     window.dispatchEvent(new CustomEvent(PERSONALIZED_EVENT, { detail: { path: updatedPath } }));
   };

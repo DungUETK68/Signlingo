@@ -234,15 +234,33 @@ export default function App() {
               setActiveTab('learning');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
+            onOpenSentenceDetail={(sentenceId) => {
+              setSelectedSentenceId(sentenceId);
+              setActiveTab('sentences');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenGrammar={() => {
+              setActiveTab('grammar');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
           />
         )}
 
-        {/* TAB 2: LỘ TRÌNH CHUẨN CỐ ĐỊNH (GIỮ NGUYÊN) */}
+        {/* TAB 2: LỘ TRÌNH CHUẨN KHOA HỌC (12 CHUYÊN ĐỀ 400 TỪ) */}
         {activeTab === 'learning' && (
           <LearningPathView 
             onStartPracticeWord={handleStartPracticeWord}
             initialLesson={selectedLearningLesson}
             initialTopic={selectedLearningTopic}
+            onOpenSentenceDetail={(sentenceId) => {
+              setSelectedSentenceId(sentenceId);
+              setActiveTab('sentences');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenGrammar={() => {
+              setActiveTab('grammar');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
           />
         )}
 

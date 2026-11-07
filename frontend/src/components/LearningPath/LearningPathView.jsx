@@ -11,14 +11,18 @@ import {
   Star,
   ChevronRight,
   BookOpen,
-  Award
+  Award,
+  GraduationCap,
+  MessageSquareQuote
 } from 'lucide-react';
 
 export default function LearningPathView({ 
   onStartPracticeWord, 
   initialLesson = null, 
   initialTopic = null,
-  onClearInitialLesson 
+  onClearInitialLesson,
+  onOpenSentenceDetail,
+  onOpenGrammar
 }) {
   const { topics } = useSignWords();
   const [selectedLevel, setSelectedLevel] = useState('all'); // 'all' | 'basic' | 'elementary' | 'intermediate'
@@ -225,6 +229,119 @@ export default function LearningPathView({
                 </div>
               </div>
 
+              {/* Banner Ngữ pháp & Câu thực hành VSL tích hợp */}
+              {topic.grammarRuleTitle && (
+                <div style={{
+                  margin: '0.85rem 1.25rem 0 1.25rem',
+                  padding: '0.9rem 1.15rem',
+                  borderRadius: 'var(--radius-lg)',
+                  backgroundColor: '#f8fafc',
+                  border: '1.5px solid #e2e8f0',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap',
+                  gap: '0.75rem'
+                }}>
+                  <div style={{ flex: 1, minWidth: 260 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '0.25rem' }}>
+                      <span style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.3rem',
+                        padding: '0.15rem 0.55rem',
+                        borderRadius: 'var(--radius-pill)',
+                        backgroundColor: '#eff6ff',
+                        color: '#0284c7',
+                        fontSize: '0.75rem',
+                        fontWeight: 800
+                      }}>
+                        <GraduationCap size={13} />
+                        NGỮ PHÁP TRỌNG TÂM
+                      </span>
+                      <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#1e293b' }}>
+                        {topic.grammarRuleTitle}
+                      </span>
+                    </div>
+                    <p style={{ fontSize: '0.8rem', color: '#64748b', margin: 0, lineHeight: 1.45 }}>
+                      {topic.grammarTip}
+                    </p>
+
+                    {/* Dải câu thực hành mẫu */}
+                    {Array.isArray(topic.sampleSentences) && topic.sampleSentences.length > 0 && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
+                        <span style={{ fontSize: '0.74rem', fontWeight: 800, color: '#64748b' }}>Câu thực hành:</span>
+                        {topic.sampleSentences.map(sent => (
+                          <button
+                            key={sent.slug}
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (onOpenSentenceDetail) {
+                                onOpenSentenceDetail(sent.slug);
+                              }
+                            }}
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '0.3rem',
+                              padding: '0.15rem 0.55rem',
+                              borderRadius: 'var(--radius-pill)',
+                              backgroundColor: '#ffffff',
+                              border: '1px solid #cbd5e1',
+                              color: '#0284c7',
+                              fontSize: '0.75rem',
+                              fontWeight: 800,
+                              cursor: 'pointer',
+                              transition: 'all 0.15s ease'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor = '#eff6ff';
+                              e.currentTarget.style.borderColor = '#93c5fd';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor = '#ffffff';
+                              e.currentTarget.style.borderColor = '#cbd5e1';
+                            }}
+                            title={`Học câu thực hành: "${sent.title}"`}
+                          >
+                            <MessageSquareQuote size={12} />
+                            <span>"{sent.title}"</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Nút Xem lý thuyết ngữ pháp */}
+                  {topic.grammarRuleId && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (onOpenGrammar) {
+                          onOpenGrammar(topic.grammarRuleId);
+                        }
+                      }}
+                      className="btn-pill btn-secondary btn-sm"
+                      style={{
+                        fontSize: '0.78rem',
+                        padding: '0.35rem 0.75rem',
+                        fontWeight: 800,
+                        gap: '0.35rem',
+                        color: '#0284c7',
+                        borderColor: '#bae6fd',
+                        backgroundColor: '#ffffff',
+                        flexShrink: 0
+                      }}
+                    >
+                      <GraduationCap size={14} />
+                      <span>Xem lý thuyết</span>
+                    </button>
+                  )}
+                </div>
+              )}
+
               {/* Danh sách các bài học con - Xếp thành dạng lưới 2 cột gọn gàng, đẹp mắt */}
               <div style={{
                 padding: '1.25rem',
@@ -235,12 +352,11 @@ export default function LearningPathView({
                 {topic.lessons.map((lesson, idx) => {
                   const isCompleted = lesson.completed;
                   const isCurrent = !lesson.completed && idx === topic.lessons.findIndex(l => !l.completed);
-                  const isLocked = !lesson.completed && !isCurrent;
 
                   return (
                     <div
                       key={lesson.id}
-                      onClick={() => !isLocked && handleOpenLesson(lesson, topic)}
+                      onClick={() => handleOpenLesson(lesson, topic)}
                       style={{
                         padding: '0.85rem 1rem',
                         borderRadius: 'var(--radius-lg)',
@@ -253,25 +369,20 @@ export default function LearningPathView({
                           ? '#f0f9ff' 
                           : isCompleted 
                             ? '#fcfdfd' 
-                            : '#f8fafc',
+                            : '#ffffff',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: isLocked ? 'not-allowed' : 'pointer',
-                        opacity: isLocked ? 0.6 : 1,
+                        cursor: 'pointer',
                         transition: 'var(--transition)'
                       }}
                       onMouseEnter={(e) => {
-                        if (!isLocked) {
-                          e.currentTarget.style.transform = 'translateY(-2px)';
-                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.05)';
-                        }
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.05)';
                       }}
                       onMouseLeave={(e) => {
-                        if (!isLocked) {
-                          e.currentTarget.style.transform = 'translateY(0)';
-                          e.currentTarget.style.boxShadow = 'none';
-                        }
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = 'none';
                       }}
                     >
                       {/* Cột trái: Trạng thái & Tên bài */}
@@ -285,8 +396,8 @@ export default function LearningPathView({
                             ? '#22c55e' 
                             : isCurrent 
                               ? '#0284c7' 
-                              : '#e2e8f0',
-                          color: isLocked ? '#94a3b8' : '#ffffff',
+                              : '#e0f2fe',
+                          color: isCompleted || isCurrent ? '#ffffff' : '#0284c7',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -296,10 +407,8 @@ export default function LearningPathView({
                         }}>
                           {isCompleted ? (
                             <Check size={18} strokeWidth={3} />
-                          ) : isCurrent ? (
-                            <Play size={16} fill="white" />
                           ) : (
-                            <Lock size={15} />
+                            <Play size={16} fill={isCurrent ? 'white' : 'currentColor'} />
                           )}
                         </div>
 
@@ -330,17 +439,18 @@ export default function LearningPathView({
                             <Star size={12} fill="#15803d" />
                             <span>{lesson.score}%</span>
                           </div>
-                        ) : isCurrent ? (
-                          <button
-                            className="btn-pill btn-primary btn-sm"
-                            style={{ padding: '0.35rem 0.85rem', fontSize: '0.78rem' }}
-                          >
-                            Học ngay
-                          </button>
                         ) : (
-                          <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600 }}>
-                            Chưa mở
-                          </span>
+                          <button
+                            type="button"
+                            className="btn-pill btn-sm btn-secondary"
+                            style={{
+                              fontSize: '0.75rem',
+                              padding: '0.25rem 0.65rem',
+                              color: isCurrent ? '#0284c7' : '#64748b'
+                            }}
+                          >
+                            <span>Học bài</span>
+                          </button>
                         )}
                       </div>
                     </div>

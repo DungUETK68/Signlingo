@@ -1628,3 +1628,4 @@ export function getAllSentenceCategories() {
 `;
 fs.writeFileSync(frontendPath, frontendContent, 'utf-8');
 console.log(`Đã ghi thành công ${enrichedSentences.length} câu vào frontend ${frontendPath}`);
+

@@ -175,6 +175,12 @@ export function getAllTopics() {
     }
   });
 
+  // Đồng bộ lại tổng số bài học và số bài đã hoàn thành
+  baseTopics.forEach(t => {
+    t.totalLessons = t.lessons.length;
+    t.completedLessons = t.lessons.filter(l => l.completed).length;
+  });
+
   return baseTopics;
 }
 
