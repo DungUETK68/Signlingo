@@ -181,3 +181,34 @@ export const adaptiveApi = {
   },
 };
 
+// ========================================================
+// 5. User Profile & Settings API (Hồ sơ người dùng)
+// ========================================================
+export const userApi = {
+  async getProfile() {
+    const res = await fetch(`${CORE_API_URL}/users/profile`, {
+      headers: getAuthHeaders(),
+    });
+    if (!res.ok) return null;
+    return res.json();
+  },
+
+  async updateProfile(data) {
+    const res = await fetch(`${CORE_API_URL}/users/profile`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('Cập nhật thông tin thất bại');
+    return res.json();
+  },
+
+  async refillHearts() {
+    const res = await fetch(`${CORE_API_URL}/users/refill-hearts`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+    });
+    return res.json();
+  },
+};
+

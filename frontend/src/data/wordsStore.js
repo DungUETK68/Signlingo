@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { DICTIONARY_WORDS, TOPICS } from './mockData';
+import { dictionaryApi } from '../services/api';
 
 const STORAGE_KEY = 'signlingo_custom_words';
 const TOPICS_STORAGE_KEY = 'signlingo_custom_topics';
@@ -258,44 +259,65 @@ export function useSignWords() {
     // Lấy dữ liệu từ backend NestJS nếu có lúc khởi chạy
     const syncBackendWords = async () => {
       try {
-        let res = await fetch('http://localhost:3000/api/words');
-        if (!res.ok) {
-          res = await fetch('http://127.0.0.1:8000/api/words');
-        }
-        if (res.ok) {
-          const backendWords = await res.json();
-          if (Array.isArray(backendWords) && backendWords.length > 0) {
-            const formatted = backendWords.map(bw => ({
-              id: bw.id,
-              word: bw.name || bw.word,
-              slug: bw.slug,
-              topic: bw.topicId || bw.topic || 'general',
-              topicLabel: bw.category || bw.topicLabel || 'Từ vựng thông dụng',
-              description: bw.meaning || bw.description || 'Thực hiện cử chỉ theo video mẫu.',
-              details: bw.usageTips || bw.details || '',
-              videoFront: bw.videoFront || bw.videoUrl || '/vsl400_videos/cam_on_front.mp4',
-              videoUrl: bw.videoUrl || bw.videoFront || '/vsl400_videos/cam_on_front.mp4',
-              videoLeft: bw.videoLeft || bw.videoSide || '/vsl400_videos/cam_on_left.mp4',
-              videoRight: bw.videoRight || '/vsl400_videos/cam_on_right.mp4',
-              videoSide: bw.videoLeft || bw.videoSide || bw.videoUrl || '/vsl400_videos/cam_on_left.mp4',
-              thumbnail: bw.thumbnailUrl || bw.thumbnail || (bw.slug ? `/vsl400_videos/${bw.slug}_thumb.jpg` : '/vsl400_videos/cam_on_thumb.jpg'),
-              difficulty: bw.difficulty || 'Dễ',
-              dialect: 'Toàn quốc'
-            }));
+        const [backendWords, backendTopics] = await Promise.all([
+          dictionaryApi.getWords().catch(() => []),
+          dictionaryApi.getTopics().catch(() => []),
+        ]);
 
-            const local = getCustomWords();
-            const merged = [...formatted];
-            local.forEach(lw => {
-              if (!merged.some(bw => bw.id === lw.id || bw.slug === lw.slug)) {
-                merged.push(lw);
-              }
-            });
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
-            setWords(getAllWords());
-            setTopics(getAllTopics());
-          }
+        if (Array.isArray(backendWords) && backendWords.length > 0) {
+          const formatted = backendWords.map(bw => ({
+            id: bw.id,
+            word: bw.name || bw.word,
+            slug: bw.slug,
+            topic: bw.topicId || bw.topic || 'general',
+            topicLabel: bw.category || bw.topicLabel || 'Từ vựng thông dụng',
+            description: bw.meaning || bw.description || 'Thực hiện cử chỉ theo video mẫu.',
+            details: bw.usageTips || bw.details || '',
+            videoFront: bw.videoFront || bw.videoUrl || '/vsl400_videos/cam_on_front.mp4',
+            videoUrl: bw.videoUrl || bw.videoFront || '/vsl400_videos/cam_on_front.mp4',
+            videoLeft: bw.videoLeft || bw.videoSide || '/vsl400_videos/cam_on_left.mp4',
+            videoRight: bw.videoRight || '/vsl400_videos/cam_on_right.mp4',
+            videoSide: bw.videoLeft || bw.videoSide || bw.videoUrl || '/vsl400_videos/cam_on_left.mp4',
+            thumbnail: bw.thumbnailUrl || bw.thumbnail || (bw.slug ? `/vsl400_videos/${bw.slug}_thumb.jpg` : '/vsl400_videos/cam_on_thumb.jpg'),
+            difficulty: bw.difficulty || 'Dễ',
+            dialect: 'Toàn quốc'
+          }));
+
+          const local = getCustomWords();
+          const merged = [...formatted];
+          local.forEach(lw => {
+            if (!merged.some(bw => bw.id === lw.id || bw.slug === lw.slug)) {
+              merged.push(lw);
+            }
+          });
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+          setWords(getAllWords());
         }
-      } catch (err) {}
+
+        if (Array.isArray(backendTopics) && backendTopics.length > 0) {
+          const syncedTopics = backendTopics.map(bt => ({
+            id: bt.slug || bt.id,
+            title: bt.title,
+            subtitle: bt.subtitle || '',
+            icon: bt.icon || '👋',
+            lessons: (bt.lessons || []).map((l, lIdx) => ({
+              id: l.id || `lesson-${l.slug || lIdx}`,
+              title: l.title,
+              description: l.description || '',
+              duration: l.duration || '5 phút',
+              level: l.level || 'Cơ bản',
+              completed: false,
+              score: 0,
+              videoUrl: l.videoUrl || '/vsl400_videos/chao_front.mp4'
+            }))
+          }));
+          setTopics(syncedTopics);
+        } else {
+          setTopics(getAllTopics());
+        }
+      } catch (err) {
+        console.warn('Lỗi đồng bộ từ vựng & chủ đề từ backend:', err);
+      }
     };
 
     syncBackendWords();

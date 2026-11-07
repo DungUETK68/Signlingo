@@ -1,6 +1,7 @@
 // Store và thuật toán cá nhân hóa lộ trình học theo khả năng (Adaptive Learning Engine)
 import { useState, useEffect } from 'react';
 import { USER_PROFILE } from './mockData';
+import { getStoredToken } from '../services/api';
 
 export const USER_PROFILE_KEY = 'signlingo_user_profile';
 export const PREFERENCES_KEY = 'signlingo_learning_preferences';
@@ -12,12 +13,13 @@ export const PERSONALIZED_EVENT = 'signlingo_personalized_updated';
 export function getUserProfile() {
   try {
     const raw = localStorage.getItem(USER_PROFILE_KEY);
+    const hasToken = !!getStoredToken();
     if (!raw) {
-      // Mặc định tạo tài khoản mẫu ban đầu
+      // Mặc định tạo tài khoản mẫu ban đầu theo trạng thái token
       const initial = {
         ...USER_PROFILE,
-        isLoggedIn: true,
-        hasCompletedOnboarding: true,
+        isLoggedIn: hasToken,
+        hasCompletedOnboarding: hasToken,
         learningLevel: 'beginner', // 'beginner' | 'elementary' | 'intermediate'
         learningGoalMinutes: 15,
         priorityTopic: 'greeting'
@@ -25,7 +27,11 @@ export function getUserProfile() {
       localStorage.setItem(USER_PROFILE_KEY, JSON.stringify(initial));
       return initial;
     }
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    if (!hasToken) {
+      parsed.isLoggedIn = false;
+    }
+    return parsed;
   } catch (e) {
     return USER_PROFILE;
   }

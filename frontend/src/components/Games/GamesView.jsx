@@ -31,6 +31,33 @@ let globalHandsLoadingPromise = null;
 
 export default function GamesView({ onStartPracticeWord }) {
   const [mode, setMode] = useState('quiz'); // 'quiz' | 'reflex' | 'leaderboard'
+  const [leaderboardList, setLeaderboardList] = useState(() => LEADERBOARD);
+
+  // Tải bảng xếp hạng người dùng thực tế từ NestJS Backend API
+  useEffect(() => {
+    let isMounted = true;
+    const fetchLeaderboard = async () => {
+      try {
+        const data = await progressApi.getLeaderboard(20);
+        if (isMounted && Array.isArray(data) && data.length > 0) {
+          setLeaderboardList(data.map((u, i) => ({
+            rank: u.rank || (i + 1),
+            id: u.id,
+            name: u.fullName || u.name,
+            streak: u.streak || 1,
+            xp: u.xp || 0,
+            avatar: u.avatarUrl || u.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
+            isMe: u.fullName === 'Nguyễn Văn Học' || u.isMe,
+            league: u.league || 'Vàng'
+          })));
+        }
+      } catch (e) {
+        console.warn('Không thể tải leaderboard:', e);
+      }
+    };
+    fetchLeaderboard();
+    return () => { isMounted = false; };
+  }, [mode]);
 
   // ==========================================
   // 1. TRÒ CHƠI ĐOÁN TỪ (DYNAMIC 5 QUESTIONS)
@@ -1207,9 +1234,9 @@ export default function GamesView({ onStartPracticeWord }) {
       {mode === 'leaderboard' && (
         <div className="mini-card" style={{ padding: '1rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            {LEADERBOARD.map((u, i) => (
+            {leaderboardList.map((u, i) => (
               <div
-                key={u.rank}
+                key={u.id || u.rank || i}
                 style={{
                   display: 'flex',
                   alignItems: 'center',

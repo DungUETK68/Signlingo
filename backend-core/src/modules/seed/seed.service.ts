@@ -9,6 +9,9 @@ import { Topic } from '../dictionary/entities/topic.entity';
 import { Lesson } from '../dictionary/entities/lesson.entity';
 import { Word } from '../dictionary/entities/word.entity';
 import { Sentence } from '../sentences/entities/sentence.entity';
+import { PracticeLog } from '../progress/entities/practice-log.entity';
+import { UserProgress } from '../progress/entities/user-progress.entity';
+import { ReviewItem } from '../adaptive/entities/review-item.entity';
 
 @Injectable()
 export class SeedService implements OnApplicationBootstrap {
@@ -25,6 +28,12 @@ export class SeedService implements OnApplicationBootstrap {
     private readonly wordRepository: Repository<Word>,
     @InjectRepository(Sentence)
     private readonly sentenceRepository: Repository<Sentence>,
+    @InjectRepository(PracticeLog)
+    private readonly practiceLogRepository: Repository<PracticeLog>,
+    @InjectRepository(UserProgress)
+    private readonly userProgressRepository: Repository<UserProgress>,
+    @InjectRepository(ReviewItem)
+    private readonly reviewItemRepository: Repository<ReviewItem>,
   ) {}
 
   async onApplicationBootstrap() {
@@ -32,6 +41,7 @@ export class SeedService implements OnApplicationBootstrap {
     await this.seedTopicsAndLessons();
     await this.seedWords();
     await this.seedSentences();
+    await this.seedDemoActivity();
   }
 
   private async seedUsers() {
@@ -53,25 +63,87 @@ export class SeedService implements OnApplicationBootstrap {
       this.logger.log('Đã tạo tài khoản Admin mặc định: admin@signlingo.com / 123456');
     }
 
-    const learnerCount = await this.userRepository.count({ where: { email: 'learner@signlingo.com' } });
-    if (learnerCount === 0) {
-      const salt = await bcrypt.genSalt(10);
-      const learnerPass = await bcrypt.hash('123456', salt);
-      const learner = this.userRepository.create({
+    const demoUsers = [
+      {
         email: 'learner@signlingo.com',
-        passwordHash: learnerPass,
         fullName: 'Nguyễn Văn Học',
         role: UserRole.LEARNER,
-        xp: 450,
-        streak: 5,
+        xp: 1240,
+        streak: 7,
         hearts: 5,
-        gems: 150,
+        gems: 250,
         learningLevel: 'beginner',
         dailyGoalMinutes: 15,
         priorityTopic: 'greeting',
-      });
-      await this.userRepository.save(learner);
-      this.logger.log('Đã tạo tài khoản Học viên demo: learner@signlingo.com / 123456');
+        avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
+      },
+      {
+        email: 'baongoc@signlingo.com',
+        fullName: 'Trần Bảo Ngọc',
+        role: UserRole.LEARNER,
+        xp: 3450,
+        streak: 21,
+        hearts: 5,
+        gems: 820,
+        learningLevel: 'intermediate',
+        dailyGoalMinutes: 30,
+        priorityTopic: 'daily',
+        avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80',
+      },
+      {
+        email: 'hoanglong@signlingo.com',
+        fullName: 'Lê Hoàng Long',
+        role: UserRole.LEARNER,
+        xp: 2980,
+        streak: 14,
+        hearts: 4,
+        gems: 640,
+        learningLevel: 'intermediate',
+        dailyGoalMinutes: 20,
+        priorityTopic: 'family',
+        avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
+      },
+      {
+        email: 'thuthao@signlingo.com',
+        fullName: 'Phạm Thu Thảo',
+        role: UserRole.LEARNER,
+        xp: 2650,
+        streak: 12,
+        hearts: 5,
+        gems: 510,
+        learningLevel: 'elementary',
+        dailyGoalMinutes: 15,
+        priorityTopic: 'food',
+        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
+      },
+      {
+        email: 'tuankiet@signlingo.com',
+        fullName: 'Đặng Tuấn Kiệt',
+        role: UserRole.LEARNER,
+        xp: 1120,
+        streak: 5,
+        hearts: 3,
+        gems: 180,
+        learningLevel: 'beginner',
+        dailyGoalMinutes: 15,
+        priorityTopic: 'greeting',
+        avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80',
+      },
+    ];
+
+    const salt = await bcrypt.genSalt(10);
+    const defaultPass = await bcrypt.hash('123456', salt);
+
+    for (const u of demoUsers) {
+      const exists = await this.userRepository.findOne({ where: { email: u.email } });
+      if (!exists) {
+        const user = this.userRepository.create({
+          ...u,
+          passwordHash: defaultPass,
+        });
+        await this.userRepository.save(user);
+        this.logger.log(`Đã tạo tài khoản mẫu: ${u.email} (${u.fullName})`);
+      }
     }
   }
 
@@ -88,9 +160,9 @@ export class SeedService implements OnApplicationBootstrap {
         icon: '👋',
         orderIndex: 1,
         lessons: [
-          { title: 'Chào & Gặp gỡ', slug: 'chao-gap-go', description: 'Học cách thực hiện cử chỉ Chào tiêu chuẩn VSL', duration: '5 phút', level: 'Cơ bản', orderIndex: 1 },
-          { title: 'Tri ân & Tạ lỗi', slug: 'tri-an-ta-loi', description: 'Thực hành ký hiệu Cảm ơn và Xin lỗi', duration: '7 phút', level: 'Cơ bản', orderIndex: 2 },
-          { title: 'Hỏi thăm sức khỏe', slug: 'hoi-tham-suc-khoe', description: 'Ký hiệu Khỏe, Giúp đỡ khi giao tiếp', duration: '8 phút', level: 'Trung bình', orderIndex: 3 },
+          { title: 'Chào & Gặp gỡ', slug: 'chao-gap-go', description: 'Học cách thực hiện cử chỉ Chào tiêu chuẩn VSL', duration: '5 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/chao_front.mp4', orderIndex: 1 },
+          { title: 'Tri ân & Tạ lỗi', slug: 'tri-an-ta-loi', description: 'Thực hành ký hiệu Cảm ơn và Xin lỗi', duration: '7 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/cam_on_front.mp4', orderIndex: 2 },
+          { title: 'Hỏi thăm sức khỏe', slug: 'hoi-tham-suc-khoe', description: 'Ký hiệu Khỏe, Giúp đỡ khi giao tiếp', duration: '8 phút', level: 'Trung bình', videoUrl: '/vsl400_videos/khoe_front.mp4', orderIndex: 3 },
         ],
       },
       {
@@ -101,9 +173,9 @@ export class SeedService implements OnApplicationBootstrap {
         icon: '👨‍👩‍👧‍👦',
         orderIndex: 2,
         lessons: [
-          { title: 'Bố mẹ & Thế hệ trên', slug: 'bo-me', description: 'Ký hiệu Bố, Mẹ, Bác, Chú, Cô', duration: '6 phút', level: 'Cơ bản', orderIndex: 1 },
-          { title: 'Ông bà & Cội nguồn', slug: 'ong-ba', description: 'Ký hiệu Ông nội, Bà nội', duration: '5 phút', level: 'Cơ bản', orderIndex: 2 },
-          { title: 'Anh chị em trong nhà', slug: 'anh-chi-em', description: 'Ký hiệu Anh, Chị, Em', duration: '7 phút', level: 'Cơ bản', orderIndex: 3 },
+          { title: 'Bố mẹ & Thế hệ trên', slug: 'bo-me', description: 'Ký hiệu Bố, Mẹ, Bác, Chú, Cô', duration: '6 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/bo_front.mp4', orderIndex: 1 },
+          { title: 'Ông bà & Cội nguồn', slug: 'ong-ba', description: 'Ký hiệu Ông nội, Bà nội', duration: '5 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/ong_noi_front.mp4', orderIndex: 2 },
+          { title: 'Anh chị em trong nhà', slug: 'anh-chi-em', description: 'Ký hiệu Anh, Chị, Em', duration: '7 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/anh_front.mp4', orderIndex: 3 },
         ],
       },
       {
@@ -114,9 +186,9 @@ export class SeedService implements OnApplicationBootstrap {
         icon: '🍜',
         orderIndex: 3,
         lessons: [
-          { title: 'Động từ Ăn & Uống', slug: 'an-uong', description: 'Cử chỉ cơ bản về nạp năng lượng', duration: '5 phút', level: 'Cơ bản', orderIndex: 1 },
-          { title: 'Món ăn truyền thống', slug: 'mon-an', description: 'Phở, Bún, Bánh bao, Thịt', duration: '8 phút', level: 'Trung bình', orderIndex: 2 },
-          { title: 'Thức uống quen thuộc', slug: 'thuc-uong', description: 'Nước, Sữa, Trà', duration: '6 phút', level: 'Cơ bản', orderIndex: 3 },
+          { title: 'Động từ Ăn & Uống', slug: 'an-uong', description: 'Cử chỉ cơ bản về nạp năng lượng', duration: '5 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/an_front.mp4', orderIndex: 1 },
+          { title: 'Món ăn truyền thống', slug: 'mon-an', description: 'Phở, Bún, Bánh bao, Thịt', duration: '8 phút', level: 'Trung bình', videoUrl: '/vsl400_videos/pho_front.mp4', orderIndex: 2 },
+          { title: 'Thức uống quen thuộc', slug: 'thuc-uong', description: 'Nước, Sữa, Trà', duration: '6 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/nuoc_front.mp4', orderIndex: 3 },
         ],
       },
       {
@@ -127,8 +199,8 @@ export class SeedService implements OnApplicationBootstrap {
         icon: '⚽',
         orderIndex: 4,
         lessons: [
-          { title: 'Vận động & Thể thao', slug: 'the-thao', description: 'Bóng đá, Bơi lội', duration: '6 phút', level: 'Trung bình', orderIndex: 1 },
-          { title: 'Thời gian & Hiện tại', slug: 'thoi-gian', description: 'Bây giờ, Hôm nay', duration: '5 phút', level: 'Cơ bản', orderIndex: 2 },
+          { title: 'Vận động & Thể thao', slug: 'the-thao', description: 'Bóng đá, Bơi lội', duration: '6 phút', level: 'Trung bình', videoUrl: '/vsl400_videos/bong_da_front.mp4', orderIndex: 1 },
+          { title: 'Thời gian & Hiện tại', slug: 'thoi-gian', description: 'Bây giờ, Hôm nay', duration: '5 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/bay_gio_front.mp4', orderIndex: 2 },
         ],
       },
       {
@@ -139,8 +211,8 @@ export class SeedService implements OnApplicationBootstrap {
         icon: '🏥',
         orderIndex: 5,
         lessons: [
-          { title: 'Môi trường học đường', slug: 'hoc-duong', description: 'Học tập, Trường học', duration: '7 phút', level: 'Cơ bản', orderIndex: 1 },
-          { title: 'Y tế & Bệnh viện', slug: 'y-te', description: 'Bác sĩ, Bệnh viện', duration: '8 phút', level: 'Trung bình', orderIndex: 2 },
+          { title: 'Môi trường học đường', slug: 'hoc-duong', description: 'Học tập, Trường học', duration: '7 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/hoc_front.mp4', orderIndex: 1 },
+          { title: 'Y tế & Bệnh viện', slug: 'y-te', description: 'Bác sĩ, Bệnh viện', duration: '8 phút', level: 'Trung bình', videoUrl: '/vsl400_videos/bac_si_front.mp4', orderIndex: 2 },
         ],
       },
     ];
@@ -332,6 +404,99 @@ export class SeedService implements OnApplicationBootstrap {
       await this.sentenceRepository.save(sentence);
     }
     this.logger.log(`Đã nạp thành công ${sentences.length} câu VSL chuẩn vào CSDL.`);
+  }
+
+  private async seedDemoActivity() {
+    const learner = await this.userRepository.findOne({ where: { email: 'learner@signlingo.com' } });
+    if (!learner) return;
+
+    // 1. Seed lịch sử luyện tập 7 ngày gần nhất (PracticeLogs)
+    const logCount = await this.practiceLogRepository.count({ where: { userId: learner.id } });
+    if (logCount === 0) {
+      const now = new Date();
+      const demoLogs = [
+        { wordSlug: 'chao', wordName: 'Chào', score: 96, isPassed: true, daysAgo: 0, badJoints: [] },
+        { wordSlug: 'pho', wordName: 'Phở', score: 90, isPassed: true, daysAgo: 0, badJoints: [] },
+        { wordSlug: 'khoe', wordName: 'Khỏe', score: 95, isPassed: true, daysAgo: 1, badJoints: [] },
+        { wordSlug: 'hoc', wordName: 'Học', score: 88, isPassed: true, daysAgo: 1, badJoints: [] },
+        { wordSlug: 'ong-noi', wordName: 'Ông nội', score: 91, isPassed: true, daysAgo: 2, badJoints: [] },
+        { wordSlug: 'ba-noi', wordName: 'Bà nội', score: 87, isPassed: true, daysAgo: 2, badJoints: [] },
+        { wordSlug: 'xin-loi', wordName: 'Xin lỗi', score: 65, isPassed: false, daysAgo: 3, badJoints: [4, 20] },
+        { wordSlug: 'nuoc', wordName: 'Nước', score: 89, isPassed: true, daysAgo: 3, badJoints: [] },
+        { wordSlug: 'an', wordName: 'Ăn', score: 94, isPassed: true, daysAgo: 4, badJoints: [] },
+        { wordSlug: 'uong', wordName: 'Uống', score: 82, isPassed: true, daysAgo: 4, badJoints: [] },
+        { wordSlug: 'tam-biet', wordName: 'Tạm biệt', score: 70, isPassed: false, daysAgo: 5, badJoints: [0, 6] },
+        { wordSlug: 'bo', wordName: 'Bố', score: 85, isPassed: true, daysAgo: 5, badJoints: [] },
+        { wordSlug: 'me', wordName: 'Mẹ', score: 90, isPassed: true, daysAgo: 5, badJoints: [] },
+        { wordSlug: 'chao', wordName: 'Chào', score: 88, isPassed: true, daysAgo: 6, badJoints: [] },
+        { wordSlug: 'cam-on', wordName: 'Cảm ơn', score: 92, isPassed: true, daysAgo: 6, badJoints: [] },
+      ];
+
+      for (const item of demoLogs) {
+        const logDate = new Date(now.getTime() - item.daysAgo * 86400000 - Math.floor(Math.random() * 3600000));
+        const log = this.practiceLogRepository.create({
+          userId: learner.id,
+          wordSlug: item.wordSlug,
+          wordName: item.wordName,
+          score: item.score,
+          isPassed: item.isPassed,
+          badJoints: item.badJoints,
+          mode: 'camera',
+          durationSeconds: 3.2,
+          createdAt: logDate,
+        });
+        await this.practiceLogRepository.save(log);
+      }
+      this.logger.log('Đã tạo lịch sử luyện tập mẫu cho tài khoản learner.');
+    }
+
+    // 2. Seed tiến trình bài học hoàn thành (UserProgress)
+    const progressCount = await this.userProgressRepository.count({ where: { userId: learner.id } });
+    if (progressCount === 0) {
+      const lessons = await this.lessonRepository.find({ take: 3 });
+      for (let i = 0; i < lessons.length; i++) {
+        const prog = this.userProgressRepository.create({
+          userId: learner.id,
+          lessonId: lessons[i].id,
+          completed: true,
+          score: i === 0 ? 95 : 90,
+          attempts: 2,
+          lastStudiedAt: new Date(Date.now() - i * 86400000),
+        });
+        await this.userProgressRepository.save(prog);
+      }
+      this.logger.log('Đã tạo tiến trình bài học mẫu cho tài khoản learner.');
+    }
+
+    // 3. Seed hàng đợi Spaced Repetition (ReviewItem)
+    const reviewCount = await this.reviewItemRepository.count({ where: { userId: learner.id } });
+    if (reviewCount === 0) {
+      const today = new Date().toISOString().split('T')[0];
+      const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+      const inTwoDays = new Date(Date.now() + 2 * 86400000).toISOString().split('T')[0];
+
+      const reviewSeed = [
+        { wordSlug: 'tam-biet', wordName: 'Tạm biệt', interval: 1, repetition: 0, easeFactor: 2.3, nextReviewDate: today },
+        { wordSlug: 'xin-loi', wordName: 'Xin lỗi', interval: 1, repetition: 0, easeFactor: 2.2, nextReviewDate: today },
+        { wordSlug: 'chao', wordName: 'Chào', interval: 5, repetition: 3, easeFactor: 2.6, nextReviewDate: tomorrow },
+        { wordSlug: 'cam-on', wordName: 'Cảm ơn', interval: 3, repetition: 2, easeFactor: 2.5, nextReviewDate: inTwoDays },
+      ];
+
+      for (const r of reviewSeed) {
+        const item = this.reviewItemRepository.create({
+          userId: learner.id,
+          wordSlug: r.wordSlug,
+          wordName: r.wordName,
+          interval: r.interval,
+          repetition: r.repetition,
+          easeFactor: r.easeFactor,
+          nextReviewDate: r.nextReviewDate,
+          lastReviewedAt: new Date(),
+        });
+        await this.reviewItemRepository.save(item);
+      }
+      this.logger.log('Đã nạp hàng đợi Spaced Repetition mẫu cho tài khoản learner.');
+    }
   }
 }
 

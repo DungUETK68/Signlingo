@@ -13,24 +13,57 @@ import {
   Compass
 } from 'lucide-react';
 import { VSL_SENTENCES, getSentenceById } from '../../data/sentencesData';
+import { dictionaryApi } from '../../services/api';
 import SentenceDetailView from './SentenceDetailView';
 import SentencePracticeView from './SentencePracticeView';
 
 export default function SentencesView({ onStartPracticeWord }) {
+  const [sentencesList, setSentencesList] = useState(VSL_SENTENCES);
   const [selectedTopic, setSelectedTopic] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [activeSentenceId, setActiveSentenceId] = useState(null);
   const [viewMode, setViewMode] = useState('list'); // 'list' | 'detail' | 'practice'
 
-  const activeSentence = activeSentenceId ? getSentenceById(activeSentenceId) : null;
+  // Tải danh sách câu VSL từ Backend API NestJS
+  useEffect(() => {
+    let isMounted = true;
+    const fetchSentences = async () => {
+      try {
+        const data = await dictionaryApi.getSentences();
+        if (isMounted && Array.isArray(data) && data.length > 0) {
+          const formatted = data.map((s, idx) => ({
+            id: s.id || `sent-${idx + 1}`,
+            title: s.title,
+            slug: s.slug,
+            meaning: s.meaning,
+            topic: s.category || 'Giao tiếp hàng ngày',
+            difficulty: s.difficulty || 'Cơ bản',
+            grammarExplanation: s.explanation || s.grammarExplanation,
+            signOrderText: s.structure || s.signOrderText || 'VSL Chuẩn',
+            components: s.words || s.components || [],
+            videoUrl: s.videoUrl || (s.words && s.words[0] ? s.words[0].video : '/vsl400_videos/chao_front.mp4'),
+          }));
+          setSentencesList(formatted);
+        }
+      } catch (err) {
+        console.warn('Sử dụng bộ câu VSL dự phòng:', err);
+      }
+    };
+    fetchSentences();
+    return () => { isMounted = false; };
+  }, []);
+
+  const activeSentence = activeSentenceId 
+    ? (sentencesList.find(s => s.id === activeSentenceId || s.slug === activeSentenceId) || getSentenceById(activeSentenceId)) 
+    : null;
 
   // Lọc câu theo chủ đề và từ khóa tìm kiếm
-  const filteredSentences = VSL_SENTENCES.filter((s) => {
+  const filteredSentences = sentencesList.filter((s) => {
     const matchesTopic = selectedTopic === 'all' || s.topic === selectedTopic;
     const matchesSearch =
-      s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.signOrderText.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.grammarExplanation.toLowerCase().includes(searchQuery.toLowerCase());
+      (s.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (s.signOrderText || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (s.grammarExplanation || '').toLowerCase().includes(searchQuery.toLowerCase());
     return matchesTopic && matchesSearch;
   });
 

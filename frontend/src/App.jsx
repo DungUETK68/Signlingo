@@ -11,6 +11,7 @@ import ReviewView from './components/Review/ReviewView';
 import DashboardView from './components/Dashboard/DashboardView';
 import AdminView from './components/Admin/AdminView';
 import AuthModal from './components/AuthModal';
+import LandingView from './components/Landing/LandingView';
 import { getUserProfile, saveUserProfile } from './data/personalizedStore';
 import { getStoredToken, authApi } from './services/api';
 
@@ -21,6 +22,7 @@ export default function App() {
   const [selectedLearningLesson, setSelectedLearningLesson] = useState(null);
   const [selectedLearningTopic, setSelectedLearningTopic] = useState(null);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [authMode, setAuthMode] = useState('login'); // 'login' | 'register'
   const [forceOnboarding, setForceOnboarding] = useState(false);
   const [userProfile, setUserProfile] = useState(() => getUserProfile());
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -32,7 +34,7 @@ export default function App() {
       const token = getStoredToken();
       if (!token) {
         setIsAuthenticated(false);
-        setIsAuthOpen(true);
+        setIsAuthOpen(false);
         setIsCheckingAuth(false);
         return;
       }
@@ -61,10 +63,10 @@ export default function App() {
           setIsAuthenticated(true);
           setIsAuthOpen(false);
         } else {
-          // Token không hợp lệ hoặc hết hạn -> xóa token và bắt buộc đăng nhập
+          // Token không hợp lệ hoặc hết hạn -> xóa token và đưa về trang giới thiệu
           authApi.logout();
           setIsAuthenticated(false);
-          setIsAuthOpen(true);
+          setIsAuthOpen(false);
         }
       } catch (err) {
         console.warn('Lỗi kết nối kiểm tra tài khoản từ Backend:', err);
@@ -74,7 +76,7 @@ export default function App() {
           setIsAuthOpen(false);
         } else {
           setIsAuthenticated(false);
-          setIsAuthOpen(true);
+          setIsAuthOpen(false);
         }
       } finally {
         setIsCheckingAuth(false);
@@ -106,28 +108,92 @@ export default function App() {
   const handleOpenLessonFromReview = handleOpenLesson;
 
   const handleOpenAuthForSurvey = () => {
+    setAuthMode('login');
     setForceOnboarding(true);
     setIsAuthOpen(true);
   };
 
-  const handleOpenAuthGeneral = () => {
+  const handleOpenAuthGeneral = (mode = 'login') => {
+    setAuthMode(mode);
     setForceOnboarding(false);
     setIsAuthOpen(true);
   };
 
-  // Đăng xuất: xóa JWT token, chuyển về trạng thái chưa xác thực
+  // Đăng xuất: xóa JWT token, chuyển về trang Landing
   const handleLogout = () => {
     authApi.logout();
     const guestProfile = {
       ...userProfile,
-      isLoggedIn: false
+      isLoggedIn: false,
     };
     saveUserProfile(guestProfile);
     setUserProfile(guestProfile);
     setIsAuthenticated(false);
     setForceOnboarding(false);
-    setIsAuthOpen(true);
+    setIsAuthOpen(false);
   };
+
+  // Màn hình loading nhẹ khi kiểm tra auth token
+  if (isCheckingAuth) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#f8fafc',
+        gap: '1rem',
+      }}>
+        <div style={{
+          width: 52,
+          height: 52,
+          borderRadius: '16px',
+          background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#fff',
+          boxShadow: '0 8px 24px rgba(2, 132, 199, 0.25)',
+          fontSize: '1.5rem',
+        }}>
+          ✨
+        </div>
+        <div style={{ fontSize: '1rem', fontWeight: 800, color: '#0284c7' }}>
+          Đang tải Signlingo AI...
+        </div>
+      </div>
+    );
+  }
+
+  // 1. Khi chưa đăng nhập: Hiển thị Trang Giới Thiệu (Landing Page) kèm Modal Đăng nhập / Đăng ký
+  if (!isAuthenticated) {
+    return (
+      <>
+        <LandingView
+          onOpenAuth={(mode = 'login') => {
+            setAuthMode(mode);
+            setForceOnboarding(false);
+            setIsAuthOpen(true);
+          }}
+        />
+        <AuthModal
+          isOpen={isAuthOpen}
+          initialMode={authMode}
+          forceOnboarding={forceOnboarding}
+          onClose={() => setIsAuthOpen(false)}
+          onLoginSuccess={(newUserData) => {
+            setUserProfile(newUserData);
+            setIsAuthenticated(true);
+            setIsAuthOpen(false);
+            setActiveTab('personalized');
+          }}
+        />
+      </>
+    );
+  }
+
+  // 2. Khi đã đăng nhập: Hiển thị Giao diện học tập chính (Duo Layout)
 
   return (
     <div className="duo-layout">
@@ -233,21 +299,15 @@ export default function App() {
         onLogout={handleLogout}
       />
 
-      {/* 4. Auth Modal & Onboarding Assessment (Chặn vào web nếu chưa đăng nhập) */}
+      {/* 4. Auth Modal & Onboarding Assessment */}
       <AuthModal
-        isOpen={isAuthOpen || (!isAuthenticated && !isCheckingAuth)}
-        isMandatory={!isAuthenticated && !isCheckingAuth}
+        isOpen={isAuthOpen}
+        initialMode={authMode}
         forceOnboarding={forceOnboarding}
-        onClose={() => {
-          if (isAuthenticated) {
-            setIsAuthOpen(false);
-          }
-        }}
-        onLoginSuccess={(newUserData, level) => {
+        onClose={() => setIsAuthOpen(false)}
+        onLoginSuccess={(newUserData) => {
           setUserProfile(newUserData);
-          setIsAuthenticated(true);
           setIsAuthOpen(false);
-          setActiveTab('personalized');
         }}
       />
     </div>

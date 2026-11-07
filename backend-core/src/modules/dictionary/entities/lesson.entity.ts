@@ -38,6 +38,9 @@ export class Lesson {
   @Column({ default: 'Cơ bản' })
   level: string;
 
+  @Column({ name: 'video_url', nullable: true })
+  videoUrl: string;
+
   @Column({ name: 'order_index', type: 'int', default: 0 })
   orderIndex: number;
 

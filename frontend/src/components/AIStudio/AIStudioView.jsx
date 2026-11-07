@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { DICTIONARY_WORDS } from '../../data/mockData';
 import { getAllWords } from '../../data/wordsStore';
 import { recordPracticeSession } from '../../data/personalizedStore';
 import { progressApi } from '../../services/api';
@@ -130,7 +129,7 @@ export default function AIStudioView({ initialWord = 'Chào', onBack }) {
 
     // 3. Fallback mặc định
     return {
-      ...(allWords[0] || DICTIONARY_WORDS[0]),
+      ...(allWords[0] || {}),
       id: `custom-${selectedWord}`,
       word: selectedWord || 'Cảm ơn',
       topicLabel: 'Giao tiếp hàng ngày',

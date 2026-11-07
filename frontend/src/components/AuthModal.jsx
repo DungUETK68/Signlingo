@@ -24,10 +24,11 @@ export default function AuthModal({
   onClose, 
   onLoginSuccess, 
   forceOnboarding = false,
-  isMandatory = false 
+  isMandatory = false,
+  initialMode = 'login',
 }) {
   const [step, setStep] = useState(forceOnboarding ? 'onboarding' : 'auth'); // 'auth' | 'onboarding'
-  const [isRegister, setIsRegister] = useState(false);
+  const [isRegister, setIsRegister] = useState(initialMode === 'register');
   const [email, setEmail] = useState('learner@signlingo.com');
   const [password, setPassword] = useState('123456');
   const [fullName, setFullName] = useState('Học viên Signlingo');
@@ -47,13 +48,22 @@ export default function AuthModal({
     if (isOpen) {
       setErrorMessage('');
       setSuccessMessage('');
+      setIsRegister(initialMode === 'register');
       const currentProfile = getUserProfile();
-      if (currentProfile) {
+      if (initialMode === 'register') {
+        setEmail('');
+        setPassword('');
+        setFullName('');
+      } else if (currentProfile && currentProfile.isLoggedIn) {
         setFullName(currentProfile.name || 'Học viên Signlingo');
         setEmail(currentProfile.email || 'learner@signlingo.com');
         setSelectedLevel(currentProfile.learningLevel || 'beginner');
         setLearningGoalMinutes(currentProfile.learningGoalMinutes || 15);
         setPriorityTopic(currentProfile.priorityTopic || 'greeting');
+      } else {
+        setEmail('learner@signlingo.com');
+        setPassword('123456');
+        setFullName('Học viên Signlingo');
       }
 
       if (forceOnboarding) {
@@ -62,7 +72,7 @@ export default function AuthModal({
         setStep('auth');
       }
     }
-  }, [isOpen, forceOnboarding]);
+  }, [isOpen, forceOnboarding, initialMode]);
 
   if (!isOpen) return null;
 
