@@ -17,13 +17,27 @@ export function getCustomWords() {
     const list = JSON.parse(raw);
     if (!Array.isArray(list)) return [];
 
-    // Lọc bỏ triệt để các từ seeding ảnh/mock cũ (chứa ảnh stock unsplash hoặc ID mẫu)
+    // Danh sách slug và tên của các từ chuẩn trong bộ từ điển gốc
+    const standardSlugs = new Set(DICTIONARY_WORDS.map(w => (w.slug || '').toLowerCase().trim()));
+    const standardNames = new Set(DICTIONARY_WORDS.map(w => (w.word || '').toLowerCase().trim()));
+
+    // Lọc bỏ triệt để:
+    // 1. Các từ seeding ảnh/mock cũ
+    // 2. Các từ chuẩn VSL400 bị lưu lặp vào STORAGE_KEY (không phải do người dùng tự tạo mới)
     const cleaned = list.filter(w => {
-      if (!w || !w.id) return false;
-      if (LEGACY_SEEDING_IDS.has(w.id)) return false;
+      if (!w || !w.word) return false;
+      if (w.id && LEGACY_SEEDING_IDS.has(w.id)) return false;
       const vFront = String(w.videoFront || '');
       const vThumb = String(w.thumbnail || '');
       if (vFront.includes('unsplash.com') || vThumb.includes('unsplash.com')) return false;
+
+      // Nếu từ này trùng với từ chuẩn VSL400 và không có cờ isCustom thì loại bỏ để tránh nhân đôi
+      const s = (w.slug || '').toLowerCase().trim();
+      const n = (w.word || '').toLowerCase().trim();
+      if (!w.isCustom && (standardSlugs.has(s) || standardNames.has(n))) {
+        return false;
+      }
+
       return true;
     });
 
@@ -48,15 +62,38 @@ export function getCustomTopics() {
   }
 }
 
-// Lấy toàn bộ từ vựng (Mock data + Custom words)
+// Lấy toàn bộ từ vựng (Khử trùng lặp triệt để theo slug & tên từ vựng)
 export function getAllWords() {
   const custom = getCustomWords();
-  const customIds = new Set(custom.map(w => w.id));
   const deletedRaw = localStorage.getItem('signlingo_deleted_ids');
-  const deletedIds = deletedRaw ? JSON.parse(deletedRaw) : [];
-  
-  const baseWords = DICTIONARY_WORDS.filter(w => !deletedIds.includes(w.id) && !customIds.has(w.id));
-  return [...custom, ...baseWords];
+  const deletedIds = new Set(deletedRaw ? JSON.parse(deletedRaw) : []);
+
+  const result = [];
+  const seenSlugs = new Set();
+  const seenNames = new Set();
+
+  const addWord = (w) => {
+    if (!w || !w.word) return;
+    if (w.id && deletedIds.has(w.id)) return;
+    if (w.slug && deletedIds.has(w.slug)) return;
+
+    const slugKey = (w.slug || w.word).toLowerCase().replace(/[^a-z0-9_]/g, '');
+    const nameKey = w.word.toLowerCase().trim();
+
+    if (!seenSlugs.has(slugKey) && !seenNames.has(nameKey)) {
+      seenSlugs.add(slugKey);
+      seenNames.add(nameKey);
+      result.push(w);
+    }
+  };
+
+  // 1. Từ do người dùng tự thêm (custom words) ưu tiên
+  custom.forEach(addWord);
+
+  // 2. Toàn bộ từ chuẩn VSL400 + Chào
+  DICTIONARY_WORDS.forEach(addWord);
+
+  return result;
 }
 
 // Lấy toàn bộ chủ đề kèm các bài học đã được bổ sung từ mới (phục vụ Tab Học tập)
@@ -265,32 +302,45 @@ export function useSignWords() {
         ]);
 
         if (Array.isArray(backendWords) && backendWords.length > 0) {
-          const formatted = backendWords.map(bw => ({
-            id: bw.id,
-            word: bw.name || bw.word,
-            slug: bw.slug,
-            topic: bw.topicId || bw.topic || 'general',
-            topicLabel: bw.category || bw.topicLabel || 'Từ vựng thông dụng',
-            description: bw.meaning || bw.description || 'Thực hiện cử chỉ theo video mẫu.',
-            details: bw.usageTips || bw.details || '',
-            videoFront: bw.videoFront || bw.videoUrl || '/vsl400_videos/cam_on_front.mp4',
-            videoUrl: bw.videoUrl || bw.videoFront || '/vsl400_videos/cam_on_front.mp4',
-            videoLeft: bw.videoLeft || bw.videoSide || '/vsl400_videos/cam_on_left.mp4',
-            videoRight: bw.videoRight || '/vsl400_videos/cam_on_right.mp4',
-            videoSide: bw.videoLeft || bw.videoSide || bw.videoUrl || '/vsl400_videos/cam_on_left.mp4',
-            thumbnail: bw.thumbnailUrl || bw.thumbnail || (bw.slug ? `/vsl400_videos/${bw.slug}_thumb.jpg` : '/vsl400_videos/cam_on_thumb.jpg'),
-            difficulty: bw.difficulty || 'Dễ',
-            dialect: 'Toàn quốc'
-          }));
+          const standardSlugs = new Set(DICTIONARY_WORDS.map(w => (w.slug || '').toLowerCase().trim()));
+          const standardNames = new Set(DICTIONARY_WORDS.map(w => (w.word || '').toLowerCase().trim()));
 
-          const local = getCustomWords();
-          const merged = [...formatted];
-          local.forEach(lw => {
-            if (!merged.some(bw => bw.id === lw.id || bw.slug === lw.slug)) {
-              merged.push(lw);
-            }
-          });
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+          // Chỉ lưu vào localStorage nếu có từ mới tùy chỉnh được tạo trên backend mà chưa có trong DICTIONARY_WORDS
+          const trulyCustomFromBackend = backendWords
+            .filter(bw => {
+              const s = (bw.slug || '').toLowerCase().trim();
+              const n = (bw.name || bw.word || '').toLowerCase().trim();
+              return !standardSlugs.has(s) && !standardNames.has(n);
+            })
+            .map(bw => ({
+              id: bw.id,
+              word: bw.name || bw.word,
+              slug: bw.slug,
+              topic: bw.topicId || bw.topic || 'general',
+              topicLabel: bw.category || bw.topicLabel || 'Từ vựng thông dụng',
+              description: bw.meaning || bw.description || 'Thực hiện cử chỉ theo video mẫu.',
+              details: bw.usageTips || bw.details || '',
+              videoFront: bw.videoFront || bw.videoUrl || '/vsl400_videos/cam_on_front.mp4',
+              videoUrl: bw.videoUrl || bw.videoFront || '/vsl400_videos/cam_on_front.mp4',
+              videoLeft: bw.videoLeft || bw.videoSide || '/vsl400_videos/cam_on_left.mp4',
+              videoRight: bw.videoRight || '/vsl400_videos/cam_on_right.mp4',
+              videoSide: bw.videoLeft || bw.videoSide || bw.videoUrl || '/vsl400_videos/cam_on_left.mp4',
+              thumbnail: bw.thumbnailUrl || bw.thumbnail || (bw.slug ? `/vsl400_videos/${bw.slug}_thumb.jpg` : '/vsl400_videos/cam_on_thumb.jpg'),
+              difficulty: bw.difficulty || 'Dễ',
+              dialect: 'Toàn quốc',
+              isCustom: true
+            }));
+
+          if (trulyCustomFromBackend.length > 0) {
+            const local = getCustomWords();
+            const merged = [...trulyCustomFromBackend];
+            local.forEach(lw => {
+              if (!merged.some(bw => bw.id === lw.id || bw.slug === lw.slug)) {
+                merged.push(lw);
+              }
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+          }
           setWords(getAllWords());
         }
 
