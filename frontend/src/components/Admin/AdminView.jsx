@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useSignWords, deleteWordById } from '../../data/wordsStore';
 import AddWordModal from './AddWordModal';
 import {
@@ -17,7 +17,9 @@ import {
   Sparkles,
   CheckCircle2,
   ExternalLink,
-  BookOpen
+  BookOpen,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 
 export default function AdminView() {
@@ -85,6 +87,44 @@ export default function AdminView() {
       return matchSearch && matchTopic;
     });
   }, [words, searchTerm, filterTopic]);
+
+  // Phân trang 20 từ / trang cho phần Quản trị
+  const PAGE_SIZE = 20;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Reset về trang 1 khi tìm kiếm hoặc thay đổi chủ đề
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterTopic]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredWords.length / PAGE_SIZE));
+  const safeCurrentPage = Math.min(Math.max(1, currentPage), totalPages);
+
+  const paginatedWords = useMemo(() => {
+    const start = (safeCurrentPage - 1) * PAGE_SIZE;
+    return filteredWords.slice(start, start + PAGE_SIZE);
+  }, [filteredWords, safeCurrentPage]);
+
+  const startWordIndex = filteredWords.length > 0 ? (safeCurrentPage - 1) * PAGE_SIZE + 1 : 0;
+  const endWordIndex = Math.min(safeCurrentPage * PAGE_SIZE, filteredWords.length);
+
+  const handlePageChange = (newPage) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    setCurrentPage(newPage);
+  };
+
+  const getPageNumbers = () => {
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    if (safeCurrentPage <= 4) {
+      return [1, 2, 3, 4, 5, '...', totalPages];
+    }
+    if (safeCurrentPage >= totalPages - 3) {
+      return [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    }
+    return [1, '...', safeCurrentPage - 1, safeCurrentPage, safeCurrentPage + 1, '...', totalPages];
+  };
 
   return (
     <div>
@@ -207,39 +247,74 @@ export default function AdminView() {
                   color: '#475569'
                 }}
               >
-                <option value="all">Tất cả chủ đề</option>
-                <option value="greeting">👋 Chào hỏi</option>
-                <option value="family">👨‍👩‍👧‍👦 Gia đình</option>
-                <option value="food">🍲 Ẩm thực</option>
-                <option value="daily">💬 Giao tiếp hàng ngày</option>
-                <option value="numbers">🔢 Số đếm</option>
-                <option value="alphabet">🔤 Chữ cái</option>
+                <option value="all">Tất cả chủ đề ({words.length})</option>
+                {(topics && topics.length > 0 ? topics : [
+                  { id: 'greeting', title: '👋 Chào hỏi' },
+                  { id: 'family', title: '👨‍👩‍👧‍👦 Gia đình' },
+                  { id: 'food', title: '🍲 Ẩm thực' },
+                  { id: 'daily', title: '💬 Giao tiếp hàng ngày' },
+                  { id: 'numbers', title: '🔢 Số đếm' },
+                  { id: 'alphabet', title: '🔤 Chữ cái' },
+                ]).map(t => (
+                  <option key={t.id} value={t.id}>
+                    {t.icon ? `${t.icon} ` : ''}{t.title || t.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
 
           {/* Table List */}
-          <div className="mini-card" style={{ padding: '0.5rem', overflow: 'hidden' }}>
+          <div className="mini-card" style={{ padding: '0', overflow: 'hidden' }}>
+            {/* Status Bar */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '0.75rem 1rem',
+              fontSize: '0.84rem',
+              color: '#64748b',
+              backgroundColor: '#f8fafc',
+              borderBottom: '1.5px solid var(--border-color)',
+              flexWrap: 'wrap',
+              gap: '0.5rem'
+            }}>
+              <span>
+                {filteredWords.length > 0 ? (
+                  <>
+                    Hiển thị <strong>{startWordIndex} - {endWordIndex}</strong> trong tổng số <strong>{filteredWords.length}</strong> từ vựng
+                  </>
+                ) : (
+                  'Không tìm thấy từ vựng nào phù hợp.'
+                )}
+              </span>
+              {totalPages > 1 && (
+                <span style={{ fontWeight: 700, color: '#0284c7' }}>
+                  Trang {safeCurrentPage} / {totalPages} (20 từ/trang)
+                </span>
+              )}
+            </div>
+
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.84rem' }}>
                 <thead>
                   <tr style={{ borderBottom: '1.5px solid var(--border-color)', color: '#64748b', backgroundColor: '#f8fafc' }}>
-                    <th style={{ padding: '0.65rem 0.55rem', whiteSpace: 'nowrap' }}>Từ vựng</th>
+                    <th style={{ padding: '0.65rem 0.75rem', whiteSpace: 'nowrap' }}>Từ vựng</th>
                     <th style={{ padding: '0.65rem 0.55rem', whiteSpace: 'nowrap' }}>Chủ đề</th>
                     <th style={{ padding: '0.65rem 0.55rem', whiteSpace: 'nowrap' }}>Phương ngữ</th>
                     <th style={{ padding: '0.65rem 0.55rem', whiteSpace: 'nowrap', textAlign: 'center' }}>Video</th>
-                    <th style={{ padding: '0.65rem 0.55rem', textAlign: 'right', whiteSpace: 'nowrap' }}>Thao tác</th>
+                    <th style={{ padding: '0.65rem 0.75rem', textAlign: 'right', whiteSpace: 'nowrap' }}>Thao tác</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredWords.length === 0 ? (
+                  {paginatedWords.length === 0 ? (
                     <tr>
                       <td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: '#94a3b8' }}>
                         Không tìm thấy từ vựng nào phù hợp.
                       </td>
                     </tr>
                   ) : (
-                    filteredWords.map(w => {
+                    paginatedWords.map(w => {
                       const isVideo = w.videoFront && (
                         w.videoFront.endsWith('.mp4') ||
                         w.videoFront.endsWith('.webm') ||
@@ -365,6 +440,99 @@ export default function AdminView() {
                 </tbody>
               </table>
             </div>
+
+            {/* Pagination Controls (20 từ/trang) */}
+            {totalPages > 1 && (
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '1.1rem 0.75rem',
+                borderTop: '1px solid var(--border-color)',
+                backgroundColor: '#ffffff'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                  {/* Nút Trang Trước */}
+                  <button
+                    className="btn-pill btn-secondary btn-sm"
+                    disabled={safeCurrentPage === 1}
+                    onClick={() => handlePageChange(safeCurrentPage - 1)}
+                    style={{
+                      opacity: safeCurrentPage === 1 ? 0.4 : 1,
+                      cursor: safeCurrentPage === 1 ? 'not-allowed' : 'pointer',
+                      padding: '0.35rem 0.75rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.25rem',
+                      fontWeight: 700,
+                      fontSize: '0.78rem'
+                    }}
+                  >
+                    <ChevronLeft size={15} />
+                    <span>Trước</span>
+                  </button>
+
+                  {/* Các nút số trang */}
+                  {getPageNumbers().map((num, idx) => {
+                    if (num === '...') {
+                      return (
+                        <span key={`dots-${idx}`} style={{ padding: '0.2rem 0.4rem', color: '#94a3b8', fontWeight: 700, fontSize: '0.8rem' }}>
+                          ...
+                        </span>
+                      );
+                    }
+                    const isActive = num === safeCurrentPage;
+                    return (
+                      <button
+                        key={`page-${num}`}
+                        className={`btn-pill btn-sm ${isActive ? 'btn-primary' : 'btn-secondary'}`}
+                        onClick={() => handlePageChange(num)}
+                        style={{
+                          minWidth: '32px',
+                          height: '32px',
+                          padding: '0 0.5rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontWeight: 800,
+                          fontSize: '0.8rem',
+                          backgroundColor: isActive ? '#0284c7' : '#ffffff',
+                          color: isActive ? '#ffffff' : '#334155',
+                          borderColor: isActive ? '#0284c7' : '#cbd5e1'
+                        }}
+                      >
+                        {num}
+                      </button>
+                    );
+                  })}
+
+                  {/* Nút Trang Sau */}
+                  <button
+                    className="btn-pill btn-secondary btn-sm"
+                    disabled={safeCurrentPage === totalPages}
+                    onClick={() => handlePageChange(safeCurrentPage + 1)}
+                    style={{
+                      opacity: safeCurrentPage === totalPages ? 0.4 : 1,
+                      cursor: safeCurrentPage === totalPages ? 'not-allowed' : 'pointer',
+                      padding: '0.35rem 0.75rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.25rem',
+                      fontWeight: 700,
+                      fontSize: '0.78rem'
+                    }}
+                  >
+                    <span>Sau</span>
+                    <ChevronRight size={15} />
+                  </button>
+                </div>
+
+                <div style={{ fontSize: '0.76rem', color: '#64748b' }}>
+                  Mỗi trang 20 từ • Trang {safeCurrentPage} trên tổng số {totalPages} trang
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
