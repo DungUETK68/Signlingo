@@ -438,9 +438,9 @@ export default function PersonalizedPathView({
                       {/* 3. Nếu là bài từ vựng chuẩn */}
                       {lesson.type !== 'sentence' && lesson.type !== 'grammar' && (
                         <>
-                          {lesson.word && (
+                          {(lesson.word || lesson.title) && (
                             <button
-                              onClick={() => onStartPracticeWord(lesson.word)}
+                              onClick={() => onStartPracticeWord(lesson.word || lesson.title)}
                               className="btn-pill btn-secondary"
                               style={{
                                 fontSize: '0.8rem',
@@ -448,6 +448,7 @@ export default function PersonalizedPathView({
                                 gap: '0.35rem',
                                 fontWeight: 700
                               }}
+                              title={`Luyện tập cử chỉ "${lesson.word || lesson.title}" với Camera AI`}
                             >
                               <Camera size={15} color="#0284c7" />
                               <span>Luyện AI</span>
@@ -456,10 +457,19 @@ export default function PersonalizedPathView({
 
                           <button
                             onClick={() => {
-                              if (lesson.word) {
-                                onStartPracticeWord(lesson.word);
-                              } else if (onOpenLesson) {
-                                onOpenLesson(lesson, stage);
+                              if (onOpenLesson) {
+                                const lessonForDetail = {
+                                  ...lesson,
+                                  id: lesson.id || (lesson.slug ? `vsl-${lesson.slug}` : undefined),
+                                  wordId: lesson.wordId || (lesson.slug ? `vsl-${lesson.slug}` : undefined),
+                                  word: lesson.word || lesson.title,
+                                  title: lesson.word || lesson.title,
+                                  slug: lesson.slug,
+                                  videoUrl: lesson.videoUrl,
+                                  videoSideUrl: lesson.videoSideUrl,
+                                  description: lesson.desc || lesson.description
+                                };
+                                onOpenLesson(lessonForDetail, stage);
                               }
                             }}
                             className={`btn-pill ${lesson.completed ? 'btn-secondary' : 'btn-primary'}`}
@@ -469,6 +479,7 @@ export default function PersonalizedPathView({
                               fontWeight: 800,
                               gap: '0.35rem'
                             }}
+                            title={`Xem video mẫu và hướng dẫn học "${lesson.word || lesson.title}"`}
                           >
                             <span>{lesson.completed ? 'Ôn lại' : 'Học ngay'}</span>
                             <ArrowRight size={15} />

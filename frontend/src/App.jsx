@@ -217,9 +217,15 @@ export default function App() {
             onOpenSurvey={handleOpenAuthForSurvey}
             onOpenLesson={(lesson, stage) => {
               setSelectedLearningLesson({
-                id: lesson.id,
-                title: lesson.title,
-                description: lesson.desc,
+                ...lesson,
+                id: lesson.id || (lesson.slug ? `vsl-${lesson.slug}` : undefined),
+                wordId: lesson.wordId || (lesson.slug ? `vsl-${lesson.slug}` : undefined),
+                word: lesson.word || lesson.title,
+                title: lesson.word || lesson.title,
+                slug: lesson.slug,
+                videoUrl: lesson.videoUrl,
+                videoSideUrl: lesson.videoSideUrl,
+                description: lesson.description || lesson.desc,
                 duration: lesson.duration,
                 level: lesson.level,
                 completed: lesson.completed,
@@ -228,7 +234,7 @@ export default function App() {
               setSelectedLearningTopic({
                 id: stage.id,
                 title: stage.title,
-                level: stage.subtitle,
+                level: stage.level || stage.subtitle,
                 lessons: stage.lessons
               });
               setActiveTab('learning');
@@ -295,6 +301,7 @@ export default function App() {
         {/* TAB 4: LUYỆN TẬP CAMERA AI */}
         {activeTab === 'practice' && (
           <AIStudioView 
+            initialWord={practiceTargetWord}
             targetWord={practiceTargetWord} 
             onBack={handleBackFromPractice} 
           />

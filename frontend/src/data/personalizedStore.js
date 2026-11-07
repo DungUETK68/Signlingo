@@ -1,6 +1,7 @@
 // Store và thuật toán cá nhân hóa lộ trình học theo khả năng (Adaptive Learning Engine)
 import { useState, useEffect } from 'react';
 import { USER_PROFILE } from './mockData';
+import { VSL400_WORDS } from './vsl400Words.js';
 import { getStoredToken } from '../services/api';
 
 export const USER_PROFILE_KEY = 'signlingo_user_profile';
@@ -8,6 +9,41 @@ export const PREFERENCES_KEY = 'signlingo_learning_preferences';
 export const PRACTICE_HISTORY_KEY = 'signlingo_practice_history';
 export const PERSONALIZED_PATH_KEY = 'signlingo_personalized_path';
 export const PERSONALIZED_EVENT = 'signlingo_personalized_updated';
+
+// Tra cứu siêu tốc thông tin chuẩn 400 từ vựng VSL (video chính diện, góc nghiêng, slug)
+const VSL_WORDS_MAP = new Map();
+VSL400_WORDS.forEach(w => {
+  if (w.word) VSL_WORDS_MAP.set(w.word.toLowerCase().trim(), w);
+  if (w.slug) VSL_WORDS_MAP.set(w.slug.toLowerCase().trim(), w);
+});
+
+export function getWordMetadata(wordName) {
+  if (!wordName) return null;
+  const clean = wordName
+    .replace(/^Ký hiệu\s*["“]?/i, '')
+    .replace(/["”]?\s*(chuẩn VSL|chân thành|ngọt ngào)?$/i, '')
+    .trim()
+    .toLowerCase();
+  
+  const found = VSL_WORDS_MAP.get(clean) || VSL400_WORDS.find(w => 
+    w.word.toLowerCase() === clean || 
+    clean.includes(w.word.toLowerCase()) || 
+    w.word.toLowerCase().includes(clean)
+  );
+  
+  if (found) {
+    return {
+      word: found.word,
+      slug: found.slug,
+      wordId: `vsl-${found.slug}`,
+      videoUrl: found.videoFront,
+      videoSideUrl: found.videoSide || found.videoLeft || `/vsl400_videos/${found.slug}_left.mp4`,
+      difficulty: found.difficulty || 'Dễ',
+      dominantHand: found.dominantHand || 'right'
+    };
+  }
+  return null;
+}
 
 // 1. Quản lý Hồ Sơ Người Dùng (Local Storage)
 export function getUserProfile() {
@@ -1151,6 +1187,29 @@ export function generatePersonalizedPath(level, capability) {
     }
   }
 
+  // Tự động chuẩn hóa toàn bộ các bài từ vựng trong lộ trình cá nhân khớp 100% video và slug VSL400
+  stages = stages.map(stg => ({
+    ...stg,
+    lessons: stg.lessons.map(ls => {
+      if (ls.word || ls.type === 'word' || (!ls.type && !ls.grammarRuleId && !ls.sentenceSlug)) {
+        const targetWord = ls.word || ls.title;
+        const meta = getWordMetadata(targetWord);
+        if (meta) {
+          return {
+            ...ls,
+            word: meta.word,
+            slug: meta.slug,
+            wordId: meta.wordId,
+            videoUrl: meta.videoUrl,
+            videoSideUrl: meta.videoSideUrl,
+            level: ls.level || meta.difficulty || 'Dễ'
+          };
+        }
+      }
+      return ls;
+    })
+  }));
+
   return stages;
 }
 
@@ -1163,14 +1222,14 @@ export function getPersonalizedPath() {
     
     if (raw) {
       const parsed = JSON.parse(raw);
-      // Nâng cấp cache cũ: kiểm tra version === 4 hoặc kiểm tra tính hợp lệ
-      if (parsed && parsed.version === 4 && Array.isArray(parsed.stages) && parsed.stages.length > 0) {
+      // Nâng cấp cache cũ: kiểm tra version === 5 để đồng bộ video/slug chuẩn VSL400
+      if (parsed && parsed.version === 5 && Array.isArray(parsed.stages) && parsed.stages.length > 0) {
         return parsed.stages;
       }
     }
 
     const generated = generatePersonalizedPath(profile.learningLevel || 'beginner', capability);
-    localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: 4, stages: generated }));
+    localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: 5, stages: generated }));
     return generated;
   } catch (e) {
     return generatePersonalizedPath('beginner');
@@ -1182,7 +1241,7 @@ export function recalculateAdaptivePath() {
   const profile = getUserProfile();
   const capability = analyzeLearnerCapability();
   const newPath = generatePersonalizedPath(profile.learningLevel || 'beginner', capability);
-  localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: 4, stages: newPath }));
+  localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: 5, stages: newPath }));
   window.dispatchEvent(new CustomEvent(PERSONALIZED_EVENT, { detail: { path: newPath, capability } }));
   return newPath;
 }
@@ -1208,7 +1267,7 @@ export function usePersonalizedPath() {
     const updatedProf = saveUserProfile({ learningLevel: newLevel });
     const newCapability = analyzeLearnerCapability();
     const newPath = generatePersonalizedPath(newLevel, newCapability);
-    localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: 4, stages: newPath }));
+    localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: 5, stages: newPath }));
     setProfile(updatedProf);
     setCapability(newCapability);
     setPath(newPath);
@@ -1228,7 +1287,7 @@ export function usePersonalizedPath() {
       return { ...stage, lessons: updatedLessons, progress };
     });
 
-    localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: 4, stages: updatedPath }));
+    localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: 5, stages: updatedPath }));
     setPath(updatedPath);
     window.dispatchEvent(new CustomEvent(PERSONALIZED_EVENT, { detail: { path: updatedPath } }));
   };

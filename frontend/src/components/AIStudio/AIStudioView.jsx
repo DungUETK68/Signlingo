@@ -33,8 +33,9 @@ let globalHolisticLoadingPromise = null;
 let globalHandsInstance = null;
 let globalHandsLoadingPromise = null;
 
-export default function AIStudioView({ initialWord = 'Cảm ơn', onBack }) {
-  const [selectedWord, setSelectedWord] = useState(initialWord);
+export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, onBack }) {
+  const effectiveWord = targetWord || initialWord || 'Cảm ơn';
+  const [selectedWord, setSelectedWord] = useState(effectiveWord);
 
   // Video Refs & Playback State
   const sampleVideoRef = useRef(null);
@@ -91,10 +92,11 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', onBack }) {
     };
   }, []);
 
-  // Đồng bộ từ vựng khi prop initialWord thay đổi
+  // Đồng bộ từ vựng khi prop targetWord hoặc initialWord thay đổi
   useEffect(() => {
-    if (initialWord) {
-      setSelectedWord(initialWord);
+    const nextWord = targetWord || initialWord;
+    if (nextWord) {
+      setSelectedWord(nextWord);
       setEvalResult(null);
       setDtwScore(null);
       setBadJoints([]);
@@ -107,33 +109,47 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', onBack }) {
       }
       setUserRecordedVideoUrl(null);
     }
-  }, [initialWord]);
+  }, [initialWord, targetWord]);
 
   // Tìm từ vựng phù hợp trong từ điển
   const currentWordObj = React.useMemo(() => {
-    const search = (selectedWord || '').trim().toLowerCase();
+    const rawSearch = (selectedWord || '').trim();
+    const cleanSearch = rawSearch
+      .replace(/^Ký hiệu\s*["“]?/i, '')
+      .replace(/["”]?\s*(chuẩn VSL|chân thành|ngọt ngào)?$/i, '')
+      .trim();
     const allWords = getAllWords();
 
-    // 1. Khớp chính xác
-    let found = allWords.find(w => w.word.toLowerCase() === search);
+    // 1. Khớp chính xác theo tên từ vựng
+    let found = allWords.find(w => 
+      w.word.toLowerCase() === rawSearch.toLowerCase() || 
+      w.word.toLowerCase() === cleanSearch.toLowerCase()
+    );
     if (found) return found;
 
-    // 2. Khớp một phần
-    found = allWords.find(w =>
-      search.includes(w.word.toLowerCase()) ||
-      w.word.toLowerCase().includes(search)
+    // 2. Khớp theo slug
+    found = allWords.find(w => 
+      (w.slug && w.slug.toLowerCase() === cleanSearch.toLowerCase()) ||
+      (w.slug && w.slug.toLowerCase() === rawSearch.toLowerCase())
     );
-    if (found) {
-      return { ...found, word: selectedWord };
+    if (found) return found;
+
+    // 3. Khớp một phần
+    if (cleanSearch) {
+      found = allWords.find(w =>
+        cleanSearch.toLowerCase().includes(w.word.toLowerCase()) ||
+        w.word.toLowerCase().includes(cleanSearch.toLowerCase())
+      );
+      if (found) return found;
     }
 
-    // 3. Fallback mặc định
+    // 4. Fallback mặc định
     return {
       ...(allWords[0] || {}),
-      id: `custom-${selectedWord}`,
-      word: selectedWord || 'Cảm ơn',
+      id: `custom-${cleanSearch || selectedWord}`,
+      word: cleanSearch || selectedWord || 'Cảm ơn',
       topicLabel: 'Giao tiếp hàng ngày',
-      description: `Thực hiện động tác ký hiệu chuẩn cho "${selectedWord}".`
+      description: `Thực hiện động tác ký hiệu chuẩn cho "${cleanSearch || selectedWord}".`
     };
   }, [selectedWord]);
 

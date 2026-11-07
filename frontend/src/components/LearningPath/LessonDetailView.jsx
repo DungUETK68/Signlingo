@@ -26,33 +26,48 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
   if (!lesson || !topic) return null;
 
   const allWords = getAllWords();
+
+  // Trích xuất tên từ sạch chuẩn VSL (loại bỏ tiền tố Ký hiệu "..." nếu có)
+  const cleanWordTarget = (lesson.word || lesson.title || '')
+    .replace(/^Ký hiệu\s*["“]?/i, '')
+    .replace(/["”]?\s*(chuẩn VSL|chân thành|ngọt ngào)?$/i, '')
+    .trim();
+
   // Tìm kiếm từ vựng tương ứng trong từ điển hoặc từ mới thêm
-  const matchedWord = allWords.find(
-    w => w.id === lesson.wordId ||
-         w.word.toLowerCase() === lesson.title.toLowerCase() || 
-         lesson.title.toLowerCase().includes(w.word.toLowerCase()) ||
-         w.word.toLowerCase().includes(lesson.title.toLowerCase())
+  const matchedWord = allWords.find(w => 
+    (lesson.wordId && w.id === lesson.wordId) ||
+    (lesson.slug && w.slug === lesson.slug) ||
+    (lesson.word && w.word.toLowerCase() === lesson.word.toLowerCase()) ||
+    (cleanWordTarget && w.word.toLowerCase() === cleanWordTarget.toLowerCase()) ||
+    (lesson.title && w.word.toLowerCase() === lesson.title.toLowerCase())
+  ) || allWords.find(w => 
+    cleanWordTarget && (
+      w.word.toLowerCase().includes(cleanWordTarget.toLowerCase()) ||
+      cleanWordTarget.toLowerCase().includes(w.word.toLowerCase())
+    )
   ) || {
-    word: lesson.title,
-    description: lesson.description,
-    videoFront: lesson.videoUrl || '/vsl400_videos/cam_on_front.mp4',
+    word: lesson.word || cleanWordTarget || lesson.title,
+    description: lesson.description || lesson.desc,
+    videoFront: lesson.videoUrl || (lesson.slug ? `/vsl400_videos/${lesson.slug}_front.mp4` : '/vsl400_videos/cam_on_front.mp4'),
+    videoSide: lesson.videoSideUrl || (lesson.slug ? `/vsl400_videos/${lesson.slug}_left.mp4` : undefined),
     handShape: 'Bàn tay mở tự nhiên chuẩn VSL',
     movement: 'Thực hiện động tác dứt khoát theo video mẫu'
   };
 
-  // Lấy video chuẩn theo góc quay: chính diện (front) hoặc góc nghiêng (side)
+  // Lấy video chuẩn theo góc quay: chính diện (front) hoặc góc nghiêng (side / left)
   const currentVideo = React.useMemo(() => {
     if (viewAngle === 'side') {
       if (matchedWord.videoSide) return matchedWord.videoSide;
+      if (matchedWord.videoLeft) return matchedWord.videoLeft;
       if (lesson.videoSideUrl) return lesson.videoSideUrl;
       if (lesson.videoUrl && lesson.videoUrl.includes('_front.mp4')) {
-        return lesson.videoUrl.replace('_front.mp4', '_side.mp4');
+        return lesson.videoUrl.replace('_front.mp4', '_left.mp4');
       }
-      return matchedWord.videoSide || matchedWord.videoFront || lesson.videoUrl || '/vsl400_videos/cam_on_front.mp4';
+      return matchedWord.videoSide || matchedWord.videoLeft || matchedWord.videoFront || lesson.videoUrl || (lesson.slug ? `/vsl400_videos/${lesson.slug}_left.mp4` : '/vsl400_videos/cam_on_front.mp4');
     }
 
     // viewAngle === 'front'
-    return matchedWord.videoFront || lesson.videoUrl || '/vsl400_videos/cam_on_front.mp4';
+    return matchedWord.videoFront || lesson.videoUrl || (lesson.slug ? `/vsl400_videos/${lesson.slug}_front.mp4` : '/vsl400_videos/cam_on_front.mp4');
   }, [viewAngle, matchedWord, lesson]);
 
   const isVideoFormat = currentVideo && (
@@ -433,7 +448,7 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
             justifyContent: 'center',
             gap: '0.65rem'
           }}
-          onClick={() => onStartPractice(lesson.title)}
+          onClick={() => onStartPractice(matchedWord?.word || lesson.word || cleanWordTarget || lesson.title)}
         >
           <Camera size={20} />
           <span>BƯỚC 2: BẬT CAMERA THỰC HÀNH CÙNG AI</span>
