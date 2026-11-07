@@ -6,8 +6,8 @@ const STORAGE_KEY = 'signlingo_custom_words';
 const TOPICS_STORAGE_KEY = 'signlingo_custom_topics';
 const EVENT_NAME = 'signlingo_data_updated';
 
-// Danh sách các ID từ seeding mẫu cần loại bỏ triệt để
-const LEGACY_SEEDING_IDS = new Set(['w-hello', 'w-bye', 'w-family', 'w-alpha-a', 'w-num-5']);
+// Danh sách các ID từ seeding mẫu hoặc từ cũ cần loại bỏ triệt để
+const LEGACY_SEEDING_IDS = new Set(['w-hello', 'w-bye', 'w-family', 'w-alpha-a', 'w-num-5', 'vsl-chao', 'w-chao', 'chao']);
 
 // Lấy danh sách từ tùy chỉnh từ localStorage
 export function getCustomWords() {
@@ -22,11 +22,12 @@ export function getCustomWords() {
     const standardNames = new Set(DICTIONARY_WORDS.map(w => (w.word || '').toLowerCase().trim()));
 
     // Lọc bỏ triệt để:
-    // 1. Các từ seeding ảnh/mock cũ
+    // 1. Các từ seeding ảnh/mock cũ hoặc từ 'chao'
     // 2. Các từ chuẩn VSL400 bị lưu lặp vào STORAGE_KEY (không phải do người dùng tự tạo mới)
     const cleaned = list.filter(w => {
       if (!w || !w.word) return false;
       if (w.id && LEGACY_SEEDING_IDS.has(w.id)) return false;
+      if (w.slug === 'chao' || w.word === 'Chào') return false;
       const vFront = String(w.videoFront || '');
       const vThumb = String(w.thumbnail || '');
       if (vFront.includes('unsplash.com') || vThumb.includes('unsplash.com')) return false;
@@ -74,6 +75,7 @@ export function getAllWords() {
 
   const addWord = (w) => {
     if (!w || !w.word) return;
+    if (w.slug === 'chao' || w.word === 'Chào') return;
     if (w.id && deletedIds.has(w.id)) return;
     if (w.slug && deletedIds.has(w.slug)) return;
 
@@ -358,7 +360,7 @@ export function useSignWords() {
               level: l.level || 'Cơ bản',
               completed: false,
               score: 0,
-              videoUrl: l.videoUrl || '/vsl400_videos/chao_front.mp4'
+              videoUrl: l.videoUrl || '/vsl400_videos/cam_on_front.mp4'
             }))
           }));
           setTopics(syncedTopics);

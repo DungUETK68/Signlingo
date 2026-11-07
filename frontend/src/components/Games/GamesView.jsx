@@ -638,7 +638,7 @@ export default function GamesView({ onStartPracticeWord }) {
     }
   };
 
-  const currentReflex = reflexQuestions[reflexIdx] || { word: 'Chào', tip: 'Chạm nhẹ thái dương đưa dứt khoát ra ngoài' };
+  const currentReflex = reflexQuestions[reflexIdx] || { word: 'Cảm ơn', tip: 'Bàn tay mở chạm cằm đưa dứt khoát ra trước' };
 
   return (
     <div>

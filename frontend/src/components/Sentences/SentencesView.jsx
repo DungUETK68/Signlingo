@@ -41,7 +41,7 @@ export default function SentencesView({ onStartPracticeWord }) {
             grammarExplanation: s.explanation || s.grammarExplanation,
             signOrderText: s.structure || s.signOrderText || 'VSL Chuẩn',
             components: s.words || s.components || [],
-            videoUrl: s.videoUrl || (s.words && s.words[0] ? s.words[0].video : '/vsl400_videos/chao_front.mp4'),
+            videoUrl: s.videoUrl || (s.words && s.words[0] ? s.words[0].video : '/vsl400_videos/cam_on_front.mp4'),
           }));
           setSentencesList(formatted);
         }

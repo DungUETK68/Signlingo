@@ -2,12 +2,12 @@ import { IsNotEmpty, IsOptional, IsString, IsNumber, IsBoolean, IsArray, Min, Ma
 import { ApiProperty } from '@nestjs/swagger';
 
 export class LogPracticeDto {
-  @ApiProperty({ example: 'chao' })
+  @ApiProperty({ example: 'cam_on' })
   @IsString()
   @IsNotEmpty()
   wordSlug: string;
 
-  @ApiProperty({ example: 'Chào' })
+  @ApiProperty({ example: 'Cảm ơn' })
   @IsString()
   @IsNotEmpty()
   wordName: string;

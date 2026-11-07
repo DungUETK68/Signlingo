@@ -23,18 +23,18 @@ export default function LandingView({ onOpenAuth }) {
   const [activeAngle, setActiveAngle] = useState('front'); // 'front' | 'left' | 'right'
 
   const videoAngles = {
-    front: '/vsl400_videos/chao_front.mp4',
-    left: '/vsl400_videos/chao_left.mp4',
-    right: '/vsl400_videos/chao_right.mp4',
+    front: '/vsl400_videos/cam_on_front.mp4',
+    left: '/vsl400_videos/cam_on_left.mp4',
+    right: '/vsl400_videos/cam_on_right.mp4',
   };
 
   const sampleWords = [
-    { name: 'Chào', topic: 'Chào hỏi', thumb: '/vsl400_videos/chao_thumb.jpg', slug: 'chao' },
-    { name: 'Cảm ơn', topic: 'Chào hỏi', thumb: '/vsl400_videos/cam_on_thumb.jpg', slug: 'cam_on' },
-    { name: 'Tạm biệt', topic: 'Chào hỏi', thumb: '/vsl400_videos/tam_biet_thumb.jpg', slug: 'tam_biet' },
-    { name: 'Bố', topic: 'Gia đình', thumb: '/vsl400_videos/bo_thumb.jpg', slug: 'bo' },
-    { name: 'Mẹ', topic: 'Gia đình', thumb: '/vsl400_videos/me_thumb.jpg', slug: 'me' },
-    { name: 'Yêu', topic: 'Cảm xúc', thumb: '/vsl400_videos/yeu_thumb.jpg', slug: 'yeu' },
+    { name: 'Cảm ơn', topic: 'Chào hỏi & Giao tiếp', thumb: '/vsl400_videos/cam_on_thumb.jpg', slug: 'cam_on' },
+    { name: 'Tạm biệt', topic: 'Chào hỏi & Giao tiếp', thumb: '/vsl400_videos/tam_biet_thumb.jpg', slug: 'tam_biet' },
+    { name: 'Bố', topic: 'Gia đình & Xưng hô', thumb: '/vsl400_videos/bo_thumb.jpg', slug: 'bo' },
+    { name: 'Mẹ', topic: 'Gia đình & Xưng hô', thumb: '/vsl400_videos/me_thumb.jpg', slug: 'me' },
+    { name: 'Ăn', topic: 'Ẩm thực & Thức uống', thumb: '/vsl400_videos/an_thumb.jpg', slug: 'an' },
+    { name: 'Yêu', topic: 'Cảm xúc & Tính chất', thumb: '/vsl400_videos/yeu_thumb.jpg', slug: 'yeu' },
   ];
 
   return (
@@ -280,7 +280,7 @@ export default function LandingView({ onOpenAuth }) {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#1e293b' }}>
-                Từ vựng: "Chào"
+                Từ vựng: "Cảm ơn"
               </span>
               <span style={{
                 fontSize: '0.72rem',
@@ -400,7 +400,7 @@ export default function LandingView({ onOpenAuth }) {
             border: '1px solid #bbf7d0'
           }}>
             <div style={{ fontSize: '0.82rem', color: '#166534', fontWeight: 700 }}>
-              Bạn muốn thử luyện cử chỉ "Chào" bằng webcam của mình?
+              Bạn muốn thử luyện cử chỉ "Cảm ơn" bằng webcam của mình?
             </div>
             <button
               onClick={() => onOpenAuth('register')}

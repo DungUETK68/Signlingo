@@ -57,7 +57,7 @@ export function getPracticeHistory() {
     if (!raw) {
       // Dữ liệu mẫu khởi đầu
       const defaultHistory = [
-        { word: 'Chào', score: 94, passed: true, date: '2026-10-28', badJoints: [] },
+        { word: 'Tạm biệt', score: 94, passed: true, date: '2026-10-28', badJoints: [] },
         { word: 'Cảm ơn', score: 78, passed: false, date: '2026-10-29', badJoints: [1, 2] },
         { word: 'Số 5', score: 95, passed: true, date: '2026-10-30', badJoints: [] }
       ];
@@ -168,26 +168,26 @@ export function generatePersonalizedPath(level, capability) {
     const stage1Lessons = [
       {
         id: 'p-beg-1',
-        title: 'Ký hiệu "Chào" chuẩn VSL',
-        desc: 'Bàn tay mở chạm nhẹ thái dương đưa dứt khoát ra ngoài kèm nụ cười thân thiện',
+        title: 'Ký hiệu "Cảm ơn" chuẩn VSL',
+        desc: 'Đặt đầu ngón tay lên cằm rồi hạ nhẹ bàn tay về phía trước đối tác giao tiếp',
         duration: '2 phút',
         level: 'Dễ',
         badge: 'Căn bản',
         completed: true,
         score: 95,
-        word: 'Chào'
+        word: 'Cảm ơn'
       },
       {
         id: 'p-beg-2',
-        title: 'Ký hiệu "Cảm ơn" tri ân',
-        desc: 'Đặt đầu ngón tay lên cằm rồi hạ nhẹ bàn tay về phía trước đối tác giao tiếp',
+        title: 'Ký hiệu "Tạm biệt" thân thiện',
+        desc: 'Nâng tay ngang tầm ngực và vẫy nhẹ các ngón tay sang hai bên',
         duration: '2 phút',
         level: 'Dễ',
         badge: 'Khuyên học hôm nay',
         highlight: true,
         completed: true,
         score: 92,
-        word: 'Cảm ơn'
+        word: 'Tạm biệt'
       },
       {
         id: 'p-beg-3',
@@ -213,7 +213,7 @@ export function generatePersonalizedPath(level, capability) {
         badge: 'Bài thích ứng AI',
         completed: false,
         score: 0,
-        word: 'Chào'
+        word: 'Cảm ơn'
       });
     }
 
@@ -630,7 +630,7 @@ export function generatePersonalizedPath(level, capability) {
           badge: 'Thử thách 5s',
           completed: false,
           score: 0,
-          word: 'Chào'
+          word: 'Cảm ơn'
         }
       ]
     }

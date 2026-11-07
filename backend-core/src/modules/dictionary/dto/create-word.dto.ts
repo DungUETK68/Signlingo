@@ -2,17 +2,17 @@ import { IsNotEmpty, IsOptional, IsString, IsArray } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateWordDto {
-  @ApiProperty({ example: 'Xin chào' })
+  @ApiProperty({ example: 'Cảm ơn' })
   @IsString()
   @IsNotEmpty({ message: 'Tên từ không được để trống' })
   name: string;
 
-  @ApiProperty({ example: 'xin_chao' })
+  @ApiProperty({ example: 'cam_on' })
   @IsString()
   @IsNotEmpty({ message: 'Slug không được để trống' })
   slug: string;
 
-  @ApiProperty({ example: 'Lời chào hỏi lịch sự khi gặp mặt' })
+  @ApiProperty({ example: 'Lời cảm ơn tri ân lịch sự' })
   @IsOptional()
   @IsString()
   meaning?: string;

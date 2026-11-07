@@ -1,27 +1,9 @@
 import { VSL400_WORDS } from './vsl400Words';
 
-// Định nghĩa từ chào hỏi / cảm ơn chuẩn
-const CHAO_WORD = {
-  id: 'vsl-cam-on',
-  word: 'Cảm ơn',
-  slug: 'cam_on',
-  topic: 'greeting',
-  topicLabel: 'Chào hỏi',
-  dialect: 'Toàn quốc',
-  difficulty: 'Dễ',
-  description: 'Bàn tay mở chạm nhẹ cằm rồi đưa thẳng dứt khoát về phía trước.',
-  details: 'Cử chỉ giao tiếp tiêu chuẩn trong Ngôn ngữ Ký hiệu Việt Nam (VSL).',
-  videoFront: '/vsl400_videos/cam_on_front.mp4',
-  videoSide: '/vsl400_videos/cam_on_left.mp4'
-};
-
 // Helper để lấy metadata của từ theo slug
 export function getWordBySlug(slug) {
   const found = VSL400_WORDS.find(w => w.slug === slug);
   if (found) return found;
-  if (slug === 'chao') {
-    return CHAO_WORD;
-  }
   return {
     id: `vsl-${slug}`,
     word: slug.toUpperCase(),
@@ -36,17 +18,17 @@ export function getWordBySlug(slug) {
 export const VSL_SENTENCES = [
   // --- CHỦ ĐỀ 1: CHÀO HỎI & XÃ GIAO (LỄ PHÉP, LỊCH THIỆP) ---
   {
-    id: 's-em-chao-anh',
-    title: 'Em chào anh',
-    signOrderText: 'Em + Anh + Chào',
+    id: 's-em-cam-on-anh',
+    title: 'Em cảm ơn anh',
+    signOrderText: 'Em + Anh + Cảm ơn',
     topic: 'greeting',
     topicLabel: 'Chào hỏi & Xã giao',
     difficulty: 'Dễ',
     duration: '5 phút',
-    grammarPattern: 'Chủ thể (Em) + Đối tượng (Anh) + Hành động Chào',
-    grammarExplanation: 'Trong ngữ pháp VSL, khi chào hỏi lễ phép, người điếc xác định rõ bản thân (Em) và đối tượng giao tiếp (Anh) trước khi thực hiện ký hiệu "Chào".',
-    wordSlugs: ['em', 'anh', 'chao'],
-    roles: ['Chủ ngữ (Người nói nhỏ tuổi)', 'Đối tượng xưng hô', 'Hành động chào hỏi']
+    grammarPattern: 'Chủ thể (Em) + Đối tượng (Anh) + Hành động Cảm ơn',
+    grammarExplanation: 'Trong ngữ pháp VSL, khi bày tỏ sự cảm kích lễ phép, người điếc xác định rõ bản thân (Em) và đối tượng giao tiếp (Anh) trước khi thực hiện ký hiệu "Cảm ơn".',
+    wordSlugs: ['em', 'anh', 'cam_on'],
+    roles: ['Chủ ngữ (Người nói nhỏ tuổi)', 'Đối tượng xưng hô', 'Hành động cảm ơn']
   },
   {
     id: 's-em-cam-on-bac',

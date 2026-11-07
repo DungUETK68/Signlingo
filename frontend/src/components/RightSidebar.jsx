@@ -247,7 +247,7 @@ export default function RightSidebar({
       <button 
         className="btn-pill btn-primary"
         style={{ width: '100%', gap: '0.5rem', marginTop: 'auto' }}
-        onClick={() => onStartPractice('Chào')}
+        onClick={() => onStartPractice('Cảm ơn')}
       >
         <Camera size={18} />
         <span>Thực hành camera AI</span>

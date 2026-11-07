@@ -37,6 +37,10 @@ export class SeedService implements OnApplicationBootstrap {
   ) {}
 
   async onApplicationBootstrap() {
+    await this.wordRepository.delete({ slug: 'chao' }).catch(() => {});
+    await this.lessonRepository.delete({ slug: 'chao-gap-go' }).catch(() => {});
+    await this.practiceLogRepository.delete({ wordSlug: 'chao' }).catch(() => {});
+    await this.reviewItemRepository.delete({ wordSlug: 'chao' }).catch(() => {});
     await this.seedUsers();
     await this.seedTopicsAndLessons();
     await this.seedWords();
@@ -160,8 +164,8 @@ export class SeedService implements OnApplicationBootstrap {
         icon: '👋',
         orderIndex: 1,
         lessons: [
-          { title: 'Chào & Gặp gỡ', slug: 'chao-gap-go', description: 'Học cách thực hiện cử chỉ Chào tiêu chuẩn VSL', duration: '5 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/chao_front.mp4', orderIndex: 1 },
-          { title: 'Tri ân & Tạ lỗi', slug: 'tri-an-ta-loi', description: 'Thực hành ký hiệu Cảm ơn và Xin lỗi', duration: '7 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/cam_on_front.mp4', orderIndex: 2 },
+          { title: 'Cảm ơn & Tri ân', slug: 'cam-on-tri-an', description: 'Học cách thực hiện cử chỉ Cảm ơn tiêu chuẩn VSL', duration: '5 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/cam_on_front.mp4', orderIndex: 1 },
+          { title: 'Tạm biệt & Tạ lỗi', slug: 'tam-biet-ta-loi', description: 'Thực hành ký hiệu Tạm biệt và Xin lỗi', duration: '7 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/tam_biet_front.mp4', orderIndex: 2 },
           { title: 'Hỏi thăm sức khỏe', slug: 'hoi-tham-suc-khoe', description: 'Ký hiệu Khỏe, Giúp đỡ khi giao tiếp', duration: '8 phút', level: 'Trung bình', videoUrl: '/vsl400_videos/khoe_front.mp4', orderIndex: 3 },
         ],
       },
@@ -415,7 +419,7 @@ export class SeedService implements OnApplicationBootstrap {
     if (logCount === 0) {
       const now = new Date();
       const demoLogs = [
-        { wordSlug: 'chao', wordName: 'Chào', score: 96, isPassed: true, daysAgo: 0, badJoints: [] },
+        { wordSlug: 'cam-on', wordName: 'Cảm ơn', score: 96, isPassed: true, daysAgo: 0, badJoints: [] },
         { wordSlug: 'pho', wordName: 'Phở', score: 90, isPassed: true, daysAgo: 0, badJoints: [] },
         { wordSlug: 'khoe', wordName: 'Khỏe', score: 95, isPassed: true, daysAgo: 1, badJoints: [] },
         { wordSlug: 'hoc', wordName: 'Học', score: 88, isPassed: true, daysAgo: 1, badJoints: [] },
@@ -428,7 +432,7 @@ export class SeedService implements OnApplicationBootstrap {
         { wordSlug: 'tam-biet', wordName: 'Tạm biệt', score: 70, isPassed: false, daysAgo: 5, badJoints: [0, 6] },
         { wordSlug: 'bo', wordName: 'Bố', score: 85, isPassed: true, daysAgo: 5, badJoints: [] },
         { wordSlug: 'me', wordName: 'Mẹ', score: 90, isPassed: true, daysAgo: 5, badJoints: [] },
-        { wordSlug: 'chao', wordName: 'Chào', score: 88, isPassed: true, daysAgo: 6, badJoints: [] },
+        { wordSlug: 'tam-biet', wordName: 'Tạm biệt', score: 88, isPassed: true, daysAgo: 6, badJoints: [] },
         { wordSlug: 'cam-on', wordName: 'Cảm ơn', score: 92, isPassed: true, daysAgo: 6, badJoints: [] },
       ];
 
@@ -478,7 +482,7 @@ export class SeedService implements OnApplicationBootstrap {
       const reviewSeed = [
         { wordSlug: 'tam-biet', wordName: 'Tạm biệt', interval: 1, repetition: 0, easeFactor: 2.3, nextReviewDate: today },
         { wordSlug: 'xin-loi', wordName: 'Xin lỗi', interval: 1, repetition: 0, easeFactor: 2.2, nextReviewDate: today },
-        { wordSlug: 'chao', wordName: 'Chào', interval: 5, repetition: 3, easeFactor: 2.6, nextReviewDate: tomorrow },
+        { wordSlug: 'hoc', wordName: 'Học', interval: 5, repetition: 3, easeFactor: 2.6, nextReviewDate: tomorrow },
         { wordSlug: 'cam-on', wordName: 'Cảm ơn', interval: 3, repetition: 2, easeFactor: 2.5, nextReviewDate: inTwoDays },
       ];
 

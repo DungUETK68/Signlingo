@@ -33,7 +33,7 @@ let globalHolisticLoadingPromise = null;
 let globalHandsInstance = null;
 let globalHandsLoadingPromise = null;
 
-export default function AIStudioView({ initialWord = 'Chào', onBack }) {
+export default function AIStudioView({ initialWord = 'Cảm ơn', onBack }) {
   const [selectedWord, setSelectedWord] = useState(initialWord);
 
   // Video Refs & Playback State

@@ -46,7 +46,7 @@ export const TOPICS = [
     level: 'Sơ cấp (Level 2)',
     levelCode: 'elementary',
     icon: '👋',
-    description: 'Chào, Tạm biệt, Cảm ơn, Xin lỗi, Giúp đỡ và hỏi thăm sức khỏe chuẩn VSL400',
+    description: 'Tạm biệt, Cảm ơn, Xin lỗi, Giúp đỡ và hỏi thăm sức khỏe chuẩn VSL400',
     totalLessons: 6,
     completedLessons: 4,
     color: '#d97706',
@@ -208,7 +208,7 @@ export const USER_PROFILE = {
     }
   ],
   recentPractices: [
-    { word: 'Chào', date: 'Hôm nay, 18:30', score: 95, status: 'Xuất sắc', passed: true },
+    { word: 'Cảm ơn', date: 'Hôm nay, 18:30', score: 95, status: 'Xuất sắc', passed: true },
     { word: 'Cảm ơn', date: 'Hôm nay, 18:15', score: 74, status: 'Cần cải thiện', passed: true },
     { word: 'Số 5', date: 'Hôm qua, 20:10', score: 98, status: 'Hoàn hảo', passed: true },
     { word: 'Bố / Cha', date: 'Hôm qua, 19:45', score: 90, status: 'Rất tốt', passed: true },
@@ -326,23 +326,23 @@ export const QUIZ_QUESTIONS = [
 ];
 
 export const REFLEX_CARDS = [
-  { word: 'Chào', time: 5, tip: 'Chạm thái dương -> Đưa tay ra trước', difficulty: 'Dễ' },
   { word: 'Cảm ơn', time: 5, tip: 'Chạm cằm -> Hạ tay đưa thẳng ra', difficulty: 'Dễ' },
-  { word: 'Số 5', time: 5, tip: 'Xòe 5 ngón tay hướng về phía trước', difficulty: 'Dễ' },
   { word: 'Tạm biệt', time: 5, tip: 'Nâng tay ngang vai và vẫy 4 ngón', difficulty: 'Dễ' },
-  { word: 'Uống nước', time: 5, tip: 'Bàn tay cong chữ C nâng lên miệng', difficulty: 'Dễ' },
-  { word: 'Chữ cái A', time: 5, tip: 'Nắm bàn tay, ngón cái áp ngón trỏ', difficulty: 'Trung bình' }
+  { word: 'Bố', time: 5, tip: 'Ngón tay trỏ và cái đặt góc cằm', difficulty: 'Dễ' },
+  { word: 'Mẹ', time: 5, tip: 'Ngón tay trỏ chạm nhẹ má phải', difficulty: 'Dễ' },
+  { word: 'Số 5', time: 5, tip: 'Xòe 5 ngón tay hướng về phía trước', difficulty: 'Dễ' },
+  { word: 'Uống nước', time: 5, tip: 'Bàn tay cong chữ C nâng lên miệng', difficulty: 'Dễ' }
 ];
 
 export const ADMIN_STATS = {
   totalUsers: 14280,
   activeUsersToday: 1845,
-  totalWords: 350,
-  benchmarkModelsExtracted: 342,
+  totalWords: 400,
+  benchmarkModelsExtracted: 400,
   completionRate: '84.2%',
   popularWords: [
-    { word: 'Chào', practiceCount: 8940, avgScore: 92.4 },
-    { word: 'Cảm ơn', practiceCount: 7620, avgScore: 78.1 },
+    { word: 'Cảm ơn', practiceCount: 8940, avgScore: 92.4 },
+    { word: 'Tạm biệt', practiceCount: 7620, avgScore: 78.1 },
     { word: 'Gia đình', practiceCount: 5410, avgScore: 73.5 },
     { word: 'Số 5', practiceCount: 4980, avgScore: 95.8 },
     { word: 'Phở bò', practiceCount: 3820, avgScore: 88.2 }

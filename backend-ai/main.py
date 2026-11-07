@@ -416,10 +416,6 @@ def process_evaluation(landmarks: List[List[List[float]]], word_slug: str = "") 
 def evaluate_word(word_slug: str, req: EvaluateRequest):
     return process_evaluation(req.landmarks, word_slug=word_slug)
 
-@app.post("/api/evaluate/chao")
-def evaluate_chao_legacy(req: EvaluateRequest):
-    return process_evaluation(req.landmarks, word_slug="chao")
-
 @app.get("/api/benchmarks")
 def list_benchmarks():
     """Danh sách các benchmark từ vựng VSL400 sẵn sàng chấm điểm"""

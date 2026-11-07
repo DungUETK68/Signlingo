@@ -18,7 +18,7 @@ import { getStoredToken, authApi } from './services/api';
 export default function App() {
   const [activeTab, setActiveTab] = useState('personalized');
   const [previousTab, setPreviousTab] = useState('personalized');
-  const [practiceTargetWord, setPracticeTargetWord] = useState('Chào');
+  const [practiceTargetWord, setPracticeTargetWord] = useState('Cảm ơn');
   const [selectedLearningLesson, setSelectedLearningLesson] = useState(null);
   const [selectedLearningTopic, setSelectedLearningTopic] = useState(null);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
