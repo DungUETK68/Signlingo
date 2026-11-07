@@ -153,88 +153,100 @@ export class SeedService implements OnApplicationBootstrap {
 
   private async seedTopicsAndLessons() {
     const topicCount = await this.topicRepository.count();
-    if (topicCount > 0) return;
+    if (topicCount >= 12) return;
 
-    const topicsData = [
-      {
-        slug: 'greeting',
-        title: 'Chào hỏi & Giao tiếp',
-        subtitle: 'Ký hiệu cơ bản kết nối xã hội',
-        description: 'Làm quen các cử chỉ chào hỏi, cảm ơn, xin lỗi và làm quen trong văn hóa người điếc.',
-        icon: '👋',
-        orderIndex: 1,
-        lessons: [
-          { title: 'Cảm ơn & Tri ân', slug: 'cam-on-tri-an', description: 'Học cách thực hiện cử chỉ Cảm ơn tiêu chuẩn VSL', duration: '5 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/cam_on_front.mp4', orderIndex: 1 },
-          { title: 'Tạm biệt & Tạ lỗi', slug: 'tam-biet-ta-loi', description: 'Thực hành ký hiệu Tạm biệt và Xin lỗi', duration: '7 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/tam_biet_front.mp4', orderIndex: 2 },
-          { title: 'Hỏi thăm sức khỏe', slug: 'hoi-tham-suc-khoe', description: 'Ký hiệu Khỏe, Giúp đỡ khi giao tiếp', duration: '8 phút', level: 'Trung bình', videoUrl: '/vsl400_videos/khoe_front.mp4', orderIndex: 3 },
-        ],
-      },
-      {
-        slug: 'family',
-        title: 'Gia đình & Xưng hô',
-        subtitle: 'Tình thân và cách gọi người thân',
-        description: 'Học cách biểu đạt ông, bà, bố, mẹ, anh, chị, em trong gia đình.',
-        icon: '👨‍👩‍👧‍👦',
-        orderIndex: 2,
-        lessons: [
-          { title: 'Bố mẹ & Thế hệ trên', slug: 'bo-me', description: 'Ký hiệu Bố, Mẹ, Bác, Chú, Cô', duration: '6 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/bo_front.mp4', orderIndex: 1 },
-          { title: 'Ông bà & Cội nguồn', slug: 'ong-ba', description: 'Ký hiệu Ông nội, Bà nội', duration: '5 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/ong_noi_front.mp4', orderIndex: 2 },
-          { title: 'Anh chị em trong nhà', slug: 'anh-chi-em', description: 'Ký hiệu Anh, Chị, Em', duration: '7 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/anh_front.mp4', orderIndex: 3 },
-        ],
-      },
-      {
-        slug: 'food',
-        title: 'Ẩm thực & Ăn uống',
-        subtitle: 'Món ăn, đồ uống quen thuộc',
-        description: 'Ký hiệu gọi món, các món phở, bún, bánh bao, nước, sữa, trà.',
-        icon: '🍜',
-        orderIndex: 3,
-        lessons: [
-          { title: 'Động từ Ăn & Uống', slug: 'an-uong', description: 'Cử chỉ cơ bản về nạp năng lượng', duration: '5 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/an_front.mp4', orderIndex: 1 },
-          { title: 'Món ăn truyền thống', slug: 'mon-an', description: 'Phở, Bún, Bánh bao, Thịt', duration: '8 phút', level: 'Trung bình', videoUrl: '/vsl400_videos/pho_front.mp4', orderIndex: 2 },
-          { title: 'Thức uống quen thuộc', slug: 'thuc-uong', description: 'Nước, Sữa, Trà', duration: '6 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/nuoc_front.mp4', orderIndex: 3 },
-        ],
-      },
-      {
-        slug: 'life',
-        title: 'Đời sống & Thể thao',
-        subtitle: 'Sinh hoạt, vui chơi giải trí',
-        description: 'Ký hiệu bóng đá, bơi lội, thời gian bây giờ.',
-        icon: '⚽',
-        orderIndex: 4,
-        lessons: [
-          { title: 'Vận động & Thể thao', slug: 'the-thao', description: 'Bóng đá, Bơi lội', duration: '6 phút', level: 'Trung bình', videoUrl: '/vsl400_videos/bong_da_front.mp4', orderIndex: 1 },
-          { title: 'Thời gian & Hiện tại', slug: 'thoi-gian', description: 'Bây giờ, Hôm nay', duration: '5 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/bay_gio_front.mp4', orderIndex: 2 },
-        ],
-      },
-      {
-        slug: 'education',
-        title: 'Trường học & Y tế',
-        subtitle: 'Môi trường học tập và chăm sóc sức khỏe',
-        description: 'Ký hiệu trường học, học tập, bác sĩ, bệnh viện.',
-        icon: '🏥',
-        orderIndex: 5,
-        lessons: [
-          { title: 'Môi trường học đường', slug: 'hoc-duong', description: 'Học tập, Trường học', duration: '7 phút', level: 'Cơ bản', videoUrl: '/vsl400_videos/hoc_front.mp4', orderIndex: 1 },
-          { title: 'Y tế & Bệnh viện', slug: 'y-te', description: 'Bác sĩ, Bệnh viện', duration: '8 phút', level: 'Trung bình', videoUrl: '/vsl400_videos/bac_si_front.mp4', orderIndex: 2 },
-        ],
-      },
+    this.logger.log('Đang khởi tạo danh mục 12 Chuyên đề chuẩn VSL400 và bài học...');
+    await this.lessonRepository.delete({});
+    await this.topicRepository.delete({});
+
+    const TOPIC_DEFS = [
+      { slug: 'greeting', title: 'Giao tiếp & Xã giao cốt lõi', subtitle: 'Ký hiệu cơ bản kết nối xã hội', description: 'Cảm ơn, Tạm biệt, Xin lỗi, Giúp đỡ, Khỏe và các giao tiếp xã giao lịch sự chuẩn VSL400', icon: '👋', orderIndex: 1, grammarTitle: 'Quy tắc 8: Biểu cảm nét mặt & Không gian giao tiếp', grammarTip: 'Trong VSL, nét mặt và ánh mắt đóng vai trò như ngữ điệu giọng nói; biểu cảm chân thành khi chào hỏi, xin lỗi, cảm ơn.' },
+      { slug: 'family', title: 'Gia đình & Xưng hô thân thuộc', subtitle: 'Tình thân và cách gọi người thân', description: 'Bố, Mẹ, Ông bà nội ngoại, Anh chị em, Con cháu và các mối quan hệ xưng hô trong gia đình', icon: '👨‍👩‍👧‍👦', orderIndex: 2, grammarTitle: 'Quy tắc 7: Không gian ký hiệu & Điểm quy chiếu xưng hô', grammarTip: 'Định vị người lớn tuổi ở vị trí cao hơn và phía trước; phân biệt nhánh nội và ngoại bằng vị trí bên trái/phải.' },
+      { slug: 'food', title: 'Ẩm thực & Thức uống hàng ngày', subtitle: 'Món ăn, đồ uống quen thuộc', description: 'Ăn, Uống, Cơm, Phở, Bún, Bánh bao, Bánh mì, Thịt, Trà, Cà phê, Sữa và các món ăn quen thuộc', icon: '🍲', orderIndex: 3, grammarTitle: 'Quy tắc 1: Cấu trúc Chủ đề – Lời dẫn & Trật tự SOV', grammarTip: 'Nguyên lý cốt lõi: Luôn đưa món ăn/đồ uống lên trước động từ Ăn/Uống: [Chủ ngữ] + [Món ăn] + [Ăn/Uống].' },
+      { slug: 'daily', title: 'Sinh hoạt & Đồ dùng cá nhân', subtitle: 'Trang phục, thiết bị và sinh hoạt', description: 'Trang phục, đồ dùng gia đình, thiết bị cá nhân: Áo, Quần, Bàn, Ghế, Cửa, Đồng hồ, Điện thoại, Tiền', icon: '🏠', orderIndex: 4, grammarTitle: 'Quy tắc 3: Từ ghép trong VSL', grammarTip: 'Rất nhiều từ ghép đồ dùng được tạo bằng cách lắp ghép đơn thuần các ký hiệu đơn lẻ (Cái + Bàn, Áo + Sơ mi).' },
+      { slug: 'actions', title: 'Hành động & Hoạt động tương tác', subtitle: 'Cử chỉ hành động đời sống', description: 'Đi, Về, Chạy, Mở, Đóng, Cho, Lấy, Tìm, Thấy, Dừng lại và các động từ giao tiếp đời sống', icon: '⚡', orderIndex: 5, grammarTitle: 'Quy tắc 5: Câu phủ định trong VSL', grammarTip: 'Từ phủ định (Không, Chưa, Không cần) đứng sau động từ hoặc ở cuối câu kết hợp động tác lắc đầu dứt khoát.' },
+      { slug: 'time', title: 'Thời gian & Lịch sinh hoạt', subtitle: 'Khung thời gian và thì trong VSL', description: 'Hôm nay, Ngày mai, Hôm qua, Sáng, Trưa, Tối, Bây giờ, Giờ, Phút, Ngày, Tuần, Tháng, Năm', icon: '⏰', orderIndex: 6, grammarTitle: 'Quy tắc 6: Thời gian & Thì trong VSL', grammarTip: 'VSL không chia động từ; luôn đặt từ chỉ thời gian ở đầu câu để xác lập khung thời gian tham chiếu cho toàn câu.' },
+      { slug: 'education', title: 'Giáo dục, Trường học & Nghề nghiệp', subtitle: 'Học tập và môi trường công sở', description: 'Học, Trường học, Báo cáo, Sách, Vở, Thầy giáo, Cô giáo, Bút bi và các dụng cụ học tập', icon: '🎓', orderIndex: 7, grammarTitle: 'Quy tắc 4: Cấu trúc Câu hỏi & Ngữ điệu cơ thể (NMMs)', grammarTip: 'Từ để hỏi thường được đặt ở cuối câu; kết hợp nhướn mày hoặc hơi nghiêng đầu đối với câu hỏi Có/Không.' },
+      { slug: 'health', title: 'Y tế, Sức khỏe & Thể trạng', subtitle: 'Chăm sóc sức khỏe và khám chữa bệnh', description: 'Bác sĩ, Bệnh viện, Y tá, Khám bệnh, Đau, Thuốc, Khỏe mạnh, Sốt, Cấp cứu', icon: '🏥', orderIndex: 8, grammarTitle: null, grammarTip: null },
+      { slug: 'travel', title: 'Địa điểm, Giao thông & Di chuyển', subtitle: 'Phương tiện và nơi chốn công cộng', description: 'Chợ, Công viên, Máy bay, Ô tô, Xe máy, Đường, Cầu, Ga tàu', icon: '✈️', orderIndex: 9, grammarTitle: null, grammarTip: null },
+      { slug: 'sports', title: 'Thể thao, Vận động & Giải trí', subtitle: 'Rèn luyện thân thể và vui chơi', description: 'Bóng đá, Bơi lội, Bóng bàn, Cầu lông, Điền kinh, Chạy bộ', icon: '⚽', orderIndex: 10, grammarTitle: null, grammarTip: null },
+      { slug: 'nature', title: 'Thiên nhiên, Thời tiết & Động vật', subtitle: 'Môi trường sống và sinh vật', description: 'Trời, Mưa, Nắng, Gió, Cây, Hoa, Con chó, Con mèo', icon: '🌿', orderIndex: 11, grammarTitle: null, grammarTip: null },
+      { slug: 'emotions', title: 'Cảm xúc, Tính chất & Miêu tả', subtitle: 'Tâm trạng, sắc thái và tính từ', description: 'Vui, Buồn, Yêu thương, Chăm chỉ, Đẹp, Xấu, Nhanh, Chậm', icon: '💖', orderIndex: 12, grammarTitle: 'Quy tắc 8: Biểu cảm nét mặt thể hiện mức độ tính từ', grammarTip: 'Nét mặt biểu đạt sắc thái và cường độ của tính từ: mở to mắt khi ngạc nhiên, mỉm cười khi hạnh phúc, nhíu mày khi giận.' }
     ];
 
-    for (const tData of topicsData) {
-      const { lessons, ...topicFields } = tData;
-      const topic = this.topicRepository.create(topicFields);
+    const CATEGORY_MAP: Record<string, string> = {
+      'Chào hỏi & Giao tiếp': 'greeting',
+      'Gia đình & Xưng hô': 'family',
+      'Ẩm thực & Thức uống': 'food',
+      'Đời sống & Đồ dùng': 'daily',
+      'Đời sống hàng ngày': 'daily',
+      'Hành động & Hoạt động': 'actions',
+      'Thời gian & Lịch': 'time',
+      'Giáo dục & Nghề nghiệp': 'education',
+      'Y tế & Sức khỏe': 'health',
+      'Địa điểm & Giao thông': 'travel',
+      'Thể thao & Giải trí': 'sports',
+      'Thiên nhiên & Động vật': 'nature',
+      'Cảm xúc & Tính chất': 'emotions'
+    };
+
+    const possiblePaths = [
+      path.join(__dirname, 'vsl400-seed.json'),
+      path.join(process.cwd(), 'src', 'modules', 'seed', 'vsl400-seed.json'),
+      path.join(process.cwd(), 'dist', 'modules', 'seed', 'vsl400-seed.json'),
+      path.join(process.cwd(), 'backend-core', 'src', 'modules', 'seed', 'vsl400-seed.json'),
+    ];
+
+    let seedWords: any[] = [];
+    for (const p of possiblePaths) {
+      if (fs.existsSync(p)) {
+        seedWords = JSON.parse(fs.readFileSync(p, 'utf8'));
+        break;
+      }
+    }
+
+    for (const tDef of TOPIC_DEFS) {
+      const topic = this.topicRepository.create({
+        slug: tDef.slug,
+        title: tDef.title,
+        subtitle: tDef.subtitle,
+        description: tDef.description,
+        icon: tDef.icon,
+        orderIndex: tDef.orderIndex,
+      });
       const savedTopic = await this.topicRepository.save(topic);
 
-      for (const lData of lessons) {
-        const lesson = this.lessonRepository.create({
-          ...lData,
+      let order = 1;
+      if (tDef.grammarTitle) {
+        const grammarLesson = this.lessonRepository.create({
           topicId: savedTopic.id,
+          title: `Bài học Ngữ pháp: ${tDef.grammarTitle}`,
+          slug: `ngu-phap-${tDef.slug}`,
+          description: tDef.grammarTip || 'Nắm vững quy tắc ngữ pháp VSL chuẩn.',
+          duration: '5 phút',
+          level: 'Lý thuyết',
+          orderIndex: order++,
+          videoUrl: null,
+        });
+        await this.lessonRepository.save(grammarLesson);
+      }
+
+      const wordsInTopic = seedWords.filter(w => CATEGORY_MAP[w.category] === tDef.slug);
+      for (const w of wordsInTopic) {
+        const lesson = this.lessonRepository.create({
+          topicId: savedTopic.id,
+          title: w.name,
+          slug: w.slug,
+          description: w.meaning || `Ký hiệu "${w.name}" chuẩn VSL.`,
+          duration: '3 phút',
+          level: w.difficulty || 'Dễ',
+          orderIndex: order++,
+          videoUrl: w.videoUrl,
         });
         await this.lessonRepository.save(lesson);
       }
     }
-    this.logger.log('Đã khởi tạo danh mục Topics và Lessons mẫu.');
+    this.logger.log('Đã khởi tạo thành công 12 Chuyên đề chuẩn VSL400 với 400 từ vựng và bài học ngữ pháp.');
   }
 
   private async seedWords() {

@@ -57,7 +57,17 @@ export function getCustomTopics() {
   try {
     const raw = localStorage.getItem(TOPICS_STORAGE_KEY);
     if (!raw) return [];
-    return JSON.parse(raw);
+    const list = JSON.parse(raw);
+    if (!Array.isArray(list)) return [];
+    // Tự động dọn dẹp nếu có cache dữ liệu mẫu cũ bị lỗi (ví dụ: "Tri ân", "Tạ lỗi" hoặc thiếu chuyên đề)
+    const hasLegacy = list.some(t => 
+      t.lessons?.some(l => (l.title || '').includes('Tri ân') || (l.title || '').includes('Tạ lỗi') || (l.slug || '').includes('tri-an'))
+    );
+    if (hasLegacy || list.length < 12) {
+      localStorage.removeItem(TOPICS_STORAGE_KEY);
+      return [];
+    }
+    return list;
   } catch (e) {
     return [];
   }
@@ -352,24 +362,41 @@ export function useSignWords() {
           setWords(getAllWords());
         }
 
-        if (Array.isArray(backendTopics) && backendTopics.length > 0) {
-          const syncedTopics = backendTopics.map(bt => ({
-            id: bt.slug || bt.id,
-            title: bt.title,
-            subtitle: bt.subtitle || '',
-            icon: bt.icon || '👋',
-            lessons: (bt.lessons || []).map((l, lIdx) => ({
-              id: l.id || `lesson-${l.slug || lIdx}`,
-              title: l.title,
-              description: l.description || '',
-              duration: l.duration || '5 phút',
-              level: l.level || 'Cơ bản',
-              completed: false,
-              score: 0,
-              videoUrl: l.videoUrl || '/vsl400_videos/cam_on_front.mp4'
-            }))
-          }));
-          setTopics(syncedTopics);
+        if (Array.isArray(backendTopics) && backendTopics.length >= 12) {
+          const hasLegacy = backendTopics.some(bt => 
+            bt.lessons?.some(l => (l.title || '').includes('Tri ân') || (l.title || '').includes('Tạ lỗi') || (l.slug || '').includes('tri-an'))
+          );
+          if (!hasLegacy) {
+            const syncedTopics = backendTopics.map(bt => {
+              const baseTopic = TOPICS.find(t => t.id === bt.slug || t.id === bt.id || t.title === bt.title) || {};
+              return {
+                ...baseTopic,
+                id: bt.slug || bt.id,
+                title: bt.title,
+                subtitle: bt.subtitle || baseTopic.subtitle || '',
+                icon: bt.icon || baseTopic.icon || '👋',
+                lessons: (bt.lessons || []).map((l, lIdx) => ({
+                  id: l.id || `lesson-${l.slug || lIdx}`,
+                  wordId: l.slug ? `vsl-${l.slug}` : undefined,
+                  slug: l.slug,
+                  title: l.title,
+                  word: l.title,
+                  description: l.description || '',
+                  duration: l.duration || '3 phút',
+                  level: l.level || 'Dễ',
+                  completed: false,
+                  score: 0,
+                  videoUrl: l.videoUrl || (l.slug ? `/vsl400_videos/${l.slug}_front.mp4` : '/vsl400_videos/cam_on_front.mp4'),
+                  videoSideUrl: l.slug ? `/vsl400_videos/${l.slug}_left.mp4` : undefined,
+                  type: (l.slug || '').startsWith('ngu-phap-') || (l.level === 'Lý thuyết') ? 'grammar' : 'word',
+                  grammarRuleId: baseTopic.grammarRuleId
+                }))
+              };
+            });
+            setTopics(syncedTopics);
+          } else {
+            setTopics(getAllTopics());
+          }
         } else {
           setTopics(getAllTopics());
         }

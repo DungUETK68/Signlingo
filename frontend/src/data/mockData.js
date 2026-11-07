@@ -239,30 +239,82 @@ export const TOPIC_METADATA = [
   }
 ];
 
-// Khởi tạo 12 chuyên đề chuẩn kết hợp toàn bộ 400 từ vựng VSL thật
+// Khởi tạo 12 chuyên đề chuẩn kết hợp toàn bộ 400 từ vựng VSL thật + 8 bài học ngữ pháp + 36 bài luyện câu
 export const TOPICS = TOPIC_METADATA.map((meta, topicIdx) => {
   const wordsForTopic = VSL400_WORDS.filter(w => w.topic === meta.id);
-  const lessons = wordsForTopic.map((w, idx) => ({
-    id: `vsl-${w.slug}`,
-    wordId: `vsl-${w.slug}`,
-    slug: w.slug,
-    title: w.word,
-    description: `Ký hiệu "${w.word}" chuẩn VSL (tay thuận: ${w.dominantHand === 'left' ? 'tay trái' : 'tay phải'}).`,
-    duration: '2-3 phút',
-    level: w.difficulty || 'Dễ',
-    videoUrl: w.videoFront,
-    videoSideUrl: w.videoSide || w.videoLeft,
-    completed: topicIdx === 0 && idx < 2, // 2 bài đầu của chương 1 demo hoàn thành
-    score: topicIdx === 0 && idx < 2 ? (idx === 0 ? 96 : 92) : 0
-  }));
+  const allLessons = [];
 
-  const completedCount = lessons.filter(l => l.completed).length;
+  // 1. BÀI HỌC LÝ THUYẾT NGỮ PHÁP (NẾU CHUYÊN ĐỀ CÓ QUY TẮC NGỮ PHÁP)
+  if (meta.grammarRuleId && meta.grammarRuleTitle) {
+    allLessons.push({
+      id: `gram-${meta.id}`,
+      type: 'grammar',
+      grammarRuleId: meta.grammarRuleId,
+      title: `Bài học Ngữ pháp: ${meta.grammarRuleTitle}`,
+      description: meta.grammarTip || 'Nắm vững quy tắc ngữ pháp VSL chuẩn để ghép câu và giao tiếp tự nhiên.',
+      duration: '5 phút',
+      level: 'Lý thuyết',
+      badge: 'Ngữ pháp VSL',
+      topicId: meta.id,
+      topicTitle: meta.title,
+      completed: topicIdx === 0, // Chương 1 demo hoàn thành bài ngữ pháp
+      score: topicIdx === 0 ? 100 : 0
+    });
+  }
+
+  // 2. CÁC BÀI HỌC TỪ VỰNG KÝ HIỆU CHUẨN VSL400 (TỪNG TỪ ĐỘC LẬP)
+  wordsForTopic.forEach((w, idx) => {
+    allLessons.push({
+      id: `vsl-${w.slug}`,
+      type: 'word',
+      wordId: `vsl-${w.slug}`,
+      slug: w.slug,
+      word: w.word,
+      title: w.word, // CHÍNH LÀ TỪ VỰNG: Cảm ơn, Xin lỗi, Giúp đỡ, Khỏe, Bố, Mẹ, v.v.
+      description: `Ký hiệu "${w.word}" chuẩn VSL (tay thuận: ${w.dominantHand === 'left' ? 'tay trái' : 'tay phải'}).`,
+      duration: '2-3 phút',
+      level: w.difficulty || 'Dễ',
+      videoUrl: w.videoFront,
+      videoSideUrl: w.videoSide || w.videoLeft,
+      thumbnail: w.thumbnail,
+      dominantHand: w.dominantHand,
+      topicId: meta.id,
+      topicTitle: meta.title,
+      completed: topicIdx === 0 && idx < 2,
+      score: topicIdx === 0 && idx < 2 ? (idx === 0 ? 96 : 92) : 0
+    });
+  });
+
+  // 3. CÁC BÀI HỌC CÂU GIAO TIẾP VSL THỰC HÀNH
+  if (Array.isArray(meta.sampleSentences)) {
+    meta.sampleSentences.forEach((sent) => {
+      allLessons.push({
+        id: `sent-${meta.id}-${sent.slug}`,
+        type: 'sentence',
+        sentenceSlug: sent.slug,
+        title: `Câu VSL: "${sent.title}"`,
+        description: `Thực hành câu giao tiếp VSL ứng dụng từ vựng chương "${meta.title}".`,
+        duration: '3-4 phút',
+        level: 'Thực hành',
+        badge: 'Luyện câu VSL',
+        topicId: meta.id,
+        topicTitle: meta.title,
+        completed: false,
+        score: 0
+      });
+    });
+  }
+
+  const completedCount = allLessons.filter(l => l.completed).length;
 
   return {
     ...meta,
-    totalLessons: lessons.length,
+    totalLessons: allLessons.length,
     completedLessons: completedCount,
-    lessons
+    lessons: allLessons,
+    vocabCount: wordsForTopic.length,
+    grammarCount: meta.grammarRuleId ? 1 : 0,
+    sentenceCount: Array.isArray(meta.sampleSentences) ? meta.sampleSentences.length : 0
   };
 });
 
