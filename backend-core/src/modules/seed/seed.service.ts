@@ -153,11 +153,14 @@ export class SeedService implements OnApplicationBootstrap {
 
   private async seedTopicsAndLessons() {
     const topicCount = await this.topicRepository.count();
-    if (topicCount >= 12) return;
+    const hasLegacyGreeting = await this.topicRepository.findOne({ where: { slug: 'greeting', title: 'Chào hỏi & Giao tiếp' } });
+    const hasLegacyLesson = await this.lessonRepository.findOne({ where: { slug: 'tri-an-ta-loi' } });
+    if (topicCount >= 12 && !hasLegacyGreeting && !hasLegacyLesson) return;
 
     this.logger.log('Đang khởi tạo danh mục 12 Chuyên đề chuẩn VSL400 và bài học...');
-    await this.lessonRepository.delete({});
-    await this.topicRepository.delete({});
+    await this.userProgressRepository.createQueryBuilder().delete().execute().catch(() => {});
+    await this.lessonRepository.createQueryBuilder().delete().execute().catch(() => {});
+    await this.topicRepository.createQueryBuilder().delete().execute().catch(() => {});
 
     const TOPIC_DEFS = [
       { slug: 'greeting', title: 'Giao tiếp & Xã giao cốt lõi', subtitle: 'Ký hiệu cơ bản kết nối xã hội', description: 'Cảm ơn, Tạm biệt, Xin lỗi, Giúp đỡ, Khỏe và các giao tiếp xã giao lịch sự chuẩn VSL400', icon: '👋', orderIndex: 1, grammarTitle: 'Quy tắc 8: Biểu cảm nét mặt & Không gian giao tiếp', grammarTip: 'Trong VSL, nét mặt và ánh mắt đóng vai trò như ngữ điệu giọng nói; biểu cảm chân thành khi chào hỏi, xin lỗi, cảm ơn.' },
