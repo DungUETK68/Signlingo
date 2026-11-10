@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { PracticeLog } from './entities/practice-log.entity';
 import { UserProgress } from './entities/user-progress.entity';
 import { User } from '../users/entities/user.entity';
+import { Lesson } from '../dictionary/entities/lesson.entity';
 import { ReviewItem } from '../adaptive/entities/review-item.entity';
 import { LogPracticeDto, CompleteLessonDto } from './dto/progress.dto';
 
@@ -16,6 +17,8 @@ export class ProgressService {
     private readonly userProgressRepository: Repository<UserProgress>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Lesson)
+    private readonly lessonRepository: Repository<Lesson>,
     @InjectRepository(ReviewItem)
     private readonly reviewItemRepository: Repository<ReviewItem>,
   ) {}
@@ -78,31 +81,63 @@ export class ProgressService {
   }
 
   async completeLesson(userId: string, dto: CompleteLessonDto) {
-    let progress = await this.userProgressRepository.findOne({
-      where: { userId, lessonId: dto.lessonId },
-    });
-
-    const isFirstTime = !progress || !progress.completed;
-
-    if (!progress) {
-      progress = this.userProgressRepository.create({
-        userId,
-        lessonId: dto.lessonId,
-        completed: true,
-        score: dto.score,
-        attempts: 1,
-        lastStudiedAt: new Date(),
+    // 1. Tìm bài học thực tế theo UUID, slug hoặc tên bài
+    let resolvedLessonId = dto.lessonId;
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(dto.lessonId);
+    
+    let targetLesson = null;
+    if (isUuid) {
+      targetLesson = await this.lessonRepository.findOne({ where: { id: dto.lessonId } });
+    }
+    if (!targetLesson) {
+      targetLesson = await this.lessonRepository.findOne({
+        where: [
+          { slug: dto.lessonId },
+          { slug: dto.lessonId.replace(/^vsl-/, '').replace(/-/g, '_') },
+          { title: dto.lessonId },
+        ],
       });
-    } else {
-      progress.completed = true;
-      progress.score = Math.max(progress.score, dto.score);
-      progress.attempts += 1;
-      progress.lastStudiedAt = new Date();
     }
 
-    await this.userProgressRepository.save(progress);
+    if (targetLesson) {
+      resolvedLessonId = targetLesson.id;
+    }
 
-    // Thưởng XP khi hoàn thành bài học
+    let progress: UserProgress | null = null;
+    let isFirstTime = true;
+
+    // 2. Chỉ lưu vào user_progress nếu resolvedLessonId là UUID hợp lệ trong DB
+    if (targetLesson || isUuid) {
+      try {
+        progress = await this.userProgressRepository.findOne({
+          where: { userId, lessonId: resolvedLessonId },
+        });
+
+        isFirstTime = !progress || !progress.completed;
+
+        if (!progress) {
+          progress = this.userProgressRepository.create({
+            userId,
+            lessonId: resolvedLessonId,
+            completed: true,
+            score: dto.score,
+            attempts: 1,
+            lastStudiedAt: new Date(),
+          });
+        } else {
+          progress.completed = true;
+          progress.score = Math.max(progress.score, dto.score);
+          progress.attempts += 1;
+          progress.lastStudiedAt = new Date();
+        }
+
+        await this.userProgressRepository.save(progress);
+      } catch (err) {
+        // Tránh lỗi foreign key nếu lessonId không tồn tại
+      }
+    }
+
+    // 3. Thưởng XP và cập nhật tiến trình cho User
     const bonusXp = isFirstTime ? 150 : 50;
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (user) {

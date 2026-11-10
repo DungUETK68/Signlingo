@@ -3,8 +3,10 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { User } from './entities/user.entity';
+import { User, UserRole } from './entities/user.entity';
 
 @ApiTags('Users (Người dùng & Hồ sơ)')
 @ApiBearerAuth()
@@ -12,6 +14,14 @@ import { User } from './entities/user.entity';
 @Controller('api/users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @ApiOperation({ summary: 'Admin lấy danh sách tất cả học viên' })
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @Get()
+  getAllUsers() {
+    return this.usersService.findAllUsers();
+  }
 
   @ApiOperation({ summary: 'Lấy thông tin hồ sơ của tài khoản đang đăng nhập' })
   @Get('profile')

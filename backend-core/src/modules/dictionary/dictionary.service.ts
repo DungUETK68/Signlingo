@@ -70,15 +70,48 @@ export class DictionaryService {
       slug: cleanSlug,
       isCustom: true,
     });
-    return this.wordRepository.save(word);
+    const savedWord = await this.wordRepository.save(word);
+
+    // Tự động tạo bài học tương ứng vào Chuyên đề (Topic) nếu có
+    try {
+      const topic = await this.topicRepository.findOne({
+        where: [
+          { title: dto.category },
+          { slug: dto.category },
+        ],
+      });
+      if (topic) {
+        const lesson = this.lessonRepository.create({
+          topicId: topic.id,
+          title: dto.name,
+          slug: cleanSlug,
+          description: dto.meaning || `Ký hiệu "${dto.name}" chuẩn VSL.`,
+          duration: '3 phút',
+          level: dto.difficulty || 'Dễ',
+          videoUrl: dto.videoUrl || null,
+        });
+        await this.lessonRepository.save(lesson);
+      }
+    } catch (e) {
+      // Bỏ qua lỗi lesson nếu không tìm thấy topic phù hợp
+    }
+
+    return savedWord;
   }
 
   async deleteWord(id: string) {
-    const word = await this.wordRepository.findOne({ where: { id } });
+    const word = await this.wordRepository.findOne({
+      where: [{ id }, { slug: id }],
+    });
     if (!word) {
       throw new NotFoundException('Không tìm thấy từ vựng cần xóa');
     }
+    const slug = word.slug;
     await this.wordRepository.remove(word);
+
+    // Cũng xóa bài học tương ứng trong bảng lessons nếu có
+    await this.lessonRepository.delete({ slug }).catch(() => {});
+
     return { success: true, message: `Đã xóa từ vựng ${word.name}` };
   }
 }

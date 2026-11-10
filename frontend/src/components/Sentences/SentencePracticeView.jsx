@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import CanvasSkeleton from '../CanvasSkeleton';
 import confetti from 'canvas-confetti';
-import { progressApi } from '../../services/api';
+import { progressApi, AI_API_URL } from '../../services/api';
 
 // Singleton Cache: Giữ mô hình trong bộ nhớ, lần sau mở lại là sẵn sàng ngay lập tức (0 giây)
 let globalHolisticInstance = null;
@@ -588,7 +588,7 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
 
         if (frames.length >= 5) {
           try {
-            let res = await fetch(`http://localhost:8000/api/evaluate/${slug}`, {
+            let res = await fetch(`${AI_API_URL}/evaluate/${slug}`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ landmarks: frames })

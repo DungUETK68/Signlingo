@@ -9,10 +9,15 @@ import {
   CheckCircle2,
   Award,
   BookOpen,
-  Loader2
+  Loader2,
+  Edit3,
+  X,
+  Save,
+  User as UserIcon,
+  Sparkles
 } from 'lucide-react';
-import { getUserProfile } from '../../data/personalizedStore';
-import { authApi, progressApi, adaptiveApi } from '../../services/api';
+import { getUserProfile, saveUserProfile } from '../../data/personalizedStore';
+import { authApi, progressApi, adaptiveApi, userApi } from '../../services/api';
 
 export default function DashboardView({ onStartPracticeWord }) {
   const [user, setUser] = useState(() => getUserProfile());
@@ -37,6 +42,16 @@ export default function DashboardView({ onStartPracticeWord }) {
     weekXp: 1240,
   });
   const [isLoading, setIsLoading] = useState(true);
+
+  // Trạng thái modal chỉnh sửa hồ sơ
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editForm, setEditForm] = useState({
+    name: user?.name || '',
+    learningLevel: user?.learningLevel || 'beginner',
+    dailyGoalMinutes: user?.dailyGoalMinutes || 20,
+  });
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
+  const [saveToast, setSaveToast] = useState('');
 
   // Tải dữ liệu thực tế từ backend NestJS
   useEffect(() => {
@@ -150,23 +165,99 @@ export default function DashboardView({ onStartPracticeWord }) {
 
   const levelInfo = getLevelInfo(user?.learningLevel);
 
+  const handleOpenEditModal = () => {
+    setEditForm({
+      name: user?.name || '',
+      learningLevel: user?.learningLevel || 'beginner',
+      dailyGoalMinutes: user?.dailyGoalMinutes || 20,
+    });
+    setIsEditModalOpen(true);
+  };
+
+  const handleSaveProfile = async (e) => {
+    e.preventDefault();
+    setIsSavingProfile(true);
+    setSaveToast('');
+    try {
+      // 1. Cập nhật về backend NestJS nếu có token
+      await userApi.updateProfile({
+        fullName: editForm.name,
+        learningLevel: editForm.learningLevel,
+        dailyGoalMinutes: Number(editForm.dailyGoalMinutes),
+      }).catch(err => console.warn('Cập nhật backend thất bại, dùng local:', err));
+
+      // 2. Lưu vào local storage và phát event cập nhật toàn bộ app
+      const updated = saveUserProfile({
+        name: editForm.name,
+        learningLevel: editForm.learningLevel,
+        dailyGoalMinutes: Number(editForm.dailyGoalMinutes),
+      });
+
+      setUser(prev => ({
+        ...prev,
+        ...updated,
+      }));
+
+      setSaveToast('Đã lưu thông tin hồ sơ thành công!');
+      setTimeout(() => {
+        setIsEditModalOpen(false);
+        setSaveToast('');
+      }, 1000);
+    } catch (err) {
+      setSaveToast('Có lỗi xảy ra khi lưu');
+    } finally {
+      setIsSavingProfile(false);
+    }
+  };
+
   return (
     <div style={{ width: '100%', margin: '0 auto', animation: 'fadeIn 0.2s ease-out' }}>
       {/* User Info Header */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-        <img
-          src={user?.avatarUrl || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80"}
-          alt={user?.name || "Học viên"}
-          style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', border: '2px solid #bae6fd' }}
-        />
-        <div>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#1e293b' }}>
-            {user?.name || 'Nguyễn Văn Học'}
-          </h2>
-          <div style={{ fontSize: '0.85rem', color: '#64748b' }}>
-            Cấp {levelInfo.level}: {levelInfo.title} • {user?.email || 'learner@signlingo.com'}
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'space-between',
+        marginBottom: '1.5rem',
+        padding: '1.25rem',
+        backgroundColor: '#ffffff',
+        borderRadius: 'var(--radius-lg)',
+        border: '1px solid #e2e8f0',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <img
+            src={user?.avatarUrl || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80"}
+            alt={user?.name || "Học viên"}
+            style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', border: '2px solid #bae6fd' }}
+          />
+          <div>
+            <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#1e293b', margin: 0, marginBottom: '0.25rem' }}>
+              {user?.name || 'Nguyễn Văn Học'}
+            </h2>
+            <div style={{ fontSize: '0.85rem', color: '#64748b' }}>
+              Cấp {levelInfo.level}: <span style={{ color: '#0284c7', fontWeight: 700 }}>{levelInfo.title}</span> • {user?.email || 'learner@signlingo.com'}
+            </div>
+            <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.2rem' }}>
+              Mục tiêu: {user?.dailyGoalMinutes || 20} phút/ngày
+            </div>
           </div>
         </div>
+
+        <button
+          onClick={handleOpenEditModal}
+          className="btn-pill btn-secondary"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.4rem',
+            padding: '0.5rem 1rem',
+            fontSize: '0.85rem',
+            fontWeight: 800,
+          }}
+        >
+          <Edit3 size={15} />
+          <span>Sửa hồ sơ</span>
+        </button>
       </div>
 
       {/* 3 Metric Cards */}
@@ -408,6 +499,202 @@ export default function DashboardView({ onStartPracticeWord }) {
           ))}
         </div>
       </div>
+
+      {/* Modal Chỉnh Sửa Hồ Sơ */}
+      {isEditModalOpen && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(15, 23, 42, 0.65)',
+          backdropFilter: 'blur(4px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999,
+          padding: '1rem',
+          animation: 'fadeIn 0.2s ease-out'
+        }}>
+          <div style={{
+            backgroundColor: '#ffffff',
+            borderRadius: 'var(--radius-xl, 1.25rem)',
+            width: '100%',
+            maxWidth: 480,
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+            overflow: 'hidden',
+            border: '1px solid #e2e8f0',
+          }}>
+            {/* Modal Header */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '1.25rem 1.5rem',
+              borderBottom: '1px solid #f1f5f9',
+              backgroundColor: '#f8fafc'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <div style={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: '50%',
+                  backgroundColor: '#e0f2fe',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#0284c7'
+                }}>
+                  <UserIcon size={18} />
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1e293b', margin: 0 }}>
+                    Cập nhật hồ sơ học tập
+                  </h3>
+                  <p style={{ fontSize: '0.78rem', color: '#64748b', margin: 0 }}>
+                    Đồng bộ trực tiếp với hệ cơ sở dữ liệu Signlingo
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsEditModalOpen(false)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: '#94a3b8',
+                  padding: '0.25rem',
+                  borderRadius: '0.375rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Modal Form */}
+            <form onSubmit={handleSaveProfile} style={{ padding: '1.5rem' }}>
+              <div style={{ marginBottom: '1.25rem' }}>
+                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 800, color: '#334155', marginBottom: '0.4rem' }}>
+                  Họ và tên
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={editForm.name}
+                  onChange={e => setEditForm({ ...editForm, name: e.target.value })}
+                  placeholder="Nhập tên hiển thị..."
+                  style={{
+                    width: '100%',
+                    padding: '0.65rem 0.9rem',
+                    borderRadius: 'var(--radius-md, 0.5rem)',
+                    border: '1.5px solid #cbd5e1',
+                    fontSize: '0.9rem',
+                    outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
+                />
+              </div>
+
+              <div style={{ marginBottom: '1.25rem' }}>
+                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 800, color: '#334155', marginBottom: '0.4rem' }}>
+                  Trình độ học tập VSL
+                </label>
+                <select
+                  value={editForm.learningLevel}
+                  onChange={e => setEditForm({ ...editForm, learningLevel: e.target.value })}
+                  style={{
+                    width: '100%',
+                    padding: '0.65rem 0.9rem',
+                    borderRadius: 'var(--radius-md, 0.5rem)',
+                    border: '1.5px solid #cbd5e1',
+                    fontSize: '0.9rem',
+                    backgroundColor: '#ffffff',
+                    outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
+                >
+                  <option value="beginner">Cấp 1: Nhập môn ký hiệu (A1 - Căn bản)</option>
+                  <option value="elementary">Cấp 2: Giao tiếp sơ cấp (A2 - Thực tế)</option>
+                  <option value="intermediate">Cấp 3: Thành thạo biểu cảm (B2 - Nâng cao)</option>
+                </select>
+              </div>
+
+              <div style={{ marginBottom: '1.5rem' }}>
+                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 800, color: '#334155', marginBottom: '0.4rem' }}>
+                  Mục tiêu luyện tập hàng ngày
+                </label>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem' }}>
+                  {[10, 20, 30, 45].map(mins => (
+                    <button
+                      key={mins}
+                      type="button"
+                      onClick={() => setEditForm({ ...editForm, dailyGoalMinutes: mins })}
+                      style={{
+                        padding: '0.6rem 0.25rem',
+                        borderRadius: 'var(--radius-md, 0.5rem)',
+                        border: Number(editForm.dailyGoalMinutes) === mins ? '2px solid #0284c7' : '1px solid #e2e8f0',
+                        backgroundColor: Number(editForm.dailyGoalMinutes) === mins ? '#f0f9ff' : '#ffffff',
+                        color: Number(editForm.dailyGoalMinutes) === mins ? '#0284c7' : '#475569',
+                        fontWeight: 800,
+                        fontSize: '0.85rem',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {mins} phút
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {saveToast && (
+                <div style={{
+                  padding: '0.65rem',
+                  borderRadius: '0.5rem',
+                  backgroundColor: saveToast.includes('thành công') ? '#f0fdf4' : '#fef2f2',
+                  color: saveToast.includes('thành công') ? '#16a34a' : '#dc2626',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  textAlign: 'center',
+                  marginBottom: '1rem'
+                }}>
+                  {saveToast}
+                </div>
+              )}
+
+              {/* Actions */}
+              <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
+                <button
+                  type="button"
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="btn-pill btn-secondary"
+                  style={{ padding: '0.6rem 1.25rem', fontSize: '0.88rem' }}
+                >
+                  Hủy
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSavingProfile}
+                  className="btn-pill btn-primary"
+                  style={{
+                    padding: '0.6rem 1.5rem',
+                    fontSize: '0.88rem',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.4rem'
+                  }}
+                >
+                  {isSavingProfile ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                  <span>{isSavingProfile ? 'Đang lưu...' : 'Lưu thay đổi'}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

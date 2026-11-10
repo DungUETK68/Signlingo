@@ -22,6 +22,7 @@ import {
 import confetti from 'canvas-confetti';
 import { VSL_GRAMMAR_RULES, VSL_GRAMMAR_QUIZ } from '../../data/grammarData';
 import { getSentenceById } from '../../data/sentencesData';
+import { progressApi } from '../../services/api';
 
 const RULE_ICONS = {
   Layers: Layers,
@@ -75,6 +76,18 @@ export default function GrammarView({ onSelectTab, onOpenSentenceDetail }) {
         });
       } catch (e) {}
     }
+
+    const quizScorePercent = Math.round((correctCount / VSL_GRAMMAR_QUIZ.length) * 100);
+    // Ghi nhận hoàn thành bài trắc nghiệm ngữ pháp vào CSDL và thưởng XP
+    progressApi.completeLesson('vsl_grammar_quiz', quizScorePercent).catch(() => {});
+    progressApi.logPractice({
+      wordSlug: 'vsl_grammar_quiz',
+      wordName: 'Trắc nghiệm Ngữ pháp VSL',
+      score: quizScorePercent,
+      isPassed: correctCount >= 3,
+      mode: 'quiz',
+      durationSeconds: 20
+    }).catch(() => {});
   };
 
   // Làm lại trắc nghiệm

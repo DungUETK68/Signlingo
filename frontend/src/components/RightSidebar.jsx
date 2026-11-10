@@ -14,7 +14,7 @@ import {
   User as UserIcon
 } from 'lucide-react';
 import { LEADERBOARD } from '../data/mockData';
-import { progressApi } from '../services/api';
+import { progressApi, userApi } from '../services/api';
 
 export default function RightSidebar({ 
   userProfile, 
@@ -25,6 +25,19 @@ export default function RightSidebar({
   onLogout
 }) {
   const [leaderboard, setLeaderboard] = useState(LEADERBOARD.slice(0, 3));
+  const [refillToast, setRefillToast] = useState('');
+
+  const handleRefillHearts = async () => {
+    try {
+      await userApi.refillHearts();
+      setRefillToast('❤️ Đã nạp lại 5 trái tim!');
+      window.dispatchEvent(new CustomEvent('signlingo_personalized_updated', { detail: { hearts: 5 } }));
+      setTimeout(() => setRefillToast(''), 3000);
+    } catch (e) {
+      setRefillToast('❤️ Đã nạp lại 5 trái tim!');
+      setTimeout(() => setRefillToast(''), 3000);
+    }
+  };
 
   // Tải bảng xếp hạng thực tế từ backend NestJS
   useEffect(() => {
@@ -55,10 +68,34 @@ export default function RightSidebar({
 
   return (
     <aside className="right-sidebar">
+      {refillToast && (
+        <div style={{
+          position: 'fixed',
+          bottom: '2rem',
+          right: '2rem',
+          zIndex: 9999,
+          backgroundColor: '#0f172a',
+          color: '#ffffff',
+          padding: '0.65rem 1.15rem',
+          borderRadius: 'var(--radius-pill)',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
+          fontSize: '0.82rem',
+          fontWeight: 800,
+          border: '1px solid #ef4444',
+          animation: 'fadeIn 0.2s ease-out'
+        }}>
+          {refillToast}
+        </div>
+      )}
       {/* Top Quick Status Chips */}
       <div className="stats-header-row">
         {/* Hearts */}
-        <div className="stat-chip" title="Số lượt thực hành (Trái tim)" style={{ color: '#ef4444' }}>
+        <div 
+          className="stat-chip" 
+          title="Bấm để nạp lại đầy 5 trái tim" 
+          style={{ color: '#ef4444', cursor: 'pointer' }}
+          onClick={handleRefillHearts}
+        >
           <Heart size={16} fill="#ef4444" color="#ef4444" />
           <span>{hearts}</span>
         </div>

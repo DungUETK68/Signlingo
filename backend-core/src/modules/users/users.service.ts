@@ -54,5 +54,12 @@ export class UsersService {
     await this.userRepository.save(user);
     return { hearts: user.hearts };
   }
+
+  async findAllUsers() {
+    const users = await this.userRepository.find({
+      order: { createdAt: 'DESC' },
+    });
+    return users.map(({ passwordHash: _, ...u }) => u);
+  }
 }
 

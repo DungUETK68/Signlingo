@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { USER_PROFILE } from './mockData';
 import { VSL400_WORDS } from './vsl400Words.js';
-import { getStoredToken } from '../services/api';
+import { getStoredToken, progressApi, adaptiveApi } from '../services/api';
 
 export const USER_PROFILE_KEY = 'signlingo_user_profile';
 export const PREFERENCES_KEY = 'signlingo_learning_preferences';
@@ -1253,6 +1253,63 @@ export function usePersonalizedPath() {
   const [path, setPath] = useState(getPersonalizedPath());
 
   useEffect(() => {
+    // Đồng bộ tiến độ thực tế từ Backend NestJS khi tải
+    const syncBackendProgress = async () => {
+      const token = getStoredToken();
+      if (!token) return;
+
+      try {
+        const [userProgress, recommendations] = await Promise.all([
+          progressApi.getUserProgress().catch(() => []),
+          adaptiveApi.getRecommendations().catch(() => null),
+        ]);
+
+        if (Array.isArray(userProgress) && userProgress.length > 0) {
+          const completedSet = new Set(
+            userProgress
+              .filter(p => p.completed)
+              .flatMap(p => [
+                String(p.lessonId).toLowerCase(),
+                p.lesson?.slug ? String(p.lesson.slug).toLowerCase() : null,
+                p.lesson?.title ? String(p.lesson.title).toLowerCase().trim() : null,
+              ])
+              .filter(Boolean)
+          );
+
+          const currentPath = getPersonalizedPath();
+          const synced = currentPath.map(stage => {
+            const updatedLessons = stage.lessons.map(l => {
+              const lid = String(l.id || '').toLowerCase();
+              const lslug = String(l.slug || '').toLowerCase();
+              const lword = String(l.word || l.title || '').toLowerCase().trim();
+              if (completedSet.has(lid) || completedSet.has(lslug) || completedSet.has(lword)) {
+                return { ...l, completed: true, score: l.score || 90 };
+              }
+              return l;
+            });
+            const compCount = updatedLessons.filter(l => l.completed).length;
+            const progress = Math.round((compCount / updatedLessons.length) * 100);
+            return { ...stage, lessons: updatedLessons, progress };
+          });
+
+          localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: 5, stages: synced }));
+          setPath(synced);
+        }
+
+        if (recommendations && recommendations.learningLevel) {
+          setCapability(prev => ({
+            ...prev,
+            paceLevel: recommendations.paceLevel || prev.paceLevel,
+            recommendation: recommendations.recommendation || prev.recommendation,
+          }));
+        }
+      } catch (e) {
+        console.warn('Lỗi đồng bộ tiến độ cá nhân từ backend:', e);
+      }
+    };
+
+    syncBackendProgress();
+
     const handleUpdate = () => {
       setProfile(getUserProfile());
       setCapability(analyzeLearnerCapability());
@@ -1289,7 +1346,19 @@ export function usePersonalizedPath() {
 
     localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: 5, stages: updatedPath }));
     setPath(updatedPath);
-    window.dispatchEvent(new CustomEvent(PERSONALIZED_EVENT, { detail: { path: updatedPath } }));
+
+    // Đồng bộ lưu hoàn thành bài học lên Backend NestJS
+    progressApi.completeLesson(lessonId, score).catch(() => {});
+
+    // Cộng XP cục bộ cho người dùng
+    const current = getUserProfile();
+    const updatedUser = saveUserProfile({
+      ...current,
+      totalXp: (current.totalXp || 0) + 150
+    });
+    setProfile(updatedUser);
+
+    window.dispatchEvent(new CustomEvent(PERSONALIZED_EVENT, { detail: { path: updatedPath, profile: updatedUser } }));
   };
 
   return {

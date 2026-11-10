@@ -1,8 +1,9 @@
 // Centralized API Client for Signlingo
 // Connects to NestJS Backend Core (Port 3000) and Python AI Service (Port 8000)
 
-export const CORE_API_URL = import.meta.env.VITE_CORE_API_URL || 'http://localhost:3000/api';
-export const AI_API_URL = import.meta.env.VITE_AI_API_URL || 'http://localhost:8000/api';
+const isVitePort = typeof window !== 'undefined' && window.location.port === '5173';
+export const CORE_API_URL = import.meta.env.VITE_CORE_API_URL || (isVitePort ? 'http://localhost:3000/api' : '/api');
+export const AI_API_URL = import.meta.env.VITE_AI_API_URL || (isVitePort ? 'http://localhost:8000/api' : '/ai');
 
 const TOKEN_KEY = 'signlingo_auth_token';
 
@@ -26,7 +27,7 @@ export const setStoredToken = (token) => {
   }
 };
 
-const getAuthHeaders = () => {
+export const getAuthHeaders = () => {
   const token = getStoredToken();
   const headers = { 'Content-Type': 'application/json' };
   if (token) {
@@ -108,6 +109,31 @@ export const dictionaryApi = {
     if (!res.ok) throw new Error('Không thể tải danh sách câu');
     return res.json();
   },
+
+  async createWord(wordData) {
+    const res = await fetch(`${CORE_API_URL}/words`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(wordData),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Không thể tạo từ vựng mới trên máy chủ');
+    }
+    return res.json();
+  },
+
+  async deleteWord(id) {
+    const res = await fetch(`${CORE_API_URL}/words/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Không thể xóa từ vựng trên máy chủ');
+    }
+    return res.json();
+  },
 };
 
 // ========================================================
@@ -137,26 +163,51 @@ export const progressApi = {
   },
 
   async completeLesson(lessonId, score) {
-    const res = await fetch(`${CORE_API_URL}/progress/complete-lesson`, {
-      method: 'POST',
-      headers: getAuthHeaders(),
-      body: JSON.stringify({ lessonId, score }),
-    });
-    return res.json();
+    try {
+      const res = await fetch(`${CORE_API_URL}/progress/complete-lesson`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ lessonId, score }),
+      });
+      return await res.json();
+    } catch (e) {
+      console.warn('Lỗi gửi kết quả hoàn thành bài học:', e);
+      return null;
+    }
+  },
+
+  async getUserProgress() {
+    try {
+      const res = await fetch(`${CORE_API_URL}/progress/my-lessons`, {
+        headers: getAuthHeaders(),
+      });
+      if (!res.ok) return [];
+      return await res.json();
+    } catch (e) {
+      return [];
+    }
   },
 
   async getLeaderboard(limit = 20) {
-    const res = await fetch(`${CORE_API_URL}/progress/leaderboard?limit=${limit}`);
-    if (!res.ok) return [];
-    return res.json();
+    try {
+      const res = await fetch(`${CORE_API_URL}/progress/leaderboard?limit=${limit}`);
+      if (!res.ok) return [];
+      return await res.json();
+    } catch (e) {
+      return [];
+    }
   },
 
   async getMyHistory(limit = 20) {
-    const res = await fetch(`${CORE_API_URL}/progress/my-history?limit=${limit}`, {
-      headers: getAuthHeaders(),
-    });
-    if (!res.ok) return [];
-    return res.json();
+    try {
+      const res = await fetch(`${CORE_API_URL}/progress/my-history?limit=${limit}`, {
+        headers: getAuthHeaders(),
+      });
+      if (!res.ok) return [];
+      return await res.json();
+    } catch (e) {
+      return [];
+    }
   },
 };
 
@@ -165,19 +216,27 @@ export const progressApi = {
 // ========================================================
 export const adaptiveApi = {
   async getRecommendations() {
-    const res = await fetch(`${CORE_API_URL}/adaptive/recommendations`, {
-      headers: getAuthHeaders(),
-    });
-    if (!res.ok) return null;
-    return res.json();
+    try {
+      const res = await fetch(`${CORE_API_URL}/adaptive/recommendations`, {
+        headers: getAuthHeaders(),
+      });
+      if (!res.ok) return null;
+      return await res.json();
+    } catch (e) {
+      return null;
+    }
   },
 
   async getDueReviewQueue() {
-    const res = await fetch(`${CORE_API_URL}/adaptive/review-queue`, {
-      headers: getAuthHeaders(),
-    });
-    if (!res.ok) return [];
-    return res.json();
+    try {
+      const res = await fetch(`${CORE_API_URL}/adaptive/review-queue`, {
+        headers: getAuthHeaders(),
+      });
+      if (!res.ok) return [];
+      return await res.json();
+    } catch (e) {
+      return [];
+    }
   },
 };
 
@@ -186,11 +245,15 @@ export const adaptiveApi = {
 // ========================================================
 export const userApi = {
   async getProfile() {
-    const res = await fetch(`${CORE_API_URL}/users/profile`, {
-      headers: getAuthHeaders(),
-    });
-    if (!res.ok) return null;
-    return res.json();
+    try {
+      const res = await fetch(`${CORE_API_URL}/users/profile`, {
+        headers: getAuthHeaders(),
+      });
+      if (!res.ok) return null;
+      return await res.json();
+    } catch (e) {
+      return null;
+    }
   },
 
   async updateProfile(data) {
@@ -210,5 +273,86 @@ export const userApi = {
     });
     return res.json();
   },
+
+  async getAllUsers() {
+    try {
+      const res = await fetch(`${CORE_API_URL}/users`, {
+        headers: getAuthHeaders(),
+      });
+      if (!res.ok) return [];
+      return await res.json();
+    } catch (e) {
+      return [];
+    }
+  },
 };
 
+// ========================================================
+// 6. Python AI Service API (FastAPI Cổng 8000 / Proxy /ai)
+// ========================================================
+export const aiApi = {
+  async evaluate(wordSlug, landmarks) {
+    const res = await fetch(`${AI_API_URL}/evaluate/${wordSlug}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ landmarks }),
+    });
+    if (!res.ok) throw new Error('AI evaluation failed');
+    return res.json();
+  },
+
+  async uploadVideo(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await fetch(`${AI_API_URL}/upload_video`, {
+      method: 'POST',
+      body: formData,
+    });
+    if (!res.ok) throw new Error('Upload video lên AI Service thất bại');
+    return res.json();
+  },
+
+  async getWords() {
+    try {
+      const res = await fetch(`${AI_API_URL}/words`);
+      if (!res.ok) return [];
+      return await res.json();
+    } catch (e) {
+      return [];
+    }
+  },
+
+  async addWord(wordData) {
+    try {
+      const res = await fetch(`${AI_API_URL}/words`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(wordData),
+      });
+      return await res.json();
+    } catch (e) {
+      return null;
+    }
+  },
+
+  async deleteWord(wordId) {
+    try {
+      const res = await fetch(`${AI_API_URL}/words/${wordId}`, {
+        method: 'DELETE',
+      });
+      return await res.json();
+    } catch (e) {
+      return null;
+    }
+  },
+
+  async getBenchmarks() {
+    try {
+      const res = await fetch(`${AI_API_URL}/benchmarks`);
+      if (!res.ok) return [];
+      return await res.json();
+    } catch (e) {
+      return [];
+    }
+  },
+};

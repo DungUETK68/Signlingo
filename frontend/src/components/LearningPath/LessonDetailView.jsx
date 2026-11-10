@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import confetti from 'canvas-confetti';
 import { 
   ArrowLeft, 
   Camera, 
@@ -16,12 +17,27 @@ import {
   Bookmark
 } from 'lucide-react';
 import { getAllWords, useSavedLessons } from '../../data/wordsStore';
+import { progressApi } from '../../services/api';
 
 export default function LessonDetailView({ lesson, topic, onBack, onStartPractice, onSelectLesson }) {
   const [speed, setSpeed] = useState(1.0);
   const [viewAngle, setViewAngle] = useState('front');
+  const [completedState, setCompletedState] = useState(!!lesson?.completed);
   const videoPlayerRef = useRef(null);
   const { isSaved, toggleSave } = useSavedLessons();
+
+  useEffect(() => {
+    setCompletedState(!!lesson?.completed);
+  }, [lesson?.id, lesson?.completed]);
+
+  const handleCompleteLesson = async () => {
+    setCompletedState(true);
+    confetti({ particleCount: 65, spread: 60 });
+    try {
+      await progressApi.completeLesson(lesson.id || lesson.slug || lesson.title, 100);
+      window.dispatchEvent(new CustomEvent('signlingo_data_updated', { detail: { action: 'complete_lesson', lessonId: lesson.id } }));
+    } catch (e) {}
+  };
 
   if (!lesson || !topic) return null;
 
@@ -187,33 +203,59 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
             </p>
           </div>
 
-          <button
-            onClick={() => toggleSave(lesson, topic)}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.45rem',
-              padding: '0.55rem 1.15rem',
-              borderRadius: 'var(--radius-pill)',
-              fontSize: '0.9rem',
-              fontWeight: 800,
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              backgroundColor: isSaved(lesson.id, lesson.title) ? '#eff6ff' : '#ffffff',
-              color: isSaved(lesson.id, lesson.title) ? '#0284c7' : '#64748b',
-              border: isSaved(lesson.id, lesson.title) ? '1.5px solid #93c5fd' : '1.5px solid #e2e8f0',
-              boxShadow: isSaved(lesson.id, lesson.title) ? '0 2px 8px rgba(2, 132, 199, 0.15)' : '0 1px 3px rgba(0,0,0,0.04)',
-              flexShrink: 0
-            }}
-            title={isSaved(lesson.id, lesson.title) ? 'Bấm để bỏ lưu bài học' : 'Lưu bài học để vào mục Ôn tập'}
-          >
-            <Bookmark 
-              size={18} 
-              fill={isSaved(lesson.id, lesson.title) ? '#0284c7' : 'none'} 
-              color={isSaved(lesson.id, lesson.title) ? '#0284c7' : '#64748b'} 
-            />
-            <span>{isSaved(lesson.id, lesson.title) ? 'Đã lưu' : 'Lưu'}</span>
-          </button>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <button
+              onClick={handleCompleteLesson}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                padding: '0.55rem 1.15rem',
+                borderRadius: 'var(--radius-pill)',
+                fontSize: '0.9rem',
+                fontWeight: 800,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                backgroundColor: completedState ? '#dcfce7' : '#ffffff',
+                color: completedState ? '#15803d' : '#0284c7',
+                border: completedState ? '1.5px solid #86efac' : '1.5px solid #bae6fd',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                flexShrink: 0
+              }}
+              title="Ghi nhận hoàn thành bài học vào CSDL và nhận XP"
+            >
+              <CheckCircle2 size={18} color={completedState ? '#16a34a' : '#0284c7'} />
+              <span>{completedState ? 'Đã hoàn thành' : 'Đánh dấu đã học'}</span>
+            </button>
+
+            <button
+              onClick={() => toggleSave(lesson, topic)}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                padding: '0.55rem 1.15rem',
+                borderRadius: 'var(--radius-pill)',
+                fontSize: '0.9rem',
+                fontWeight: 800,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                backgroundColor: isSaved(lesson.id, lesson.title) ? '#eff6ff' : '#ffffff',
+                color: isSaved(lesson.id, lesson.title) ? '#0284c7' : '#64748b',
+                border: isSaved(lesson.id, lesson.title) ? '1.5px solid #93c5fd' : '1.5px solid #e2e8f0',
+                boxShadow: isSaved(lesson.id, lesson.title) ? '0 2px 8px rgba(2, 132, 199, 0.15)' : '0 1px 3px rgba(0,0,0,0.04)',
+                flexShrink: 0
+              }}
+              title={isSaved(lesson.id, lesson.title) ? 'Bấm để bỏ lưu bài học' : 'Lưu bài học để vào mục Ôn tập'}
+            >
+              <Bookmark 
+                size={18} 
+                fill={isSaved(lesson.id, lesson.title) ? '#0284c7' : 'none'} 
+                color={isSaved(lesson.id, lesson.title) ? '#0284c7' : '#64748b'} 
+              />
+              <span>{isSaved(lesson.id, lesson.title) ? 'Đã lưu' : 'Lưu'}</span>
+            </button>
+          </div>
         </div>
 
         {/* Stepper Chỉ Dẫn 2 Bước */}

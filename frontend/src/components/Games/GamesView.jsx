@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { getAllWords } from '../../data/wordsStore';
 import { LEADERBOARD } from '../../data/mockData';
-import { progressApi } from '../../services/api';
+import { progressApi, AI_API_URL } from '../../services/api';
 import CanvasSkeleton from '../CanvasSkeleton';
 import confetti from 'canvas-confetti';
 import { 
@@ -143,6 +143,14 @@ export default function GamesView({ onStartPracticeWord }) {
     } else {
       setIsQuizDone(true);
       confetti({ particleCount: 80, spread: 80 });
+      progressApi.logPractice({
+        wordSlug: 'video_quiz_challenge',
+        wordName: 'Thử thách Đoán từ qua Video',
+        score: Math.min(100, Math.round(((quizScore + (selectedOpt === currentQuiz.correctIndex ? 100 : 0)) / (quizQuestions.length * 100)) * 100)),
+        isPassed: quizScore >= 300,
+        mode: 'quiz',
+        durationSeconds: 15,
+      }).catch(() => {});
     }
   };
 
@@ -553,7 +561,7 @@ export default function GamesView({ onStartPracticeWord }) {
     } else {
       // 2. Gửi chuỗi frame thực tế lên Backend FastAPI để đánh giá thật
       try {
-        let res = await fetch(`http://localhost:8000/api/evaluate/${wordSlug}`, {
+        let res = await fetch(`${AI_API_URL}/evaluate/${wordSlug}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ landmarks: framesToSend })

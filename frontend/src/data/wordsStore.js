@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { DICTIONARY_WORDS, TOPICS } from './mockData';
-import { dictionaryApi } from '../services/api';
+import { dictionaryApi, aiApi, progressApi, getStoredToken } from '../services/api';
 
 const STORAGE_KEY = 'signlingo_custom_words';
 const TOPICS_STORAGE_KEY = 'signlingo_custom_topics';
@@ -229,16 +229,26 @@ export async function addCustomWord(wordData) {
   // Phát event đồng bộ UI toàn ứng dụng
   window.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: { action: 'add', word: formattedWord } }));
 
-  // Đồng bộ lên backend API nếu có thể
+  // Đồng bộ lên NestJS Backend Core (PostgreSQL)
   try {
-    fetch('http://127.0.0.1:8000/api/words', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formattedWord)
+    const cleanSlug = formattedWord.word.toLowerCase().replace(/\s+/g, '_');
+    dictionaryApi.createWord({
+      name: formattedWord.word,
+      slug: cleanSlug,
+      category: formattedWord.topicLabel || 'Từ vựng thông dụng',
+      meaning: formattedWord.description || formattedWord.details,
+      difficulty: formattedWord.difficulty,
+      videoUrl: formattedWord.videoFront,
+      videoSideUrl: formattedWord.videoSide,
+      handShape: formattedWord.handShape,
+      movement: formattedWord.movement,
     }).catch(() => {});
-  } catch (err) {
-    // Offline / fallback silently
-  }
+  } catch (err) {}
+
+  // Đồng bộ sang Python AI Service
+  try {
+    aiApi.addWord(formattedWord).catch(() => {});
+  } catch (err) {}
 
   return formattedWord;
 }
@@ -263,9 +273,12 @@ export async function deleteWordById(wordId) {
 
   window.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: { action: 'delete', id: wordId } }));
 
-  // Gọi backend API nếu có
+  // Đồng bộ xóa trên cả Backend Core và AI Service
   try {
-    fetch(`http://127.0.0.1:8000/api/words/${wordId}`, { method: 'DELETE' }).catch(() => {});
+    dictionaryApi.deleteWord(wordId).catch(() => {});
+  } catch (e) {}
+  try {
+    aiApi.deleteWord(wordId).catch(() => {});
   } catch (e) {}
 }
 
@@ -275,16 +288,8 @@ export async function uploadVideoFile(file) {
   const localPreviewUrl = URL.createObjectURL(file);
 
   try {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    const res = await fetch('http://127.0.0.1:8000/api/upload_video', {
-      method: 'POST',
-      body: formData
-    });
-
-    if (res.ok) {
-      const data = await res.json();
+    const data = await aiApi.uploadVideo(file);
+    if (data && data.videoUrl) {
       return {
         success: true,
         videoUrl: data.videoUrl, // /uploads/video_...mp4
@@ -314,10 +319,25 @@ export function useSignWords() {
     // Lấy dữ liệu từ backend NestJS nếu có lúc khởi chạy
     const syncBackendWords = async () => {
       try {
-        const [backendWords, backendTopics] = await Promise.all([
+        const [backendWords, backendTopics, userProgress] = await Promise.all([
           dictionaryApi.getWords().catch(() => []),
           dictionaryApi.getTopics().catch(() => []),
+          getStoredToken() ? progressApi.getUserProgress().catch(() => []) : Promise.resolve([]),
         ]);
+
+        // Tạo tập hợp các ID / slug bài học mà user đã hoàn thành trên server
+        const completedMap = new Map();
+        if (Array.isArray(userProgress)) {
+          userProgress.forEach(up => {
+            if (up.completed) {
+              const score = up.score || 90;
+              if (up.lessonId) completedMap.set(String(up.lessonId).toLowerCase(), score);
+              if (up.lesson?.id) completedMap.set(String(up.lesson.id).toLowerCase(), score);
+              if (up.lesson?.slug) completedMap.set(String(up.lesson.slug).toLowerCase(), score);
+              if (up.lesson?.title) completedMap.set(String(up.lesson.title).toLowerCase().trim(), score);
+            }
+          });
+        }
 
         if (Array.isArray(backendWords) && backendWords.length > 0) {
           const standardSlugs = new Set(DICTIONARY_WORDS.map(w => (w.slug || '').toLowerCase().trim()));
@@ -369,13 +389,14 @@ export function useSignWords() {
           if (!hasLegacy) {
             const syncedTopics = backendTopics.map(bt => {
               const baseTopic = TOPICS.find(t => t.id === bt.slug || t.id === bt.id || t.title === bt.title) || {};
-              return {
-                ...baseTopic,
-                id: bt.slug || bt.id,
-                title: bt.title,
-                subtitle: bt.subtitle || baseTopic.subtitle || '',
-                icon: bt.icon || baseTopic.icon || '👋',
-                lessons: (bt.lessons || []).map((l, lIdx) => ({
+              const mappedLessons = (bt.lessons || []).map((l, lIdx) => {
+                const lid = String(l.id || `lesson-${l.slug || lIdx}`).toLowerCase();
+                const lslug = String(l.slug || '').toLowerCase();
+                const ltitle = String(l.title || '').toLowerCase().trim();
+                const isCompleted = completedMap.has(lid) || completedMap.has(lslug) || completedMap.has(ltitle);
+                const score = completedMap.get(lid) || completedMap.get(lslug) || completedMap.get(ltitle) || 0;
+
+                return {
                   id: l.id || `lesson-${l.slug || lIdx}`,
                   wordId: l.slug ? `vsl-${l.slug}` : undefined,
                   slug: l.slug,
@@ -384,13 +405,26 @@ export function useSignWords() {
                   description: l.description || '',
                   duration: l.duration || '3 phút',
                   level: l.level || 'Dễ',
-                  completed: false,
-                  score: 0,
+                  completed: isCompleted,
+                  score: isCompleted ? score : 0,
                   videoUrl: l.videoUrl || (l.slug ? `/vsl400_videos/${l.slug}_front.mp4` : '/vsl400_videos/cam_on_front.mp4'),
                   videoSideUrl: l.slug ? `/vsl400_videos/${l.slug}_left.mp4` : undefined,
                   type: (l.slug || '').startsWith('ngu-phap-') || (l.level === 'Lý thuyết') ? 'grammar' : 'word',
                   grammarRuleId: baseTopic.grammarRuleId
-                }))
+                };
+              });
+
+              const completedInTopic = mappedLessons.filter(l => l.completed).length;
+
+              return {
+                ...baseTopic,
+                id: bt.slug || bt.id,
+                title: bt.title,
+                subtitle: bt.subtitle || baseTopic.subtitle || '',
+                icon: bt.icon || baseTopic.icon || '👋',
+                totalLessons: mappedLessons.length,
+                completedLessons: completedInTopic,
+                lessons: mappedLessons
               };
             });
             setTopics(syncedTopics);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getAllWords } from '../../data/wordsStore';
 import { recordPracticeSession } from '../../data/personalizedStore';
-import { progressApi } from '../../services/api';
+import { progressApi, AI_API_URL } from '../../services/api';
 import CanvasSkeleton from '../CanvasSkeleton';
 import confetti from 'canvas-confetti';
 import {
@@ -599,7 +599,7 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
             .replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '')
           : 'cam_on'
         );
-        const endpoint = `http://localhost:8000/api/evaluate/${wordSlug}`;
+        const endpoint = `${AI_API_URL}/evaluate/${wordSlug}`;
 
         let data = null;
 
@@ -673,6 +673,10 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
         });
 
         if (data.passed) {
+          // Tự động ghi nhận hoàn thành bài học vào CSDL và thưởng XP
+          progressApi.completeLesson(wordSlug, Math.round(data.overall_score)).catch(() => {});
+          window.dispatchEvent(new CustomEvent('signlingo_data_updated', { detail: { action: 'complete_lesson', slug: wordSlug } }));
+
           setStatusMessage("✅ Đã hoàn tất chấm điểm! Bạn đã ĐẠT yêu cầu (≥ 80%).");
           confetti({ particleCount: 75, spread: 65, origin: { y: 0.6 } });
         } else {
