@@ -222,3 +222,4 @@ export function extract75Landmarks(results) {
   }
   return frame75;
 }
+

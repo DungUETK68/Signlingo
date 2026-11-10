@@ -15,7 +15,6 @@ export default function CanvasSkeleton({
   badJoints = [],       // Mảng các index khớp bị lỗi từ backend AI (ví dụ: [1, 2, 3, 4])
   accuracy = 92,
   isRecording = false,
-  showGuides = true,
   landmarksRef = null,  // Ref chứa { poseLandmarks, leftHandLandmarks, rightHandLandmarks, realLandmarks }
   realLandmarks = [],   // Mảng 2 bàn tay tương thích cũ [[lm0..lm20], ...]
   poseLandmarks = null, // 33 pose landmarks từ MediaPipe Holistic
@@ -79,23 +78,7 @@ export default function CanvasSkeleton({
       const t = frame * 0.05;
       const sway = Math.sin(t) * 3;
 
-      // 1. Vẽ khung căn chỉnh hướng dẫn vị trí đứng/ngồi
-      if (showGuides) {
-        ctx.save();
-        ctx.strokeStyle = 'rgba(56, 189, 248, 0.45)';
-        ctx.lineWidth = 1.5;
-        ctx.setLineDash([8, 6]);
-
-        // Vùng đầu & vai
-        ctx.beginPath();
-        ctx.ellipse(width / 2, height * 0.25, width * 0.13, height * 0.16, 0, 0, Math.PI * 2);
-        ctx.stroke();
-
-        // Khung căn chỉnh nửa thân trên & bàn tay
-        ctx.strokeRect(width * 0.14, height * 0.12, width * 0.72, height * 0.82);
-        ctx.restore();
-      }
-
+      // 1. Chỉ hiển thị camera và khung xương (đã loại bỏ khung căn chỉnh và hiệu ứng quét)
       // Lấy dữ liệu landmarks từ ref mới nhất
       const currentData = landmarksRef?.current || internalDataRef.current;
       const curPose = currentData.poseLandmarks;
@@ -288,7 +271,7 @@ export default function CanvasSkeleton({
     return () => {
       cancelAnimationFrame(animationId);
     };
-  }, [width, height, hasError, errorJoint, badJoints, accuracy, isRecording, showGuides]);
+  }, [width, height, hasError, errorJoint, badJoints, accuracy, isRecording]);
 
   return (
     <canvas 
