@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { getAllWords } from '../../data/wordsStore';
 import { LEADERBOARD } from '../../data/mockData';
 import { progressApi, AI_API_URL } from '../../services/api';
+import { startSkeletonTracking, stopSkeletonTracking, extract75Landmarks } from '../../services/skeletonTracker';
 import CanvasSkeleton from '../CanvasSkeleton';
 import confetti from 'canvas-confetti';
 import { 
@@ -22,12 +23,6 @@ import {
   ArrowRight,
   Award
 } from 'lucide-react';
-
-// Cache singleton MediaPipe Holistic & Hands
-let globalHolisticInstance = null;
-let globalHolisticLoadingPromise = null;
-let globalHandsInstance = null;
-let globalHandsLoadingPromise = null;
 
 export default function GamesView({ onStartPracticeWord }) {
   const [mode, setMode] = useState('quiz'); // 'quiz' | 'reflex' | 'leaderboard'
@@ -299,193 +294,30 @@ export default function GamesView({ onStartPracticeWord }) {
     }
   }, [cameraStream]);
 
-  // Tích hợp MediaPipe Holistic thời gian thực (trích xuất khung xương 75 điểm mốc như AIStudio)
+  // Tích hợp MediaPipe Holistic qua Singleton Tracker toàn cục (0s độ trễ, đã warm-up)
   useEffect(() => {
     if (cameraStatus !== 'active' || !videoRef.current || mode !== 'reflex') return;
 
-    let isSubscribed = true;
-    let animFrameId = null;
+    const handleSkeletonResults = (results) => {
+      // Cập nhật khung xương trực tiếp vào landmarksRef để CanvasSkeleton vẽ ngay
+      landmarksRef.current.poseLandmarks = results.poseLandmarks || null;
+      landmarksRef.current.leftHandLandmarks = results.leftHandLandmarks || null;
+      landmarksRef.current.rightHandLandmarks = results.rightHandLandmarks || null;
+      landmarksRef.current.realLandmarks = [];
 
-    const setupHolisticOrHands = async () => {
-      try {
-        // 1. Thử nạp MediaPipe Holistic (Lite)
-        if (!globalHolisticInstance) {
-          if (!globalHolisticLoadingPromise) {
-            globalHolisticLoadingPromise = (async () => {
-              let HolisticClass = window.Holistic;
-              if (!HolisticClass) {
-                try {
-                  const mod = await import('@mediapipe/holistic');
-                  HolisticClass = mod.Holistic || mod.default?.Holistic;
-                } catch (e) {}
-              }
-
-              if (HolisticClass) {
-                const instance = new HolisticClass({
-                  locateFile: (file) => `/mediapipe/holistic/${file}`
-                });
-
-                instance.setOptions({
-                  modelComplexity: 0,
-                  smoothLandmarks: true,
-                  minDetectionConfidence: 0.5,
-                  minTrackingConfidence: 0.5,
-                  refineFaceLandmarks: false
-                });
-
-                try {
-                  await instance.initialize();
-                } catch (initErr) {}
-                return instance;
-              }
-              return null;
-            })();
-          }
-          globalHolisticInstance = await globalHolisticLoadingPromise;
+      // Thu thập chuỗi 75 điểm mốc khi đang trong 5 giây thử thách
+      if (reflexPhaseRef.current === 'playing') {
+        const frame75 = extract75Landmarks(results);
+        if (frame75) {
+          recordedFramesRef.current.push(frame75);
         }
-
-        const holisticModel = globalHolisticInstance;
-
-        if (holisticModel && isSubscribed) {
-          holisticModel.onResults((results) => {
-            if (!isSubscribed) return;
-
-            // Cập nhật khung xương trực tiếp vào landmarksRef để CanvasSkeleton vẽ ngay
-            landmarksRef.current.poseLandmarks = results.poseLandmarks || null;
-            landmarksRef.current.leftHandLandmarks = results.leftHandLandmarks || null;
-            landmarksRef.current.rightHandLandmarks = results.rightHandLandmarks || null;
-            landmarksRef.current.realLandmarks = [];
-
-            // Thu thập chuỗi 75 điểm mốc khi đang trong 5 giây thử thách
-            if (reflexPhaseRef.current === 'playing') {
-              if (results.leftHandLandmarks || results.rightHandLandmarks || results.poseLandmarks) {
-                const frame75 = [];
-                // 33 pose landmarks
-                for (let i = 0; i < 33; i++) {
-                  const lm = results.poseLandmarks?.[i];
-                  frame75.push(lm ? [lm.x, lm.y, lm.z || 0] : [0, 0, 0]);
-                }
-                // 21 left hand landmarks
-                for (let i = 0; i < 21; i++) {
-                  const lm = results.leftHandLandmarks?.[i];
-                  frame75.push(lm ? [lm.x, lm.y, lm.z || 0] : [0, 0, 0]);
-                }
-                // 21 right hand landmarks
-                for (let i = 0; i < 21; i++) {
-                  const lm = results.rightHandLandmarks?.[i];
-                  frame75.push(lm ? [lm.x, lm.y, lm.z || 0] : [0, 0, 0]);
-                }
-                recordedFramesRef.current.push(frame75);
-              }
-            }
-          });
-
-          let isProcessing = false;
-          let lastFrameTime = 0;
-          const processHolistic = async (timestamp) => {
-            if (!isSubscribed) return;
-            const video = videoRef.current;
-            if (!isProcessing && video && video.readyState >= 2) {
-              if (timestamp - lastFrameTime >= 30) {
-                lastFrameTime = timestamp;
-                isProcessing = true;
-                try {
-                  await holisticModel.send({ image: video });
-                } catch (e) {} finally {
-                  isProcessing = false;
-                }
-              }
-            }
-            if (isSubscribed) {
-              animFrameId = requestAnimationFrame(processHolistic);
-            }
-          };
-
-          animFrameId = requestAnimationFrame(processHolistic);
-          return;
-        }
-
-        // 2. Fallback MediaPipe Hands nếu Holistic chưa sẵn sàng
-        if (!globalHandsInstance) {
-          if (!globalHandsLoadingPromise) {
-            globalHandsLoadingPromise = (async () => {
-              let HandsClass = window.Hands;
-              if (!HandsClass) {
-                try {
-                  const mod = await import('@mediapipe/hands');
-                  HandsClass = mod.Hands || mod.default?.Hands;
-                } catch (e) {}
-              }
-              if (HandsClass) {
-                const instance = new HandsClass({
-                  locateFile: (file) => `/mediapipe/hands/${file}`
-                });
-                instance.setOptions({
-                  maxNumHands: 2,
-                  modelComplexity: 0,
-                  minDetectionConfidence: 0.5,
-                  minTrackingConfidence: 0.5
-                });
-                return instance;
-              }
-              return null;
-            })();
-          }
-          globalHandsInstance = await globalHandsLoadingPromise;
-        }
-
-        const handsModel = globalHandsInstance;
-        if (handsModel && isSubscribed) {
-          handsModel.onResults((results) => {
-            if (!isSubscribed) return;
-            if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
-              landmarksRef.current.realLandmarks = results.multiHandLandmarks;
-
-              if (reflexPhaseRef.current === 'playing') {
-                const primaryHand = results.multiHandLandmarks[0];
-                const frame75 = Array(33).fill([0, 0, 0]);
-                frame75.push(...Array(21).fill([0, 0, 0]));
-                const rhPoints = primaryHand.map(pt => [pt.x, pt.y, pt.z || 0]);
-                frame75.push(...rhPoints);
-                recordedFramesRef.current.push(frame75);
-              }
-            } else {
-              landmarksRef.current.realLandmarks = [];
-            }
-          });
-
-          let isProcessing = false;
-          let lastFrameTime = 0;
-          const processHands = async (timestamp) => {
-            if (!isSubscribed) return;
-            const video = videoRef.current;
-            if (!isProcessing && video && video.readyState >= 2) {
-              if (timestamp - lastFrameTime >= 30) {
-                lastFrameTime = timestamp;
-                isProcessing = true;
-                try {
-                  await handsModel.send({ image: video });
-                } catch (e) {} finally {
-                  isProcessing = false;
-                }
-              }
-            }
-            if (isSubscribed) {
-              animFrameId = requestAnimationFrame(processHands);
-            }
-          };
-          animFrameId = requestAnimationFrame(processHands);
-        }
-      } catch (err) {
-        console.warn('Lỗi khởi tạo MediaPipe trong Thử thách 5s:', err);
       }
     };
 
-    setupHolisticOrHands();
+    startSkeletonTracking(videoRef.current, handleSkeletonResults);
 
     return () => {
-      isSubscribed = false;
-      if (animFrameId) cancelAnimationFrame(animFrameId);
+      stopSkeletonTracking(handleSkeletonResults);
     };
   }, [cameraStatus, mode]);
 

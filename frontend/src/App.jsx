@@ -15,6 +15,7 @@ import AuthModal from './components/AuthModal';
 import LandingView from './components/Landing/LandingView';
 import { getUserProfile, saveUserProfile } from './data/personalizedStore';
 import { getStoredToken, authApi } from './services/api';
+import { preloadSkeletonTracker } from './services/skeletonTracker';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('personalized');
@@ -29,6 +30,14 @@ export default function App() {
   const [userProfile, setUserProfile] = useState(() => getUserProfile());
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+
+  // 0. Khởi động & làm ấm nhận diện khung xương AI ngay khi truy cập website (0s delay khi vào camera)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      preloadSkeletonTracker().catch(e => console.warn('Preload skeleton notice:', e));
+    }, 150);
+    return () => clearTimeout(timer);
+  }, []);
 
   // 1. Kiểm tra Token JWT & Xác thực người dùng tự động khi tải web
   useEffect(() => {

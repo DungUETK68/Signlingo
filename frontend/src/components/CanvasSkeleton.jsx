@@ -5,7 +5,7 @@ import React, { useEffect, useRef } from 'react';
  * - Upper body Pose (11, 12, 13, 14, 15, 16)
  * - Hands (21 landmarks mỗi bàn tay)
  * - Hỗ trợ đổi màu khớp xương chuẩn xác: Xanh lá (#10b981) nếu đúng, Đỏ rực (#ef4444) nếu lỗi (badJoints)
- * - Hiệu ứng quét radar khi đang thu thập dữ liệu (isRecording)
+ * - Tinh giản hiển thị: Chỉ hiện video camera và khung xương, không có hiệu ứng quét gây rối mắt
  */
 export default function CanvasSkeleton({ 
   width = 640, 
@@ -278,25 +278,7 @@ export default function CanvasSkeleton({
         });
       }
 
-      // 5. Nếu đang trong phiên ghi hình AI -> Hiệu ứng sóng radar quét xanh công nghệ
-      if (isRecording) {
-        ctx.save();
-        const scanY = (frame * 5) % height;
-        const grad = ctx.createLinearGradient(0, scanY - 35, 0, scanY + 35);
-        grad.addColorStop(0, 'rgba(2, 132, 199, 0)');
-        grad.addColorStop(0.5, 'rgba(2, 132, 199, 0.28)');
-        grad.addColorStop(1, 'rgba(2, 132, 199, 0)');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, scanY - 35, width, 70);
-
-        ctx.strokeStyle = '#0284c7';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(0, scanY);
-        ctx.lineTo(width, scanY);
-        ctx.stroke();
-        ctx.restore();
-      }
+      // (Đã loại bỏ hiệu ứng quét sóng radar để màn hình tinh giản, chỉ hiện camera và khung xương)
 
       animationId = requestAnimationFrame(render);
     };
