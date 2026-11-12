@@ -26,7 +26,14 @@ const NAV_ITEMS = [
   { id: 'admin', label: 'Quản trị', icon: Settings },
 ];
 
-export default function Sidebar({ activeTab, onSelectTab }) {
+export default function Sidebar({ activeTab, onSelectTab, isAdmin = false }) {
+  const visibleNavItems = NAV_ITEMS.filter((item) => {
+    if (item.id === 'admin') {
+      return !!isAdmin;
+    }
+    return true;
+  });
+
   return (
     <aside className="left-sidebar">
       {/* Brand Header */}
@@ -39,7 +46,7 @@ export default function Sidebar({ activeTab, onSelectTab }) {
 
       {/* Navigation Buttons */}
       <nav className="sidebar-nav">
-        {NAV_ITEMS.map((item) => {
+        {visibleNavItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
           return (
