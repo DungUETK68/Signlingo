@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Flame, 
   Sparkles, 
@@ -26,6 +26,23 @@ export default function RightSidebar({
 }) {
   const [leaderboard, setLeaderboard] = useState(LEADERBOARD.slice(0, 3));
   const [refillToast, setRefillToast] = useState('');
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Đóng menu hồ sơ khi bấm chuột ra ngoài
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+    if (isProfileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isProfileMenuOpen]);
 
   const handleRefillHearts = async () => {
     try {
@@ -116,25 +133,169 @@ export default function RightSidebar({
           <span>{xp}</span>
         </div>
 
-        {/* Avatar Profile */}
-        <button 
-          onClick={onOpenAuth}
-          title="Thông tin tài khoản"
-          style={{
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            position: 'relative'
-          }}
-        >
-          <img
-            src={userProfile?.avatarUrl || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80"}
-            alt="User"
-            style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover', border: '2px solid #0284c7' }}
-          />
-        </button>
+        {/* Avatar Profile with Dropdown Menu */}
+        <div style={{ position: 'relative' }} ref={dropdownRef}>
+          <button 
+            type="button"
+            onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+            title="Thông tin tài khoản & Đăng xuất"
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              position: 'relative',
+              padding: 0
+            }}
+          >
+            <img
+              src={userProfile?.avatarUrl || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80"}
+              alt="User"
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: '50%',
+                objectFit: 'cover',
+                border: isProfileMenuOpen ? '2px solid #0284c7' : '2px solid #0284c7',
+                boxShadow: isProfileMenuOpen ? '0 0 0 3px rgba(2, 132, 199, 0.25)' : 'none',
+                transition: 'all 0.15s ease'
+              }}
+            />
+          </button>
+
+          {/* User Profile Dropdown */}
+          {isProfileMenuOpen && (
+            <div
+              style={{
+                position: 'absolute',
+                top: 'calc(100% + 10px)',
+                right: 0,
+                width: 280,
+                backgroundColor: '#ffffff',
+                borderRadius: '16px',
+                boxShadow: '0 12px 30px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08)',
+                border: '1px solid #e2e8f0',
+                padding: '1.1rem',
+                zIndex: 1000,
+                animation: 'fadeIn 0.15s ease'
+              }}
+            >
+              {/* Header: Avatar, Name, Email, Role */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '0.9rem' }}>
+                <img
+                  src={userProfile?.avatarUrl || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80"}
+                  alt="Avatar"
+                  style={{ width: 46, height: 46, borderRadius: '50%', objectFit: 'cover', border: '2px solid #0284c7', flexShrink: 0 }}
+                />
+                <div style={{ overflow: 'hidden', flex: 1 }}>
+                  <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {userProfile?.name || 'Học viên'}
+                  </div>
+                  <div style={{ fontSize: '0.78rem', color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {userProfile?.email || 'Chưa cập nhật email'}
+                  </div>
+                  <span style={{
+                    display: 'inline-block',
+                    marginTop: '0.25rem',
+                    padding: '0.12rem 0.5rem',
+                    fontSize: '0.68rem',
+                    fontWeight: 700,
+                    borderRadius: '9999px',
+                    backgroundColor: (userProfile?.isAdmin || userProfile?.role === 'Quản trị viên') ? '#ecfdf5' : '#f0f9ff',
+                    color: (userProfile?.isAdmin || userProfile?.role === 'Quản trị viên') ? '#059669' : '#0284c7'
+                  }}>
+                    {(userProfile?.isAdmin || userProfile?.role === 'Quản trị viên') ? 'Quản trị viên' : 'Học viên chăm chỉ'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Thông tin thống kê nhanh */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '0.5rem',
+                padding: '0.6rem 0.75rem',
+                backgroundColor: '#f8fafc',
+                borderRadius: '12px',
+                marginBottom: '0.9rem',
+                border: '1px solid #f1f5f9'
+              }}>
+                <div>
+                  <div style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 600 }}>Trình độ:</div>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155' }}>
+                    {getLevelLabel(userProfile?.learningLevel)}
+                  </div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 600 }}>Kinh nghiệm:</div>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 800, color: '#0284c7' }}>
+                    {xp} XP
+                  </div>
+                </div>
+              </div>
+
+              {/* Danh sách hành động */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsProfileMenuOpen(false);
+                    onSelectTab('dashboard');
+                  }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.6rem',
+                    width: '100%',
+                    padding: '0.6rem 0.8rem',
+                    fontSize: '0.84rem',
+                    fontWeight: 700,
+                    color: '#334155',
+                    backgroundColor: '#ffffff',
+                    border: '1px solid #e2e8f0',
+                    borderRadius: '10px',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f1f5f9'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
+                >
+                  <UserIcon size={16} color="#0284c7" />
+                  <span>Trang cá nhân & Cài đặt</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsProfileMenuOpen(false);
+                    if (onLogout) onLogout();
+                  }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.6rem',
+                    width: '100%',
+                    padding: '0.6rem 0.8rem',
+                    fontSize: '0.84rem',
+                    fontWeight: 700,
+                    color: '#dc2626',
+                    backgroundColor: '#fef2f2',
+                    border: '1px solid #fecaca',
+                    borderRadius: '10px',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#fee2e2'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fef2f2'}
+                >
+                  <LogOut size={16} color="#dc2626" />
+                  <span>Đăng xuất tài khoản</span>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Profile & Personalized Status Card */}
