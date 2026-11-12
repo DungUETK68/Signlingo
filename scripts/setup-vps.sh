@@ -14,6 +14,20 @@ echo "🚀 [1/5] Đang cập nhật hệ điều hành và các gói tiện ích
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y curl git ufw openssl
 
+# Tự động tạo 2GB Swap file nếu RAM máy chủ nhỏ (< 3GB) để chống tràn bộ nhớ khi build Docker
+TOTAL_RAM_KB=$(grep MemTotal /proc/meminfo | awk '{print $2}' || echo "4000000")
+if [ "$TOTAL_RAM_KB" -lt 3145728 ]; then
+    if [ ! -f /swapfile ]; then
+        echo "🧠 [Bộ nhớ ảo] Phát hiện RAM < 3GB, đang tự động tạo 2GB Swap file để đảm bảo build Docker 100% không bị đứng..."
+        sudo fallocate -l 2G /swapfile 2>/dev/null || sudo dd if=/dev/zero of=/swapfile bs=1M count=2048
+        sudo chmod 600 /swapfile
+        sudo mkswap /swapfile
+        sudo swapon /swapfile
+        echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+        echo "✅ Đã kích hoạt 2GB Swap file thành công!"
+    fi
+fi
+
 echo "🛡️ [2/5] Thiết lập tường lửa UFW an toàn (Mở cổng 22, 80, 443)..."
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
@@ -61,3 +75,4 @@ echo "   http://$PUBLIC_IP"
 echo ""
 echo "👉 Khi đã trỏ tên miền qua Cloudflare, website sẽ tự động chạy HTTPS an toàn!"
 echo "=============================================================================="
+
