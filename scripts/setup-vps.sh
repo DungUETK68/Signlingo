@@ -11,10 +11,14 @@ echo "🌟 BẮT ĐẦU TRIỂN KHAI HỆ THỐNG HỌC NGÔN NGỮ KÝ HIỆU S
 echo "=============================================================================="
 
 echo "🚀 [1/5] Đang cấu hình DNS và cập nhật hệ điều hành..."
-# Đảm bảo phân giải tên miền DNS hoạt động ổn định
-if ! grep -q "8.8.8.8" /etc/resolv.conf 2>/dev/null; then
-    echo -e "nameserver 8.8.8.8\nnameserver 1.1.1.1" | sudo tee /etc/resolv.conf > /dev/null
-fi
+# Đảm bảo phân giải tên miền DNS hoạt động ổn định (hỗ trợ cả DNS quốc tế và DNS nội địa VNPT/Viettel)
+cat << 'EOF' > /etc/resolv.conf
+nameserver 8.8.8.8
+nameserver 1.1.1.1
+nameserver 203.162.4.190
+nameserver 203.162.4.191
+nameserver 203.113.131.1
+EOF
 
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y curl git ufw openssl
