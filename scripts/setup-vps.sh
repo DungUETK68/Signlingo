@@ -28,10 +28,16 @@ if [ "$TOTAL_RAM_KB" -lt 3145728 ]; then
     fi
 fi
 
-echo "🛡️ [2/5] Thiết lập tường lửa UFW an toàn (Mở cổng 22, 80, 443)..."
+echo "🛡️ [2/5] Thiết lập tường lửa UFW an toàn..."
+# Tự động nhận diện cổng SSH đang chạy (tránh lock-out đối với nhà mạng đổi cổng như iNET port 24700)
+CURRENT_SSH_PORT=$(ss -tlnp 2>/dev/null | grep -E 'sshd|ssh' | awk '{print $4}' | awk -F':' '{print $NF}' | head -n 1 || echo "")
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
 sudo ufw allow 22/tcp
+sudo ufw allow 24700/tcp
+if [ -n "$CURRENT_SSH_PORT" ]; then
+    sudo ufw allow "$CURRENT_SSH_PORT"/tcp
+fi
 sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
 echo "y" | sudo ufw enable
