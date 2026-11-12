@@ -10,7 +10,12 @@ echo "==========================================================================
 echo "🌟 BẮT ĐẦU TRIỂN KHAI HỆ THỐNG HỌC NGÔN NGỮ KÝ HIỆU SIGNLINGO LÊN VPS"
 echo "=============================================================================="
 
-echo "🚀 [1/5] Đang cập nhật hệ điều hành và các gói tiện ích..."
+echo "🚀 [1/5] Đang cấu hình DNS và cập nhật hệ điều hành..."
+# Đảm bảo phân giải tên miền DNS hoạt động ổn định
+if ! grep -q "8.8.8.8" /etc/resolv.conf 2>/dev/null; then
+    echo -e "nameserver 8.8.8.8\nnameserver 1.1.1.1" | sudo tee /etc/resolv.conf > /dev/null
+fi
+
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y curl git ufw openssl
 
