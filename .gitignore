@@ -1,3 +1,7 @@
+# Assets archive
+assets.tar.gz
+assets.zip
+
 # Frontend
 frontend/node_modules/
 frontend/dist/

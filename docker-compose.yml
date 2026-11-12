@@ -35,6 +35,7 @@ services:
       - "8000:8000"
     volumes:
       - ./frontend/public/uploads:/app/frontend_uploads
+      - ./backend-ai/models/benchmarks:/app/models/benchmarks:ro
     networks:
       - signlingo-net
 
@@ -82,6 +83,8 @@ services:
     ports:
       - "80:80"
       - "5173:80"
+    volumes:
+      - ./frontend/public/vsl400_videos:/usr/share/nginx/html/vsl400_videos:ro
     depends_on:
       - backend-core
       - backend-ai
