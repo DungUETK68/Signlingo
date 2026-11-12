@@ -64,13 +64,27 @@ fi
 
 echo "⚙️ [4/5] Thiết lập file cấu hình môi trường .env an toàn..."
 if [ ! -f .env ]; then
-    echo "Tạo file .env từ .env.example..."
-    cp .env.example .env
+    echo "Tạo file .env sản xuất bảo mật..."
     RANDOM_JWT=$(openssl rand -hex 32 2>/dev/null || echo "signlingo_prod_jwt_$(date +%s)")
     RANDOM_PASS=$(openssl rand -hex 16 2>/dev/null || echo "db_pass_$(date +%s)")
-    sed -i "s/signlingo_super_secret_jwt_key_2026_very_secure/$RANDOM_JWT/g" .env
-    sed -i "s/DB_PASSWORD=postgres/DB_PASSWORD=$RANDOM_PASS/g" .env
-    echo "✅ Đã tự động tạo JWT Secret và Database Password bảo mật cao."
+    cat << EOF > .env
+# PostgreSQL Configuration
+DB_HOST=postgres
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=$RANDOM_PASS
+DB_NAME=signlingo
+
+# NestJS Backend Core Configuration
+PORT=3000
+JWT_SECRET=$RANDOM_JWT
+JWT_EXPIRATION=7d
+
+# Python AI Service Configuration
+AI_PORT=8000
+AI_SERVICE_URL=http://backend-ai:8000
+EOF
+    echo "✅ Đã tự động tạo file .env với JWT Secret và Database Password bảo mật cao."
 else
     echo "✅ Đã tìm thấy file .env hiện có."
 fi
