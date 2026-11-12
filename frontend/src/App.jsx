@@ -97,6 +97,15 @@ export default function App() {
     checkAuthStatus();
   }, []);
 
+  // 2. Phân quyền Quản trị viên & Tự động bảo vệ điều hướng tab Quản trị
+  const isAdmin = !!(userProfile?.isAdmin || userProfile?.role === 'Quản trị viên');
+
+  useEffect(() => {
+    if (activeTab === 'admin' && !isAdmin) {
+      setActiveTab('personalized');
+    }
+  }, [activeTab, isAdmin]);
+
   const handleStartPracticeWord = (wordName) => {
     setPreviousTab(activeTab === 'practice' ? 'personalized' : activeTab);
     setPracticeTargetWord(wordName);
@@ -205,17 +214,6 @@ export default function App() {
   }
 
   // 2. Khi đã đăng nhập: Hiển thị Giao diện học tập chính (Duo Layout)
-
-  // Kiểm tra quyền Quản trị viên
-  const isAdmin = !!(userProfile?.isAdmin || userProfile?.role === 'Quản trị viên');
-
-  // Tự động chuyển hướng nếu người học bình thường cố tình vào tab quản trị
-  useEffect(() => {
-    if (activeTab === 'admin' && !isAdmin) {
-      setActiveTab('personalized');
-    }
-  }, [activeTab, isAdmin]);
-
   return (
     <div className="duo-layout">
       {/* 1. Left Navigation Sidebar (Duolingo Style) */}
