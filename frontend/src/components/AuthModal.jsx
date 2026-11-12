@@ -29,9 +29,9 @@ export default function AuthModal({
 }) {
   const [step, setStep] = useState(forceOnboarding ? 'onboarding' : 'auth'); // 'auth' | 'onboarding'
   const [isRegister, setIsRegister] = useState(initialMode === 'register');
-  const [email, setEmail] = useState('learner@signlingo.com');
-  const [password, setPassword] = useState('123456');
-  const [fullName, setFullName] = useState('Học viên Signlingo');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
   
   // Trạng thái khảo sát Onboarding
   const [selectedLevel, setSelectedLevel] = useState('beginner'); // 'beginner' | 'elementary' | 'intermediate'
@@ -55,15 +55,15 @@ export default function AuthModal({
         setPassword('');
         setFullName('');
       } else if (currentProfile && currentProfile.isLoggedIn) {
-        setFullName(currentProfile.name || 'Học viên Signlingo');
-        setEmail(currentProfile.email || 'learner@signlingo.com');
+        setFullName(currentProfile.name || '');
+        setEmail(currentProfile.email || '');
         setSelectedLevel(currentProfile.learningLevel || 'beginner');
         setLearningGoalMinutes(currentProfile.learningGoalMinutes || 15);
         setPriorityTopic(currentProfile.priorityTopic || 'greeting');
       } else {
-        setEmail('learner@signlingo.com');
-        setPassword('123456');
-        setFullName('Học viên Signlingo');
+        setEmail('');
+        setPassword('');
+        setFullName('');
       }
 
       if (forceOnboarding) {
@@ -81,6 +81,23 @@ export default function AuthModal({
     e.preventDefault();
     setErrorMessage('');
     setSuccessMessage('');
+
+    if (isRegister) {
+      if (!fullName.trim() || !email.trim() || !password.trim()) {
+        setErrorMessage('Vui lòng điền đầy đủ cả 3 thông tin: Họ và tên, Email và Mật khẩu!');
+        return;
+      }
+      if (password.length < 6) {
+        setErrorMessage('Mật khẩu phải có tối thiểu 6 ký tự!');
+        return;
+      }
+    } else {
+      if (!email.trim() || !password.trim()) {
+        setErrorMessage('Vui lòng nhập Email và Mật khẩu!');
+        return;
+      }
+    }
+
     setIsLoading(true);
 
     try {
@@ -94,9 +111,10 @@ export default function AuthModal({
         });
 
         setSuccessMessage('Đăng ký thành công! Hãy thiết lập mục tiêu học tập.');
+        const registeredName = data.user.fullName || fullName.trim();
         const profile = {
           id: data.user.id,
-          name: data.user.fullName,
+          name: registeredName,
           email: data.user.email,
           role: data.user.role === 'ADMIN' ? 'Quản trị viên' : 'Học viên chăm chỉ',
           isAdmin: data.user.role === 'ADMIN',
@@ -126,7 +144,7 @@ export default function AuthModal({
 
         const profile = {
           id: data.user.id,
-          name: data.user.fullName,
+          name: data.user.fullName || 'Học viên Signlingo',
           email: data.user.email,
           role: data.user.role === 'ADMIN' ? 'Quản trị viên' : 'Học viên chăm chỉ',
           isAdmin: data.user.role === 'ADMIN',
@@ -160,8 +178,8 @@ export default function AuthModal({
     const current = getUserProfile();
     const updatedProfile = saveUserProfile({
       ...current,
-      name: fullName || 'Học viên Signlingo',
-      email: email || 'learner@signlingo.com',
+      name: fullName.trim() || current.name || 'Học viên Signlingo',
+      email: email.trim() || current.email,
       isLoggedIn: true,
       hasCompletedOnboarding: true,
       learningLevel: selectedLevel,
@@ -176,49 +194,6 @@ export default function AuthModal({
       onLoginSuccess(updatedProfile, selectedLevel);
     }
     onClose();
-  };
-
-  // Đăng nhập nhanh 1 chạm với tài khoản mẫu
-  const handleQuickLogin = async (demoRole) => {
-    setErrorMessage('');
-    setIsLoading(true);
-    const demoEmail = demoRole === 'admin' ? 'admin@signlingo.com' : 'learner@signlingo.com';
-    const demoPass = '123456';
-    
-    setEmail(demoEmail);
-    setPassword(demoPass);
-    setIsRegister(false);
-
-    try {
-      const data = await authApi.login({ email: demoEmail, password: demoPass });
-      const profile = {
-        id: data.user.id,
-        name: data.user.fullName,
-        email: data.user.email,
-        role: data.user.role === 'ADMIN' ? 'Quản trị viên' : 'Học viên chăm chỉ',
-        isAdmin: data.user.role === 'ADMIN',
-        learningLevel: data.user.learningLevel || 'beginner',
-        dailyGoalMinutes: data.user.dailyGoalMinutes || 15,
-        priorityTopic: data.user.priorityTopic || 'greeting',
-        streakDays: data.user.streak || 1,
-        totalXp: data.user.xp || 0,
-        hearts: data.user.hearts ?? 5,
-        gems: data.user.gems ?? 100,
-        isLoggedIn: true,
-        hasCompletedOnboarding: true
-      };
-      saveUserProfile(profile);
-      recalculateAdaptivePath();
-
-      if (onLoginSuccess) {
-        onLoginSuccess(profile, profile.learningLevel);
-      }
-      setIsLoading(false);
-      onClose();
-    } catch (err) {
-      setIsLoading(false);
-      setErrorMessage(err.message || 'Không thể kết nối đến Backend Core (Cổng 3000). Vui lòng đảm bảo server đang chạy!');
-    }
   };
 
   return (
@@ -316,16 +291,16 @@ export default function AuthModal({
               {isRegister && (
                 <div>
                   <label style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-main)', display: 'block', marginBottom: '0.35rem' }}>
-                    Họ và tên của bạn:
+                    Họ và tên của bạn: <span style={{ color: '#ef4444' }}>*</span>
                   </label>
                   <div style={{ position: 'relative' }}>
                     <UserIcon size={16} color="#94a3b8" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
                     <input
                       type="text"
-                      required={isRegister}
+                      required
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      placeholder="Ví dụ: Nguyễn Văn A"
+                      placeholder="Nhập họ và tên đầy đủ của bạn"
                       style={{
                         width: '100%',
                         padding: '0.75rem 1rem 0.75rem 2.6rem',
@@ -341,7 +316,7 @@ export default function AuthModal({
 
               <div>
                 <label style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-main)', display: 'block', marginBottom: '0.35rem' }}>
-                  Địa chỉ Email:
+                  Địa chỉ Email: <span style={{ color: '#ef4444' }}>*</span>
                 </label>
                 <div style={{ position: 'relative' }}>
                   <Mail size={16} color="#94a3b8" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
@@ -350,7 +325,7 @@ export default function AuthModal({
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="learner@signlingo.com"
+                    placeholder="name@example.com"
                     style={{
                       width: '100%',
                       padding: '0.75rem 1rem 0.75rem 2.6rem',
@@ -365,7 +340,7 @@ export default function AuthModal({
 
               <div>
                 <label style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-main)', display: 'block', marginBottom: '0.35rem' }}>
-                  Mật khẩu:
+                  Mật khẩu: <span style={{ color: '#ef4444' }}>*</span>
                 </label>
                 <div style={{ position: 'relative' }}>
                   <Lock size={16} color="#94a3b8" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
@@ -375,7 +350,7 @@ export default function AuthModal({
                     minLength={6}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Mật khẩu tối thiểu 6 ký tự"
+                    placeholder="Tối thiểu 6 ký tự"
                     style={{
                       width: '100%',
                       padding: '0.75rem 1rem 0.75rem 2.6rem',
@@ -407,35 +382,6 @@ export default function AuthModal({
                 )}
               </button>
             </form>
-
-            {/* Nút Đăng Nhập Nhanh 1 Chạm */}
-            <div style={{ marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid #f1f5f9' }}>
-              <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#64748b', textAlign: 'center', marginBottom: '0.6rem' }}>
-                HOẶC ĐĂNG NHẬP NHANH TÀI KHOẢN MẪU:
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem' }}>
-                <button
-                  type="button"
-                  disabled={isLoading}
-                  onClick={() => handleQuickLogin('learner')}
-                  className="btn-pill btn-secondary"
-                  style={{ fontSize: '0.8rem', padding: '0.5rem 0.6rem', justifyContent: 'center' }}
-                >
-                  <UserIcon size={14} color="#0284c7" />
-                  <span>Học viên Demo</span>
-                </button>
-                <button
-                  type="button"
-                  disabled={isLoading}
-                  onClick={() => handleQuickLogin('admin')}
-                  className="btn-pill btn-secondary"
-                  style={{ fontSize: '0.8rem', padding: '0.5rem 0.6rem', justifyContent: 'center' }}
-                >
-                  <ShieldCheck size={14} color="#059669" />
-                  <span>Quản trị viên</span>
-                </button>
-              </div>
-            </div>
 
             <div style={{ textAlign: 'center', marginTop: '1.25rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
               {isRegister ? 'Đã có tài khoản?' : 'Chưa có tài khoản?'}{' '}

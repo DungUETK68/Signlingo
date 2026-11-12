@@ -67,6 +67,7 @@ export class SeedService implements OnApplicationBootstrap {
       this.logger.log('Đã tạo tài khoản Admin mặc định: admin@signlingo.com / 123456');
     }
 
+    // Giữ lại 1 tài khoản người học mẫu tiêu chuẩn và dọn dẹp các tài khoản demo thừa
     const demoUsers = [
       {
         email: 'learner@signlingo.com',
@@ -81,59 +82,25 @@ export class SeedService implements OnApplicationBootstrap {
         priorityTopic: 'greeting',
         avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
       },
-      {
-        email: 'baongoc@signlingo.com',
-        fullName: 'Trần Bảo Ngọc',
-        role: UserRole.LEARNER,
-        xp: 3450,
-        streak: 21,
-        hearts: 5,
-        gems: 820,
-        learningLevel: 'intermediate',
-        dailyGoalMinutes: 30,
-        priorityTopic: 'daily',
-        avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80',
-      },
-      {
-        email: 'hoanglong@signlingo.com',
-        fullName: 'Lê Hoàng Long',
-        role: UserRole.LEARNER,
-        xp: 2980,
-        streak: 14,
-        hearts: 4,
-        gems: 640,
-        learningLevel: 'intermediate',
-        dailyGoalMinutes: 20,
-        priorityTopic: 'family',
-        avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
-      },
-      {
-        email: 'thuthao@signlingo.com',
-        fullName: 'Phạm Thu Thảo',
-        role: UserRole.LEARNER,
-        xp: 2650,
-        streak: 12,
-        hearts: 5,
-        gems: 510,
-        learningLevel: 'elementary',
-        dailyGoalMinutes: 15,
-        priorityTopic: 'food',
-        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
-      },
-      {
-        email: 'tuankiet@signlingo.com',
-        fullName: 'Đặng Tuấn Kiệt',
-        role: UserRole.LEARNER,
-        xp: 1120,
-        streak: 5,
-        hearts: 3,
-        gems: 180,
-        learningLevel: 'beginner',
-        dailyGoalMinutes: 15,
-        priorityTopic: 'greeting',
-        avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80',
-      },
     ];
+
+    // Xóa các tài khoản demo cũ khi chuyển sang môi trường thực tế (chỉ giữ learner và admin)
+    const oldDemoEmails = [
+      'baongoc@signlingo.com',
+      'hoanglong@signlingo.com',
+      'thuthao@signlingo.com',
+      'tuankiet@signlingo.com',
+    ];
+    for (const oldEmail of oldDemoEmails) {
+      const oldUser = await this.userRepository.findOne({ where: { email: oldEmail } });
+      if (oldUser) {
+        await this.userProgressRepository.delete({ userId: oldUser.id }).catch(() => {});
+        await this.practiceLogRepository.delete({ userId: oldUser.id }).catch(() => {});
+        await this.reviewItemRepository.delete({ userId: oldUser.id }).catch(() => {});
+        await this.userRepository.delete({ id: oldUser.id }).catch(() => {});
+        this.logger.log(`Đã xóa tài khoản seeding cũ: ${oldEmail}`);
+      }
+    }
 
     const salt = await bcrypt.genSalt(10);
     const defaultPass = await bcrypt.hash('123456', salt);

@@ -72,27 +72,29 @@ export default function Navbar({ activeTab, onSelectTab, onOpenAuth, userProfile
           {/* Streak pill */}
           <div 
             className="streak-pill" 
-            title="Chuỗi ngày học liên tục: 7 ngày"
+            title={`Chuỗi ngày học liên tục: ${userProfile?.streakDays || 0} ngày`}
             onClick={() => onSelectTab('dashboard')}
           >
             <Flame size={17} fill="#f59e0b" color="#f59e0b" />
-            <span>{userProfile?.streakDays || 7} ngày</span>
+            <span>{userProfile?.streakDays || 0} ngày</span>
           </div>
 
           {/* XP pill */}
           <div className="xp-pill" title="Điểm kinh nghiệm tích lũy">
             <Sparkles size={16} color="#0284c7" />
-            <span>{userProfile?.totalXp || 1240} XP</span>
+            <span>{userProfile?.totalXp || 0} XP</span>
           </div>
 
           {/* User profile / login button */}
           <button className="user-btn" onClick={onOpenAuth}>
             <img 
-              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80" 
+              src={userProfile?.avatarUrl || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80"} 
               alt="Avatar" 
               className="user-avatar"
             />
-            <span className="user-name-abbr">{userProfile?.name?.split(' ').slice(-1)[0] || 'Minh Anh'}</span>
+            <span className="user-name-abbr">
+              {userProfile?.name ? userProfile.name.trim().split(' ').slice(-1)[0] : 'Tài khoản'}
+            </span>
           </button>
         </div>
       </div>

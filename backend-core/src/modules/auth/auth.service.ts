@@ -35,7 +35,7 @@ export class AuthService {
     const user = this.userRepository.create({
       email: dto.email.toLowerCase().trim(),
       passwordHash,
-      fullName: dto.fullName || 'Học viên Signlingo',
+      fullName: dto.fullName?.trim() || 'Học viên Signlingo',
       role: UserRole.LEARNER,
       learningLevel: dto.learningLevel || 'beginner',
       xp: 0,

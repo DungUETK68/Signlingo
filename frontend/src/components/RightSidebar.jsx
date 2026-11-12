@@ -168,10 +168,10 @@ export default function RightSidebar({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.5rem', paddingTop: '0.5rem', borderTop: '1px solid #f1f5f9' }}>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#1e293b' }}>
-              {userProfile?.name || 'Học viên Signlingo'}
+              {userProfile?.name || 'Học viên'}
             </span>
             <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
-              {userProfile?.email || 'learner@signlingo.com'}
+              {userProfile?.email || ''}
             </span>
           </div>
           

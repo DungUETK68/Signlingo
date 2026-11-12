@@ -36,10 +36,10 @@ export default function DashboardView({ onStartPracticeWord }) {
     { wordId: 'w-xin-loi', word: 'Xin lỗi', avgScore: 65, commonError: 'Khớp ngón tay cái và ngón út chưa khép sát' },
   ]);
   const [metrics, setMetrics] = useState({
-    completedWordsCount: 28,
-    streakDays: user?.streakDays || 7,
-    avgAiScore: 89,
-    weekXp: 1240,
+    completedWordsCount: 0,
+    streakDays: user?.streakDays || 0,
+    avgAiScore: 0,
+    weekXp: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -232,10 +232,10 @@ export default function DashboardView({ onStartPracticeWord }) {
           />
           <div>
             <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#1e293b', margin: 0, marginBottom: '0.25rem' }}>
-              {user?.name || 'Nguyễn Văn Học'}
+              {user?.name || 'Học viên'}
             </h2>
             <div style={{ fontSize: '0.85rem', color: '#64748b' }}>
-              Cấp {levelInfo.level}: <span style={{ color: '#0284c7', fontWeight: 700 }}>{levelInfo.title}</span> • {user?.email || 'learner@signlingo.com'}
+              Cấp {levelInfo.level}: <span style={{ color: '#0284c7', fontWeight: 700 }}>{levelInfo.title}</span>{user?.email ? ` • ${user.email}` : ''}
             </div>
             <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.2rem' }}>
               Mục tiêu: {user?.dailyGoalMinutes || 20} phút/ngày

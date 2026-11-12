@@ -330,16 +330,16 @@ export const DICTIONARY_WORDS = [
 ];
 
 export const USER_PROFILE = {
-  name: 'Nguyễn Minh Anh',
-  email: 'minhanh.signlingo@edu.vn',
-  role: 'Học viên chăm chỉ',
-  streakDays: 7,
-  totalXp: 1240,
-  level: 4,
-  levelTitle: 'Bàn Tay Giao Tiếp',
-  completedWordsCount: 48,
-  totalPracticeHours: 14.5,
-  avgAiScore: 88.5,
+  name: '',
+  email: '',
+  role: 'Học viên',
+  streakDays: 0,
+  totalXp: 0,
+  level: 1,
+  levelTitle: 'Khởi đầu',
+  completedWordsCount: 0,
+  totalPracticeHours: 0,
+  avgAiScore: 0,
   weeklyActivity: [
     { day: 'T2', xp: 180, words: 6, score: 89 },
     { day: 'T3', xp: 210, words: 8, score: 92 },

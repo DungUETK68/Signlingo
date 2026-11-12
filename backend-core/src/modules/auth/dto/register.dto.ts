@@ -11,10 +11,10 @@ export class RegisterDto {
   @MinLength(6, { message: 'Mật khẩu phải có ít nhất 6 ký tự' })
   password: string;
 
-  @ApiProperty({ example: 'Nguyễn Văn A', required: false })
-  @IsOptional()
-  @IsString()
-  fullName?: string;
+  @ApiProperty({ example: 'Nguyễn Văn A', required: true })
+  @IsNotEmpty({ message: 'Vui lòng nhập họ và tên của bạn' })
+  @IsString({ message: 'Họ và tên phải là chuỗi ký tự' })
+  fullName: string;
 
   @ApiProperty({ example: 'beginner', required: false })
   @IsOptional()
