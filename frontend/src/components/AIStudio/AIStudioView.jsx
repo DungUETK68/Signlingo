@@ -740,13 +740,7 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
       </div>
 
       {/* 3. Bố Cục Đối Chiếu Song Song: Video Mẫu Chuyên Gia vs Camera Người Học */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-        gap: '1.25rem',
-        marginBottom: '1.25rem',
-        alignItems: 'stretch'
-      }}>
+      <div className="practice-camera-grid">
         {/* Cột 1: Video Mẫu Chuẩn */}
         <div className="mini-card" style={{ padding: '0.9rem', display: 'flex', flexDirection: 'column' }}>
           <div style={{

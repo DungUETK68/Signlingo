@@ -180,11 +180,7 @@ export default function DictionaryView({ onStartPracticeWord, onOpenLesson }) {
 
       {/* Visual Flashcards Grid (30 words per page) */}
       {paginatedWords.length > 0 ? (
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))',
-          gap: '1rem'
-        }}>
+        <div className="dictionary-grid">
           {paginatedWords.map(word => (
             <div
               key={word.id}

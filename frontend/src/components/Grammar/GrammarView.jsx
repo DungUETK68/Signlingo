@@ -121,8 +121,8 @@ export default function GrammarView({ onSelectTab, onOpenSentenceDetail }) {
           overflow: 'hidden',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1.5rem', position: 'relative', zIndex: 2 }}>
-          <div style={{ maxWidth: 680 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1.25rem', flexWrap: 'wrap', position: 'relative', zIndex: 2 }}>
+          <div style={{ maxWidth: 680, flex: 1, minWidth: 260 }}>
             <div
               style={{
                 display: 'inline-flex',
@@ -140,7 +140,7 @@ export default function GrammarView({ onSelectTab, onOpenSentenceDetail }) {
               <GraduationCap size={16} />
               <span>Cẩm nang Ngữ pháp Ngôn ngữ Ký hiệu Việt Nam (VSL)</span>
             </div>
-            <h1 style={{ fontSize: '2.1rem', fontWeight: 900, margin: '0 0 0.65rem 0', lineHeight: 1.25 }}>
+            <h1 style={{ fontSize: 'clamp(1.5rem, 4vw, 2.1rem)', fontWeight: 900, margin: '0 0 0.65rem 0', lineHeight: 1.25 }}>
               Lý thuyết & Quy tắc Ngữ pháp VSL
             </h1>
             <p style={{ fontSize: '0.96rem', margin: 0, opacity: 0.92, lineHeight: 1.55 }}>
@@ -182,13 +182,7 @@ export default function GrammarView({ onSelectTab, onOpenSentenceDetail }) {
         <h2 style={{ fontSize: '1.1rem', fontWeight: 900, color: '#1e293b', marginBottom: '0.75rem' }}>
           Chọn chủ đề ngữ pháp để khám phá:
         </h2>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))',
-            gap: '0.75rem',
-          }}
-        >
+        <div className="grammar-rules-grid">
           {VSL_GRAMMAR_RULES.map((rule) => {
             const isSelected = rule.id === activeRuleId;
             const Icon = RULE_ICONS[rule.iconName] || Layers;

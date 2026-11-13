@@ -726,13 +726,7 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
       {/* =====================================================================
           3. BỐ CỤC ĐỐI CHIẾU SONG SONG: VIDEO MẪU VS CAMERA THỰC HÀNH (CHUẨN TỪ VỰNG)
           ===================================================================== */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-        gap: '1.25rem',
-        marginBottom: '1.25rem',
-        alignItems: 'stretch'
-      }}>
+      <div className="practice-camera-grid">
         {/* CỘT 1: Video Mẫu Chuẩn */}
         <div className="mini-card" style={{ padding: '0.9rem', display: 'flex', flexDirection: 'column' }}>
           <div style={{

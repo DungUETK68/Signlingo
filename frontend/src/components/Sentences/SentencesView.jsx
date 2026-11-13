@@ -315,7 +315,7 @@ export default function SentencesView({ onStartPracticeWord, initialSentenceId =
           </button>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
+        <div className="sentences-list-grid">
           {filteredSentences.map((sentence) => (
             <div
               key={sentence.id || sentence.slug}

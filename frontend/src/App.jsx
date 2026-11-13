@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import RightSidebar from './components/RightSidebar';
+import MobileTopBar from './components/MobileTopBar';
+import MobileBottomNav from './components/MobileBottomNav';
+import MobileDrawer from './components/MobileDrawer';
 import PersonalizedPathView from './components/LearningPath/PersonalizedPathView';
 import LearningPathView from './components/LearningPath/LearningPathView';
 import GrammarView from './components/Grammar/GrammarView';
@@ -30,6 +33,7 @@ export default function App() {
   const [userProfile, setUserProfile] = useState(() => getUserProfile());
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
   // 0. Khởi động & làm ấm nhận diện khung xương AI ngay khi truy cập website (0s delay khi vào camera)
   useEffect(() => {
@@ -215,20 +219,49 @@ export default function App() {
 
   // 2. Khi đã đăng nhập: Hiển thị Giao diện học tập chính (Duo Layout)
   return (
-    <div className="duo-layout">
-      {/* 1. Left Navigation Sidebar (Duolingo Style) */}
-      <Sidebar
+    <>
+      {/* 0. Mobile Top Bar (Hiện trên màn hình <= 768px: Menu, Brand, Stats & Avatar/Logout) */}
+      <MobileTopBar
+        userProfile={userProfile}
+        onOpenDrawer={() => setIsMobileDrawerOpen(true)}
+        onSelectTab={(tab) => {
+          if (activeTab !== 'practice') setPreviousTab(activeTab);
+          setActiveTab(tab);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onLogout={handleLogout}
+      />
+
+      {/* 1. Mobile Slide-over Drawer (Hiển thị toàn bộ 10 tabs khi bấm Hamburger trên điện thoại) */}
+      <MobileDrawer
+        isOpen={isMobileDrawerOpen}
+        onClose={() => setIsMobileDrawerOpen(false)}
         activeTab={activeTab}
-        isAdmin={isAdmin}
         onSelectTab={(tab) => {
           if (tab === 'admin' && !isAdmin) return;
           if (activeTab !== 'practice') setPreviousTab(activeTab);
           setActiveTab(tab);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
+        userProfile={userProfile}
+        isAdmin={isAdmin}
+        onLogout={handleLogout}
       />
 
-      {/* 2. Main Center Content */}
-      <main className="center-content">
+      <div className="duo-layout">
+        {/* 1. Left Navigation Sidebar (Duolingo Style - Tự ẩn trên Mobile, hiện trên Máy tính) */}
+        <Sidebar
+          activeTab={activeTab}
+          isAdmin={isAdmin}
+          onSelectTab={(tab) => {
+            if (tab === 'admin' && !isAdmin) return;
+            if (activeTab !== 'practice') setPreviousTab(activeTab);
+            setActiveTab(tab);
+          }}
+        />
+
+        {/* 2. Main Center Content */}
+        <main className="center-content">
         {/* TAB 1: LỘ TRÌNH CÁ NHÂN HÓA THEO KHẢ NĂNG (AI ADAPTIVE PATH) */}
         {activeTab === 'personalized' && (
           <PersonalizedPathView
@@ -363,7 +396,7 @@ export default function App() {
         )}
       </main>
 
-      {/* 3. Right Status & Widgets Sidebar */}
+      {/* 3. Right Status & Widgets Sidebar (Tự ẩn trên Mobile/Tablet <= 1120px) */}
       <RightSidebar
         userProfile={userProfile}
         onOpenAuth={handleOpenAuthGeneral}
@@ -373,7 +406,17 @@ export default function App() {
         onLogout={handleLogout}
       />
 
-      {/* 4. Auth Modal & Onboarding Assessment */}
+      {/* 4. Mobile Bottom Navigation (Thanh điều hướng nhanh 5 tác vụ cốt lõi dưới đáy màn hình) */}
+      <MobileBottomNav
+        activeTab={activeTab}
+        onSelectTab={(tab) => {
+          if (activeTab !== 'practice') setPreviousTab(activeTab);
+          setActiveTab(tab);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
+
+      {/* 5. Auth Modal & Onboarding Assessment */}
       <AuthModal
         isOpen={isAuthOpen}
         initialMode={authMode}
@@ -385,5 +428,6 @@ export default function App() {
         }}
       />
     </div>
-  );
+  </>
+);
 }

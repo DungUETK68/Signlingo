@@ -217,6 +217,8 @@ export default function DashboardView({ onStartPracticeWord }) {
         display: 'flex', 
         alignItems: 'center', 
         justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '0.85rem',
         marginBottom: '1.5rem',
         padding: '1.25rem',
         backgroundColor: '#ffffff',
