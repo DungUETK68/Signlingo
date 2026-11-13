@@ -10,6 +10,7 @@ import { SentencesModule } from './modules/sentences/sentences.module';
 import { ProgressModule } from './modules/progress/progress.module';
 import { AdaptiveModule } from './modules/adaptive/adaptive.module';
 import { SeedModule } from './modules/seed/seed.module';
+import { ContributionsModule } from './modules/contributions/contributions.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { SeedModule } from './modules/seed/seed.module';
     SentencesModule,
     ProgressModule,
     AdaptiveModule,
+    ContributionsModule,
     SeedModule,
   ],
 })

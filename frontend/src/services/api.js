@@ -356,3 +356,110 @@ export const aiApi = {
     }
   },
 };
+
+// ========================================================
+// 5. Word Contributions API (Đóng góp từ vựng cộng đồng)
+// ========================================================
+export const contributionsApi = {
+  async createContribution(data) {
+    const res = await fetch(`${CORE_API_URL}/contributions`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Không thể gửi đóng góp từ vựng');
+    }
+    return res.json();
+  },
+
+  async getMyContributions() {
+    try {
+      const res = await fetch(`${CORE_API_URL}/contributions/my`, {
+        headers: getAuthHeaders(),
+      });
+      if (!res.ok) return [];
+      return await res.json();
+    } catch (e) {
+      console.warn('Lỗi lấy danh sách đóng góp từ server:', e);
+      return [];
+    }
+  },
+
+  async getAllContributions(status = 'all', search = '') {
+    try {
+      const params = new URLSearchParams();
+      if (status && status !== 'all') params.append('status', status);
+      if (search) params.append('search', search);
+
+      const res = await fetch(`${CORE_API_URL}/contributions?${params.toString()}`, {
+        headers: getAuthHeaders(),
+      });
+      if (!res.ok) return [];
+      return await res.json();
+    } catch (e) {
+      console.warn('Lỗi lấy danh sách toàn bộ đóng góp:', e);
+      return [];
+    }
+  },
+
+  async getContributionById(id) {
+    const res = await fetch(`${CORE_API_URL}/contributions/${id}`, {
+      headers: getAuthHeaders(),
+    });
+    if (!res.ok) throw new Error('Không tìm thấy bản đóng góp');
+    return res.json();
+  },
+
+  async updateContribution(id, data) {
+    const res = await fetch(`${CORE_API_URL}/contributions/${id}`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Không thể cập nhật đóng góp');
+    }
+    return res.json();
+  },
+
+  async approveContribution(id, feedback = '') {
+    const res = await fetch(`${CORE_API_URL}/contributions/${id}/approve`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ feedback }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Không thể duyệt đóng góp này');
+    }
+    return res.json();
+  },
+
+  async rejectContribution(id, feedback = '') {
+    const res = await fetch(`${CORE_API_URL}/contributions/${id}/reject`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ feedback }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Không thể từ chối đóng góp');
+    }
+    return res.json();
+  },
+
+  async deleteContribution(id) {
+    const res = await fetch(`${CORE_API_URL}/contributions/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Không thể xóa đóng góp');
+    }
+    return res.json();
+  },
+};

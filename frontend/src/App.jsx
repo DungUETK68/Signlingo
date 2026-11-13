@@ -14,6 +14,7 @@ import GamesView from './components/Games/GamesView';
 import ReviewView from './components/Review/ReviewView';
 import DashboardView from './components/Dashboard/DashboardView';
 import AdminView from './components/Admin/AdminView';
+import ContributionsView from './components/Contributions/ContributionsView';
 import AuthModal from './components/AuthModal';
 import LandingView from './components/Landing/LandingView';
 import { getUserProfile, saveUserProfile } from './data/personalizedStore';
@@ -357,6 +358,11 @@ export default function App() {
             targetWord={practiceTargetWord} 
             onBack={handleBackFromPractice} 
           />
+        )}
+
+        {/* TAB 4.5: ĐÓNG GÓP TỪ VỰNG CỘNG ĐỒNG */}
+        {activeTab === 'contributions' && (
+          <ContributionsView />
         )}
 
         {/* TAB 5: MINIGAME & THỬ THÁCH */}

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSignWords, deleteWordById } from '../../data/wordsStore';
-import { userApi, aiApi } from '../../services/api';
+import { userApi, aiApi, contributionsApi } from '../../services/api';
 import AddWordModal from './AddWordModal';
+import ContributeWordModal from '../Contributions/ContributeWordModal';
 import {
   Plus,
   Trash2,
@@ -17,6 +18,9 @@ import {
   X,
   Sparkles,
   CheckCircle2,
+  XCircle,
+  Clock,
+  HeartHandshake,
   ExternalLink,
   BookOpen,
   ChevronLeft,
@@ -38,6 +42,90 @@ export default function AdminView() {
   const [processedLog, setProcessedLog] = useState([]);
   const [usersList, setUsersList] = useState([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(false);
+
+  // Contributions state & handlers
+  const [adminContributions, setAdminContributions] = useState([]);
+  const [isLoadingContributions, setIsLoadingContributions] = useState(false);
+  const [contributionSearch, setContributionSearch] = useState('');
+  const [contributionStatus, setContributionStatus] = useState('all');
+  const [editingContribution, setEditingContribution] = useState(null);
+  const [isContributionModalOpen, setIsContributionModalOpen] = useState(false);
+  const [rejectModalState, setRejectModalState] = useState({ isOpen: false, item: null, reason: '' });
+
+  const fetchAdminContributions = async () => {
+    setIsLoadingContributions(true);
+    try {
+      const data = await contributionsApi.getAllContributions();
+      setAdminContributions(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.warn('Lỗi tải danh sách đóng góp từ vựng:', err);
+    } finally {
+      setIsLoadingContributions(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAdminContributions();
+  }, [tab]);
+
+  const handleApproveContribution = async (item) => {
+    if (!window.confirm(`Xác nhận DUYỆT từ "${item.word}" và đưa vào Từ điển chung?`)) return;
+    try {
+      await contributionsApi.approveContribution(item.id, 'Đã kiểm duyệt và đưa vào từ điển chính thức.');
+      showToast(`Đã duyệt từ "${item.word}" và tích hợp vào từ điển thành công! 🎉`);
+      fetchAdminContributions();
+      window.dispatchEvent(new CustomEvent('signlingo_data_updated', { detail: { action: 'refresh' } }));
+    } catch (err) {
+      showToast(`Lỗi duyệt từ: ${err.message || 'Thao tác thất bại'}`);
+    }
+  };
+
+  const handleOpenRejectModal = (item) => {
+    setRejectModalState({
+      isOpen: true,
+      item,
+      reason: 'Cử chỉ chưa rõ nét hoặc góc quay bị che khuất. Vui lòng đóng góp lại.'
+    });
+  };
+
+  const handleConfirmReject = async () => {
+    if (!rejectModalState.item) return;
+    try {
+      await contributionsApi.rejectContribution(rejectModalState.item.id, rejectModalState.reason);
+      showToast(`Đã từ chối từ đóng góp "${rejectModalState.item.word}".`);
+      setRejectModalState({ isOpen: false, item: null, reason: '' });
+      fetchAdminContributions();
+    } catch (err) {
+      showToast(`Lỗi từ chối: ${err.message || 'Thao tác thất bại'}`);
+    }
+  };
+
+  const handleDeleteContribution = async (item) => {
+    if (!window.confirm(`Bạn có chắc chắn muốn xóa bản đóng góp "${item.word}"?`)) return;
+    try {
+      await contributionsApi.deleteContribution(item.id);
+      showToast(`Đã xóa bản đóng góp "${item.word}".`);
+      fetchAdminContributions();
+    } catch (err) {
+      showToast(`Lỗi xóa: ${err.message || 'Thao tác thất bại'}`);
+    }
+  };
+
+  const pendingContributionsCount = useMemo(() => {
+    return adminContributions.filter(c => c.status === 'PENDING').length;
+  }, [adminContributions]);
+
+  const filteredAdminContributions = useMemo(() => {
+    return adminContributions.filter(c => {
+      const matchSearch =
+        c.word?.toLowerCase().includes(contributionSearch.toLowerCase().trim()) ||
+        c.contributorName?.toLowerCase().includes(contributionSearch.toLowerCase().trim()) ||
+        c.contributorEmail?.toLowerCase().includes(contributionSearch.toLowerCase().trim()) ||
+        c.description?.toLowerCase().includes(contributionSearch.toLowerCase().trim());
+      const matchStatus = contributionStatus === 'all' || c.status === contributionStatus;
+      return matchSearch && matchStatus;
+    });
+  }, [adminContributions, contributionSearch, contributionStatus]);
 
   // Tải danh sách người dùng thực tế từ Backend PostgreSQL
   useEffect(() => {
@@ -202,9 +290,10 @@ export default function AdminView() {
       )}
 
       {/* Admin Tab buttons */}
-      <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '1.25rem', overflowX: 'auto' }}>
+      <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '1.25rem', overflowX: 'auto', paddingBottom: '2px' }}>
         {[
           { id: 'words', label: 'Quản lý Từ vựng', icon: Database },
+          { id: 'contributions', label: 'Đóng góp từ vựng', icon: HeartHandshake, badge: pendingContributionsCount },
           { id: 'preprocessing', label: 'Tiền xử lý .npy', icon: FileCode },
           { id: 'users', label: 'Người dùng', icon: Users },
           { id: 'reports', label: 'Thống kê', icon: BarChart }
@@ -215,9 +304,23 @@ export default function AdminView() {
               key={t.id}
               className={`btn-pill btn-sm ${tab === t.id ? 'btn-primary' : 'btn-secondary'}`}
               onClick={() => setTab(t.id)}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', whiteSpace: 'nowrap' }}
             >
               <Icon size={14} />
               <span>{t.label}</span>
+              {Boolean(t.badge) && (
+                <span style={{
+                  fontSize: '0.68rem',
+                  fontWeight: 900,
+                  backgroundColor: tab === t.id ? '#ffffff' : '#ef4444',
+                  color: tab === t.id ? '#0284c7' : '#ffffff',
+                  padding: '0.1rem 0.45rem',
+                  borderRadius: '9999px',
+                  lineHeight: 1.2
+                }}>
+                  {t.badge}
+                </span>
+              )}
             </button>
           );
         })}
@@ -585,6 +688,385 @@ export default function AdminView() {
         </div>
       )}
 
+      {/* 1.5. Đóng Góp Từ Vựng Tab (Giữa Quản lý Từ vựng và Tiền xử lý .npy) */}
+      {tab === 'contributions' && (
+        <div>
+          {/* Header Card */}
+          <div className="mini-card" style={{ padding: '1.25rem', marginBottom: '1rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
+              <div>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#1e293b', margin: 0 }}>
+                  Kiểm Duyệt Từ Vựng Đóng Góp ({adminContributions.length})
+                </h3>
+                <p style={{ fontSize: '0.8rem', color: '#64748b', margin: '0.2rem 0 0 0' }}>
+                  Phê duyệt từ ngữ cộng đồng đóng góp để tự động tích hợp vào kho <strong>Từ điển chung</strong> hoặc từ chối kèm phản hồi.
+                </p>
+              </div>
+
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <button
+                  className="btn-pill btn-secondary btn-sm"
+                  onClick={fetchAdminContributions}
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}
+                  title="Tải lại danh sách"
+                >
+                  <RefreshCw size={14} />
+                  <span>Làm mới</span>
+                </button>
+
+                <button
+                  className="btn-pill btn-primary"
+                  onClick={() => {
+                    setEditingContribution(null);
+                    setIsContributionModalOpen(true);
+                  }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    backgroundColor: '#059669',
+                    boxShadow: '0 4px 0 #047857'
+                  }}
+                >
+                  <Plus size={16} strokeWidth={3} />
+                  <span>Tạo đóng góp</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Thống kê 4 số liệu */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+              gap: '0.65rem',
+              marginBottom: '1rem'
+            }}>
+              <div style={{ padding: '0.75rem', backgroundColor: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#0f172a' }}>{adminContributions.length}</div>
+                <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748b' }}>Tổng đóng góp</div>
+              </div>
+
+              <div style={{ padding: '0.75rem', backgroundColor: '#fffbeb', borderRadius: '12px', border: '1px solid #fef3c7', textAlign: 'center' }}>
+                <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#b45309' }}>
+                  {adminContributions.filter(c => c.status === 'PENDING').length}
+                </div>
+                <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#b45309' }}>Chờ kiểm duyệt</div>
+              </div>
+
+              <div style={{ padding: '0.75rem', backgroundColor: '#f0fdf4', borderRadius: '12px', border: '1px solid #dcfce7', textAlign: 'center' }}>
+                <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#15803d' }}>
+                  {adminContributions.filter(c => c.status === 'APPROVED').length}
+                </div>
+                <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#15803d' }}>Đã phê duyệt</div>
+              </div>
+
+              <div style={{ padding: '0.75rem', backgroundColor: '#fef2f2', borderRadius: '12px', border: '1px solid #fee2e2', textAlign: 'center' }}>
+                <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#b91c1c' }}>
+                  {adminContributions.filter(c => c.status === 'REJECTED').length}
+                </div>
+                <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#b91c1c' }}>Đã từ chối</div>
+              </div>
+            </div>
+
+            {/* Filter by status & search */}
+            <div style={{ display: 'flex', gap: '0.65rem', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: '0.35rem', overflowX: 'auto', paddingBottom: '2px' }}>
+                {[
+                  { id: 'all', label: 'Tất cả' },
+                  { id: 'PENDING', label: 'Chờ duyệt' },
+                  { id: 'APPROVED', label: 'Đã duyệt' },
+                  { id: 'REJECTED', label: 'Từ chối' },
+                ].map(s => (
+                  <button
+                    key={s.id}
+                    className={`btn-pill btn-sm ${contributionStatus === s.id ? 'btn-primary' : 'btn-secondary'}`}
+                    style={{ fontSize: '0.8rem', padding: '0.35rem 0.75rem' }}
+                    onClick={() => setContributionStatus(s.id)}
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+
+              <div style={{ position: 'relative', width: '100%', maxWidth: 300 }}>
+                <Search size={15} color="#94a3b8" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)' }} />
+                <input
+                  type="text"
+                  placeholder="Tìm từ, người đóng góp, email..."
+                  value={contributionSearch}
+                  onChange={(e) => setContributionSearch(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '0.45rem 1rem 0.45rem 2.2rem',
+                    borderRadius: 'var(--radius-pill)',
+                    border: '1.5px solid var(--border-color)',
+                    fontSize: '0.82rem',
+                    outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Contributions List Table */}
+          <div className="mini-card" style={{ padding: 0, overflow: 'hidden' }}>
+            {isLoadingContributions ? (
+              <div style={{ padding: '3rem', textAlign: 'center', color: '#64748b' }}>
+                <div style={{ width: 24, height: 24, border: '3px solid #0284c7', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 0.75rem auto' }} />
+                <span>Đang tải danh sách đóng góp từ cộng đồng...</span>
+              </div>
+            ) : filteredAdminContributions.length === 0 ? (
+              <div style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8' }}>
+                Không có bản đóng góp nào phù hợp với bộ lọc hiện tại.
+              </div>
+            ) : (
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.84rem' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1.5px solid var(--border-color)', color: '#64748b', backgroundColor: '#f8fafc' }}>
+                      <th style={{ padding: '0.75rem 0.85rem', whiteSpace: 'nowrap' }}>Từ vựng đóng góp</th>
+                      <th style={{ padding: '0.75rem 0.75rem', whiteSpace: 'nowrap' }}>Người gửi</th>
+                      <th style={{ padding: '0.75rem 0.65rem', whiteSpace: 'nowrap' }}>Chủ đề</th>
+                      <th style={{ padding: '0.75rem 0.65rem', whiteSpace: 'nowrap' }}>Phương ngữ</th>
+                      <th style={{ padding: '0.75rem 0.65rem', whiteSpace: 'nowrap', textAlign: 'center' }}>Video</th>
+                      <th style={{ padding: '0.75rem 0.75rem', whiteSpace: 'nowrap' }}>Trạng thái</th>
+                      <th style={{ padding: '0.75rem 0.75rem', whiteSpace: 'nowrap' }}>Phản hồi Admin</th>
+                      <th style={{ padding: '0.75rem 0.85rem', textAlign: 'right', whiteSpace: 'nowrap' }}>Thao tác kiểm duyệt</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredAdminContributions.map((c) => {
+                      const hasVideo = Boolean(c.videoFront);
+                      return (
+                        <tr key={c.id} style={{ borderBottom: '1px solid var(--border-color)', transition: 'background 0.15s' }}>
+                          {/* Từ vựng */}
+                          <td style={{ padding: '0.75rem 0.85rem', fontWeight: 800, color: '#0f172a', whiteSpace: 'nowrap' }}>
+                            <div>
+                              <div style={{ fontSize: '0.94rem' }}>{c.word}</div>
+                              {c.description && (
+                                <div style={{ fontSize: '0.74rem', color: '#64748b', fontWeight: 500, maxWidth: 220, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                  {c.description}
+                                </div>
+                              )}
+                            </div>
+                          </td>
+
+                          {/* Người gửi */}
+                          <td style={{ padding: '0.75rem 0.75rem', whiteSpace: 'nowrap' }}>
+                            <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#1e293b' }}>
+                              {c.contributorName || 'Ẩn danh'}
+                            </div>
+                            <div style={{ fontSize: '0.72rem', color: '#64748b' }}>
+                              {c.contributorEmail || 'Không có email'}
+                            </div>
+                          </td>
+
+                          {/* Chủ đề */}
+                          <td style={{ padding: '0.75rem 0.65rem', whiteSpace: 'nowrap' }}>
+                            <span style={{
+                              fontSize: '0.74rem',
+                              fontWeight: 700,
+                              color: '#334155',
+                              backgroundColor: '#f1f5f9',
+                              padding: '0.2rem 0.55rem',
+                              borderRadius: 'var(--radius-pill)',
+                              whiteSpace: 'nowrap',
+                              display: 'inline-block'
+                            }}>
+                              {c.topicLabel || 'Chung'}
+                            </span>
+                          </td>
+
+                          {/* Phương ngữ */}
+                          <td style={{ padding: '0.75rem 0.65rem', color: '#475569', whiteSpace: 'nowrap', fontSize: '0.8rem' }}>
+                            {c.dialect || 'Toàn quốc'}
+                          </td>
+
+                          {/* Video */}
+                          <td style={{ padding: '0.75rem 0.65rem', whiteSpace: 'nowrap', textAlign: 'center' }}>
+                            {hasVideo ? (
+                              <button
+                                className="btn-pill btn-secondary btn-sm"
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '0.25rem',
+                                  padding: '0.2rem 0.55rem',
+                                  fontSize: '0.74rem',
+                                  color: '#0284c7',
+                                  borderColor: '#bae6fd',
+                                  backgroundColor: '#f0f9ff',
+                                  whiteSpace: 'nowrap'
+                                }}
+                                onClick={() => setPreviewWord({ word: c.word, videoFront: c.videoFront, description: c.description })}
+                              >
+                                <Play size={11} fill="#0284c7" />
+                                <span>Xem video</span>
+                              </button>
+                            ) : (
+                              <span style={{ fontSize: '0.74rem', color: '#94a3b8' }}>Chưa có</span>
+                            )}
+                          </td>
+
+                          {/* Trạng thái */}
+                          <td style={{ padding: '0.75rem 0.75rem', whiteSpace: 'nowrap' }}>
+                            {c.status === 'APPROVED' && (
+                              <span style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.3rem',
+                                padding: '0.2rem 0.6rem',
+                                borderRadius: 'var(--radius-pill)',
+                                backgroundColor: '#dcfce7',
+                                color: '#15803d',
+                                fontSize: '0.75rem',
+                                fontWeight: 800,
+                                border: '1px solid #bbf7d0'
+                              }}>
+                                <CheckCircle2 size={13} />
+                                <span>Đã duyệt</span>
+                              </span>
+                            )}
+                            {c.status === 'REJECTED' && (
+                              <span style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.3rem',
+                                padding: '0.2rem 0.6rem',
+                                borderRadius: 'var(--radius-pill)',
+                                backgroundColor: '#fee2e2',
+                                color: '#b91c1c',
+                                fontSize: '0.75rem',
+                                fontWeight: 800,
+                                border: '1px solid #fecaca'
+                              }}>
+                                <XCircle size={13} />
+                                <span>Từ chối</span>
+                              </span>
+                            )}
+                            {c.status === 'PENDING' && (
+                              <span style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.3rem',
+                                padding: '0.2rem 0.6rem',
+                                borderRadius: 'var(--radius-pill)',
+                                backgroundColor: '#fef3c7',
+                                color: '#b45309',
+                                fontSize: '0.75rem',
+                                fontWeight: 800,
+                                border: '1px solid #fde68a'
+                              }}>
+                                <Clock size={13} />
+                                <span>Chờ duyệt</span>
+                              </span>
+                            )}
+                          </td>
+
+                          {/* Phản hồi */}
+                          <td style={{ padding: '0.75rem 0.75rem', fontSize: '0.78rem', color: '#475569', maxWidth: 200 }}>
+                            {c.adminFeedback ? (
+                              <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={c.adminFeedback}>
+                                {c.adminFeedback}
+                              </div>
+                            ) : (
+                              <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>Chưa có</span>
+                            )}
+                          </td>
+
+                          {/* Thao tác kiểm duyệt */}
+                          <td style={{ padding: '0.75rem 0.85rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', justifyContent: 'flex-end' }}>
+                              {/* Xem / Sửa chi tiết */}
+                              <button
+                                title="Xem chi tiết hoặc chỉnh sửa"
+                                className="btn-pill btn-secondary btn-sm"
+                                style={{
+                                  padding: '0.25rem 0.55rem',
+                                  fontSize: '0.75rem',
+                                  fontWeight: 700
+                                }}
+                                onClick={() => {
+                                  setEditingContribution(c);
+                                  setIsContributionModalOpen(true);
+                                }}
+                              >
+                                <Edit3 size={12} />
+                                <span>Sửa</span>
+                              </button>
+
+                              {/* Duyệt từ */}
+                              {c.status !== 'APPROVED' && (
+                                <button
+                                  title="Duyệt và thêm từ mới vào từ điển"
+                                  className="btn-pill btn-sm"
+                                  style={{
+                                    backgroundColor: '#22c55e',
+                                    color: '#ffffff',
+                                    border: 'none',
+                                    padding: '0.25rem 0.65rem',
+                                    fontSize: '0.75rem',
+                                    fontWeight: 800,
+                                    cursor: 'pointer',
+                                    boxShadow: '0 2px 0 #15803d'
+                                  }}
+                                  onClick={() => handleApproveContribution(c)}
+                                >
+                                  <CheckCircle2 size={13} />
+                                  <span>Duyệt</span>
+                                </button>
+                              )}
+
+                              {/* Từ chối */}
+                              {c.status !== 'REJECTED' && (
+                                <button
+                                  title="Từ chối đóng góp"
+                                  className="btn-pill btn-sm"
+                                  style={{
+                                    backgroundColor: '#ffffff',
+                                    color: '#dc2626',
+                                    border: '1.5px solid #fecaca',
+                                    padding: '0.25rem 0.55rem',
+                                    fontSize: '0.75rem',
+                                    fontWeight: 800,
+                                    cursor: 'pointer'
+                                  }}
+                                  onClick={() => handleOpenRejectModal(c)}
+                                >
+                                  <XCircle size={13} />
+                                  <span>Từ chối</span>
+                                </button>
+                              )}
+
+                              {/* Xóa */}
+                              <button
+                                title="Xóa bản đóng góp"
+                                className="btn-pill btn-sm"
+                                style={{
+                                  padding: '0.25rem 0.45rem',
+                                  color: '#94a3b8',
+                                  border: '1px solid #e2e8f0',
+                                  backgroundColor: '#ffffff',
+                                  cursor: 'pointer'
+                                }}
+                                onClick={() => handleDeleteContribution(c)}
+                              >
+                                <Trash2 size={12} />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* 2. Tiền xử lý */}
       {tab === 'preprocessing' && (
         <div className="mini-card" style={{ padding: '1.5rem' }}>
@@ -788,6 +1270,89 @@ export default function AdminView() {
             >
               Đóng
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Chỉnh Sửa / Tạo Đóng Góp từ Admin */}
+      <ContributeWordModal
+        isOpen={isContributionModalOpen}
+        onClose={() => setIsContributionModalOpen(false)}
+        initialContribution={editingContribution}
+        onSuccess={() => {
+          showToast('Đã lưu thông tin đóng góp thành công!');
+          fetchAdminContributions();
+        }}
+      />
+
+      {/* Modal Nhập Lý Do Từ Chối Đóng Góp */}
+      {rejectModalState.isOpen && (
+        <div className="modal-overlay" onClick={() => setRejectModalState({ isOpen: false, item: null, reason: '' })} style={{ zIndex: 1250 }}>
+          <div
+            className="modal-card"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              maxWidth: 480,
+              padding: '1.5rem',
+              borderRadius: 'var(--radius-xl)'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '1rem' }}>
+              <div style={{ width: 36, height: 36, borderRadius: '50%', backgroundColor: '#fee2e2', color: '#dc2626', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <XCircle size={20} />
+              </div>
+              <div>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
+                  Từ Chối Đóng Góp Từ Vựng
+                </h3>
+                <p style={{ fontSize: '0.78rem', color: '#64748b', margin: 0 }}>
+                  Từ vựng: <strong>"{rejectModalState.item?.word}"</strong> của {rejectModalState.item?.contributorName}
+                </p>
+              </div>
+            </div>
+
+            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#334155', marginBottom: '0.4rem' }}>
+              Nhập lý do từ chối (Gửi thông báo tới người học):
+            </label>
+            <textarea
+              rows={3}
+              value={rejectModalState.reason}
+              onChange={(e) => setRejectModalState(prev => ({ ...prev, reason: e.target.value }))}
+              placeholder="Ví dụ: Cử chỉ chưa đúng quy tắc VSL, góc quay bị che ngón tay, video bị rung..."
+              style={{
+                width: '100%',
+                padding: '0.75rem',
+                borderRadius: 'var(--radius-md)',
+                border: '1.5px solid #cbd5e1',
+                fontSize: '0.86rem',
+                outline: 'none',
+                boxSizing: 'border-box',
+                marginBottom: '1.25rem',
+                resize: 'vertical'
+              }}
+            />
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
+              <button
+                className="btn-pill btn-secondary btn-sm"
+                onClick={() => setRejectModalState({ isOpen: false, item: null, reason: '' })}
+              >
+                Hủy bỏ
+              </button>
+              <button
+                className="btn-pill btn-sm"
+                style={{
+                  backgroundColor: '#dc2626',
+                  color: '#ffffff',
+                  border: 'none',
+                  padding: '0.5rem 1.25rem',
+                  fontWeight: 800
+                }}
+                onClick={handleConfirmReject}
+              >
+                Xác nhận từ chối
+              </button>
+            </div>
           </div>
         </div>
       )}

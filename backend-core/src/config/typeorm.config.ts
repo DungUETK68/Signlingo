@@ -7,6 +7,7 @@ import { Sentence } from '../modules/sentences/entities/sentence.entity';
 import { UserProgress } from '../modules/progress/entities/user-progress.entity';
 import { PracticeLog } from '../modules/progress/entities/practice-log.entity';
 import { ReviewItem } from '../modules/adaptive/entities/review-item.entity';
+import { WordContribution } from '../modules/contributions/entities/word-contribution.entity';
 
 export const allEntities = [
   User,
@@ -17,6 +18,7 @@ export const allEntities = [
   UserProgress,
   PracticeLog,
   ReviewItem,
+  WordContribution,
 ];
 
 export const getTypeOrmConfig = (): TypeOrmModuleOptions => {

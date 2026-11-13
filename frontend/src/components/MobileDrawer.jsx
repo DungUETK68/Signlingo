@@ -12,7 +12,8 @@ import {
   User,
   Settings,
   LogOut,
-  Hand
+  Hand,
+  HeartHandshake
 } from 'lucide-react';
 
 const DRAWER_NAV_ITEMS = [
@@ -22,6 +23,7 @@ const DRAWER_NAV_ITEMS = [
   { id: 'sentences', label: 'Câu thường gặp', icon: MessageSquareQuote },
   { id: 'dictionary', label: 'Từ điển 400 từ', icon: Search },
   { id: 'practice', label: 'Luyện tập Camera AI', icon: Camera },
+  { id: 'contributions', label: 'Đóng góp từ vựng', icon: HeartHandshake },
   { id: 'games', label: 'Thử thách phản xạ 5s', icon: Zap },
   { id: 'review', label: 'Ôn tập ngắt quãng', icon: BookmarkCheck },
   { id: 'dashboard', label: 'Hồ sơ & Thành tích', icon: User },
@@ -172,3 +174,4 @@ export default function MobileDrawer({
     </div>
   );
 }
+

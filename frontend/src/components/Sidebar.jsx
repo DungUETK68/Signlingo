@@ -10,7 +10,8 @@ import {
   Hand,
   Sparkles,
   MessageSquareQuote,
-  GraduationCap
+  GraduationCap,
+  HeartHandshake
 } from 'lucide-react';
 
 const NAV_ITEMS = [
@@ -20,6 +21,7 @@ const NAV_ITEMS = [
   { id: 'sentences', label: 'Câu thường gặp', icon: MessageSquareQuote },
   { id: 'dictionary', label: 'Từ điển', icon: Search },
   { id: 'practice', label: 'Luyện tập AI', icon: Camera },
+  { id: 'contributions', label: 'Đóng góp từ vựng', icon: HeartHandshake },
   { id: 'games', label: 'Thử thách', icon: Zap },
   { id: 'review', label: 'Ôn tập', icon: BookmarkCheck },
   { id: 'dashboard', label: 'Hồ sơ', icon: User },
