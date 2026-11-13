@@ -289,46 +289,6 @@ AI_SERVICE_URL=http://backend-ai:8000
 
 ---
 
-## 📖 Tài Liệu API & Tài Khoản Thử Nghiệm
-
-### Tài Liệu API Tương Tác
-- **Core API Swagger:** `http://localhost:3000/api/docs` (Cung cấp đầy đủ đặc tả OpenAPI, JWT Bearer Token, kiểm thử trực tiếp).
-- **AI Service OpenAPI:** `http://localhost:8000/docs` (Mô tả thuật toán chấm điểm và endpoint upload video).
-
-### Tài Khoản Thử Nghiệm Mặc Định
-Hệ thống tích hợp sẵn tài khoản Quản trị viên khởi tạo tự động khi seed:
-- **Email:** `admin@signlingo.com`
-- **Mật khẩu:** `123456`
-- **Vai trò:** Quản trị viên (truy cập toàn quyền tab Quản trị, duyệt từ vựng cộng đồng, tiền xử lý dữ liệu).
-
-> *Lưu ý: Học viên thông thường có thể tự đăng ký tài khoản mới trực tiếp tại màn hình Đăng ký của hệ thống.*
-
----
-
-## 🌐 Triển Khai Máy Chủ Production (VPS)
-
-Dự án đi kèm kịch bản tự động hóa tối ưu cho máy chủ Ubuntu/Debian ([setup-vps.sh](scripts/setup-vps.sh)):
-
-```bash
-# Trên máy chủ VPS (Ubuntu 22.04 LTS / 24.04 LTS):
-git clone https://github.com/DungUETK68/Signlingo.git /root/Signlingo
-cd /root/Signlingo
-
-# Cấp quyền thực thi và chạy kịch bản thiết lập
-chmod +x scripts/setup-vps.sh
-sudo ./scripts/setup-vps.sh
-```
-
-**Kịch bản tự động thực hiện:**
-1. Cấu hình DNS đa tầng ổn định.
-2. Tự động tạo phân vùng nhớ ảo **2GB Swap RAM** (giúp build Docker an toàn trên VPS dung lượng RAM thấp 1–2GB).
-3. Thiết lập tường lửa UFW mở cổng an toàn (SSH, HTTP 80, HTTPS 443).
-4. Cài đặt Docker & Docker Compose Engine chính thức từ Docker Inc.
-5. Tự động sinh `JWT_SECRET` và mật khẩu Database bảo mật ngẫu nhiên.
-6. Build và khởi chạy 4 containers nền tảng hoạt động liên tục với cờ `restart: unless-stopped`.
-
----
-
 ## 🤝 Đóng Góp Phát Triển (Contributing)
 
 Mọi đóng góp nhằm hoàn thiện giải pháp học ngôn ngữ ký hiệu cho cộng đồng đều được hoan nghênh:
