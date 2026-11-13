@@ -92,3 +92,6 @@ frontend/public/vsl400_videos/*.png
 scratch/
 scratch_*
 
+# AI Agent Guidelines
+AGENTS.md
+
