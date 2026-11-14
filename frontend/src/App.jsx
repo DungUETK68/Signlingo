@@ -24,6 +24,7 @@ import { preloadSkeletonTracker } from './services/skeletonTracker';
 export default function App() {
   const [activeTab, setActiveTab] = useState('personalized');
   const [previousTab, setPreviousTab] = useState('personalized');
+  const [gamesMode, setGamesMode] = useState('quiz');
   const [practiceTargetWord, setPracticeTargetWord] = useState('Cảm ơn');
   const [selectedLearningLesson, setSelectedLearningLesson] = useState(null);
   const [selectedLearningTopic, setSelectedLearningTopic] = useState(null);
@@ -218,6 +219,24 @@ export default function App() {
     );
   }
 
+  const handleSelectTab = (tab, options = null) => {
+    if (tab === 'admin' && !isAdmin) return;
+    if (activeTab !== 'practice') setPreviousTab(activeTab);
+
+    if (tab === 'games') {
+      if (typeof options === 'string') {
+        setGamesMode(options);
+      } else if (options && typeof options === 'object' && options.mode) {
+        setGamesMode(options.mode);
+      } else {
+        setGamesMode('quiz');
+      }
+    }
+
+    setActiveTab(tab);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   // 2. Khi đã đăng nhập: Hiển thị Giao diện học tập chính (Duo Layout)
   return (
     <>
@@ -225,11 +244,7 @@ export default function App() {
       <MobileTopBar
         userProfile={userProfile}
         onOpenDrawer={() => setIsMobileDrawerOpen(true)}
-        onSelectTab={(tab) => {
-          if (activeTab !== 'practice') setPreviousTab(activeTab);
-          setActiveTab(tab);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }}
+        onSelectTab={handleSelectTab}
         onLogout={handleLogout}
       />
 
@@ -238,12 +253,7 @@ export default function App() {
         isOpen={isMobileDrawerOpen}
         onClose={() => setIsMobileDrawerOpen(false)}
         activeTab={activeTab}
-        onSelectTab={(tab) => {
-          if (tab === 'admin' && !isAdmin) return;
-          if (activeTab !== 'practice') setPreviousTab(activeTab);
-          setActiveTab(tab);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }}
+        onSelectTab={handleSelectTab}
         userProfile={userProfile}
         isAdmin={isAdmin}
         onLogout={handleLogout}
@@ -254,11 +264,7 @@ export default function App() {
         <Sidebar
           activeTab={activeTab}
           isAdmin={isAdmin}
-          onSelectTab={(tab) => {
-            if (tab === 'admin' && !isAdmin) return;
-            if (activeTab !== 'practice') setPreviousTab(activeTab);
-            setActiveTab(tab);
-          }}
+          onSelectTab={handleSelectTab}
         />
 
         {/* 2. Main Center Content */}
@@ -326,7 +332,7 @@ export default function App() {
         {/* TAB 2.5: NGỮ PHÁP VSL */}
         {activeTab === 'grammar' && (
           <GrammarView
-            onSelectTab={setActiveTab}
+            onSelectTab={handleSelectTab}
             onOpenSentenceDetail={(sentenceId) => {
               setSelectedSentenceId(sentenceId);
               setActiveTab('sentences');
@@ -357,6 +363,14 @@ export default function App() {
             initialWord={practiceTargetWord}
             targetWord={practiceTargetWord} 
             onBack={handleBackFromPractice} 
+          />
+        )}
+
+        {/* TAB 5: MINIGAME & THỬ THÁCH */}
+        {activeTab === 'games' && (
+          <GamesView 
+            onStartPracticeWord={handleStartPracticeWord}
+            initialMode={gamesMode}
           />
         )}
 
@@ -403,18 +417,14 @@ export default function App() {
         onOpenAuth={handleOpenAuthGeneral}
         onOpenSurvey={handleOpenAuthForSurvey}
         onStartPractice={handleStartPracticeWord}
-        onSelectTab={setActiveTab}
+        onSelectTab={handleSelectTab}
         onLogout={handleLogout}
       />
 
       {/* 4. Mobile Bottom Navigation (Thanh điều hướng nhanh 5 tác vụ cốt lõi dưới đáy màn hình) */}
       <MobileBottomNav
         activeTab={activeTab}
-        onSelectTab={(tab) => {
-          if (activeTab !== 'practice') setPreviousTab(activeTab);
-          setActiveTab(tab);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }}
+        onSelectTab={handleSelectTab}
       />
 
       {/* 5. Auth Modal & Onboarding Assessment */}

@@ -388,7 +388,7 @@ export default function RightSidebar({
           </div>
           <span 
             style={{ fontSize: '0.78rem', color: '#0284c7', fontWeight: 700, cursor: 'pointer' }}
-            onClick={() => onSelectTab('games')}
+            onClick={() => onSelectTab('games', 'leaderboard')}
           >
             Xem tất cả
           </span>

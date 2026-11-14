@@ -24,9 +24,15 @@ import {
   Award
 } from 'lucide-react';
 
-export default function GamesView({ onStartPracticeWord }) {
-  const [mode, setMode] = useState('quiz'); // 'quiz' | 'reflex' | 'leaderboard'
+export default function GamesView({ onStartPracticeWord, initialMode = 'quiz' }) {
+  const [mode, setMode] = useState(initialMode); // 'quiz' | 'reflex' | 'leaderboard'
   const [leaderboardList, setLeaderboardList] = useState(() => LEADERBOARD);
+
+  useEffect(() => {
+    if (initialMode) {
+      setMode(initialMode);
+    }
+  }, [initialMode]);
 
   // Tải bảng xếp hạng người dùng thực tế từ NestJS Backend API
   useEffect(() => {
@@ -1072,7 +1078,24 @@ export default function GamesView({ onStartPracticeWord }) {
       {/* MODE 3: BẢNG XẾP HẠNG                                          */}
       {/* ============================================================== */}
       {mode === 'leaderboard' && (
-        <div className="mini-card" style={{ padding: '1rem' }}>
+        <div className="mini-card" style={{ padding: '1.25rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', paddingBottom: '0.75rem', borderBottom: '1px solid var(--border-color)', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Trophy size={20} color="#f59e0b" />
+              <div>
+                <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#1e293b', margin: 0 }}>
+                  Bảng Xếp Hạng Điểm Tuần
+                </h3>
+                <p style={{ fontSize: '0.78rem', color: '#64748b', margin: '0.15rem 0 0 0' }}>
+                  Thi đua tích lũy XP từ bài tập, đoán từ và thử thách camera VSL
+                </p>
+              </div>
+            </div>
+            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#0284c7', backgroundColor: '#e0f2fe', padding: '0.2rem 0.65rem', borderRadius: 'var(--radius-pill)' }}>
+              Top 20 học viên
+            </span>
+          </div>
+
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {leaderboardList.map((u, i) => (
               <div
