@@ -247,26 +247,31 @@ export default function SentencesView({ onStartPracticeWord, initialSentenceId =
           />
         </div>
 
-        {/* Bộ lọc Danh mục Tabs */}
-        <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+        {/* Bộ lọc Danh mục Tabs - 1 hàng ngang trượt tự do giống Từ điển */}
+        <div
+          style={{
+            display: 'flex',
+            gap: '0.4rem',
+            overflowX: 'auto',
+            paddingBottom: '0.5rem',
+            scrollbarWidth: 'thin',
+          }}
+        >
           {categories.map((tab) => {
             const isSelected = selectedTopic === tab.id;
             return (
               <button
                 key={tab.id}
+                className={`btn-pill btn-sm ${isSelected ? 'btn-primary' : 'btn-secondary'}`}
                 style={{
                   padding: '0.4rem 0.85rem',
                   fontSize: '0.8rem',
                   fontWeight: 800,
-                  borderRadius: 'var(--radius-pill)',
-                  border: isSelected ? '1.5px solid #0284c7' : '1.5px solid #e2e8f0',
-                  backgroundColor: isSelected ? '#0284c7' : '#ffffff',
-                  color: isSelected ? '#ffffff' : '#475569',
-                  cursor: 'pointer',
-                  transition: 'all 0.15s ease',
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.35rem',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
                 }}
                 onClick={() => setSelectedTopic(tab.id)}
               >
@@ -278,6 +283,7 @@ export default function SentencesView({ onStartPracticeWord, initialSentenceId =
                     borderRadius: 'var(--radius-pill)',
                     backgroundColor: isSelected ? 'rgba(255,255,255,0.25)' : '#f1f5f9',
                     color: isSelected ? '#ffffff' : '#64748b',
+                    fontWeight: 700,
                   }}
                 >
                   {tab.count}

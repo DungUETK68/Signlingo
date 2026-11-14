@@ -360,16 +360,6 @@ export default function App() {
           />
         )}
 
-        {/* TAB 4.5: ĐÓNG GÓP TỪ VỰNG CỘNG ĐỒNG */}
-        {activeTab === 'contributions' && (
-          <ContributionsView />
-        )}
-
-        {/* TAB 5: MINIGAME & THỬ THÁCH */}
-        {activeTab === 'games' && (
-          <GamesView onStartPracticeWord={handleStartPracticeWord} />
-        )}
-
         {/* TAB 6: ÔN TẬP (SPACED REPETITION) */}
         {activeTab === 'review' && (
           <ReviewView 
@@ -389,6 +379,11 @@ export default function App() {
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
           />
+        )}
+
+        {/* TAB 6.5: ĐÓNG GÓP TỪ VỰNG CỘNG ĐỒNG */}
+        {activeTab === 'contributions' && (
+          <ContributionsView />
         )}
 
         {/* TAB 7: HỒ SƠ NGƯỜI DÙNG */}
