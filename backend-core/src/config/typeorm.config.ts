@@ -8,6 +8,8 @@ import { UserProgress } from '../modules/progress/entities/user-progress.entity'
 import { PracticeLog } from '../modules/progress/entities/practice-log.entity';
 import { ReviewItem } from '../modules/adaptive/entities/review-item.entity';
 import { WordContribution } from '../modules/contributions/entities/word-contribution.entity';
+import { CommunityWord } from '../modules/community/entities/community-word.entity';
+import { CommunityVote } from '../modules/community/entities/community-vote.entity';
 
 export const allEntities = [
   User,
@@ -19,6 +21,8 @@ export const allEntities = [
   PracticeLog,
   ReviewItem,
   WordContribution,
+  CommunityWord,
+  CommunityVote,
 ];
 
 export const getTypeOrmConfig = (): TypeOrmModuleOptions => {

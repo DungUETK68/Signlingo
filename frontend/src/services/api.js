@@ -463,3 +463,125 @@ export const contributionsApi = {
     return res.json();
   },
 };
+
+// ========================================================
+// 6. Community Words API (Cộng đồng đăng từ & bình chọn)
+// ========================================================
+export const communityApi = {
+  async createWord(data) {
+    const res = await fetch(`${CORE_API_URL}/community`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Không thể đăng từ mới lên cộng đồng');
+    }
+    return res.json();
+  },
+
+  async getAllWords(params = {}) {
+    try {
+      const query = new URLSearchParams();
+      if (params.search) query.append('search', params.search);
+      if (params.status && params.status !== 'all') query.append('status', params.status);
+
+      const url = `${CORE_API_URL}/community?${query.toString()}`;
+      const res = await fetch(url, {
+        headers: getAuthHeaders(),
+      });
+      if (!res.ok) return [];
+      return await res.json();
+    } catch (e) {
+      console.warn('Lỗi lấy danh sách từ cộng đồng:', e);
+      return [];
+    }
+  },
+
+  async getMyWords() {
+    try {
+      const res = await fetch(`${CORE_API_URL}/community/my`, {
+        headers: getAuthHeaders(),
+      });
+      if (!res.ok) return [];
+      return await res.json();
+    } catch (e) {
+      console.warn('Lỗi lấy danh sách từ của tôi:', e);
+      return [];
+    }
+  },
+
+  async getAdminEligibleWords(search = '') {
+    try {
+      const query = search ? `?search=${encodeURIComponent(search)}` : '';
+      const res = await fetch(`${CORE_API_URL}/community/admin/eligible${query}`, {
+        headers: getAuthHeaders(),
+      });
+      if (!res.ok) return [];
+      return await res.json();
+    } catch (e) {
+      console.warn('Lỗi lấy danh sách từ đủ điều kiện duyệt:', e);
+      return [];
+    }
+  },
+
+  async getWordById(id) {
+    const res = await fetch(`${CORE_API_URL}/community/${id}`, {
+      headers: getAuthHeaders(),
+    });
+    if (!res.ok) throw new Error('Không tìm thấy từ cộng đồng');
+    return res.json();
+  },
+
+  async voteWord(id, voteType) {
+    const res = await fetch(`${CORE_API_URL}/community/${id}/vote`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ voteType }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Không thể bình chọn từ này');
+    }
+    return res.json();
+  },
+
+  async approveWord(id, feedback = '') {
+    const res = await fetch(`${CORE_API_URL}/community/${id}/approve`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ feedback }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Không thể phê duyệt từ này');
+    }
+    return res.json();
+  },
+
+  async rejectWord(id, feedback = '') {
+    const res = await fetch(`${CORE_API_URL}/community/${id}/reject`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ feedback }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Không thể từ chối từ này');
+    }
+    return res.json();
+  },
+
+  async deleteWord(id) {
+    const res = await fetch(`${CORE_API_URL}/community/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Không thể xóa từ này');
+    }
+    return res.json();
+  },
+};

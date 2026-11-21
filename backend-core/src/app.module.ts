@@ -11,6 +11,7 @@ import { ProgressModule } from './modules/progress/progress.module';
 import { AdaptiveModule } from './modules/adaptive/adaptive.module';
 import { SeedModule } from './modules/seed/seed.module';
 import { ContributionsModule } from './modules/contributions/contributions.module';
+import { CommunityModule } from './modules/community/community.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ContributionsModule } from './modules/contributions/contributions.modul
     ProgressModule,
     AdaptiveModule,
     ContributionsModule,
+    CommunityModule,
     SeedModule,
   ],
 })

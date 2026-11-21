@@ -15,6 +15,7 @@ import ReviewView from './components/Review/ReviewView';
 import DashboardView from './components/Dashboard/DashboardView';
 import AdminView from './components/Admin/AdminView';
 import ContributionsView from './components/Contributions/ContributionsView';
+import CommunityView from './components/Community/CommunityView';
 import AuthModal from './components/AuthModal';
 import LandingView from './components/Landing/LandingView';
 import { getUserProfile, saveUserProfile } from './data/personalizedStore';
@@ -398,6 +399,11 @@ export default function App() {
         {/* TAB 6.5: ĐÓNG GÓP TỪ VỰNG CỘNG ĐỒNG */}
         {activeTab === 'contributions' && (
           <ContributionsView />
+        )}
+
+        {/* TAB 6.6: CỘNG ĐỒNG BÌNH CHỌN & DUYỆT TỪ VỰNG MỚI */}
+        {activeTab === 'community' && (
+          <CommunityView isAdmin={isAdmin} />
         )}
 
         {/* TAB 7: HỒ SƠ NGƯỜI DÙNG */}

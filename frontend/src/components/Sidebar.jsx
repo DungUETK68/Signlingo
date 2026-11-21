@@ -11,7 +11,8 @@ import {
   Sparkles,
   MessageSquareQuote,
   GraduationCap,
-  HeartHandshake
+  HeartHandshake,
+  Users
 } from 'lucide-react';
 
 const NAV_ITEMS = [
@@ -24,6 +25,7 @@ const NAV_ITEMS = [
   { id: 'games', label: 'Thử thách', icon: Zap },
   { id: 'review', label: 'Ôn tập', icon: BookmarkCheck },
   { id: 'contributions', label: 'Đóng góp từ vựng', icon: HeartHandshake },
+  { id: 'community', label: 'Cộng đồng', icon: Users },
   { id: 'dashboard', label: 'Hồ sơ', icon: User },
   { id: 'admin', label: 'Quản trị', icon: Settings },
 ];

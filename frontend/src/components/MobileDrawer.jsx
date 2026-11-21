@@ -13,7 +13,8 @@ import {
   Settings,
   LogOut,
   Hand,
-  HeartHandshake
+  HeartHandshake,
+  Users
 } from 'lucide-react';
 
 const DRAWER_NAV_ITEMS = [
@@ -26,6 +27,7 @@ const DRAWER_NAV_ITEMS = [
   { id: 'games', label: 'Thử thách phản xạ 5s', icon: Zap },
   { id: 'review', label: 'Ôn tập ngắt quãng', icon: BookmarkCheck },
   { id: 'contributions', label: 'Đóng góp từ vựng', icon: HeartHandshake },
+  { id: 'community', label: 'Cộng đồng VSL', icon: Users },
   { id: 'dashboard', label: 'Hồ sơ & Thành tích', icon: User },
   { id: 'admin', label: 'Quản trị hệ thống', icon: Settings },
 ];
