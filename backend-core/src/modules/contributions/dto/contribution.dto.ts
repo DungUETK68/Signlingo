@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateContributionDto {
@@ -49,11 +50,23 @@ export class CreateContributionDto {
 
   @ApiPropertyOptional({ description: 'Link video hoặc đường dẫn video chính diện' })
   @IsOptional()
+  @Transform(({ value }) => {
+    if (typeof value === 'object' && value !== null) {
+      return value.videoUrl || value.previewUrl || value.url || '';
+    }
+    return typeof value === 'string' ? value : '';
+  })
   @IsString()
   videoFront?: string;
 
   @ApiPropertyOptional({ description: 'Link video hoặc đường dẫn video góc nghiêng' })
   @IsOptional()
+  @Transform(({ value }) => {
+    if (typeof value === 'object' && value !== null) {
+      return value.videoUrl || value.previewUrl || value.url || '';
+    }
+    return typeof value === 'string' ? value : '';
+  })
   @IsString()
   videoSide?: string;
 

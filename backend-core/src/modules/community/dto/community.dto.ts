@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsOptional, IsString, IsIn } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateCommunityWordDto {
@@ -54,11 +55,23 @@ export class CreateCommunityWordDto {
 
   @ApiPropertyOptional({ description: 'URL video góc quay chính diện' })
   @IsOptional()
+  @Transform(({ value }) => {
+    if (typeof value === 'object' && value !== null) {
+      return value.videoUrl || value.previewUrl || value.url || '';
+    }
+    return typeof value === 'string' ? value : '';
+  })
   @IsString()
   videoFront?: string;
 
   @ApiPropertyOptional({ description: 'URL video góc quay nghiêng' })
   @IsOptional()
+  @Transform(({ value }) => {
+    if (typeof value === 'object' && value !== null) {
+      return value.videoUrl || value.previewUrl || value.url || '';
+    }
+    return typeof value === 'string' ? value : '';
+  })
   @IsString()
   videoSide?: string;
 

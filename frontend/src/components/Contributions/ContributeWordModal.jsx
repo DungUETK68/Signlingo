@@ -153,7 +153,9 @@ export default function ContributeWordModal({ isOpen, onClose, onSuccess, initia
     try {
       if (videoFile) {
         const uploadRes = await uploadVideoFile(videoFile);
-        finalVideoUrl = uploadRes.videoUrl || uploadRes.previewUrl;
+        finalVideoUrl = typeof uploadRes === 'string' 
+          ? uploadRes 
+          : (uploadRes?.videoUrl || uploadRes?.previewUrl || '');
       }
 
       if (!finalVideoUrl) {

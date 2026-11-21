@@ -134,14 +134,21 @@ export default function PostCommunityWordModal({ isOpen, onClose, onSuccess }) {
       if (videoMethod === 'upload') {
         if (videoFile) {
           try {
-            finalVideoFront = await uploadVideoFile(videoFile);
+            const uploadRes = await uploadVideoFile(videoFile);
+            finalVideoFront = typeof uploadRes === 'string' 
+              ? uploadRes 
+              : (uploadRes?.videoUrl || uploadRes?.previewUrl || '');
           } catch (uploadErr) {
             console.warn('Lỗi upload video máy chủ Python AI, lưu URL tạm thời:', uploadErr);
-            finalVideoFront = videoPreviewUrl || '';
+            finalVideoFront = typeof videoPreviewUrl === 'string' ? videoPreviewUrl : '';
           }
         }
       } else {
-        finalVideoFront = videoUrl.trim();
+        finalVideoFront = typeof videoUrl === 'string' ? videoUrl.trim() : '';
+      }
+
+      if (!finalVideoFront) {
+        finalVideoFront = typeof videoPreviewUrl === 'string' ? videoPreviewUrl : '';
       }
 
       const payload = {
