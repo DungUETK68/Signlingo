@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { getAllWords } from '../../data/wordsStore';
 import { LEADERBOARD } from '../../data/mockData';
-import { progressApi, AI_API_URL } from '../../services/api';
+import { progressApi, AI_API_URL, resolveMediaUrl, isNativePlatform } from '../../services/api';
 import { startSkeletonTracking, stopSkeletonTracking, extract75Landmarks } from '../../services/skeletonTracker';
 import CanvasSkeleton from '../CanvasSkeleton';
 import confetti from 'canvas-confetti';
@@ -241,7 +241,11 @@ export default function GamesView({ onStartPracticeWord, initialMode = 'quiz' })
       try {
         stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
       } catch (e2) {
-        setCameraError('Không thể mở camera. Vui lòng cho phép quyền truy cập webcam trên trình duyệt.');
+        setCameraError(
+          isNativePlatform()
+            ? 'Không thể mở camera. Vui lòng cho phép quyền truy cập Camera cho ứng dụng Signlingo.'
+            : 'Không thể mở camera. Vui lòng cho phép quyền truy cập webcam trên trình duyệt.'
+        );
         setCameraStatus('error');
         return;
       }
@@ -567,7 +571,7 @@ export default function GamesView({ onStartPracticeWord, initialMode = 'quiz' })
             }}>
               <video
                 key={currentQuiz.videoUrl}
-                src={currentQuiz.videoUrl}
+                src={resolveMediaUrl(currentQuiz.videoUrl)}
                 autoPlay
                 loop
                 muted

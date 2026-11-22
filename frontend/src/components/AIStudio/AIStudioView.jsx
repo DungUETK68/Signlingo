@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getAllWords } from '../../data/wordsStore';
 import { recordPracticeSession } from '../../data/personalizedStore';
-import { progressApi, AI_API_URL } from '../../services/api';
+import { progressApi, AI_API_URL, resolveMediaUrl, isNativePlatform } from '../../services/api';
 import { startSkeletonTracking, stopSkeletonTracking, extract75Landmarks } from '../../services/skeletonTracker';
 import CanvasSkeleton from '../CanvasSkeleton';
 import confetti from 'canvas-confetti';
@@ -157,7 +157,7 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
       src.startsWith('/uploads/');
   }, [currentWordObj]);
 
-  const sampleVideoSrc = currentWordObj.videoFront || '/vsl400_videos/cam_on_front.mp4';
+  const sampleVideoSrc = resolveMediaUrl(currentWordObj.videoFront || '/vsl400_videos/cam_on_front.mp4');
 
   // Đổi tốc độ phát video mẫu (1.0x hoặc 0.5x)
   const changeSpeed = (rate) => {
@@ -212,7 +212,9 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
         } catch (err3) {
           let userMsg = 'Không thể bật camera.';
           if (err3.name === 'NotAllowedError' || err3.name === 'PermissionDeniedError') {
-            userMsg = 'Trình duyệt chưa được cấp quyền truy cập Camera. Vui lòng chọn "Cho phép" (Allow) trên thanh URL trình duyệt và thử lại.';
+            userMsg = isNativePlatform()
+              ? 'Ứng dụng chưa được cấp quyền truy cập Camera. Vui lòng chọn "Cho phép" khi được hỏi hoặc cấp quyền Camera trong Cài đặt ứng dụng Signlingo rồi thử lại.'
+              : 'Trình duyệt chưa được cấp quyền truy cập Camera. Vui lòng chọn "Cho phép" (Allow) trên thanh URL trình duyệt và thử lại.';
           } else if (err3.name === 'NotFoundError' || err3.name === 'DevicesNotFoundError') {
             userMsg = 'Không tìm thấy thiết bị Camera nào được kết nối với máy tính.';
           } else if (err3.name === 'NotReadableError' || err3.name === 'TrackStartError') {
@@ -793,7 +795,7 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
               />
             ) : (
               <img
-                src={currentWordObj.videoFront}
+                src={resolveMediaUrl(currentWordObj.videoFront)}
                 alt="Mẫu chuẩn"
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
@@ -1276,7 +1278,7 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
                 />
               ) : (
                 <img
-                  src={currentWordObj.videoFront}
+                  src={resolveMediaUrl(currentWordObj.videoFront)}
                   alt="Mẫu"
                   style={{ width: '100%', height: 230, objectFit: 'cover' }}
                 />

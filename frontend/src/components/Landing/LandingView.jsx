@@ -26,6 +26,7 @@ import {
   HelpCircle
 } from 'lucide-react';
 import './LandingView.css';
+import { resolveMediaUrl } from '../../services/api';
 
 export default function LandingView({ onOpenAuth }) {
   const [activeAngle, setActiveAngle] = useState('front'); // 'front' | 'left' | 'right'
@@ -355,7 +356,7 @@ export default function LandingView({ onOpenAuth }) {
           <div className="landing-mockup-video-box">
             <video
               key={activeAngle}
-              src={videoAngles[activeAngle]}
+              src={resolveMediaUrl(videoAngles[activeAngle])}
               autoPlay
               loop
               muted
@@ -1001,7 +1002,7 @@ export default function LandingView({ onOpenAuth }) {
               >
                 <div style={{ position: 'relative', height: 120, backgroundColor: '#0f172a' }}>
                   <img
-                    src={word.thumb}
+                    src={resolveMediaUrl(word.thumb)}
                     alt={word.name}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     onError={(e) => {

@@ -15,6 +15,7 @@ import {
   Bookmark
 } from 'lucide-react';
 import { useSavedSentences } from '../../data/wordsStore';
+import { resolveMediaUrl } from '../../services/api';
 
 export default function SentenceDetailView({ sentence, onBack, onStartPractice }) {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -29,11 +30,11 @@ export default function SentenceDetailView({ sentence, onBack, onStartPractice }
 
   // Xác định đường dẫn video mẫu theo góc quay (Chính diện hoặc Góc nghiêng)
   const currentVideoSrc = React.useMemo(() => {
-    if (!currentWord) return '/vsl400_videos/cam_on_front.mp4';
+    if (!currentWord) return resolveMediaUrl('/vsl400_videos/cam_on_front.mp4');
     if (viewAngle === 'side' && (currentWord.videoSide || currentWord.videoLeft || currentWord.videoRight)) {
-      return currentWord.videoSide || currentWord.videoLeft || currentWord.videoRight;
+      return resolveMediaUrl(currentWord.videoSide || currentWord.videoLeft || currentWord.videoRight);
     }
-    return currentWord.videoFront || currentWord.video || currentWord.videoUrl || (currentWord.slug ? `/vsl400_videos/${currentWord.slug}_front.mp4` : '/vsl400_videos/cam_on_front.mp4');
+    return resolveMediaUrl(currentWord.videoFront || currentWord.video || currentWord.videoUrl || (currentWord.slug ? `/vsl400_videos/${currentWord.slug}_front.mp4` : '/vsl400_videos/cam_on_front.mp4'));
   }, [currentWord, viewAngle]);
 
   // Cập nhật tốc độ phát video

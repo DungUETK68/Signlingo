@@ -5,8 +5,22 @@ assets.zip
 # Frontend
 frontend/node_modules/
 frontend/dist/
+frontend/dist-mobile/
 frontend/dist-ssr/
 frontend/*.local
+
+# Android / Capacitor Native Build Outputs
+frontend/android/.gradle/
+frontend/android/.idea/
+frontend/android/build/
+frontend/android/app/build/
+frontend/android/app/src/main/assets/public/
+frontend/android/capacitor-cordova-android-plugins/build/
+frontend/android/local.properties
+*.apk
+*.aab
+*.keystore
+*.jks
 
 # Backend Core (NestJS)
 backend-core/node_modules/

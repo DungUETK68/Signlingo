@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Signlingo</string>
+    <string name="title_activity_main">Signlingo</string>
+    <string name="package_name">vn.id.signlingo.app</string>
+    <string name="custom_url_scheme">vn.id.signlingo.app</string>
+</resources>

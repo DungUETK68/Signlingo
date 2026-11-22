@@ -7,9 +7,20 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "mobile:build": "node scripts/build-mobile-assets.mjs",
+    "mobile:sync": "node scripts/build-mobile-assets.mjs && npx cap sync android",
+    "mobile:apk": "powershell -ExecutionPolicy Bypass -File ../scripts/build-android-apk.ps1",
+    "mobile:install": "powershell -ExecutionPolicy Bypass -File ../scripts/build-android-apk.ps1 -Install",
+    "mobile:open": "npx cap open android"
   },
   "dependencies": {
+    "@capacitor/android": "^8.6.2",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/cli": "^8.6.2",
+    "@capacitor/core": "^8.6.2",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.4",
     "@mediapipe/camera_utils": "^0.3.1675466862",
     "@mediapipe/hands": "^0.4.1675469240",
     "@mediapipe/holistic": "^0.5.1675471629",

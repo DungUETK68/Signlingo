@@ -19,7 +19,7 @@ import {
   Filter,
   Award
 } from 'lucide-react';
-import { communityApi } from '../../services/api';
+import { communityApi, resolveMediaUrl } from '../../services/api';
 import PostCommunityWordModal from './PostCommunityWordModal';
 
 export default function CommunityView({ isAdmin = false }) {
@@ -437,7 +437,7 @@ export default function CommunityView({ isAdmin = false }) {
                     <div style={{ position: 'relative', height: 180, backgroundColor: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       {item.videoFront ? (
                         <video
-                          src={item.videoFront}
+                          src={resolveMediaUrl(item.videoFront)}
                           style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                           playsInline
                           preload="metadata"
@@ -799,7 +799,7 @@ export default function CommunityView({ isAdmin = false }) {
                     >
                       {item.videoFront ? (
                         <>
-                          <video src={item.videoFront} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          <video src={resolveMediaUrl(item.videoFront)} playsInline muted preload="metadata" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                           <div style={{ position: 'absolute', width: 28, height: 28, borderRadius: '50%', backgroundColor: 'rgba(2, 132, 199, 0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <Play size={14} color="#ffffff" style={{ marginLeft: 2 }} />
                           </div>
@@ -935,9 +935,10 @@ export default function CommunityView({ isAdmin = false }) {
               </button>
             </div>
             <video
-              src={previewVideo.url}
+              src={resolveMediaUrl(previewVideo.url)}
               controls
               autoPlay
+              playsInline
               style={{ width: '100%', maxHeight: 420, display: 'block' }}
             />
           </div>

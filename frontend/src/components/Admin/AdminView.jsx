@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSignWords, deleteWordById } from '../../data/wordsStore';
-import { userApi, aiApi, contributionsApi } from '../../services/api';
+import { userApi, aiApi, contributionsApi, resolveMediaUrl } from '../../services/api';
 import AddWordModal from './AddWordModal';
 import ContributeWordModal from '../Contributions/ContributeWordModal';
 import {
@@ -1232,7 +1232,7 @@ export default function AdminView() {
                 previewWord.videoFront.includes('/vsl400_videos/')
               ) ? (
                 <video
-                  src={previewWord.videoFront}
+                  src={resolveMediaUrl(previewWord.videoFront)}
                   controls
                   autoPlay
                   loop
@@ -1241,7 +1241,7 @@ export default function AdminView() {
                 />
               ) : (
                 <img
-                  src={previewWord.videoFront}
+                  src={resolveMediaUrl(previewWord.videoFront)}
                   alt={previewWord.word}
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />

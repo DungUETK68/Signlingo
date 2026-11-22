@@ -13,7 +13,7 @@ import {
   Users
 } from 'lucide-react';
 import { uploadVideoFile } from '../../data/wordsStore';
-import { communityApi } from '../../services/api';
+import { communityApi, resolveMediaUrl } from '../../services/api';
 
 const PRESET_TOPICS = [
   { id: 'greeting', label: 'Chào hỏi & Giao tiếp', icon: '👋' },
@@ -515,8 +515,9 @@ export default function PostCommunityWordModal({ isOpen, onClose, onSuccess }) {
               <div style={{ marginTop: '0.75rem', position: 'relative', borderRadius: 'var(--radius-md)', overflow: 'hidden', maxHeight: 180, backgroundColor: '#000000' }}>
                 <video
                   ref={previewVideoRef}
-                  src={videoPreviewUrl}
+                  src={resolveMediaUrl(videoPreviewUrl)}
                   controls
+                  playsInline
                   style={{ width: '100%', height: '100%', maxHeight: 180, objectFit: 'contain' }}
                 />
               </div>

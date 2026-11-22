@@ -1,9 +1,21 @@
 // Centralized API Client for Signlingo
 // Connects to NestJS Backend Core (Port 3000) and Python AI Service (Port 8000)
+// Hỗ trợ tự động điều hướng về máy chủ Production (https://signlingo.id.vn) khi chạy dưới dạng App Mobile Android
+
+import { isNativePlatform, getServerOrigin, resolveMediaUrl } from './platform';
+
+export { isNativePlatform, getServerOrigin, resolveMediaUrl };
 
 const isVitePort = typeof window !== 'undefined' && window.location.port === '5173';
-export const CORE_API_URL = import.meta.env.VITE_CORE_API_URL || (isVitePort ? 'http://localhost:3000/api' : '/api');
-export const AI_API_URL = import.meta.env.VITE_AI_API_URL || (isVitePort ? 'http://localhost:8000/api' : '/ai');
+const nativeOrigin = isNativePlatform() ? getServerOrigin() : '';
+
+export const CORE_API_URL =
+  import.meta.env.VITE_CORE_API_URL ||
+  (nativeOrigin ? `${nativeOrigin}/api` : isVitePort ? 'http://localhost:3000/api' : '/api');
+
+export const AI_API_URL =
+  import.meta.env.VITE_AI_API_URL ||
+  (nativeOrigin ? `${nativeOrigin}/ai` : isVitePort ? 'http://localhost:8000/api' : '/ai');
 
 const TOKEN_KEY = 'signlingo_auth_token';
 

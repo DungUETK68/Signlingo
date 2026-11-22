@@ -15,7 +15,7 @@ import {
   X,
   Sparkles
 } from 'lucide-react';
-import { contributionsApi } from '../../services/api';
+import { contributionsApi, resolveMediaUrl } from '../../services/api';
 import ContributeWordModal from './ContributeWordModal';
 
 export default function ContributionsView() {
@@ -604,7 +604,7 @@ export default function ContributionsView() {
 
             <div style={{ borderRadius: '12px', overflow: 'hidden', backgroundColor: '#000000', aspectRatio: '16/9' }}>
               <video
-                src={previewVideo.videoFront}
+                src={resolveMediaUrl(previewVideo.videoFront)}
                 controls
                 autoPlay
                 loop

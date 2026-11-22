@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import CanvasSkeleton from '../CanvasSkeleton';
 import confetti from 'canvas-confetti';
-import { progressApi, AI_API_URL } from '../../services/api';
+import { progressApi, AI_API_URL, resolveMediaUrl, isNativePlatform } from '../../services/api';
 import { startSkeletonTracking, stopSkeletonTracking, extract75Landmarks } from '../../services/skeletonTracker';
 
 function getShortRole(role) {
@@ -149,7 +149,9 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
         } catch (err3) {
           let userMsg = 'Không thể bật camera.';
           if (err3.name === 'NotAllowedError' || err3.name === 'PermissionDeniedError') {
-            userMsg = 'Trình duyệt chưa được cấp quyền truy cập Camera. Vui lòng chọn "Cho phép" (Allow) trên thanh URL trình duyệt và thử lại.';
+            userMsg = isNativePlatform()
+              ? 'Ứng dụng chưa được cấp quyền truy cập Camera. Vui lòng cho phép quyền Camera trong Cài đặt ứng dụng Signlingo rồi thử lại.'
+              : 'Trình duyệt chưa được cấp quyền truy cập Camera. Vui lòng chọn "Cho phép" (Allow) trên thanh URL trình duyệt và thử lại.';
           } else if (err3.name === 'NotFoundError' || err3.name === 'DevicesNotFoundError') {
             userMsg = 'Không tìm thấy thiết bị Camera nào được kết nối với máy tính.';
           } else if (err3.name === 'NotReadableError' || err3.name === 'TrackStartError') {
@@ -769,7 +771,7 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
           }}>
             <video
               ref={sampleVideoRef}
-              src={sampleVideoSrc}
+              src={resolveMediaUrl(sampleVideoSrc)}
               controls
               loop={!isRecording}
               muted

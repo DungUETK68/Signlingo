@@ -737,3 +737,61 @@ button, input, select, textarea, optgroup {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/* ========================================================
+   NATIVE MOBILE APP (CAPACITOR ANDROID / EDGE-TO-EDGE SAFE AREA)
+   ======================================================== */
+html.native-mobile-app,
+body.native-mobile-app {
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body.native-mobile-app input,
+body.native-mobile-app textarea {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* Hỗ trợ Safe Area cho màn hình tai thỏ / đục lỗ và Android 15+ Edge-to-Edge */
+.landing-header {
+  padding-top: calc(0.85rem + env(safe-area-inset-top, 0px)) !important;
+}
+
+.mobile-top-bar {
+  padding-top: env(safe-area-inset-top, 0px);
+  height: calc(56px + env(safe-area-inset-top, 0px));
+}
+
+.mobile-bottom-nav {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  height: calc(60px + env(safe-area-inset-bottom, 0px));
+}
+
+.mobile-drawer-header {
+  padding-top: calc(1.15rem + env(safe-area-inset-top, 0px));
+}
+
+.mobile-drawer-footer {
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+}
+
+.native-exit-toast {
+  position: fixed;
+  bottom: calc(78px + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99999;
+  background-color: rgba(15, 23, 42, 0.92);
+  color: #ffffff;
+  padding: 0.65rem 1.2rem;
+  border-radius: 9999px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.3);
+  animation: fadeIn 0.18s ease-out;
+}

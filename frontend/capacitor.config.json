@@ -1,0 +1,36 @@
+{
+  "appId": "vn.id.signlingo.app",
+  "appName": "Signlingo",
+  "webDir": "dist-mobile",
+  "server": {
+    "androidScheme": "https",
+    "cleartext": true,
+    "allowNavigation": [
+      "signlingo.id.vn",
+      "*.signlingo.id.vn"
+    ]
+  },
+  "android": {
+    "allowMixedContent": true,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": true
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1600,
+      "launchAutoHide": false,
+      "launchFadeOutDuration": 300,
+      "backgroundColor": "#0284c7",
+      "androidSplashResourceName": "splash",
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": false,
+      "splashFullScreen": false,
+      "splashImmersive": false
+    },
+    "StatusBar": {
+      "overlaysWebView": false,
+      "style": "LIGHT",
+      "backgroundColor": "#ffffff"
+    }
+  }
+}

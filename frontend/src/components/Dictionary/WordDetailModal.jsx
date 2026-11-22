@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Camera, BookOpen } from 'lucide-react';
+import { resolveMediaUrl } from '../../services/api';
 
 export default function WordDetailModal({ wordData, onClose, onStartPractice, onOpenLesson }) {
   const [viewAngle, setViewAngle] = useState('front');
@@ -55,7 +56,7 @@ export default function WordDetailModal({ wordData, onClose, onStartPractice, on
             {isVideo ? (
               <video
                 key={currentVideo}
-                src={currentVideo}
+                src={resolveMediaUrl(currentVideo)}
                 controls
                 autoPlay
                 loop
@@ -63,7 +64,7 @@ export default function WordDetailModal({ wordData, onClose, onStartPractice, on
                 style={{ width: '100%', height: '100%', objectFit: 'contain' }}
               />
             ) : (
-              <img src={currentVideo || wordData.thumbnail} alt={wordData.word} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={resolveMediaUrl(currentVideo || wordData.thumbnail)} alt={wordData.word} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             )}
 
             {/* Bộ chuyển đổi 3 góc quay VSL400 */}

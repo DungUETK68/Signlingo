@@ -17,7 +17,7 @@ import {
   Bookmark
 } from 'lucide-react';
 import { getAllWords, useSavedLessons } from '../../data/wordsStore';
-import { progressApi } from '../../services/api';
+import { progressApi, resolveMediaUrl } from '../../services/api';
 
 export default function LessonDetailView({ lesson, topic, onBack, onStartPractice, onSelectLesson }) {
   const [speed, setSpeed] = useState(1.0);
@@ -340,7 +340,7 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
             <video 
               key={currentVideo}
               ref={videoPlayerRef}
-              src={currentVideo} 
+              src={resolveMediaUrl(currentVideo)} 
               controls
               autoPlay
               loop
@@ -349,7 +349,7 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
             />
           ) : (
             <img 
-              src={currentVideo} 
+              src={resolveMediaUrl(currentVideo)} 
               alt={lesson.title}
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />

@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useSignWords, getAllTopics } from '../../data/wordsStore';
+import { resolveMediaUrl } from '../../services/api';
 import WordDetailModal from './WordDetailModal';
 import { Search, Camera, Video, X, BookOpen, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -14,9 +15,9 @@ export default function DictionaryView({ onStartPracticeWord, onOpenLesson }) {
 
   // Lấy đường dẫn thumbnail (frame đầu tiên của video)
   const getThumbnailSrc = (word) => {
-    if (word.thumbnail) return word.thumbnail;
-    if (word.slug) return `/vsl400_videos/${word.slug}_thumb.jpg`;
-    return word.videoFront || word.videoUrl || '/vsl400_videos/cam_on_thumb.jpg';
+    if (word.thumbnail) return resolveMediaUrl(word.thumbnail);
+    if (word.slug) return resolveMediaUrl(`/vsl400_videos/${word.slug}_thumb.jpg`);
+    return resolveMediaUrl(word.videoFront || word.videoUrl || '/vsl400_videos/cam_on_thumb.jpg');
   };
 
   // Điều hướng sang màn hình Bước 1: Học & Quan sát cử chỉ

@@ -16,7 +16,7 @@ import {
   HeartHandshake
 } from 'lucide-react';
 import { uploadVideoFile } from '../../data/wordsStore';
-import { contributionsApi } from '../../services/api';
+import { contributionsApi, resolveMediaUrl } from '../../services/api';
 
 const PRESET_TOPICS = [
   { id: 'greeting', label: 'Chào hỏi & Giao tiếp', icon: '👋' },
@@ -584,7 +584,7 @@ export default function ContributeWordModal({ isOpen, onClose, onSuccess, initia
                 }}>
                   <video
                     ref={previewVideoRef}
-                    src={videoPreviewUrl}
+                    src={resolveMediaUrl(videoPreviewUrl)}
                     controls
                     loop
                     muted

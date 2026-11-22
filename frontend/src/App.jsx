@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Sidebar from './components/Sidebar';
 import RightSidebar from './components/RightSidebar';
 import MobileTopBar from './components/MobileTopBar';
@@ -21,6 +21,7 @@ import LandingView from './components/Landing/LandingView';
 import { getUserProfile, saveUserProfile } from './data/personalizedStore';
 import { getStoredToken, authApi } from './services/api';
 import { preloadSkeletonTracker } from './services/skeletonTracker';
+import { initNativeMobileUI, registerAndroidBackButton, exitNativeApp } from './services/platform';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('personalized');
@@ -37,6 +38,55 @@ export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
+  const [mobileExitToast, setMobileExitToast] = useState('');
+  const lastBackPressRef = useRef(0);
+
+  // 0.0 Khởi tạo giao diện Android Native (StatusBar, SplashScreen, Safe Area)
+  useEffect(() => {
+    initNativeMobileUI();
+  }, []);
+
+  // 0.1 Xử lý nút Back vật lý / cử chỉ vuốt quay lại trên điện thoại Android
+  useEffect(() => {
+    const unsubscribe = registerAndroidBackButton(() => {
+      if (isMobileDrawerOpen) {
+        setIsMobileDrawerOpen(false);
+        return;
+      }
+
+      if (isAuthOpen) {
+        setIsAuthOpen(false);
+        return;
+      }
+
+      if (isAuthenticated) {
+        if (activeTab === 'practice') {
+          setActiveTab(previousTab || 'personalized');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
+        if (activeTab !== 'personalized') {
+          setActiveTab('personalized');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
+      }
+
+      // Ở màn hình gốc: bấm Back 2 lần trong 2 giây để thoát app an toàn
+      const now = Date.now();
+      if (now - lastBackPressRef.current < 2000) {
+        exitNativeApp();
+      } else {
+        lastBackPressRef.current = now;
+        setMobileExitToast('Bấm quay lại lần nữa để thoát Signlingo');
+        setTimeout(() => {
+          setMobileExitToast('');
+        }, 2000);
+      }
+    });
+
+    return unsubscribe;
+  }, [isMobileDrawerOpen, isAuthOpen, isAuthenticated, activeTab, previousTab]);
 
   // 0. Khởi động & làm ấm nhận diện khung xương AI ngay khi truy cập website (0s delay khi vào camera)
   useEffect(() => {
@@ -216,6 +266,9 @@ export default function App() {
             setActiveTab('personalized');
           }}
         />
+        {mobileExitToast && (
+          <div className="native-exit-toast">{mobileExitToast}</div>
+        )}
       </>
     );
   }
@@ -444,6 +497,11 @@ export default function App() {
           setIsAuthOpen(false);
         }}
       />
+
+      {/* Toast nhắc bấm Back lần nữa để thoát app trên Android */}
+      {mobileExitToast && (
+        <div className="native-exit-toast">{mobileExitToast}</div>
+      )}
     </div>
   </>
 );

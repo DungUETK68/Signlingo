@@ -15,6 +15,7 @@ import {
   Play
 } from 'lucide-react';
 import { addCustomWord, uploadVideoFile } from '../../data/wordsStore';
+import { resolveMediaUrl } from '../../services/api';
 
 const PRESET_TOPICS = [
   { id: 'greeting', label: 'Chào hỏi & Làm quen', icon: '👋' },
@@ -551,7 +552,7 @@ export default function AddWordModal({ isOpen, onClose, onSuccess, initialWord =
                 }}>
                   <video
                     ref={previewVideoRef}
-                    src={videoPreviewUrl}
+                    src={resolveMediaUrl(videoPreviewUrl)}
                     controls
                     playsInline
                     style={{ width: '100%', height: '100%', objectFit: 'contain' }}
