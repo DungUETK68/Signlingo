@@ -41,14 +41,14 @@ export default function WordDetailModal({ wordData, onClose, onStartPractice, on
             {wordData.word}
           </h2>
 
-          {/* Video preview 3 góc quay */}
+          {/* Video preview 3 góc quay (không bị thanh nút đè lên video) */}
           <div style={{
             position: 'relative',
             borderRadius: 'var(--radius-xl)',
             overflow: 'hidden',
             backgroundColor: '#0f172a',
             aspectRatio: '16/10',
-            marginBottom: '1rem',
+            marginBottom: '0.65rem',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
@@ -66,41 +66,46 @@ export default function WordDetailModal({ wordData, onClose, onStartPractice, on
             ) : (
               <img src={resolveMediaUrl(currentVideo || wordData.thumbnail)} alt={wordData.word} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             )}
+          </div>
 
-            {/* Bộ chuyển đổi 3 góc quay VSL400 */}
-            <div style={{
-              position: 'absolute',
-              bottom: '0.6rem',
-              right: '0.6rem',
-              display: 'flex',
-              gap: '0.3rem',
-              backgroundColor: 'rgba(15,23,42,0.85)',
-              padding: '0.25rem',
-              borderRadius: 'var(--radius-pill)',
-              backdropFilter: 'blur(4px)'
-            }}>
-              <button
-                className={`btn-pill btn-sm ${viewAngle === 'front' ? 'btn-primary' : 'btn-secondary'}`}
-                style={{ padding: '0.2rem 0.55rem', fontSize: '0.72rem', fontWeight: 700 }}
-                onClick={() => setViewAngle('front')}
-              >
-                Chính diện
-              </button>
-              <button
-                className={`btn-pill btn-sm ${viewAngle === 'left' ? 'btn-primary' : 'btn-secondary'}`}
-                style={{ padding: '0.2rem 0.55rem', fontSize: '0.72rem', fontWeight: 700 }}
-                onClick={() => setViewAngle('left')}
-              >
-                Góc trái
-              </button>
-              <button
-                className={`btn-pill btn-sm ${viewAngle === 'right' ? 'btn-primary' : 'btn-secondary'}`}
-                style={{ padding: '0.2rem 0.55rem', fontSize: '0.72rem', fontWeight: 700 }}
-                onClick={() => setViewAngle('right')}
-              >
-                Góc phải
-              </button>
-            </div>
+          {/* Bộ chuyển đổi 3 góc quay VSL400 tách riêng bên dưới video */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.4rem',
+            flexWrap: 'wrap',
+            backgroundColor: '#f8fafc',
+            border: '1px solid var(--border-color)',
+            padding: '0.45rem 0.65rem',
+            borderRadius: 'var(--radius-lg)',
+            marginBottom: '1rem'
+          }}>
+            <span style={{ fontSize: '0.76rem', fontWeight: 700, color: '#64748b', marginRight: '0.15rem' }}>Góc quay:</span>
+            <button
+              type="button"
+              className={`btn-pill btn-sm ${viewAngle === 'front' ? 'btn-primary' : 'btn-secondary'}`}
+              style={{ padding: '0.28rem 0.7rem', fontSize: '0.76rem', fontWeight: 700 }}
+              onClick={() => setViewAngle('front')}
+            >
+              Chính diện
+            </button>
+            <button
+              type="button"
+              className={`btn-pill btn-sm ${viewAngle === 'left' ? 'btn-primary' : 'btn-secondary'}`}
+              style={{ padding: '0.28rem 0.7rem', fontSize: '0.76rem', fontWeight: 700 }}
+              onClick={() => setViewAngle('left')}
+            >
+              Góc trái
+            </button>
+            <button
+              type="button"
+              className={`btn-pill btn-sm ${viewAngle === 'right' ? 'btn-primary' : 'btn-secondary'}`}
+              style={{ padding: '0.28rem 0.7rem', fontSize: '0.76rem', fontWeight: 700 }}
+              onClick={() => setViewAngle('right')}
+            >
+              Góc phải
+            </button>
           </div>
 
           {/* Quick instructions (1 short line) */}

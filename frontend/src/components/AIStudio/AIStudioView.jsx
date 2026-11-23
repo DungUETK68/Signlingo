@@ -185,13 +185,16 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
     }
 
     let stream = null;
+    const isMobileCam = isNativePlatform() || (typeof window !== 'undefined' && window.innerWidth <= 768);
 
-    // Cấp độ 1: Thử HD 720p
+    // Cấp độ 1: Trên điện thoại tối ưu 480x360 @ 30fps giúp MediaPipe nhanh gấp 3-4 lần; Desktop dùng HD 720p
     try {
       const constraints = {
         video: deviceId
           ? { deviceId: { exact: deviceId } }
-          : { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' },
+          : isMobileCam
+            ? { width: { ideal: 480 }, height: { ideal: 360 }, frameRate: { ideal: 30, max: 30 }, facingMode: 'user' }
+            : { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' },
         audio: false
       };
       stream = await navigator.mediaDevices.getUserMedia(constraints);

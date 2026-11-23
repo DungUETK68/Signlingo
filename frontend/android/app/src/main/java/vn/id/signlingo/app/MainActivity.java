@@ -1,5 +1,6 @@
 package vn.id.signlingo.app;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -12,7 +13,10 @@ public class MainActivity extends BridgeActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Bật tăng tốc phần cứng để MediaPipe WebAssembly/WebGL đạt 30-60 FPS mượt mà
+        // Khóa cố định màn hình nằm dọc (Portrait-only) cho ứng dụng di động Signlingo
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        // Bật tăng tốc phần cứng để MediaPipe WebAssembly/WebGL đạt tốc độ khung hình mượt mà
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
             WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED

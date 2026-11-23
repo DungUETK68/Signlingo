@@ -232,9 +232,12 @@ export default function GamesView({ onStartPracticeWord, initialMode = 'quiz' })
     setCameraError(null);
 
     let stream = null;
+    const isMobileCam = isNativePlatform() || (typeof window !== 'undefined' && window.innerWidth <= 768);
     try {
       stream = await navigator.mediaDevices.getUserMedia({
-        video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' },
+        video: isMobileCam
+          ? { width: { ideal: 480 }, height: { ideal: 360 }, frameRate: { ideal: 30, max: 30 }, facingMode: 'user' }
+          : { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' },
         audio: false
       });
     } catch (e1) {

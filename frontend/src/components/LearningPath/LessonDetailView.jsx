@@ -148,7 +148,7 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
       </div>
 
       {/* 2. Thẻ Nội Dung Bài Học Chính */}
-      <div className="mini-card" style={{ padding: '1.75rem', marginBottom: '1.5rem' }}>
+      <div className="mini-card lesson-detail-card" style={{ marginBottom: '1.5rem' }}>
         {/* Badges & Meta */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -258,79 +258,40 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
           </div>
         </div>
 
-        {/* Stepper Chỉ Dẫn 2 Bước */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '0.75rem',
-          marginBottom: '1.5rem',
-          backgroundColor: '#f8fafc',
-          padding: '0.6rem',
-          borderRadius: 'var(--radius-lg)',
-          border: '1px solid var(--border-color)'
-        }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.65rem',
-            padding: '0.65rem 0.85rem',
-            backgroundColor: '#ffffff',
-            borderRadius: 'var(--radius-md)',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
-            border: '1.5px solid #bae6fd'
-          }}>
-            <div style={{
-              width: 28,
-              height: 28,
-              borderRadius: '50%',
-              backgroundColor: '#0284c7',
-              color: 'white',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 800,
-              fontSize: '0.85rem'
-            }}>1</div>
-            <div>
-              <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#0284c7' }}>Bước 1: Quan sát mẫu</div>
-              <div style={{ fontSize: '0.72rem', color: '#64748b' }}>Xem video tốc độ thường & 0.5x</div>
+        {/* Stepper Chỉ Dẫn 2 Bước (Gọn gàng trên cả Mobile & Desktop) */}
+        <div className="lesson-stepper">
+          <div className="lesson-step-card active">
+            <div className="lesson-step-badge active">1</div>
+            <div className="lesson-step-text">
+              <div className="lesson-step-title active">Bước 1: Quan sát mẫu</div>
+              <div className="lesson-step-sub">Xem video tốc độ thường & 0.5x</div>
             </div>
           </div>
 
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.65rem',
-            padding: '0.65rem 0.85rem',
-            opacity: 0.85
-          }}>
-            <div style={{
-              width: 28,
-              height: 28,
-              borderRadius: '50%',
-              backgroundColor: '#e2e8f0',
-              color: '#475569',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 800,
-              fontSize: '0.85rem'
-            }}>2</div>
-            <div>
-              <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#475569' }}>Bước 2: Luyện tập AI</div>
-              <div style={{ fontSize: '0.72rem', color: '#64748b' }}>Bật webcam chấm điểm cử chỉ</div>
+          <div
+            className="lesson-step-card"
+            onClick={() => onStartPractice(lesson.title)}
+            role="button"
+            tabIndex={0}
+            style={{ cursor: 'pointer' }}
+            title="Chuyển ngay sang Bước 2: Luyện tập Camera AI"
+          >
+            <div className="lesson-step-badge">2</div>
+            <div className="lesson-step-text">
+              <div className="lesson-step-title">Bước 2: Luyện tập AI</div>
+              <div className="lesson-step-sub">Bật camera chấm điểm cử chỉ</div>
             </div>
           </div>
         </div>
 
-        {/* Khung Video Chuyên Gia Làm Mẫu */}
+        {/* Khung Video Chuyên Gia Làm Mẫu (100% thông thoáng, không bị nút điều khiển che video) */}
         <div style={{
           position: 'relative',
           borderRadius: 'var(--radius-xl)',
           overflow: 'hidden',
           backgroundColor: '#0f172a',
           aspectRatio: '16/10',
-          marginBottom: '1.25rem',
+          marginBottom: '0.75rem',
           boxShadow: 'var(--card-shadow)',
           display: 'flex',
           alignItems: 'center',
@@ -358,18 +319,18 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
           {/* Top Label Tag */}
           <div style={{
             position: 'absolute',
-            top: '0.85rem',
-            left: '0.85rem',
+            top: '0.65rem',
+            left: '0.65rem',
             display: 'flex',
             gap: '0.4rem',
             pointerEvents: 'none'
           }}>
             <span style={{
-              backgroundColor: 'rgba(15, 23, 42, 0.75)',
+              backgroundColor: 'rgba(15, 23, 42, 0.72)',
               color: '#ffffff',
-              padding: '0.3rem 0.75rem',
+              padding: '0.25rem 0.65rem',
               borderRadius: 'var(--radius-pill)',
-              fontSize: '0.75rem',
+              fontSize: '0.72rem',
               fontWeight: 700,
               backdropFilter: 'blur(6px)',
               display: 'flex',
@@ -379,60 +340,56 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
               <Video size={13} /> {isVideoFormat ? 'Video mẫu chuyên gia VSL' : 'Ảnh mẫu chuyên gia VSL'}
             </span>
           </div>
+        </div>
 
-          {/* Video Control Bar: Tốc độ 0.5x / 1.0x & Góc quay */}
-          <div style={{
-            position: 'absolute',
-            bottom: '0.85rem',
-            left: '0.85rem',
-            right: '0.85rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            backgroundColor: 'rgba(15, 23, 42, 0.85)',
-            padding: '0.5rem 0.85rem',
-            borderRadius: 'var(--radius-pill)',
-            backdropFilter: 'blur(8px)',
-            flexWrap: 'wrap',
-            gap: '0.5rem',
-            zIndex: 5
-          }}>
-            {/* Speed Buttons */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-              <span style={{ color: '#94a3b8', fontSize: '0.75rem', fontWeight: 600, marginRight: '0.2rem' }}>Tốc độ:</span>
+        {/* Thanh điều khiển Tốc độ & Góc quay tách riêng BÊN NGOÀI bên dưới video */}
+        <div className="lesson-video-toolbar">
+          {/* Speed Buttons */}
+          <div className="lesson-toolbar-group">
+            <span className="lesson-toolbar-label">Tốc độ:</span>
+            <div className="lesson-toolbar-btns">
               <button
+                type="button"
                 className={`btn-pill btn-sm ${speed === 1.0 ? 'btn-primary' : 'btn-secondary'}`}
-                style={{ padding: '0.25rem 0.65rem', fontSize: '0.75rem' }}
+                style={{ padding: '0.32rem 0.75rem', fontSize: '0.78rem', whiteSpace: 'nowrap' }}
                 onClick={() => handleSetSpeed(1.0)}
               >
                 1.0x Thường
               </button>
               <button
+                type="button"
                 className={`btn-pill btn-sm ${speed === 0.5 ? 'btn-primary' : 'btn-secondary'}`}
                 style={{
-                  padding: '0.25rem 0.65rem',
-                  fontSize: '0.75rem',
-                  backgroundColor: speed === 0.5 ? '#f97316' : undefined
+                  padding: '0.32rem 0.75rem',
+                  fontSize: '0.78rem',
+                  whiteSpace: 'nowrap',
+                  backgroundColor: speed === 0.5 ? '#f97316' : undefined,
+                  borderColor: speed === 0.5 ? '#f97316' : undefined,
+                  boxShadow: speed === 0.5 ? '0 3px 0 #c2410c' : undefined
                 }}
                 onClick={() => handleSetSpeed(0.5)}
               >
-                🐢 0.5x Quay chậm
+                🐢 0.5x Chậm
               </button>
             </div>
+          </div>
 
-            {/* View Angle Buttons */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-              <span style={{ color: '#94a3b8', fontSize: '0.75rem', fontWeight: 600, marginRight: '0.2rem' }}>Góc quay:</span>
+          {/* View Angle Buttons */}
+          <div className="lesson-toolbar-group">
+            <span className="lesson-toolbar-label">Góc quay:</span>
+            <div className="lesson-toolbar-btns">
               <button
+                type="button"
                 className={`btn-pill btn-sm ${viewAngle === 'front' ? 'btn-primary' : 'btn-secondary'}`}
-                style={{ padding: '0.25rem 0.65rem', fontSize: '0.75rem' }}
+                style={{ padding: '0.32rem 0.75rem', fontSize: '0.78rem', whiteSpace: 'nowrap' }}
                 onClick={() => setViewAngle('front')}
               >
                 Chính diện
               </button>
               <button
+                type="button"
                 className={`btn-pill btn-sm ${viewAngle === 'side' ? 'btn-primary' : 'btn-secondary'}`}
-                style={{ padding: '0.25rem 0.65rem', fontSize: '0.75rem' }}
+                style={{ padding: '0.32rem 0.75rem', fontSize: '0.78rem', whiteSpace: 'nowrap' }}
                 onClick={() => setViewAngle('side')}
               >
                 Góc nghiêng 45°
