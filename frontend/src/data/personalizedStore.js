@@ -121,6 +121,17 @@ export function recordPracticeSession(session) {
 
     localStorage.setItem(PRACTICE_HISTORY_KEY, JSON.stringify(updated));
     
+    // Tự động đưa từ vừa thực hành vào hệ thống Spaced Repetition (hẹn nhắc ôn sau 12 giờ nếu là từ mới)
+    if (session?.word) {
+      import('./srsStore').then(({ enrollWordInSrs }) => {
+        enrollWordInSrs({
+          wordSlug: session.slug || session.word,
+          wordName: session.word,
+          startedNow: true,
+        });
+      }).catch(() => {});
+    }
+
     // Tự động phân tích và cập nhật lại Lộ trình cá nhân dựa trên kết quả mới
     recalculateAdaptivePath();
 

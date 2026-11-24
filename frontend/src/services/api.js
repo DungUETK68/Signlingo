@@ -250,6 +250,46 @@ export const adaptiveApi = {
       return [];
     }
   },
+
+  async getMemoryOverview() {
+    try {
+      const res = await fetch(`${CORE_API_URL}/adaptive/memory-overview`, {
+        headers: getAuthHeaders(),
+      });
+      if (!res.ok) return null;
+      return await res.json();
+    } catch (e) {
+      return null;
+    }
+  },
+
+  async syncSavedWords(words = []) {
+    try {
+      const res = await fetch(`${CORE_API_URL}/adaptive/sync-words`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ words }),
+      });
+      if (!res.ok) return null;
+      return await res.json();
+    } catch (e) {
+      return null;
+    }
+  },
+
+  async submitReviewResult({ wordSlug, wordName, choice, score = 90, failedAttempts = 0 }) {
+    try {
+      const res = await fetch(`${CORE_API_URL}/adaptive/review-result`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ wordSlug, wordName, choice, score, failedAttempts }),
+      });
+      if (!res.ok) return null;
+      return await res.json();
+    } catch (e) {
+      return null;
+    }
+  },
 };
 
 // ========================================================

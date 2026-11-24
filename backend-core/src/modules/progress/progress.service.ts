@@ -137,12 +137,26 @@ export class ProgressService {
       }
     }
 
-    // 3. Thưởng XP và cập nhật tiến trình cho User
+    // 3. Thưởng XP và cập nhật tiến trình cho User + Đưa từ mới học vào chu kỳ nhắc ôn 12h (SRS)
     const bonusXp = isFirstTime ? 150 : 50;
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (user) {
       user.xp += bonusXp;
       await this.userRepository.save(user);
+    }
+
+    if (
+      targetLesson &&
+      !targetLesson.slug.startsWith('ngu-phap-') &&
+      targetLesson.level !== 'Lý thuyết'
+    ) {
+      await this.syncToReviewSRS(
+        userId,
+        targetLesson.slug,
+        targetLesson.title,
+        true,
+        dto.score || 90,
+      );
     }
 
     return {
@@ -195,51 +209,46 @@ export class ProgressService {
     isPassed: boolean,
     score: number,
   ) {
+    const cleanSlug = (wordSlug || '').trim().toLowerCase();
+    if (!cleanSlug) return;
+
     let item = await this.reviewItemRepository.findOne({
-      where: { userId, wordSlug },
+      where: { userId, wordSlug: cleanSlug },
     });
 
-    const today = new Date();
+    const now = new Date();
 
     if (!item) {
-      // Từ mới được luyện tập lần đầu
-      const interval = isPassed ? 1 : 0;
-      const nextDate = new Date(today.getTime() + interval * 86400000);
+      // Từ mới được học lần đầu: bắt đầu ở mức 0 ("Chưa Nhớ") và hẹn nhắc ôn lại sau 12 giờ
+      const nextAt = new Date(now.getTime() + 12 * 3600 * 1000);
 
       item = this.reviewItemRepository.create({
         userId,
-        wordSlug,
+        wordSlug: cleanSlug,
         wordName,
-        interval,
-        repetition: isPassed ? 1 : 0,
+        memoryLevel: 0,
+        isMastered: false,
+        reviewCount: 1,
+        lapseCount: isPassed ? 0 : 1,
+        lastScore: Math.round(score || 0),
+        interval: 0,
+        intervalHours: 12,
+        repetition: 0,
         easeFactor: 2.5,
-        nextReviewDate: nextDate.toISOString().split('T')[0],
-        lastReviewedAt: today,
+        nextReviewDate: nextAt.toISOString().split('T')[0],
+        nextReviewAt: nextAt,
+        lastReviewedAt: now,
       });
-    } else {
-      // Cập nhật thuật toán SM-2 rút gọn
-      if (isPassed && score >= 80) {
-        if (item.repetition === 0) {
-          item.interval = 1;
-        } else if (item.repetition === 1) {
-          item.interval = 3;
-        } else {
-          item.interval = Math.round(item.interval * item.easeFactor);
-        }
-        item.repetition += 1;
-        item.easeFactor = Math.max(1.3, item.easeFactor + 0.1);
-      } else {
-        // Nếu làm sai hoặc điểm thấp -> reset chu kỳ
-        item.repetition = 0;
-        item.interval = 1;
-        item.easeFactor = Math.max(1.3, item.easeFactor - 0.2);
-      }
-
-      const nextDate = new Date(today.getTime() + item.interval * 86400000);
-      item.nextReviewDate = nextDate.toISOString().split('T')[0];
-      item.lastReviewedAt = today;
+      await this.reviewItemRepository.save(item);
+      return;
     }
 
+    // Nếu từ đã nằm trong hệ thống SRS và người dùng luyện sai ngoài luồng -> ghi nhận khó nhớ
+    item.lastScore = Math.round(score || 0);
+    item.lastReviewedAt = now;
+    if (!isPassed) {
+      item.lapseCount = (item.lapseCount || 0) + 1;
+    }
     await this.reviewItemRepository.save(item);
   }
 }

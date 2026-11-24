@@ -530,6 +530,17 @@ export function toggleSaveLesson(lesson, topic) {
 
   localStorage.setItem(SAVED_STORAGE_KEY, JSON.stringify(updated));
   window.dispatchEvent(new CustomEvent(SAVED_EVENT_NAME, { detail: { lessonId: lesson.id, isSaved: isNowSaved, saved: updated } }));
+
+  if (isNowSaved) {
+    import('./srsStore').then(({ enrollWordInSrs }) => {
+      enrollWordInSrs({
+        wordSlug: lesson.slug || lesson.wordId || lesson.title,
+        wordName: lesson.title,
+        startedNow: false,
+      });
+    }).catch(() => {});
+  }
+
   return isNowSaved;
 }
 

@@ -1,97 +1,115 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { useSavedLessons, useSavedSentences, useSignWords } from '../../data/wordsStore';
-import { adaptiveApi } from '../../services/api';
-import { 
-  BookmarkCheck, 
+import React, { useState, useMemo } from 'react';
+import {
+  useSavedLessons,
+  useSavedSentences,
+  useSignWords,
+} from '../../data/wordsStore';
+import {
+  useSpacedRepetition,
+  MEMORY_LEVELS,
+} from '../../data/srsStore';
+import MemoryDistributionCard from './MemoryDistributionCard';
+import SpacedReviewSessionView from './SpacedReviewSessionView';
+import {
+  BookmarkCheck,
   MessageSquareQuote,
-  Play, 
-  Trash2, 
-  Search, 
-  BookOpen, 
-  ArrowRight,
+  Play,
+  Trash2,
+  Search,
+  BookOpen,
   Clock,
-  Sparkles,
   Zap,
+  BellRing,
   CheckCircle2,
-  Camera,
-  Layers
+  X,
+  Filter,
 } from 'lucide-react';
 
-export default function ReviewView({ 
-  onOpenLesson, 
-  onStartPracticeWord, 
+export default function ReviewView({
+  onOpenLesson,
+  onStartPracticeWord,
   onNavigateLearning,
   onOpenSentenceDetail,
-  onNavigateSentences
+  onNavigateSentences,
 }) {
   // Tab hiện tại: 'vocab' (Ôn tập từ vựng) hoặc 'sentences' (Ôn tập câu)
   const [reviewTab, setReviewTab] = useState('vocab');
 
-  // Quản lý từ vựng đã lưu
+  // Quản lý từ vựng & câu đã lưu
   const { savedLessons, removeSaved: removeSavedLesson } = useSavedLessons();
   const { topics } = useSignWords();
-
-  // Quản lý câu đã lưu
   const { savedSentences, removeSaved: removeSavedSentence } = useSavedSentences();
 
+  // Động cơ Spaced Repetition 6 mức độ nhớ (12h -> 1d -> 3d -> 7d -> 14d -> Nhớ dài hạn)
+  const { trackedWords, stats, refresh: refreshSrs } = useSpacedRepetition(savedLessons);
+
   const [searchQuery, setSearchQuery] = useState('');
-  const [dueItems, setDueItems] = useState([]);
+  const [selectedMemoryFilter, setSelectedMemoryFilter] = useState(null); // null | 0..5 | 'hard'
+  const [showAllLevelsModal, setShowAllLevelsModal] = useState(false);
 
-  // Tải danh sách từ đến hạn ôn tập từ thuật toán Spaced Repetition (SRS) trên NestJS
-  useEffect(() => {
-    const fetchDue = async () => {
-      try {
-        const items = await adaptiveApi.getDueReviewQueue();
-        if (Array.isArray(items)) {
-          setDueItems(items);
-        }
-      } catch (e) {}
-    };
-    fetchDue();
-  }, []);
+  // Điều khiển chuyển sang màn hình mới chuyên biệt khi nhấn "Ôn ngay"
+  const [activeSessionQueue, setActiveSessionQueue] = useState(null);
 
-  // Lọc từ vựng đã lưu theo từ khóa tìm kiếm
-  const filteredLessons = useMemo(() => {
+  // Lọc danh sách từ vựng theo ô tìm kiếm & mức độ ghi nhớ đang chọn trên bảng Phân bổ
+  const filteredWords = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
-    if (!q) return savedLessons;
-    return savedLessons.filter(item => (
-      (item.title || '').toLowerCase().includes(q) ||
-      (item.topicTitle && item.topicTitle.toLowerCase().includes(q)) ||
-      (item.description && item.description.toLowerCase().includes(q))
-    ));
-  }, [savedLessons, searchQuery]);
+    return trackedWords.filter((item) => {
+      if (selectedMemoryFilter === 'hard') {
+        if ((item.srs?.lapseCount || 0) <= 0) return false;
+      } else if (typeof selectedMemoryFilter === 'number') {
+        if (item.memoryLevel !== selectedMemoryFilter) return false;
+      }
+
+      if (!q) return true;
+      return (
+        (item.title || '').toLowerCase().includes(q) ||
+        (item.wordName || '').toLowerCase().includes(q) ||
+        (item.topicTitle && item.topicTitle.toLowerCase().includes(q)) ||
+        (item.description && item.description.toLowerCase().includes(q))
+      );
+    });
+  }, [trackedWords, searchQuery, selectedMemoryFilter]);
 
   // Lọc câu đã lưu theo từ khóa tìm kiếm
   const filteredSentences = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
     if (!q) return savedSentences;
-    return savedSentences.filter(item => (
-      (item.title || '').toLowerCase().includes(q) ||
-      (item.meaning || '').toLowerCase().includes(q) ||
-      (item.category && item.category.toLowerCase().includes(q)) ||
-      (item.structure && item.structure.toLowerCase().includes(q)) ||
-      (item.explanation && item.explanation.toLowerCase().includes(q)) ||
-      (Array.isArray(item.words) && item.words.some(w => (w.name || w.word || '').toLowerCase().includes(q)))
-    ));
+    return savedSentences.filter(
+      (item) =>
+        (item.title || '').toLowerCase().includes(q) ||
+        (item.meaning || '').toLowerCase().includes(q) ||
+        (item.category && item.category.toLowerCase().includes(q)) ||
+        (item.structure && item.structure.toLowerCase().includes(q)) ||
+        (item.explanation && item.explanation.toLowerCase().includes(q)) ||
+        (Array.isArray(item.words) &&
+          item.words.some((w) => (w.name || w.word || '').toLowerCase().includes(q)))
+    );
   }, [savedSentences, searchQuery]);
 
   const handleStudyWord = (item) => {
-    let matchedTopic = topics.find(t => t.id === item.topicId || t.title === item.topicTitle);
+    let matchedTopic = topics.find(
+      (t) => t.id === item.topicId || t.title === item.topicTitle
+    );
     if (!matchedTopic) {
       matchedTopic = {
         id: item.topicId || 'custom-topic',
         title: item.topicTitle || 'Chủ đề ôn tập',
         level: item.level || 'Căn bản (Level 1)',
-        lessons: [item]
+        lessons: [item],
       };
     }
-    
-    const fullLesson = (matchedTopic.lessons && matchedTopic.lessons.find(l => l.id === item.id || l.title === item.title)) || item;
+
+    const fullLesson =
+      (matchedTopic.lessons &&
+        matchedTopic.lessons.find(
+          (l) => l.id === item.id || l.title === item.title
+        )) ||
+      item;
 
     if (onOpenLesson) {
       onOpenLesson(fullLesson, matchedTopic);
     } else if (onStartPracticeWord) {
-      onStartPracticeWord(item.title);
+      onStartPracticeWord(item.wordName || item.title);
     }
   };
 
@@ -113,233 +131,434 @@ export default function ReviewView({
     removeSavedSentence(sentenceId);
   };
 
+  // Mở màn hình mới "Ôn ngay" cho danh sách từ đến hạn
+  const handleStartDueReviewSession = (customQueue = null) => {
+    const queueToRun =
+      Array.isArray(customQueue) && customQueue.length > 0
+        ? customQueue
+        : stats.dueWords;
+    if (!queueToRun || queueToRun.length === 0) return;
+    setActiveSessionQueue(queueToRun);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // ==================== KHI NHẤN "ÔN NGAY" -> MỞ MÀN HÌNH MỚI CHUYÊN BIỆT ====================
+  if (activeSessionQueue) {
+    return (
+      <SpacedReviewSessionView
+        queue={activeSessionQueue}
+        stats={stats}
+        onSessionUpdated={refreshSrs}
+        onBack={() => {
+          refreshSrs();
+          setActiveSessionQueue(null);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
+    );
+  }
+
   return (
-    <div style={{ width: '100%', maxWidth: 1040, margin: '0 auto', animation: 'fadeIn 0.2s ease-out', paddingBottom: '3rem' }}>
-      
+    <div
+      style={{
+        width: '100%',
+        maxWidth: 1040,
+        margin: '0 auto',
+        animation: 'fadeIn 0.2s ease-out',
+        paddingBottom: '3rem',
+      }}
+    >
       {/* 0. Thanh điều hướng phân chia 2 phân hệ: Ôn tập từ vựng & Ôn tập câu */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.75rem',
-        marginBottom: '1.25rem',
-        borderBottom: '2px solid #e2e8f0',
-        paddingBottom: '0.25rem',
-        flexWrap: 'wrap'
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.75rem',
+          marginBottom: '1.25rem',
+          borderBottom: '2px solid #e2e8f0',
+          paddingBottom: '0.25rem',
+          flexWrap: 'wrap',
+        }}
+      >
         <button
-          onClick={() => { setReviewTab('vocab'); setSearchQuery(''); }}
+          onClick={() => {
+            setReviewTab('vocab');
+            setSearchQuery('');
+          }}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: '0.5rem',
             padding: '0.65rem 1.25rem',
             border: 'none',
-            borderBottom: reviewTab === 'vocab' ? '3px solid #0284c7' : '3px solid transparent',
+            borderBottom:
+              reviewTab === 'vocab' ? '3px solid #0284c7' : '3px solid transparent',
             marginBottom: -4,
             backgroundColor: 'transparent',
             color: reviewTab === 'vocab' ? '#0284c7' : '#64748b',
             fontSize: '1rem',
             fontWeight: 800,
             cursor: 'pointer',
-            transition: 'all 0.15s ease'
+            transition: 'all 0.15s ease',
           }}
         >
           <BookOpen size={19} />
           <span>Ôn tập từ vựng</span>
-          <span style={{
-            fontSize: '0.75rem',
-            padding: '0.15rem 0.55rem',
-            borderRadius: 'var(--radius-pill)',
-            backgroundColor: reviewTab === 'vocab' ? '#e0f2fe' : '#f1f5f9',
-            color: reviewTab === 'vocab' ? '#0284c7' : '#64748b',
-            fontWeight: 800
-          }}>
-            {savedLessons.length}
+          <span
+            style={{
+              fontSize: '0.75rem',
+              padding: '0.15rem 0.55rem',
+              borderRadius: 'var(--radius-pill)',
+              backgroundColor: reviewTab === 'vocab' ? '#e0f2fe' : '#f1f5f9',
+              color: reviewTab === 'vocab' ? '#0284c7' : '#64748b',
+              fontWeight: 800,
+            }}
+          >
+            {trackedWords.length}
           </span>
+          {stats.dueCount > 0 && (
+            <span
+              style={{
+                fontSize: '0.7rem',
+                padding: '0.12rem 0.5rem',
+                borderRadius: 'var(--radius-pill)',
+                backgroundColor: '#ef4444',
+                color: '#ffffff',
+                fontWeight: 800,
+              }}
+              title="Số từ đã đến hạn cần ôn"
+            >
+              {stats.dueCount} cần ôn
+            </span>
+          )}
         </button>
 
         <button
-          onClick={() => { setReviewTab('sentences'); setSearchQuery(''); }}
+          onClick={() => {
+            setReviewTab('sentences');
+            setSearchQuery('');
+          }}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: '0.5rem',
             padding: '0.65rem 1.25rem',
             border: 'none',
-            borderBottom: reviewTab === 'sentences' ? '3px solid #0284c7' : '3px solid transparent',
+            borderBottom:
+              reviewTab === 'sentences'
+                ? '3px solid #0284c7'
+                : '3px solid transparent',
             marginBottom: -4,
             backgroundColor: 'transparent',
             color: reviewTab === 'sentences' ? '#0284c7' : '#64748b',
             fontSize: '1rem',
             fontWeight: 800,
             cursor: 'pointer',
-            transition: 'all 0.15s ease'
+            transition: 'all 0.15s ease',
           }}
         >
           <MessageSquareQuote size={19} />
           <span>Ôn tập câu</span>
-          <span style={{
-            fontSize: '0.75rem',
-            padding: '0.15rem 0.55rem',
-            borderRadius: 'var(--radius-pill)',
-            backgroundColor: reviewTab === 'sentences' ? '#e0f2fe' : '#f1f5f9',
-            color: reviewTab === 'sentences' ? '#0284c7' : '#64748b',
-            fontWeight: 800
-          }}>
+          <span
+            style={{
+              fontSize: '0.75rem',
+              padding: '0.15rem 0.55rem',
+              borderRadius: 'var(--radius-pill)',
+              backgroundColor: reviewTab === 'sentences' ? '#e0f2fe' : '#f1f5f9',
+              color: reviewTab === 'sentences' ? '#0284c7' : '#64748b',
+              fontWeight: 800,
+            }}
+          >
             {savedSentences.length}
           </span>
         </button>
       </div>
 
       {/* ========================================================
-          PHẦN 1: ÔN TẬP TỪ VỰNG
+          PHẦN 1: ÔN TẬP TỪ VỰNG NGẮT QUÃNG (SRS 6 MỨC ĐỘ NHỚ)
           ======================================================== */}
       {reviewTab === 'vocab' && (
         <div>
-          {/* Header Ôn tập Từ vựng */}
-          <div style={{
-            backgroundColor: '#ffffff',
-            border: '1.5px solid var(--border-color)',
-            borderRadius: 'var(--radius-xl)',
-            padding: '1.5rem',
-            marginBottom: '1.25rem',
-            boxShadow: 'var(--card-shadow)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '1rem'
-          }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-                <span style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.35rem',
-                  fontSize: '0.75rem',
-                  fontWeight: 800,
-                  padding: '0.2rem 0.65rem',
-                  borderRadius: 'var(--radius-pill)',
-                  backgroundColor: '#e0f2fe',
-                  color: '#0284c7'
-                }}>
-                  <BookmarkCheck size={13} />
-                  TỪ VỰNG ĐÃ LƯU
-                </span>
-                <span style={{ fontSize: '0.85rem', color: '#64748b' }}>
-                  • {savedLessons.length} từ vựng cần ôn luyện
-                </span>
+          {/* 1. THÔNG BÁO NHẮC NHỞ SỐ TỪ CẦN ÔN & NÚT "ÔN NGAY" */}
+          {stats.dueCount > 0 ? (
+            <div
+              style={{
+                background: 'linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%)',
+                border: '2px solid #60a5fa',
+                borderRadius: 'var(--radius-xl)',
+                padding: '1.25rem 1.35rem',
+                marginBottom: '1.35rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '1rem',
+                boxShadow: '0 6px 20px rgba(37, 99, 235, 0.08)',
+              }}
+            >
+              <div style={{ flex: 1, minWidth: 240 }}>
+                <div
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    color: '#1d4ed8',
+                    fontWeight: 800,
+                    fontSize: '0.82rem',
+                    backgroundColor: '#dbeafe',
+                    padding: '0.22rem 0.65rem',
+                    borderRadius: 'var(--radius-pill)',
+                    marginBottom: '0.45rem',
+                  }}
+                >
+                  <BellRing size={14} />
+                  <span>NHẮC NHỞ ÔN TẬP NGẮT QUÃNG</span>
+                </div>
+
+                <div
+                  style={{
+                    fontSize: '1.18rem',
+                    fontWeight: 900,
+                    color: '#0f172a',
+                    marginBottom: '0.25rem',
+                  }}
+                >
+                  Bạn có <span style={{ color: '#dc2626' }}>{stats.dueCount} từ</span> cần ôn tập ngay!
+                </div>
+                <p style={{ fontSize: '0.85rem', color: '#475569', margin: 0, lineHeight: 1.45 }}>
+                  Thực hiện đúng ký hiệu trước Camera AI để tăng cấp độ nhớ (từ{' '}
+                  <strong>12 giờ → 1 ngày → 3 ngày → 7 ngày → 14 ngày → Nhớ dài hạn</strong>).
+                </p>
               </div>
-              <h2 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#1e293b', margin: 0 }}>
-                Khu Vực Ôn Tập Từ Vựng Ký Hiệu
+
+              <button
+                type="button"
+                className="btn-pill btn-green"
+                onClick={() => handleStartDueReviewSession(stats.dueWords)}
+                style={{
+                  padding: '0.8rem 1.65rem',
+                  fontSize: '0.98rem',
+                  fontWeight: 900,
+                  gap: '0.45rem',
+                  flexShrink: 0,
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                <Zap size={18} fill="#ffffff" />
+                <span>Ôn ngay ({stats.dueCount} từ)</span>
+              </button>
+            </div>
+          ) : (
+            trackedWords.length > 0 && (
+              <div
+                style={{
+                  backgroundColor: '#f8fafc',
+                  border: '1.5px solid #e2e8f0',
+                  borderRadius: 'var(--radius-xl)',
+                  padding: '1.1rem 1.35rem',
+                  marginBottom: '1.35rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap',
+                  gap: '0.85rem',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.7rem' }}>
+                  <CheckCircle2 size={26} color="#16a34a" style={{ flexShrink: 0 }} />
+                  <div>
+                    <div style={{ fontSize: '0.98rem', fontWeight: 800, color: '#0f172a' }}>
+                      Bạn đã hoàn thành hết các từ đến hạn ôn tập!
+                    </div>
+                    <div style={{ fontSize: '0.82rem', color: '#64748b', marginTop: 2 }}>
+                      {stats.nextUpcomingItem
+                        ? `Từ tiếp theo "${stats.nextUpcomingItem.wordName}" • ${stats.nextUpcomingItem.remainingText} (chu kỳ từ 12h tăng dần).`
+                        : 'Tất cả từ vựng của bạn đều đã đạt mức Nhớ Dài Hạn.'}
+                    </div>
+                  </div>
+                </div>
+
+                {stats.unmasteredWords.length > 0 && (
+                  <button
+                    type="button"
+                    className="btn-pill btn-secondary btn-sm"
+                    onClick={() => handleStartDueReviewSession(stats.unmasteredWords)}
+                    style={{ fontWeight: 800, fontSize: '0.82rem', padding: '0.45rem 0.95rem', gap: '0.35rem' }}
+                  >
+                    <Play size={14} />
+                    <span>Ôn sớm ngay ({stats.unmasteredWords.length} từ)</span>
+                  </button>
+                )}
+              </div>
+            )
+          )}
+
+          {/* 2. BẢNG PHÂN BỔ GHI NHỚ 6 MỨC ĐỘ (GIAO DIỆN THAM CHIẾU VSTEPOWL) */}
+          {trackedWords.length > 0 && (
+            <MemoryDistributionCard
+              stats={stats}
+              selectedLevel={selectedMemoryFilter}
+              onSelectLevel={setSelectedMemoryFilter}
+              onOpenAllByLevel={() => setShowAllLevelsModal(true)}
+            />
+          )}
+
+          {/* 3. Header Danh sách Từ vựng đã lưu & Thanh tìm kiếm */}
+          <div
+            style={{
+              backgroundColor: '#ffffff',
+              border: '1.5px solid var(--border-color)',
+              borderRadius: 'var(--radius-xl)',
+              padding: '1.25rem 1.5rem',
+              marginBottom: '1.25rem',
+              boxShadow: 'var(--card-shadow)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '1rem',
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  marginBottom: '0.25rem',
+                  flexWrap: 'wrap',
+                }}
+              >
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.35rem',
+                    fontSize: '0.75rem',
+                    fontWeight: 800,
+                    padding: '0.2rem 0.65rem',
+                    borderRadius: 'var(--radius-pill)',
+                    backgroundColor: '#e0f2fe',
+                    color: '#0284c7',
+                  }}
+                >
+                  <BookmarkCheck size={13} />
+                  TỪ VỰNG ĐÃ LƯU & ĐANG HỌC
+                </span>
+                <span style={{ fontSize: '0.84rem', color: '#64748b' }}>
+                  • {filteredWords.length} / {trackedWords.length} từ hiển thị
+                </span>
+
+                {selectedMemoryFilter !== null && (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedMemoryFilter(null)}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.25rem',
+                      padding: '0.18rem 0.55rem',
+                      borderRadius: 'var(--radius-pill)',
+                      border: '1px solid #cbd5e1',
+                      backgroundColor: '#f8fafc',
+                      color: '#334155',
+                      fontSize: '0.74rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <Filter size={11} />
+                    <span>
+                      Bỏ lọc:{' '}
+                      {selectedMemoryFilter === 'hard'
+                        ? 'Khó nhớ'
+                        : MEMORY_LEVELS[selectedMemoryFilter]?.title}
+                    </span>
+                    <X size={12} />
+                  </button>
+                )}
+              </div>
+              <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#1e293b', margin: 0 }}>
+                Danh Sách Từ Vựng Ôn Tập Ký Hiệu
               </h2>
-              <p style={{ fontSize: '0.88rem', color: '#64748b', marginTop: '0.25rem', marginBottom: 0 }}>
-                Nơi tập hợp các bài học từ vựng bạn đã lưu lại để rèn luyện trí nhớ cơ bắp và củng cố độ chuẩn xác cử chỉ.
-              </p>
             </div>
 
-            {/* Thanh tìm kiếm nhanh từ vựng */}
-            {savedLessons.length > 0 && (
-              <div style={{ position: 'relative', width: '100%', maxWidth: 320 }}>
-                <Search 
-                  size={17} 
-                  color="#94a3b8" 
-                  style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)' }} 
+            {trackedWords.length > 0 && (
+              <div style={{ position: 'relative', width: '100%', maxWidth: 300 }}>
+                <Search
+                  size={17}
+                  color="#94a3b8"
+                  style={{
+                    position: 'absolute',
+                    left: 12,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                  }}
                 />
                 <input
                   type="text"
-                  placeholder="Tìm kiếm từ vựng đã lưu..."
+                  placeholder="Tìm kiếm từ vựng..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   style={{
                     width: '100%',
-                    padding: '0.65rem 1rem 0.65rem 2.3rem',
+                    padding: '0.6rem 1rem 0.6rem 2.3rem',
                     borderRadius: 'var(--radius-pill)',
                     border: '1.5px solid var(--border-color)',
                     fontSize: '0.88rem',
                     outline: 'none',
                     backgroundColor: '#f8fafc',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = '#0284c7';
-                    e.target.style.backgroundColor = '#ffffff';
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = 'var(--border-color)';
-                    e.target.style.backgroundColor = '#f8fafc';
                   }}
                 />
               </div>
             )}
           </div>
 
-          {/* Spaced Repetition SRS Banner */}
-          {dueItems.length > 0 && (
-            <div style={{
-              backgroundColor: '#eff6ff',
-              border: '1.5px solid #bfdbfe',
-              borderRadius: 'var(--radius-xl)',
-              padding: '1.25rem',
-              marginBottom: '1.25rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: '1rem'
-            }}>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#1d4ed8', fontWeight: 800, fontSize: '0.92rem', marginBottom: '0.2rem' }}>
-                  <Zap size={16} fill="#1d4ed8" />
-                  <span>THUẬT TOÁN LẶP LẠI NGẮT QUÃNG (SPACED REPETITION)</span>
-                </div>
-                <p style={{ fontSize: '0.84rem', color: '#334155', margin: 0 }}>
-                  Hệ thống phát hiện bạn có <b>{dueItems.length} từ</b> đến hạn cần ôn lại hôm nay để củng cố trí nhớ dài hạn.
-                </p>
-              </div>
-              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                {dueItems.slice(0, 3).map(item => (
-                  <button
-                    key={item.id}
-                    onClick={() => onStartPracticeWord && onStartPracticeWord(item.wordName)}
-                    className="btn-pill btn-primary"
-                    style={{ fontSize: '0.8rem', padding: '0.4rem 0.8rem', gap: '0.3rem' }}
-                  >
-                    <span>Ôn "{item.wordName}"</span>
-                    <ArrowRight size={14} />
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Nội dung danh sách từ vựng đã lưu */}
-          {savedLessons.length === 0 ? (
-            <div className="mini-card" style={{ textAlign: 'center', padding: '3.5rem 1.5rem', backgroundColor: '#ffffff' }}>
-              <div style={{
-                width: 72,
-                height: 72,
-                borderRadius: '50%',
-                backgroundColor: '#f0f9ff',
-                color: '#0284c7',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 1.25rem auto'
-              }}>
+          {/* 4. Bảng Danh sách từ vựng kèm Mức độ nhớ & Thời gian chờ */}
+          {trackedWords.length === 0 ? (
+            <div
+              className="mini-card"
+              style={{
+                textAlign: 'center',
+                padding: '3.5rem 1.5rem',
+                backgroundColor: '#ffffff',
+              }}
+            >
+              <div
+                style={{
+                  width: 72,
+                  height: 72,
+                  borderRadius: '50%',
+                  backgroundColor: '#f0f9ff',
+                  color: '#0284c7',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 1.25rem auto',
+                }}
+              >
                 <BookmarkCheck size={36} strokeWidth={2} />
               </div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#1e293b', marginBottom: '0.5rem' }}>
-                Chưa có từ vựng nào được lưu
+              <h3
+                style={{
+                  fontSize: '1.25rem',
+                  fontWeight: 800,
+                  color: '#1e293b',
+                  marginBottom: '0.5rem',
+                }}
+              >
+                Chưa có từ vựng nào trong bộ ôn tập
               </h3>
-              <p style={{
-                fontSize: '0.92rem',
-                color: '#64748b',
-                maxWidth: 420,
-                margin: '0 auto 1.5rem auto',
-                lineHeight: 1.5
-              }}>
-                Khi xem chi tiết bất kỳ bài học nào trong tab <strong>Học tập</strong> hoặc từ điển, hãy nhấn nút <strong>"Lưu"</strong> để thêm vào danh sách ôn tập tại đây!
+              <p
+                style={{
+                  fontSize: '0.92rem',
+                  color: '#64748b',
+                  maxWidth: 440,
+                  margin: '0 auto 1.5rem auto',
+                  lineHeight: 1.5,
+                }}
+              >
+                Khi học từ mới hoặc nhấn nút <strong>"Lưu"</strong> ở chi tiết bài học, từ vựng sẽ được đưa vào hệ thống nhắc ôn ngắt quãng từ 12 giờ đến Nhớ dài hạn!
               </p>
               <button
                 className="btn-pill btn-primary"
@@ -350,141 +569,363 @@ export default function ReviewView({
                 <span>Khám phá bài học ngay</span>
               </button>
             </div>
-          ) : filteredLessons.length === 0 ? (
-            <div className="mini-card" style={{ textAlign: 'center', padding: '2.5rem 1.5rem', backgroundColor: '#ffffff' }}>
-              <p style={{ fontSize: '0.95rem', color: '#64748b', margin: 0 }}>
-                Không tìm thấy từ đã lưu nào khớp với từ khóa "<strong>{searchQuery}</strong>".
+          ) : filteredWords.length === 0 ? (
+            <div
+              className="mini-card"
+              style={{
+                textAlign: 'center',
+                padding: '2.5rem 1.5rem',
+                backgroundColor: '#ffffff',
+              }}
+            >
+              <p style={{ fontSize: '0.95rem', color: '#64748b', margin: '0 0 0.85rem 0' }}>
+                Không có từ vựng nào khớp với bộ lọc hiện tại.
               </p>
+              <button
+                type="button"
+                className="btn-pill btn-secondary btn-sm"
+                onClick={() => {
+                  setSelectedMemoryFilter(null);
+                  setSearchQuery('');
+                }}
+              >
+                Xem lại toàn bộ từ
+              </button>
             </div>
           ) : (
-            <div className="mini-card" style={{ padding: 0, overflow: 'hidden', backgroundColor: '#ffffff' }}>
+            <div
+              className="mini-card"
+              style={{ padding: 0, overflow: 'hidden', backgroundColor: '#ffffff' }}
+            >
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                   <thead>
-                    <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1.5px solid var(--border-color)' }}>
-                      <th style={{ padding: '0.9rem 1.25rem', fontSize: '0.85rem', fontWeight: 800, color: '#475569' }}>
-                        Từ vựng / Bài học
+                    <tr
+                      style={{
+                        backgroundColor: '#f8fafc',
+                        borderBottom: '1.5px solid var(--border-color)',
+                      }}
+                    >
+                      <th
+                        style={{
+                          padding: '0.9rem 1.15rem',
+                          fontSize: '0.83rem',
+                          fontWeight: 800,
+                          color: '#475569',
+                        }}
+                      >
+                        Từ vựng
                       </th>
-                      <th style={{ padding: '0.9rem 1.25rem', fontSize: '0.85rem', fontWeight: 800, color: '#475569', whiteSpace: 'nowrap' }}>
-                        Chủ đề
+                      <th
+                        style={{
+                          padding: '0.9rem 1.15rem',
+                          fontSize: '0.83rem',
+                          fontWeight: 800,
+                          color: '#475569',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        Mức độ ghi nhớ
                       </th>
-                      <th style={{ padding: '0.9rem 1.25rem', fontSize: '0.85rem', fontWeight: 800, color: '#475569', whiteSpace: 'nowrap' }}>
-                        Thời lượng & Cấp độ
+                      <th
+                        style={{
+                          padding: '0.9rem 1.15rem',
+                          fontSize: '0.83rem',
+                          fontWeight: 800,
+                          color: '#475569',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        Lịch ôn tiếp theo
                       </th>
-                      <th style={{ padding: '0.9rem 1.25rem', fontSize: '0.85rem', fontWeight: 800, color: '#475569', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                      <th
+                        style={{
+                          padding: '0.9rem 1.15rem',
+                          fontSize: '0.83rem',
+                          fontWeight: 800,
+                          color: '#475569',
+                          textAlign: 'right',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
                         Thao tác
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredLessons.map((item, idx) => (
-                      <tr 
-                        key={item.id || idx}
-                        style={{
-                          borderBottom: idx === filteredLessons.length - 1 ? 'none' : '1px solid #f1f5f9',
-                          transition: 'background-color 0.15s ease'
-                        }}
-                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#fafafa'}
-                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                      >
-                        <td style={{ padding: '1rem 1.25rem' }}>
-                          <div style={{ fontSize: '1.05rem', fontWeight: 800, color: '#1e293b' }}>
-                            {item.title}
-                          </div>
-                          {item.description && (
-                            <p style={{
-                              fontSize: '0.82rem',
-                              color: '#64748b',
-                              margin: '0.25rem 0 0 0',
-                              lineHeight: 1.4,
-                              maxWidth: 360
-                            }}>
-                              {item.description}
-                            </p>
-                          )}
-                        </td>
-
-                        <td style={{ padding: '1rem 1.25rem', whiteSpace: 'nowrap' }}>
-                          <span style={{
-                            display: 'inline-block',
-                            padding: '0.3rem 0.75rem',
-                            borderRadius: 'var(--radius-pill)',
-                            backgroundColor: '#f1f5f9',
-                            fontSize: '0.82rem',
-                            fontWeight: 700,
-                            color: '#334155',
-                            whiteSpace: 'nowrap'
-                          }}>
-                            {item.topicTitle || 'Giao tiếp & Làm quen'}
-                          </span>
-                        </td>
-
-                        <td style={{ padding: '1rem 1.25rem', fontSize: '0.85rem', color: '#64748b', fontWeight: 600, whiteSpace: 'nowrap' }}>
-                          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', whiteSpace: 'nowrap' }}>
-                            <Clock size={14} color="#94a3b8" />
-                            <span>{item.duration || '3 phút'}</span>
-                            <span>•</span>
-                            <span style={{ color: '#0284c7', fontWeight: 700 }}>{item.difficulty || item.level || 'Dễ'}</span>
-                          </div>
-                        </td>
-
-                        <td style={{ padding: '1rem 1.25rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
-                          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', whiteSpace: 'nowrap' }}>
-                            <button
-                              className="btn-pill btn-primary btn-sm"
-                              onClick={() => handleStudyWord(item)}
+                    {filteredWords.map((item, idx) => {
+                      const lvl = item.levelInfo;
+                      return (
+                        <tr
+                          key={item.slug || item.id || idx}
+                          style={{
+                            borderBottom:
+                              idx === filteredWords.length - 1
+                                ? 'none'
+                                : '1px solid #f1f5f9',
+                          }}
+                        >
+                          <td style={{ padding: '0.95rem 1.15rem' }}>
+                            <div
                               style={{
-                                padding: '0.4rem 0.85rem',
-                                fontSize: '0.85rem',
+                                fontSize: '1.02rem',
                                 fontWeight: 800,
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '0.35rem',
-                                whiteSpace: 'nowrap',
-                                boxShadow: '0 2px 6px rgba(2, 132, 199, 0.25)'
+                                color: '#1e293b',
                               }}
-                              title="Học bài học từ vựng này ngay"
                             >
-                              <Play size={14} fill="currentColor" />
-                              <span>Học</span>
-                            </button>
+                              {item.wordName || item.title}
+                            </div>
+                            <div
+                              style={{
+                                fontSize: '0.76rem',
+                                color: '#64748b',
+                                marginTop: 2,
+                              }}
+                            >
+                              {item.topicTitle || 'Từ vựng VSL'}
+                              {item.description ? ` • ${item.description}` : ''}
+                            </div>
+                          </td>
 
-                            <button
-                              onClick={(e) => handleDeleteWord(e, item.id)}
+                          <td style={{ padding: '0.95rem 1.15rem', whiteSpace: 'nowrap' }}>
+                            <span
                               style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
-                                gap: '0.35rem',
-                                padding: '0.4rem 0.8rem',
-                                fontSize: '0.85rem',
-                                fontWeight: 700,
+                                gap: '0.4rem',
+                                padding: '0.26rem 0.7rem',
                                 borderRadius: 'var(--radius-pill)',
-                                border: '1.5px solid #fecdd3',
-                                backgroundColor: '#fff1f2',
-                                color: '#e11d48',
-                                cursor: 'pointer',
-                                whiteSpace: 'nowrap',
-                                transition: 'all 0.15s ease'
+                                backgroundColor: lvl.bgColor,
+                                color: lvl.color,
+                                border: `1px solid ${lvl.borderColor}`,
+                                fontSize: '0.78rem',
+                                fontWeight: 800,
                               }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.backgroundColor = '#ffe4e6';
-                                e.currentTarget.style.borderColor = '#fda4af';
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.backgroundColor = '#fff1f2';
-                                e.currentTarget.style.borderColor = '#fecdd3';
-                              }}
-                              title="Xóa khỏi danh sách ôn tập"
                             >
-                              <Trash2 size={14} />
-                              <span>Xóa</span>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                              <span
+                                style={{
+                                  width: 8,
+                                  height: 8,
+                                  borderRadius: '50%',
+                                  backgroundColor: lvl.color,
+                                }}
+                              />
+                              {lvl.title}
+                            </span>
+                          </td>
+
+                          <td
+                            style={{
+                              padding: '0.95rem 1.15rem',
+                              fontSize: '0.82rem',
+                              fontWeight: 700,
+                              whiteSpace: 'nowrap',
+                              color: item.isDue
+                                ? '#dc2626'
+                                : item.memoryLevel >= 5
+                                  ? '#16a34a'
+                                  : '#64748b',
+                            }}
+                          >
+                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                              <Clock size={14} />
+                              <span>{item.remainingText}</span>
+                            </div>
+                          </td>
+
+                          <td
+                            style={{
+                              padding: '0.95rem 1.15rem',
+                              textAlign: 'right',
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
+                            <div
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.4rem',
+                              }}
+                            >
+                              {item.memoryLevel < 5 && (
+                                <button
+                                  type="button"
+                                  className="btn-pill btn-green btn-sm"
+                                  onClick={() => handleStartDueReviewSession([item])}
+                                  style={{
+                                    padding: '0.38rem 0.8rem',
+                                    fontSize: '0.8rem',
+                                    fontWeight: 800,
+                                    gap: '0.3rem',
+                                  }}
+                                  title="Ôn tập từ này ngay trên màn hình Camera SRS"
+                                >
+                                  <Zap size={13} fill="currentColor" />
+                                  <span>Ôn ngay</span>
+                                </button>
+                              )}
+
+                              <button
+                                type="button"
+                                className="btn-pill btn-primary btn-sm"
+                                onClick={() => handleStudyWord(item)}
+                                style={{
+                                  padding: '0.38rem 0.8rem',
+                                  fontSize: '0.8rem',
+                                  fontWeight: 800,
+                                  gap: '0.3rem',
+                                }}
+                                title="Xem lại video bài học mẫu"
+                              >
+                                <Play size={13} fill="currentColor" />
+                                <span>Học</span>
+                              </button>
+
+                              {item.isSavedBookmark && (
+                                <button
+                                  type="button"
+                                  onClick={(e) => handleDeleteWord(e, item.id)}
+                                  style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '0.3rem',
+                                    padding: '0.38rem 0.7rem',
+                                    fontSize: '0.8rem',
+                                    fontWeight: 700,
+                                    borderRadius: 'var(--radius-pill)',
+                                    border: '1.5px solid #fecdd3',
+                                    backgroundColor: '#fff1f2',
+                                    color: '#e11d48',
+                                    cursor: 'pointer',
+                                  }}
+                                  title="Bỏ lưu khỏi danh sách"
+                                >
+                                  <Trash2 size={13} />
+                                </button>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
+              </div>
+            </div>
+          )}
+
+          {/* Modal "Xem tất cả từ theo mức" */}
+          {showAllLevelsModal && (
+            <div
+              className="modal-overlay"
+              onClick={() => setShowAllLevelsModal(false)}
+              style={{ zIndex: 1200 }}
+            >
+              <div
+                className="modal-card"
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  maxWidth: 720,
+                  width: '94%',
+                  maxHeight: '85vh',
+                  overflowY: 'auto',
+                  padding: '1.5rem',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginBottom: '1rem',
+                  }}
+                >
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#0f172a', margin: 0 }}>
+                    Tất cả từ vựng theo 6 mức độ ghi nhớ
+                  </h3>
+                  <button
+                    type="button"
+                    className="modal-close-btn"
+                    onClick={() => setShowAllLevelsModal(false)}
+                    style={{ position: 'static' }}
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {MEMORY_LEVELS.map((lvl) => {
+                    const wordsInLevel = trackedWords.filter(
+                      (w) => w.memoryLevel === lvl.level
+                    );
+                    return (
+                      <div
+                        key={lvl.level}
+                        style={{
+                          border: `1.5px solid ${lvl.borderColor}`,
+                          backgroundColor: lvl.bgColor,
+                          borderRadius: 'var(--radius-lg)',
+                          padding: '0.9rem 1rem',
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            marginBottom: '0.5rem',
+                            gap: '0.5rem',
+                            flexWrap: 'wrap',
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                            <span
+                              style={{
+                                width: 10,
+                                height: 10,
+                                borderRadius: '50%',
+                                backgroundColor: lvl.color,
+                              }}
+                            />
+                            <strong style={{ fontSize: '0.95rem', color: '#0f172a' }}>
+                              {lvl.title} ({wordsInLevel.length} từ)
+                            </strong>
+                          </div>
+                          <span style={{ fontSize: '0.76rem', fontWeight: 700, color: lvl.color }}>
+                            {lvl.waitHours
+                              ? `Thời gian chờ: ${lvl.intervalLabel}`
+                              : 'Đã thuộc dài hạn • Không cần ôn lại'}
+                          </span>
+                        </div>
+
+                        {wordsInLevel.length === 0 ? (
+                          <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
+                            Chưa có từ nào ở mức này.
+                          </div>
+                        ) : (
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+                            {wordsInLevel.map((w) => (
+                              <span
+                                key={w.slug}
+                                style={{
+                                  padding: '0.25rem 0.65rem',
+                                  borderRadius: 'var(--radius-pill)',
+                                  backgroundColor: '#ffffff',
+                                  border: '1px solid #e2e8f0',
+                                  fontSize: '0.82rem',
+                                  fontWeight: 700,
+                                  color: '#1e293b',
+                                }}
+                              >
+                                {w.wordName || w.title}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           )}
@@ -492,37 +933,40 @@ export default function ReviewView({
       )}
 
       {/* ========================================================
-          PHẦN 2: ÔN TẬP CÂU GIAO TIẾP VSL
+          PHẦN 2: ÔN TẬP CÂU GIAO TIẾP VSL (GIỮ NGUYÊN 100%)
           ======================================================== */}
       {reviewTab === 'sentences' && (
         <div>
-          {/* Header Ôn tập Câu */}
-          <div style={{
-            backgroundColor: '#ffffff',
-            border: '1.5px solid var(--border-color)',
-            borderRadius: 'var(--radius-xl)',
-            padding: '1.5rem',
-            marginBottom: '1.25rem',
-            boxShadow: 'var(--card-shadow)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '1rem'
-          }}>
+          <div
+            style={{
+              backgroundColor: '#ffffff',
+              border: '1.5px solid var(--border-color)',
+              borderRadius: 'var(--radius-xl)',
+              padding: '1.5rem',
+              marginBottom: '1.25rem',
+              boxShadow: 'var(--card-shadow)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '1rem',
+            }}
+          >
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-                <span style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.35rem',
-                  fontSize: '0.75rem',
-                  fontWeight: 800,
-                  padding: '0.2rem 0.65rem',
-                  borderRadius: 'var(--radius-pill)',
-                  backgroundColor: '#e0f2fe',
-                  color: '#0284c7'
-                }}>
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.35rem',
+                    fontSize: '0.75rem',
+                    fontWeight: 800,
+                    padding: '0.2rem 0.65rem',
+                    borderRadius: 'var(--radius-pill)',
+                    backgroundColor: '#e0f2fe',
+                    color: '#0284c7',
+                  }}
+                >
                   <MessageSquareQuote size={13} />
                   CÂU GIAO TIẾP ĐÃ LƯU
                 </span>
@@ -538,13 +982,12 @@ export default function ReviewView({
               </p>
             </div>
 
-            {/* Thanh tìm kiếm nhanh câu đã lưu */}
             {savedSentences.length > 0 && (
               <div style={{ position: 'relative', width: '100%', maxWidth: 320 }}>
-                <Search 
-                  size={17} 
-                  color="#94a3b8" 
-                  style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)' }} 
+                <Search
+                  size={17}
+                  color="#94a3b8"
+                  style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)' }}
                 />
                 <input
                   type="text"
@@ -559,47 +1002,44 @@ export default function ReviewView({
                     fontSize: '0.88rem',
                     outline: 'none',
                     backgroundColor: '#f8fafc',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = '#0284c7';
-                    e.target.style.backgroundColor = '#ffffff';
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = 'var(--border-color)';
-                    e.target.style.backgroundColor = '#f8fafc';
                   }}
                 />
               </div>
             )}
           </div>
 
-          {/* Danh sách câu đã lưu */}
           {savedSentences.length === 0 ? (
-            <div className="mini-card" style={{ textAlign: 'center', padding: '3.5rem 1.5rem', backgroundColor: '#ffffff' }}>
-              <div style={{
-                width: 72,
-                height: 72,
-                borderRadius: '50%',
-                backgroundColor: '#f0f9ff',
-                color: '#0284c7',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 1.25rem auto'
-              }}>
+            <div
+              className="mini-card"
+              style={{ textAlign: 'center', padding: '3.5rem 1.5rem', backgroundColor: '#ffffff' }}
+            >
+              <div
+                style={{
+                  width: 72,
+                  height: 72,
+                  borderRadius: '50%',
+                  backgroundColor: '#f0f9ff',
+                  color: '#0284c7',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 1.25rem auto',
+                }}
+              >
                 <MessageSquareQuote size={36} strokeWidth={2} />
               </div>
               <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#1e293b', marginBottom: '0.5rem' }}>
                 Chưa có câu giao tiếp nào được lưu
               </h3>
-              <p style={{
-                fontSize: '0.92rem',
-                color: '#64748b',
-                maxWidth: 440,
-                margin: '0 auto 1.5rem auto',
-                lineHeight: 1.5
-              }}>
+              <p
+                style={{
+                  fontSize: '0.92rem',
+                  color: '#64748b',
+                  maxWidth: 440,
+                  margin: '0 auto 1.5rem auto',
+                  lineHeight: 1.5,
+                }}
+              >
                 Trong tab <strong>Câu thường gặp</strong>, hãy nhấn vào biểu tượng <strong>"Lưu câu"</strong> trên bất kỳ câu nào để đưa vào danh sách ôn tập tại đây!
               </p>
               <button
@@ -612,13 +1052,22 @@ export default function ReviewView({
               </button>
             </div>
           ) : filteredSentences.length === 0 ? (
-            <div className="mini-card" style={{ textAlign: 'center', padding: '2.5rem 1.5rem', backgroundColor: '#ffffff' }}>
+            <div
+              className="mini-card"
+              style={{ textAlign: 'center', padding: '2.5rem 1.5rem', backgroundColor: '#ffffff' }}
+            >
               <p style={{ fontSize: '0.95rem', color: '#64748b', margin: 0 }}>
                 Không tìm thấy câu đã lưu nào khớp với từ khóa "<strong>{searchQuery}</strong>".
               </p>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                gap: '1.25rem',
+              }}
+            >
               {filteredSentences.map((sentence) => (
                 <div
                   key={sentence.id || sentence.slug}
@@ -631,13 +1080,18 @@ export default function ReviewView({
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
-                    transition: 'all 0.2s ease',
                     boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
                   }}
                 >
                   <div>
-                    {/* Header Card: Chủ đề & Thao tác Bỏ lưu */}
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.65rem' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginBottom: '0.65rem',
+                      }}
+                    >
                       <span
                         style={{
                           fontSize: '0.72rem',
@@ -656,7 +1110,12 @@ export default function ReviewView({
                           style={{
                             fontSize: '0.72rem',
                             fontWeight: 700,
-                            color: sentence.difficulty === 'Nâng cao' ? '#dc2626' : sentence.difficulty === 'Trung bình' ? '#d97706' : '#16a34a',
+                            color:
+                              sentence.difficulty === 'Nâng cao'
+                                ? '#dc2626'
+                                : sentence.difficulty === 'Trung bình'
+                                  ? '#d97706'
+                                  : '#16a34a',
                           }}
                         >
                           {sentence.difficulty || 'Dễ'}
@@ -664,7 +1123,9 @@ export default function ReviewView({
 
                         <button
                           type="button"
-                          onClick={(e) => handleDeleteSentence(e, sentence.id || sentence.slug)}
+                          onClick={(e) =>
+                            handleDeleteSentence(e, sentence.id || sentence.slug)
+                          }
                           style={{
                             background: '#fff1f2',
                             border: '1.5px solid #fecdd3',
@@ -676,7 +1137,6 @@ export default function ReviewView({
                             justifyContent: 'center',
                             cursor: 'pointer',
                             color: '#e11d48',
-                            transition: 'all 0.15s ease',
                           }}
                           title="Bỏ lưu câu này khỏi danh sách ôn tập"
                         >
@@ -685,19 +1145,30 @@ export default function ReviewView({
                       </div>
                     </div>
 
-                    {/* Tiêu đề câu */}
-                    <h3 style={{ fontSize: '1.18rem', fontWeight: 900, color: '#0f172a', margin: '0 0 0.35rem 0' }}>
+                    <h3
+                      style={{
+                        fontSize: '1.18rem',
+                        fontWeight: 900,
+                        color: '#0f172a',
+                        margin: '0 0 0.35rem 0',
+                      }}
+                    >
                       "{sentence.title}"
                     </h3>
 
-                    {/* Ý nghĩa giao tiếp */}
                     {sentence.meaning && (
-                      <p style={{ fontSize: '0.82rem', color: '#64748b', margin: '0 0 0.75rem 0', lineHeight: 1.45 }}>
+                      <p
+                        style={{
+                          fontSize: '0.82rem',
+                          color: '#64748b',
+                          margin: '0 0 0.75rem 0',
+                          lineHeight: 1.45,
+                        }}
+                      >
                         {sentence.meaning}
                       </p>
                     )}
 
-                    {/* Trật tự chuỗi ký hiệu VSL */}
                     <div
                       style={{
                         backgroundColor: '#f8fafc',
@@ -711,7 +1182,9 @@ export default function ReviewView({
                         gap: '0.35rem',
                       }}
                     >
-                      <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#64748b' }}>Trật tự:</span>
+                      <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#64748b' }}>
+                        Trật tự:
+                      </span>
                       {Array.isArray(sentence.words) && sentence.words.length > 0 ? (
                         sentence.words.map((w, idx) => (
                           <React.Fragment key={w.slug || idx}>
@@ -729,7 +1202,9 @@ export default function ReviewView({
                               {w.name || w.word}
                             </span>
                             {idx < sentence.words.length - 1 && (
-                              <span style={{ color: '#94a3b8', fontSize: '0.75rem', fontWeight: 800 }}>→</span>
+                              <span style={{ color: '#94a3b8', fontSize: '0.75rem', fontWeight: 800 }}>
+                                →
+                              </span>
                             )}
                           </React.Fragment>
                         ))
@@ -740,13 +1215,19 @@ export default function ReviewView({
                       )}
                     </div>
 
-                    {/* Mô hình cấu trúc ngữ pháp */}
-                    <div style={{ fontSize: '0.78rem', color: '#475569', lineHeight: 1.45, marginBottom: '1rem' }}>
-                      <strong style={{ color: '#1e293b' }}>Ngữ pháp:</strong> {sentence.structure || 'SOV (Chủ - Bổ - Động)'}
+                    <div
+                      style={{
+                        fontSize: '0.78rem',
+                        color: '#475569',
+                        lineHeight: 1.45,
+                        marginBottom: '1rem',
+                      }}
+                    >
+                      <strong style={{ color: '#1e293b' }}>Ngữ pháp:</strong>{' '}
+                      {sentence.structure || 'SOV (Chủ - Bổ - Động)'}
                     </div>
                   </div>
 
-                  {/* Nút Học câu ngay */}
                   <div style={{ paddingTop: '0.65rem', borderTop: '1px solid #f1f5f9' }}>
                     <button
                       className="btn-pill btn-primary"

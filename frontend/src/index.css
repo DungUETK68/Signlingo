@@ -959,3 +959,227 @@ body.native-mobile-app textarea {
     justify-content: flex-end;
   }
 }
+
+/* ========================================================
+   SPACED REPETITION (SRS) - VSTEPOWL MEMORY DISTRIBUTION & REVIEW SESSION
+   ======================================================== */
+.srs-distribution-card {
+  background-color: #ffffff;
+  border: 1.5px solid var(--border-color);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+}
+
+.srs-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.srs-kpi-cell {
+  padding: 1.1rem 1.2rem;
+  border-right: 1px solid #f1f5f9;
+  transition: background-color 0.15s ease;
+}
+
+.srs-kpi-cell:last-child {
+  border-right: none;
+}
+
+.srs-kpi-cell:hover {
+  background-color: #fafbfc;
+}
+
+.srs-kpi-cell.active-hard {
+  background-color: #fff7ed;
+  box-shadow: inset 0 0 0 2px #f97316;
+}
+
+.srs-kpi-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: 0.35rem;
+}
+
+.srs-kpi-value {
+  font-size: 1.55rem;
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.srs-kpi-sub {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-top: 0.2rem;
+  line-height: 1.3;
+}
+
+.srs-bar-section {
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.srs-segmented-bar {
+  width: 100%;
+  height: 10px;
+  border-radius: 9999px;
+  background-color: #f1f5f9;
+  overflow: hidden;
+  display: flex;
+}
+
+.srs-levels-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.srs-level-cell {
+  padding: 0.95rem 0.85rem;
+  border: none;
+  border-right: 1px solid #f1f5f9;
+  background-color: #ffffff;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.srs-level-cell:last-child {
+  border-right: none;
+}
+
+.srs-level-cell:hover {
+  background-color: #f8fafc !important;
+}
+
+.srs-level-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem;
+  margin-bottom: 0.45rem;
+}
+
+.srs-level-title {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.srs-level-count-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  margin-bottom: 0.25rem;
+}
+
+.srs-level-count {
+  font-size: 1.4rem;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.srs-level-pct {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.srs-level-sub {
+  font-size: 0.74rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.srs-level-interval {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  margin-top: 0.2rem;
+}
+
+.srs-choice-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+}
+
+.srs-choice-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0.9rem 1rem;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: transform 0.12s ease, opacity 0.15s ease;
+}
+
+.srs-choice-btn:active {
+  transform: translateY(2px);
+}
+
+.srs-choice-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.srs-choice-btn.remembered {
+  background-color: #16a34a;
+  color: #ffffff;
+  border: 2px solid #15803d;
+  box-shadow: 0 4px 0 #15803d;
+}
+
+.srs-choice-btn.review-again {
+  background-color: #fff7ed;
+  color: #c2410c;
+  border: 2px solid #fdba74;
+  box-shadow: 0 4px 0 #fb923c;
+}
+
+@media (max-width: 960px) {
+  .srs-levels-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .srs-level-cell {
+    border-bottom: 1px solid #f1f5f9;
+  }
+}
+
+@media (max-width: 640px) {
+  .srs-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .srs-kpi-cell {
+    padding: 0.85rem 0.9rem;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .srs-kpi-value {
+    font-size: 1.3rem;
+  }
+
+  .srs-levels-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .srs-choice-grid {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+}

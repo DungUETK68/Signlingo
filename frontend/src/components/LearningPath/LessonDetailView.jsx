@@ -33,6 +33,15 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
   const handleCompleteLesson = async () => {
     setCompletedState(true);
     confetti({ particleCount: 65, spread: 60 });
+    import('../../data/srsStore')
+      .then(({ enrollWordInSrs }) => {
+        enrollWordInSrs({
+          wordSlug: lesson.slug || lesson.wordId || lesson.title,
+          wordName: lesson.word || lesson.title,
+          startedNow: true,
+        });
+      })
+      .catch(() => {});
     try {
       await progressApi.completeLesson(lesson.id || lesson.slug || lesson.title, 100);
       window.dispatchEvent(new CustomEvent('signlingo_data_updated', { detail: { action: 'complete_lesson', lessonId: lesson.id } }));
