@@ -15,12 +15,13 @@ import {
   Bookmark
 } from 'lucide-react';
 import { useSavedSentences } from '../../data/wordsStore';
-import { resolveMediaUrl } from '../../services/api';
+import { resolveAngleVideoUrl } from '../../services/api';
+import VideoAngleSwitcher from '../VideoAngleSwitcher';
 
 export default function SentenceDetailView({ sentence, onBack, onStartPractice }) {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [viewAngle, setViewAngle] = useState('front'); // 'front' | 'side'
+  const [viewAngle, setViewAngle] = useState('front'); // 'front' | 'left' | 'right'
   const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
   const videoRef = useRef(null);
   const { isSaved, toggleSave } = useSavedSentences();
@@ -28,13 +29,9 @@ export default function SentenceDetailView({ sentence, onBack, onStartPractice }
   const words = sentence?.words || [];
   const currentWord = words[currentWordIndex] || words[0];
 
-  // Xác định đường dẫn video mẫu theo góc quay (Chính diện hoặc Góc nghiêng)
+  // Xác định đường dẫn video mẫu theo đủ 3 góc quay (Chính diện, Nghiêng trái, Nghiêng phải)
   const currentVideoSrc = React.useMemo(() => {
-    if (!currentWord) return resolveMediaUrl('/vsl400_videos/cam_on_front.mp4');
-    if (viewAngle === 'side' && (currentWord.videoSide || currentWord.videoLeft || currentWord.videoRight)) {
-      return resolveMediaUrl(currentWord.videoSide || currentWord.videoLeft || currentWord.videoRight);
-    }
-    return resolveMediaUrl(currentWord.videoFront || currentWord.video || currentWord.videoUrl || (currentWord.slug ? `/vsl400_videos/${currentWord.slug}_front.mp4` : '/vsl400_videos/cam_on_front.mp4'));
+    return resolveAngleVideoUrl(currentWord, viewAngle);
   }, [currentWord, viewAngle]);
 
   // Cập nhật tốc độ phát video
@@ -247,39 +244,10 @@ export default function SentenceDetailView({ sentence, onBack, onStartPractice }
             </span>
           </div>
 
-          {/* Tùy chỉnh góc nhìn & tốc độ */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-            {/* Nút đổi góc nhìn */}
-            <div style={{ display: 'flex', backgroundColor: '#f1f5f9', borderRadius: 'var(--radius-pill)', padding: 2 }}>
-              <button
-                className={`btn-pill btn-sm ${viewAngle === 'front' ? 'btn-primary' : ''}`}
-                style={{
-                  padding: '0.2rem 0.6rem',
-                  fontSize: '0.75rem',
-                  fontWeight: 800,
-                  border: 'none',
-                  backgroundColor: viewAngle === 'front' ? '#0284c7' : 'transparent',
-                  color: viewAngle === 'front' ? '#ffffff' : '#64748b'
-                }}
-                onClick={() => setViewAngle('front')}
-              >
-                Chính diện
-              </button>
-              <button
-                className={`btn-pill btn-sm ${viewAngle === 'side' ? 'btn-primary' : ''}`}
-                style={{
-                  padding: '0.2rem 0.6rem',
-                  fontSize: '0.75rem',
-                  fontWeight: 800,
-                  border: 'none',
-                  backgroundColor: viewAngle === 'side' ? '#0284c7' : 'transparent',
-                  color: viewAngle === 'side' ? '#ffffff' : '#64748b'
-                }}
-                onClick={() => setViewAngle('side')}
-              >
-                Góc nghiêng
-              </button>
-            </div>
+          {/* Tùy chỉnh 3 góc nhìn & tốc độ */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', flexWrap: 'wrap' }}>
+            {/* Nút đổi 3 góc nhìn */}
+            <VideoAngleSwitcher angle={viewAngle} onChange={setViewAngle} compact showLabel={false} />
 
             {/* Tốc độ phát */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>

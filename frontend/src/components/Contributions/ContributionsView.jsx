@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { contributionsApi, resolveMediaUrl } from '../../services/api';
 import ContributeWordModal from './ContributeWordModal';
+import PageHeroBanner from '../common/PageHeroBanner';
 
 export default function ContributionsView() {
   const [contributions, setContributions] = useState([]);
@@ -181,56 +182,21 @@ export default function ContributionsView() {
       )}
 
       {/* 1. Header Banner */}
-      <div style={{
-        background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
-        color: '#ffffff',
-        borderRadius: 'var(--radius-xl)',
-        padding: '1.75rem 2rem',
-        marginBottom: '1.5rem',
-        boxShadow: '0 8px 24px rgba(5, 150, 105, 0.25)',
-        position: 'relative',
-        overflow: 'hidden'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', position: 'relative', zIndex: 1 }}>
-          <div style={{ maxWidth: 620 }}>
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.45rem',
-              backgroundColor: 'rgba(255, 255, 255, 0.2)',
-              backdropFilter: 'blur(8px)',
-              padding: '0.3rem 0.85rem',
-              borderRadius: 'var(--radius-pill)',
-              fontSize: '0.8rem',
-              fontWeight: 800,
-              marginBottom: '0.75rem'
-            }}>
-              <HeartHandshake size={16} />
-              <span>CỘNG ĐỒNG ĐÓNG GÓP TỪ VỰNG</span>
-            </div>
-
-            <h1 style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.1rem)', fontWeight: 900, margin: '0 0 0.5rem 0', lineHeight: 1.25 }}>
-              Đóng Góp Từ Vựng Mới
-            </h1>
-
-            <p style={{ fontSize: '0.94rem', opacity: 0.95, margin: 0, lineHeight: 1.55 }}>
-              Cùng Signlingo mở rộng kho dữ liệu Ngôn ngữ Ký hiệu Việt Nam. Mỗi cử chỉ bạn đóng góp sẽ được Ban quản trị duyệt và chia sẻ tới toàn bộ cộng đồng người học!
-            </p>
-          </div>
-
+      <PageHeroBanner
+        badgeIcon={<HeartHandshake size={16} />}
+        badgeText="CỘNG ĐỒNG ĐÓNG GÓP TỪ VỰNG"
+        title="Đóng Góp Từ Vựng Mới"
+        subtitle="Cùng Signlingo mở rộng kho dữ liệu Ngôn ngữ Ký hiệu Việt Nam. Mỗi cử chỉ bạn đóng góp sẽ được Ban quản trị duyệt và chia sẻ tới toàn bộ cộng đồng người học!"
+        rightSlot={
           <button
             onClick={() => {
               setEditingItem(null);
               setIsModalOpen(true);
             }}
-            className="btn-pill btn-primary"
+            className="btn-pill page-hero-btn-white"
             style={{
-              backgroundColor: '#ffffff',
-              color: '#059669',
-              boxShadow: '0 4px 0 rgba(0, 0, 0, 0.15)',
-              padding: '0.85rem 1.75rem',
+              padding: '0.82rem 1.65rem',
               fontSize: '0.95rem',
-              fontWeight: 800,
               display: 'flex',
               alignItems: 'center',
               gap: '0.5rem'
@@ -239,8 +205,8 @@ export default function ContributionsView() {
             <Plus size={20} strokeWidth={3} />
             <span>Đóng góp từ mới</span>
           </button>
-        </div>
-      </div>
+        }
+      />
 
       {/* 2. Thẻ Thống Kê 4 Chỉ Số */}
       <div style={{

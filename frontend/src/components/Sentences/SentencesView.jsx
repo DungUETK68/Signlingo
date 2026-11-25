@@ -20,6 +20,7 @@ import { dictionaryApi } from '../../services/api';
 import { useSavedSentences } from '../../data/wordsStore';
 import SentenceDetailView from './SentenceDetailView';
 import SentencePracticeView from './SentencePracticeView';
+import PageHeroBanner from '../common/PageHeroBanner';
 
 export default function SentencesView({ onStartPracticeWord, initialSentenceId = null }) {
   const [sentencesList, setSentencesList] = useState(() => {
@@ -184,30 +185,12 @@ export default function SentencesView({ onStartPracticeWord, initialSentenceId =
   return (
     <div style={{ maxWidth: 1040, margin: '0 auto', paddingBottom: '3.5rem' }}>
       {/* 1. Header Trang */}
-      <div style={{ marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.35rem' }}>
-          <span
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 36,
-              height: 36,
-              borderRadius: '50%',
-              backgroundColor: '#e0f2fe',
-              color: '#0284c7',
-            }}
-          >
-            <MessageSquareQuote size={20} strokeWidth={2.4} />
-          </span>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#0f172a', margin: 0 }}>
-            Câu Thường Gặp trong VSL ({sentencesList.length} câu)
-          </h1>
-        </div>
-        <p style={{ fontSize: '0.92rem', color: '#64748b', margin: 0, lineHeight: 1.5 }}>
-          Học cách biểu diễn các câu giao tiếp thực tế theo chuẩn cấu trúc Chủ đề – Lời dẫn, trật tự SOV, và lược bỏ hư từ trong Ngôn ngữ Ký hiệu Việt Nam.
-        </p>
-      </div>
+      <PageHeroBanner
+        badgeIcon={<MessageSquareQuote size={15} />}
+        badgeText="CÂU GIAO TIẾP THỰC TẾ VSL"
+        title={`Câu Thường Gặp trong VSL (${sentencesList.length} câu)`}
+        subtitle="Học cách biểu diễn các câu giao tiếp thực tế theo chuẩn cấu trúc Chủ đề – Lời dẫn, trật tự SOV, và lược bỏ hư từ trong Ngôn ngữ Ký hiệu Việt Nam."
+      />
 
       {/* 2. Bộ lọc Chủ đề & Thanh tìm kiếm */}
       <div
@@ -392,16 +375,9 @@ export default function SentencesView({ onStartPracticeWord, initialSentenceId =
                 </div>
 
                 {/* Tiêu đề câu tiếng Việt */}
-                <h3 style={{ fontSize: '1.18rem', fontWeight: 900, color: '#0f172a', margin: '0 0 0.4rem 0' }}>
+                <h3 style={{ fontSize: '1.18rem', fontWeight: 900, color: '#0f172a', margin: '0 0 0.75rem 0' }}>
                   "{sentence.title}"
                 </h3>
-
-                {/* Ý nghĩa giao tiếp */}
-                {sentence.meaning && (
-                  <p style={{ fontSize: '0.82rem', color: '#64748b', margin: '0 0 0.75rem 0', lineHeight: 1.45 }}>
-                    {sentence.meaning}
-                  </p>
-                )}
 
                 {/* Dải ký hiệu VSL tuần tự */}
                 <div

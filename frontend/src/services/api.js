@@ -2,9 +2,9 @@
 // Connects to NestJS Backend Core (Port 3000) and Python AI Service (Port 8000)
 // Hỗ trợ tự động điều hướng về máy chủ Production (https://signlingo.id.vn) khi chạy dưới dạng App Mobile Android
 
-import { isNativePlatform, getServerOrigin, resolveMediaUrl } from './platform';
+import { isNativePlatform, getServerOrigin, resolveMediaUrl, resolveAngleVideoUrl } from './platform';
 
-export { isNativePlatform, getServerOrigin, resolveMediaUrl };
+export { isNativePlatform, getServerOrigin, resolveMediaUrl, resolveAngleVideoUrl };
 
 const isVitePort = typeof window !== 'undefined' && window.location.port === '5173';
 const nativeOrigin = isNativePlatform() ? getServerOrigin() : '';

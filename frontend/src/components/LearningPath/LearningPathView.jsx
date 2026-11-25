@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSignWords } from '../../data/wordsStore';
 import LessonDetailView from './LessonDetailView';
+import PageHeroBanner from '../common/PageHeroBanner';
 import { 
   Check, 
   Play, 
@@ -200,96 +201,64 @@ export default function LearningPathView({
           </div>
         </div>
 
-        {/* 2. Banner Giới Thiệu Chuyên Đề (Topic Hero Banner) */}
-        <div style={{
-          backgroundColor: '#ffffff',
-          border: '1.5px solid var(--border-color)',
-          borderRadius: 'var(--radius-xl)',
-          padding: '1.5rem 1.75rem',
-          marginBottom: '1.25rem',
-          boxShadow: 'var(--card-shadow)',
-          position: 'relative',
-          overflow: 'hidden'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <div style={{
-                width: 62,
-                height: 62,
-                borderRadius: 'var(--radius-lg)',
-                backgroundColor: currentTopic.bgColor || '#e0f2fe',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '2rem',
-                flexShrink: 0,
-                boxShadow: '0 4px 12px rgba(0,0,0,0.06)'
-              }}>
-                {currentTopic.icon}
-              </div>
-
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '0.2rem', flexWrap: 'wrap' }}>
-                  <span style={{
-                    fontSize: '0.72rem',
-                    fontWeight: 800,
-                    textTransform: 'uppercase',
-                    color: currentTopic.color || '#0284c7',
-                    backgroundColor: currentTopic.bgColor || '#eff6ff',
-                    padding: '0.15rem 0.55rem',
-                    borderRadius: 'var(--radius-pill)'
-                  }}>
-                    {currentTopic.level}
-                  </span>
-                  <span style={{ color: '#cbd5e1' }}>•</span>
-                  <span style={{ fontSize: '0.78rem', color: '#7c3aed', fontWeight: 800 }}>
-                    {grammarLessons.length > 0 ? '💡 1 Bài Ngữ pháp' : ''}
-                  </span>
-                  {grammarLessons.length > 0 && <span style={{ color: '#cbd5e1' }}>•</span>}
-                  <span style={{ fontSize: '0.78rem', color: '#0284c7', fontWeight: 800 }}>
-                    🔤 {vocabLessons.length} Từ vựng VSL
-                  </span>
-                  {sentenceLessons.length > 0 && <span style={{ color: '#cbd5e1' }}>•</span>}
-                  {sentenceLessons.length > 0 && (
-                    <span style={{ fontSize: '0.78rem', color: '#16a34a', fontWeight: 800 }}>
-                      💬 {sentenceLessons.length} Câu thực hành
-                    </span>
-                  )}
-                </div>
-
-                <h1 style={{ fontSize: '1.6rem', fontWeight: 900, color: '#1e293b', margin: 0 }}>
-                  {currentTopic.title}
-                </h1>
-                <p style={{ fontSize: '0.88rem', color: '#64748b', margin: '0.35rem 0 0 0', maxWidth: 680, lineHeight: 1.45 }}>
-                  {currentTopic.description}
-                </p>
-              </div>
-            </div>
-
-            {/* Tiến độ hoàn thành của chuyên đề */}
+        {/* 2. Banner Giới Thiệu Chuyên Đề (Đồng bộ giao diện chuẩn, Tiến độ nằm bên phải trên web) */}
+        <PageHeroBanner
+          style={{ marginBottom: '1.25rem' }}
+          leftSlot={
             <div style={{
-              backgroundColor: '#f8fafc',
-              border: '1px solid #e2e8f0',
-              padding: '0.75rem 1.25rem',
+              width: 62,
+              height: 62,
               borderRadius: 'var(--radius-lg)',
-              minWidth: 200,
-              textAlign: 'right'
+              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              backdropFilter: 'blur(8px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '2rem',
+              flexShrink: 0,
             }}>
-              <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>
+              {currentTopic.icon}
+            </div>
+          }
+          badgeText={currentTopic.level}
+          badgeExtra={
+            <>
+              {grammarLessons.length > 0 && (
+                <>
+                  <span style={{ opacity: 0.7 }}>•</span>
+                  <span>💡 1 Bài Ngữ pháp</span>
+                </>
+              )}
+              <span style={{ opacity: 0.7 }}>•</span>
+              <span>🔤 {vocabLessons.length} Từ vựng VSL</span>
+              {sentenceLessons.length > 0 && (
+                <>
+                  <span style={{ opacity: 0.7 }}>•</span>
+                  <span>💬 {sentenceLessons.length} Câu thực hành</span>
+                </>
+              )}
+            </>
+          }
+          title={currentTopic.title}
+          subtitle={currentTopic.description}
+          rightSlot={
+            <div className="page-hero-glass" style={{ minWidth: 210, textAlign: 'right' }}>
+              <div style={{ fontSize: '0.72rem', opacity: 0.85, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.03em' }}>
                 Tiến độ chuyên đề
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '0.5rem', marginTop: '0.2rem' }}>
-                <span style={{ fontSize: '1.25rem', fontWeight: 900, color: topicPercent === 100 ? '#16a34a' : currentTopic.color || '#0284c7' }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'flex-end', gap: '0.45rem', marginTop: '0.2rem' }}>
+                <span style={{ fontSize: '1.3rem', fontWeight: 900, color: '#ffffff' }}>
                   {completedTopicCount}/{totalTopicCount}
                 </span>
-                <span style={{ fontSize: '0.85rem', color: '#64748b' }}>bài ({topicPercent}%)</span>
+                <span style={{ fontSize: '0.84rem', opacity: 0.9 }}>bài ({topicPercent}%)</span>
               </div>
-              <div style={{ width: '100%', height: 7, backgroundColor: '#e2e8f0', borderRadius: 'var(--radius-pill)', overflow: 'hidden', marginTop: '0.4rem' }}>
-                <div style={{ width: `${topicPercent}%`, height: '100%', backgroundColor: topicPercent === 100 ? '#22c55e' : (currentTopic.color || '#0284c7'), borderRadius: 'var(--radius-pill)', transition: 'width 0.3s ease' }} />
+              <div style={{ width: '100%', height: 7, backgroundColor: 'rgba(255, 255, 255, 0.24)', borderRadius: 'var(--radius-pill)', overflow: 'hidden', marginTop: '0.45rem' }}>
+                <div style={{ width: `${topicPercent}%`, height: '100%', backgroundColor: topicPercent === 100 ? '#4ade80' : '#ffffff', borderRadius: 'var(--radius-pill)', transition: 'width 0.3s ease' }} />
               </div>
             </div>
-          </div>
-        </div>
+          }
+        />
 
         {/* 3. Thanh Công Cụ Lọc: Phân loại Bài học & Tìm kiếm */}
         <div style={{
@@ -732,48 +701,30 @@ export default function LearningPathView({
   // =========================================================================
   return (
     <div style={{ width: '100%', margin: '0 auto', animation: 'fadeIn 0.2s ease-out' }}>
-      {/* 1. Header Tổng Quan Tiến Độ - Gọn gàng & Hiện đại */}
-      <div style={{
-        backgroundColor: '#ffffff',
-        border: '1.5px solid var(--border-color)',
-        borderRadius: 'var(--radius-xl)',
-        padding: '1.25rem 1.5rem',
-        marginBottom: '1.25rem',
-        boxShadow: 'var(--card-shadow)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        gap: '1rem'
-      }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.2rem' }}>
-            <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#0284c7', textTransform: 'uppercase' }}>
-              LỘ TRÌNH CHUẨN VSL
-            </span>
-            <span style={{ color: '#cbd5e1' }}>•</span>
-            <span style={{ fontSize: '0.82rem', color: '#64748b' }}>
-              12 Chuyên đề • 400 Ký hiệu VSL • 8 Bài học Ngữ pháp • 100 Câu thực hành
-            </span>
-          </div>
-          <h2 style={{ fontSize: '1.45rem', fontWeight: 900, color: '#1e293b', margin: 0 }}>
-            Khung Chương Trình Học Ký Hiệu Chuẩn
-          </h2>
-        </div>
-
-        {/* Thanh tiến trình ngang gọn gàng */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>Tổng tiến độ</div>
-            <div style={{ fontSize: '0.92rem', fontWeight: 900, color: '#16a34a' }}>
-              {completedLessons}/{totalLessons} bài ({percentOverall}%)
+      {/* 1. Header Tổng Quan Tiến Độ - Đồng bộ giao diện chuẩn */}
+      <PageHeroBanner
+        style={{ marginBottom: '1.25rem' }}
+        badgeIcon={<GraduationCap size={15} />}
+        badgeText="LỘ TRÌNH CHUẨN VSL"
+        title="Khung Chương Trình Học Ký Hiệu Chuẩn"
+        subtitle="12 Chuyên đề • 400 Ký hiệu VSL • 8 Bài học Ngữ pháp • 100 Câu thực hành"
+        rightSlot={
+          <div className="page-hero-glass" style={{ minWidth: 210, textAlign: 'right' }}>
+            <div style={{ fontSize: '0.72rem', opacity: 0.85, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.03em' }}>
+              Tổng tiến độ
+            </div>
+            <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'flex-end', gap: '0.45rem', marginTop: '0.2rem' }}>
+              <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#ffffff' }}>
+                {completedLessons}/{totalLessons}
+              </span>
+              <span style={{ fontSize: '0.84rem', opacity: 0.9 }}>bài ({percentOverall}%)</span>
+            </div>
+            <div style={{ width: '100%', height: 7, backgroundColor: 'rgba(255, 255, 255, 0.24)', borderRadius: 'var(--radius-pill)', overflow: 'hidden', marginTop: '0.45rem' }}>
+              <div style={{ width: `${percentOverall}%`, height: '100%', backgroundColor: '#4ade80', borderRadius: 'var(--radius-pill)', transition: 'width 0.3s ease' }} />
             </div>
           </div>
-          <div style={{ width: 130, height: 10, backgroundColor: '#f1f5f9', borderRadius: 'var(--radius-pill)', overflow: 'hidden' }}>
-            <div style={{ width: `${percentOverall}%`, height: '100%', backgroundColor: '#22c55e', borderRadius: 'var(--radius-pill)', transition: 'width 0.3s ease' }} />
-          </div>
-        </div>
-      </div>
+        }
+      />
 
       {/* 2. Bộ Lọc Cấp Độ (Pills) */}
       <div style={{

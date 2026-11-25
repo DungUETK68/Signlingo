@@ -17,8 +17,9 @@ import {
 } from 'lucide-react';
 import CanvasSkeleton from '../CanvasSkeleton';
 import confetti from 'canvas-confetti';
-import { progressApi, AI_API_URL, resolveMediaUrl, isNativePlatform } from '../../services/api';
+import { progressApi, AI_API_URL, resolveMediaUrl, resolveAngleVideoUrl, isNativePlatform } from '../../services/api';
 import { startSkeletonTracking, stopSkeletonTracking, extract75Landmarks } from '../../services/skeletonTracker';
+import VideoAngleSwitcher from '../VideoAngleSwitcher';
 
 function getShortRole(role) {
   if (!role) return '';
@@ -56,6 +57,7 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
   const streamRef = useRef(null);
   const [playbackRate, setPlaybackRate] = useState(1.0);
   const playbackRateRef = useRef(1.0);
+  const [viewAngle, setViewAngle] = useState('front'); // 'front' | 'left' | 'right'
 
   // Camera State
   const [cameraStream, setCameraStream] = useState(null);
@@ -89,11 +91,10 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
 
   const currentWord = words[currentWordIndex] || words[0];
 
-  // Video mẫu của từ hiện tại
+  // Video mẫu của từ hiện tại theo 3 góc quay (Chính diện, Nghiêng trái, Nghiêng phải)
   const sampleVideoSrc = React.useMemo(() => {
-    if (!currentWord) return '/vsl400_videos/cam_on_front.mp4';
-    return currentWord.videoFront || currentWord.video || (currentWord.slug ? `/vsl400_videos/${currentWord.slug}_front.mp4` : '/vsl400_videos/cam_on_front.mp4');
-  }, [currentWord]);
+    return resolveAngleVideoUrl(currentWord, viewAngle);
+  }, [currentWord, viewAngle]);
 
   // Đổi tốc độ phát video mẫu (1.0x hoặc 0.5x)
   const changeSpeed = (rate) => {
@@ -805,6 +806,10 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
               <span style={{ color: '#38bdf8' }}>Từ {currentWordIndex + 1}/{words.length}:</span>
               <span>{currentWord?.word}</span>
             </div>
+          </div>
+
+          <div style={{ marginTop: '0.6rem', paddingTop: '0.55rem', borderTop: '1px solid #f1f5f9' }}>
+            <VideoAngleSwitcher angle={viewAngle} onChange={setViewAngle} compact />
           </div>
         </div>
 

@@ -12,7 +12,6 @@ import {
   Check,
   AlertTriangle,
   Zap,
-  TrendingUp,
   ArrowRight,
   MessageSquareQuote,
   GraduationCap,
@@ -134,7 +133,7 @@ export default function PersonalizedPathView({
             Hệ thống tự động đề xuất bài học dựa trên mức độ hiểu biết ban đầu và tốc độ học thực tế.
           </p>
 
-          {/* 3 Metric Cards Tình Trạng Cá Nhân Hóa */}
+          {/* 2 Metric Cards Tình Trạng Cá Nhân Hóa (Đã bỏ mục Đánh giá khả năng AI theo yêu cầu) */}
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
@@ -150,16 +149,6 @@ export default function PersonalizedPathView({
                 {profile.learningLevel === 'beginner' && '🐣 Level 1: Mới học'}
                 {profile.learningLevel === 'elementary' && '🌿 Level 2: Cơ bản'}
                 {profile.learningLevel === 'intermediate' && '🚀 Level 3: Nâng cao'}
-              </div>
-            </div>
-
-            <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.12)', padding: '0.65rem 0.85rem', borderRadius: 'var(--radius-lg)' }}>
-              <div style={{ fontSize: '0.72rem', opacity: 0.85, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.02em', whiteSpace: 'nowrap' }}>
-                Đánh giá khả năng AI
-              </div>
-              <div style={{ fontSize: '0.94rem', fontWeight: 900, marginTop: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.35rem', whiteSpace: 'nowrap' }}>
-                <TrendingUp size={16} />
-                <span>{capability.statusTitle}</span>
               </div>
             </div>
 
@@ -225,9 +214,6 @@ export default function PersonalizedPathView({
                   <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#1e293b', margin: 0 }}>
                     {stage.title}
                   </h3>
-                  <p style={{ fontSize: '0.84rem', color: '#64748b', margin: '0.2rem 0 0 0' }}>
-                    {stage.subtitle}
-                  </p>
                 </div>
               </div>
 
@@ -369,10 +355,6 @@ export default function PersonalizedPathView({
                             </span>
                           )}
                         </div>
-
-                        <p style={{ fontSize: '0.82rem', color: '#64748b', margin: 0, lineHeight: 1.4, maxWidth: 540 }}>
-                          {lesson.desc}
-                        </p>
 
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginTop: '0.4rem', fontSize: '0.76rem', color: '#94a3b8' }}>
                           <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>

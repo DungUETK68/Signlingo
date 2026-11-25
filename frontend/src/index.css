@@ -1273,3 +1273,123 @@ body.native-mobile-app textarea {
     padding: 0.08rem 0.4rem;
   }
 }
+
+/* ========================================================
+   UNIFIED PAGE HERO BANNER (STANDARDIZED ACROSS ALL TABS)
+   ======================================================== */
+.page-hero-banner {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: #ffffff;
+  border-radius: var(--radius-xl);
+  padding: 1.65rem 2rem;
+  margin-bottom: 1.35rem;
+  box-shadow: 0 8px 24px rgba(2, 132, 199, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.page-hero-banner::after {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.14) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.page-hero-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.page-hero-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.page-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  padding: 0.28rem 0.85rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.page-hero-title {
+  font-size: clamp(1.32rem, 2.8vw, 1.85rem);
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0 0 0.35rem 0;
+  line-height: 1.25;
+}
+
+.page-hero-subtitle {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+  line-height: 1.5;
+  max-width: 660px;
+}
+
+.page-hero-right {
+  flex-shrink: 0;
+}
+
+.page-hero-glass {
+  background-color: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: var(--radius-lg);
+  padding: 0.8rem 1.2rem;
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+}
+
+.page-hero-btn-white {
+  background-color: #ffffff !important;
+  color: #0284c7 !important;
+  border: none !important;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.14) !important;
+  font-weight: 800 !important;
+}
+
+.page-hero-btn-glass {
+  background-color: rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.38) !important;
+  font-weight: 700 !important;
+}
+
+@media (max-width: 768px) {
+  .page-hero-banner {
+    padding: 1.25rem 1.15rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .page-hero-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.9rem;
+  }
+
+  .page-hero-right {
+    width: 100%;
+  }
+
+  .page-hero-right .page-hero-glass {
+    text-align: left !important;
+  }
+}

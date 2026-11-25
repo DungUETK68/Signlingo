@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { communityApi, resolveMediaUrl } from '../../services/api';
 import PostCommunityWordModal from './PostCommunityWordModal';
+import PageHeroBanner from '../common/PageHeroBanner';
 
 export default function CommunityView({ isAdmin = false }) {
   // Tabs: 'explore' (Khám phá & Bình chọn) | 'my' (Từ của tôi) | 'admin_review' (Duyệt từ >= 80% - chỉ Admin)
@@ -238,53 +239,39 @@ export default function CommunityView({ isAdmin = false }) {
       )}
 
       {/* Header Banner */}
-      <div className="mini-card" style={{ padding: '1.5rem', marginBottom: '1.25rem', position: 'relative', overflow: 'hidden' }}>
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          width: '260px',
-          height: '100%',
-          background: 'radial-gradient(circle at top right, rgba(2, 132, 199, 0.12) 0%, transparent 70%)',
-          pointerEvents: 'none'
-        }} />
-
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-          <div>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', backgroundColor: '#e0f2fe', color: '#0284c7', padding: '0.25rem 0.75rem', borderRadius: 'var(--radius-pill)', fontSize: '0.78rem', fontWeight: 800, marginBottom: '0.5rem' }}>
-              <Users size={14} />
-              <span>CỘNG ĐỒNG SÁNG TẠO & ĐỀ XUẤT TỪ VỰNG</span>
-            </div>
-            <h1 style={{ fontSize: '1.65rem', fontWeight: 900, color: '#0f172a', margin: '0 0 0.4rem 0' }}>
-              Cộng Đồng Ngôn Ngữ Ký Hiệu VSL
-            </h1>
-            <p style={{ fontSize: '0.9rem', color: '#64748b', margin: 0, maxWidth: 680, lineHeight: 1.5 }}>
-              Nơi người học và cộng đồng đề xuất các từ vựng mới hoàn toàn chưa có trong từ điển. Các từ có <strong>tỉ lệ ủng hộ trên 80%</strong> sẽ tự động được gửi tới Quản trị viên để kiểm duyệt và đưa vào Từ điển chuẩn.
-            </p>
-          </div>
-
-          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+      <PageHeroBanner
+        style={{ marginBottom: '1.25rem' }}
+        badgeIcon={<Users size={15} />}
+        badgeText="CỘNG ĐỒNG SÁNG TẠO & ĐỀ XUẤT TỪ VỰNG"
+        title="Cộng Đồng Ngôn Ngữ Ký Hiệu VSL"
+        subtitle={
+          <>
+            Nơi người học và cộng đồng đề xuất các từ vựng mới hoàn toàn chưa có trong từ điển. Các từ có <strong>tỉ lệ ủng hộ trên 80%</strong> sẽ tự động được gửi tới Quản trị viên để kiểm duyệt và đưa vào Từ điển chuẩn.
+          </>
+        }
+        rightSlot={
+          <div style={{ display: 'flex', gap: '0.55rem', alignItems: 'center', flexWrap: 'wrap' }}>
             <button
-              className="btn-pill btn-secondary btn-sm"
+              className="btn-pill btn-sm page-hero-btn-glass"
               onClick={fetchCommunityData}
               title="Tải lại danh sách"
-              style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', padding: '0.55rem 0.95rem' }}
             >
               <RefreshCw size={14} />
               <span>Làm mới</span>
             </button>
 
             <button
-              className="btn-pill btn-primary"
+              className="btn-pill page-hero-btn-white"
               onClick={() => setIsPostModalOpen(true)}
-              style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', padding: '0.68rem 1.25rem' }}
             >
-              <Plus size={16} strokeWidth={2.5} />
+              <Plus size={16} strokeWidth={2.8} />
               <span>Đăng từ mới</span>
             </button>
           </div>
-        </div>
-      </div>
+        }
+      />
 
       {/* Sub Tabs Bar - luôn nằm trên 1 hàng ngang */}
       <div className="subtabs-scroll-row" style={{ display: 'flex', gap: '0.4rem', marginBottom: '1.25rem', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '2px' }}>

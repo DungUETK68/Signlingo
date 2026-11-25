@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { X, Camera, Video, Gauge } from 'lucide-react';
 
+import VideoAngleSwitcher from './VideoAngleSwitcher';
+
 export default function LessonModal({ lesson, topic, onClose, onStartPractice }) {
   const [speed, setSpeed] = useState(1.0);
   const [viewAngle, setViewAngle] = useState('front');
@@ -78,22 +80,7 @@ export default function LessonModal({ lesson, topic, onClose, onStartPractice })
               </div>
 
               {/* View Angles */}
-              <div style={{ display: 'flex', gap: '0.3rem' }}>
-                <button
-                  className={`btn-pill btn-sm ${viewAngle === 'front' ? 'btn-primary' : 'btn-secondary'}`}
-                  style={{ padding: '0.25rem 0.65rem', fontSize: '0.75rem' }}
-                  onClick={() => setViewAngle('front')}
-                >
-                  Chính diện
-                </button>
-                <button
-                  className={`btn-pill btn-sm ${viewAngle === 'side' ? 'btn-primary' : 'btn-secondary'}`}
-                  style={{ padding: '0.25rem 0.65rem', fontSize: '0.75rem' }}
-                  onClick={() => setViewAngle('side')}
-                >
-                  Góc 45°
-                </button>
-              </div>
+              <VideoAngleSwitcher angle={viewAngle} onChange={setViewAngle} compact showLabel={false} />
             </div>
           </div>
 

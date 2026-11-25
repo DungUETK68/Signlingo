@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getAllWords } from '../../data/wordsStore';
 import { recordPracticeSession } from '../../data/personalizedStore';
-import { progressApi, AI_API_URL, resolveMediaUrl, isNativePlatform } from '../../services/api';
+import { progressApi, AI_API_URL, resolveMediaUrl, resolveAngleVideoUrl, isNativePlatform } from '../../services/api';
 import { startSkeletonTracking, stopSkeletonTracking, extract75Landmarks } from '../../services/skeletonTracker';
 import CanvasSkeleton from '../CanvasSkeleton';
+import VideoAngleSwitcher from '../VideoAngleSwitcher';
+import PageHeroBanner from '../common/PageHeroBanner';
 import confetti from 'canvas-confetti';
 import {
   Camera,
@@ -37,6 +39,7 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
   const videoRef = useRef(null);
   const streamRef = useRef(null);
   const [playbackRate, setPlaybackRate] = useState(1.0);
+  const [viewAngle, setViewAngle] = useState('front'); // 'front' | 'left' | 'right'
 
   // Camera State
   const [cameraStream, setCameraStream] = useState(null);
@@ -157,7 +160,7 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
       src.startsWith('/uploads/');
   }, [currentWordObj]);
 
-  const sampleVideoSrc = resolveMediaUrl(currentWordObj.videoFront || '/vsl400_videos/cam_on_front.mp4');
+  const sampleVideoSrc = resolveAngleVideoUrl(currentWordObj, viewAngle);
 
   // Đổi tốc độ phát video mẫu (1.0x hoặc 0.5x)
   const changeSpeed = (rate) => {
@@ -683,66 +686,36 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
         </div>
       </div>
 
-      {/* 2. Tiêu Đề Bài Luyện Tập - Rõ Ràng, Tinh Tế, Khoa Học */}
-      <div className="mini-card" style={{
-        padding: '1.25rem 1.5rem',
-        marginBottom: '1.25rem',
-        background: 'linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%)',
-        border: '1.5px solid #bae6fd',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: '1rem'
-      }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
-            <span style={{
-              fontSize: '0.72rem',
-              fontWeight: 800,
-              textTransform: 'uppercase',
-              letterSpacing: '0.04em',
-              color: '#0284c7',
-              backgroundColor: '#e0f2fe',
-              padding: '0.2rem 0.65rem',
-              borderRadius: 'var(--radius-pill)'
-            }}>
-              THỰC HÀNH CỬ CHỈ AI
-            </span>
-            <span style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 600 }}>
-              • {currentWordObj.topicLabel || 'Giao tiếp hàng ngày'}
-            </span>
+      {/* 2. Tiêu Đề Bài Luyện Tập - Đồng bộ banner chuẩn */}
+      <PageHeroBanner
+        style={{ marginBottom: '1.25rem' }}
+        badgeIcon={<Sparkles size={14} />}
+        badgeText="THỰC HÀNH CỬ CHỈ AI"
+        badgeExtra={
+          <span style={{ opacity: 0.9 }}>
+            • {currentWordObj.topicLabel || 'Giao tiếp hàng ngày'}
+          </span>
+        }
+        title={`Bài học ký hiệu: "${currentWordObj.word}"`}
+        subtitle={statusMessage}
+        rightSlot={
+          <div
+            className="page-hero-glass"
+            style={{
+              width: 56,
+              height: 56,
+              borderRadius: '50%',
+              padding: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '1.65rem',
+            }}
+          >
+            🤟
           </div>
-
-          <h1 style={{
-            fontSize: '1.75rem',
-            fontWeight: 900,
-            color: '#0f172a',
-            margin: '0 0 0.35rem 0',
-            lineHeight: 1.2
-          }}>
-            Bài học ký hiệu: <span style={{ color: '#0284c7' }}>"{currentWordObj.word}"</span>
-          </h1>
-
-          <p style={{ fontSize: '0.86rem', color: '#475569', margin: 0, fontWeight: 500 }}>
-            {statusMessage}
-          </p>
-        </div>
-
-        <div style={{
-          width: 52,
-          height: 52,
-          borderRadius: '50%',
-          backgroundColor: '#e0f2fe',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '1.6rem',
-          flexShrink: 0,
-          border: '1.5px solid #bae6fd'
-        }}>
-          🤟
-        </div>
-      </div>
+        }
+      />
 
       {/* 3. Bố Cục Đối Chiếu Song Song: Video Mẫu Chuyên Gia vs Camera Người Học */}
       <div className="practice-camera-grid">
@@ -803,6 +776,10 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             )}
+          </div>
+
+          <div style={{ marginTop: '0.6rem', paddingTop: '0.55rem', borderTop: '1px solid #f1f5f9' }}>
+            <VideoAngleSwitcher angle={viewAngle} onChange={setViewAngle} compact />
           </div>
         </div>
 

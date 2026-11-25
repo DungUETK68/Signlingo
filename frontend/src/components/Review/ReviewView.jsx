@@ -10,6 +10,7 @@ import {
 } from '../../data/srsStore';
 import MemoryDistributionCard from './MemoryDistributionCard';
 import SpacedReviewSessionView from './SpacedReviewSessionView';
+import PageHeroBanner from '../common/PageHeroBanner';
 import {
   BookmarkCheck,
   MessageSquareQuote,
@@ -349,51 +350,15 @@ export default function ReviewView({
           )}
 
           {/* 3. Header Danh sách Từ vựng đã lưu & Thanh tìm kiếm */}
-          <div
-            style={{
-              backgroundColor: '#ffffff',
-              border: '1.5px solid var(--border-color)',
-              borderRadius: 'var(--radius-xl)',
-              padding: '1.25rem 1.5rem',
-              marginBottom: '1.25rem',
-              boxShadow: 'var(--card-shadow)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: '1rem',
-            }}
-          >
-            <div>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  marginBottom: '0.25rem',
-                  flexWrap: 'wrap',
-                }}
-              >
-                <span
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.35rem',
-                    fontSize: '0.75rem',
-                    fontWeight: 800,
-                    padding: '0.2rem 0.65rem',
-                    borderRadius: 'var(--radius-pill)',
-                    backgroundColor: '#e0f2fe',
-                    color: '#0284c7',
-                  }}
-                >
-                  <BookmarkCheck size={13} />
-                  TỪ VỰNG ĐÃ LƯU & ĐANG HỌC
-                </span>
-                <span style={{ fontSize: '0.84rem', color: '#64748b' }}>
+          <PageHeroBanner
+            style={{ marginBottom: '1.25rem' }}
+            badgeIcon={<BookmarkCheck size={14} />}
+            badgeText="TỪ VỰNG ĐÃ LƯU & ĐANG HỌC"
+            badgeExtra={
+              <>
+                <span style={{ opacity: 0.9 }}>
                   • {filteredWords.length} / {trackedWords.length} từ hiển thị
                 </span>
-
                 {selectedMemoryFilter !== null && (
                   <button
                     type="button"
@@ -402,13 +367,13 @@ export default function ReviewView({
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '0.25rem',
-                      padding: '0.18rem 0.55rem',
+                      padding: '0.14rem 0.55rem',
                       borderRadius: 'var(--radius-pill)',
-                      border: '1px solid #cbd5e1',
-                      backgroundColor: '#f8fafc',
-                      color: '#334155',
-                      fontSize: '0.74rem',
-                      fontWeight: 700,
+                      border: 'none',
+                      backgroundColor: '#ffffff',
+                      color: '#0284c7',
+                      fontSize: '0.72rem',
+                      fontWeight: 800,
                       cursor: 'pointer',
                     }}
                   >
@@ -422,42 +387,43 @@ export default function ReviewView({
                     <X size={12} />
                   </button>
                 )}
-              </div>
-              <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#1e293b', margin: 0 }}>
-                Danh Sách Từ Vựng Ôn Tập Ký Hiệu
-              </h2>
-            </div>
-
-            {trackedWords.length > 0 && (
-              <div style={{ position: 'relative', width: '100%', maxWidth: 300 }}>
-                <Search
-                  size={17}
-                  color="#94a3b8"
-                  style={{
-                    position: 'absolute',
-                    left: 12,
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                  }}
-                />
-                <input
-                  type="text"
-                  placeholder="Tìm kiếm từ vựng..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '0.6rem 1rem 0.6rem 2.3rem',
-                    borderRadius: 'var(--radius-pill)',
-                    border: '1.5px solid var(--border-color)',
-                    fontSize: '0.88rem',
-                    outline: 'none',
-                    backgroundColor: '#f8fafc',
-                  }}
-                />
-              </div>
-            )}
-          </div>
+              </>
+            }
+            title="Danh Sách Từ Vựng Ôn Tập Ký Hiệu"
+            rightSlot={
+              trackedWords.length > 0 ? (
+                <div style={{ position: 'relative', width: '100%', minWidth: 260, maxWidth: 320 }}>
+                  <Search
+                    size={17}
+                    color="#64748b"
+                    style={{
+                      position: 'absolute',
+                      left: 14,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                    }}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Tìm kiếm từ vựng..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '0.68rem 1rem 0.68rem 2.45rem',
+                      borderRadius: 'var(--radius-pill)',
+                      border: '1.5px solid rgba(255, 255, 255, 0.4)',
+                      fontSize: '0.88rem',
+                      outline: 'none',
+                      color: '#0f172a',
+                      backgroundColor: '#ffffff',
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+                    }}
+                  />
+                </div>
+              ) : null
+            }
+          />
 
           {/* 4. Bảng Danh sách từ vựng kèm Mức độ nhớ & Thời gian chờ */}
           {trackedWords.length === 0 ? (
@@ -881,76 +847,46 @@ export default function ReviewView({
           ======================================================== */}
       {reviewTab === 'sentences' && (
         <div>
-          <div
-            style={{
-              backgroundColor: '#ffffff',
-              border: '1.5px solid var(--border-color)',
-              borderRadius: 'var(--radius-xl)',
-              padding: '1.5rem',
-              marginBottom: '1.25rem',
-              boxShadow: 'var(--card-shadow)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: '1rem',
-            }}
-          >
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-                <span
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.35rem',
-                    fontSize: '0.75rem',
-                    fontWeight: 800,
-                    padding: '0.2rem 0.65rem',
-                    borderRadius: 'var(--radius-pill)',
-                    backgroundColor: '#e0f2fe',
-                    color: '#0284c7',
-                  }}
-                >
-                  <MessageSquareQuote size={13} />
-                  CÂU GIAO TIẾP ĐÃ LƯU
-                </span>
-                <span style={{ fontSize: '0.85rem', color: '#64748b' }}>
-                  • {savedSentences.length} câu cần ôn luyện
-                </span>
-              </div>
-              <h2 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#1e293b', margin: 0 }}>
-                Khu Vực Ôn Tập Câu Giao Tiếp VSL
-              </h2>
-              <p style={{ fontSize: '0.88rem', color: '#64748b', marginTop: '0.25rem', marginBottom: 0 }}>
-                Rèn luyện ghép câu hoàn chỉnh theo quy tắc ngữ pháp VSL (Chủ đề – Lời dẫn, SOV) và ghi nhớ chuỗi ký hiệu.
-              </p>
-            </div>
-
-            {savedSentences.length > 0 && (
-              <div style={{ position: 'relative', width: '100%', maxWidth: 320 }}>
-                <Search
-                  size={17}
-                  color="#94a3b8"
-                  style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)' }}
-                />
-                <input
-                  type="text"
-                  placeholder="Tìm kiếm câu đã lưu..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '0.65rem 1rem 0.65rem 2.3rem',
-                    borderRadius: 'var(--radius-pill)',
-                    border: '1.5px solid var(--border-color)',
-                    fontSize: '0.88rem',
-                    outline: 'none',
-                    backgroundColor: '#f8fafc',
-                  }}
-                />
-              </div>
-            )}
-          </div>
+          <PageHeroBanner
+            style={{ marginBottom: '1.25rem' }}
+            badgeIcon={<MessageSquareQuote size={14} />}
+            badgeText="CÂU GIAO TIẾP ĐÃ LƯU"
+            badgeExtra={
+              <span style={{ opacity: 0.9 }}>
+                • {savedSentences.length} câu cần ôn luyện
+              </span>
+            }
+            title="Khu Vực Ôn Tập Câu Giao Tiếp VSL"
+            subtitle="Rèn luyện ghép câu hoàn chỉnh theo quy tắc ngữ pháp VSL (Chủ đề – Lời dẫn, SOV) và ghi nhớ chuỗi ký hiệu."
+            rightSlot={
+              savedSentences.length > 0 ? (
+                <div style={{ position: 'relative', width: '100%', minWidth: 260, maxWidth: 320 }}>
+                  <Search
+                    size={17}
+                    color="#64748b"
+                    style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)' }}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Tìm kiếm câu đã lưu..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '0.68rem 1rem 0.68rem 2.45rem',
+                      borderRadius: 'var(--radius-pill)',
+                      border: '1.5px solid rgba(255, 255, 255, 0.4)',
+                      fontSize: '0.88rem',
+                      outline: 'none',
+                      color: '#0f172a',
+                      backgroundColor: '#ffffff',
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+                    }}
+                  />
+                </div>
+              ) : null
+            }
+          />
 
           {savedSentences.length === 0 ? (
             <div
@@ -1094,24 +1030,11 @@ export default function ReviewView({
                         fontSize: '1.18rem',
                         fontWeight: 900,
                         color: '#0f172a',
-                        margin: '0 0 0.35rem 0',
+                        margin: '0 0 0.75rem 0',
                       }}
                     >
                       "{sentence.title}"
                     </h3>
-
-                    {sentence.meaning && (
-                      <p
-                        style={{
-                          fontSize: '0.82rem',
-                          color: '#64748b',
-                          margin: '0 0 0.75rem 0',
-                          lineHeight: 1.45,
-                        }}
-                      >
-                        {sentence.meaning}
-                      </p>
-                    )}
 
                     <div
                       style={{

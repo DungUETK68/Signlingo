@@ -117,6 +117,49 @@ export function resolveMediaUrl(url) {
 }
 
 /**
+ * Lấy đường dẫn video chuẩn theo 3 góc quay (Chính diện, Nghiêng trái, Nghiêng phải)
+ * Dùng chung cho tất cả các màn hình có phát video mẫu VSL
+ */
+export function resolveAngleVideoUrl(
+  wordObj,
+  angle = 'front',
+  fallbackUrl = '/vsl400_videos/cam_on_front.mp4'
+) {
+  const frontRaw =
+    wordObj?.videoFront ||
+    wordObj?.videoUrl ||
+    wordObj?.video ||
+    (wordObj?.slug ? `/vsl400_videos/${wordObj.slug}_front.mp4` : '') ||
+    fallbackUrl;
+
+  if (angle === 'left') {
+    const leftRaw =
+      wordObj?.videoLeft ||
+      (wordObj?.videoSide && wordObj.videoSide.includes('_left') ? wordObj.videoSide : '') ||
+      (frontRaw && frontRaw.includes('_front.mp4')
+        ? frontRaw.replace('_front.mp4', '_left.mp4')
+        : '') ||
+      (wordObj?.slug ? `/vsl400_videos/${wordObj.slug}_left.mp4` : '') ||
+      wordObj?.videoSide ||
+      frontRaw;
+    return resolveMediaUrl(leftRaw);
+  }
+
+  if (angle === 'right') {
+    const rightRaw =
+      wordObj?.videoRight ||
+      (frontRaw && frontRaw.includes('_front.mp4')
+        ? frontRaw.replace('_front.mp4', '_right.mp4')
+        : '') ||
+      (wordObj?.slug ? `/vsl400_videos/${wordObj.slug}_right.mp4` : '') ||
+      frontRaw;
+    return resolveMediaUrl(rightRaw);
+  }
+
+  return resolveMediaUrl(frontRaw);
+}
+
+/**
  * Khởi tạo giao diện Native Android (StatusBar, SplashScreen, class CSS safe-area)
  */
 export async function initNativeMobileUI() {

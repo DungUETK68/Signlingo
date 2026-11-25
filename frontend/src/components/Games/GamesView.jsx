@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { getAllWords } from '../../data/wordsStore';
 import { LEADERBOARD } from '../../data/mockData';
-import { progressApi, AI_API_URL, resolveMediaUrl, isNativePlatform } from '../../services/api';
+import { progressApi, AI_API_URL, resolveMediaUrl, resolveAngleVideoUrl, isNativePlatform } from '../../services/api';
 import { startSkeletonTracking, stopSkeletonTracking, extract75Landmarks } from '../../services/skeletonTracker';
 import CanvasSkeleton from '../CanvasSkeleton';
+import VideoAngleSwitcher from '../VideoAngleSwitcher';
+import PageHeroBanner from '../common/PageHeroBanner';
 import confetti from 'canvas-confetti';
 import { 
   Timer, 
@@ -69,6 +71,7 @@ export default function GamesView({ onStartPracticeWord, initialMode = 'quiz' })
   const [isAnswered, setIsAnswered] = useState(false);
   const [quizScore, setQuizScore] = useState(0);
   const [isQuizDone, setIsQuizDone] = useState(false);
+  const [quizAngle, setQuizAngle] = useState('front');
 
   // Sinh ngẫu nhiên 5 câu hỏi từ video có sẵn trong kho từ vựng
   const initQuizRound = useCallback(() => {
@@ -117,6 +120,7 @@ export default function GamesView({ onStartPracticeWord, initialMode = 'quiz' })
     setIsAnswered(false);
     setQuizScore(0);
     setIsQuizDone(false);
+    setQuizAngle('front');
   }, []);
 
   // Khởi tạo vòng đoán từ khi mở màn hình
@@ -141,6 +145,7 @@ export default function GamesView({ onStartPracticeWord, initialMode = 'quiz' })
       setQuizIdx(prev => prev + 1);
       setSelectedOpt(null);
       setIsAnswered(false);
+      setQuizAngle('front');
     } else {
       setIsQuizDone(true);
       confetti({ particleCount: 80, spread: 80 });
@@ -495,6 +500,15 @@ export default function GamesView({ onStartPracticeWord, initialMode = 'quiz' })
 
   return (
     <div>
+      {/* Hero Banner đồng bộ */}
+      <PageHeroBanner
+        style={{ marginBottom: '1.25rem' }}
+        badgeIcon={<Zap size={15} />}
+        badgeText="TRÒ CHƠI & THỬ THÁCH VSL"
+        title="Thử Thách Phản Xạ Ký Hiệu"
+        subtitle="Rèn luyện tốc độ nhận diện ký hiệu qua video và chinh phục thử thách thực hành Camera AI trong 5 giây."
+      />
+
       {/* Mode Switcher - luôn nằm trên 1 hàng ngang */}
       <div className="subtabs-scroll-row" style={{ display: 'flex', gap: '0.45rem', marginBottom: '1.25rem', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '2px' }}>
         <button
@@ -562,42 +576,52 @@ export default function GamesView({ onStartPracticeWord, initialMode = 'quiz' })
             </h3>
 
             {/* Video preview - Tự động phát lặp lại không tiếng */}
-            <div style={{
-              borderRadius: 'var(--radius-lg)',
-              overflow: 'hidden',
-              height: 320,
-              marginBottom: '1.25rem',
-              backgroundColor: '#0f172a',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              border: '1.5px solid var(--border-color)',
-              position: 'relative',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.06)'
-            }}>
-              <video
-                key={currentQuiz.videoUrl}
-                src={resolveMediaUrl(currentQuiz.videoUrl)}
-                autoPlay
-                loop
-                muted
-                playsInline
-                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-              />
-              <span style={{
-                position: 'absolute',
-                top: '0.6rem',
-                left: '0.6rem',
-                backgroundColor: 'rgba(15,23,42,0.8)',
-                color: 'white',
-                fontSize: '0.72rem',
-                fontWeight: 700,
-                padding: '0.2rem 0.6rem',
-                borderRadius: 'var(--radius-pill)'
-              }}>
-                🎥 Video Mẫu Chuẩn VSL
-              </span>
-            </div>
+            {(() => {
+              const quizVideoSrc = resolveAngleVideoUrl(currentQuiz.targetWord, quizAngle, currentQuiz.videoUrl);
+              return (
+                <div style={{ marginBottom: '1.25rem' }}>
+                  <div style={{
+                    borderRadius: 'var(--radius-lg)',
+                    overflow: 'hidden',
+                    height: 320,
+                    marginBottom: '0.6rem',
+                    backgroundColor: '#0f172a',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    border: '1.5px solid var(--border-color)',
+                    position: 'relative',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.06)'
+                  }}>
+                    <video
+                      key={quizVideoSrc}
+                      src={quizVideoSrc}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                    />
+                    <span style={{
+                      position: 'absolute',
+                      top: '0.6rem',
+                      left: '0.6rem',
+                      backgroundColor: 'rgba(15,23,42,0.8)',
+                      color: 'white',
+                      fontSize: '0.72rem',
+                      fontWeight: 700,
+                      padding: '0.2rem 0.6rem',
+                      borderRadius: 'var(--radius-pill)'
+                    }}>
+                      🎥 Video Mẫu Chuẩn VSL
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <VideoAngleSwitcher angle={quizAngle} onChange={setQuizAngle} compact />
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* 4 Big Option Buttons */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1.25rem' }}>

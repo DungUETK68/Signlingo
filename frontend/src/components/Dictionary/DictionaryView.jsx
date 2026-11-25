@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useSignWords, getAllTopics } from '../../data/wordsStore';
 import { resolveMediaUrl } from '../../services/api';
 import WordDetailModal from './WordDetailModal';
+import PageHeroBanner from '../common/PageHeroBanner';
 import { Search, Camera, Video, X, BookOpen, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const PAGE_SIZE = 30;
@@ -98,6 +99,14 @@ export default function DictionaryView({ onStartPracticeWord, onOpenLesson }) {
 
   return (
     <div>
+      {/* Hero Banner đồng bộ */}
+      <PageHeroBanner
+        badgeIcon={<BookOpen size={15} />}
+        badgeText="TỪ ĐIỂN KÝ HIỆU VSL"
+        title={`Từ Điển Ngôn Ngữ Ký Hiệu (${words.length} từ)`}
+        subtitle="Tra cứu nhanh từ vựng VSL kèm video hướng dẫn đa góc quay và thực hành chấm điểm cùng Camera AI."
+      />
+
       {/* Search Bar */}
       <div style={{ position: 'relative', marginBottom: '1rem' }}>
         <Search size={18} color="#94a3b8" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />

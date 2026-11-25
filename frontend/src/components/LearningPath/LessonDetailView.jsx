@@ -17,7 +17,8 @@ import {
   Bookmark
 } from 'lucide-react';
 import { getAllWords, useSavedLessons } from '../../data/wordsStore';
-import { progressApi, resolveMediaUrl } from '../../services/api';
+import { progressApi, resolveMediaUrl, resolveAngleVideoUrl } from '../../services/api';
+import VideoAngleSwitcher from '../VideoAngleSwitcher';
 
 export default function LessonDetailView({ lesson, topic, onBack, onStartPractice, onSelectLesson }) {
   const [speed, setSpeed] = useState(1.0);
@@ -79,20 +80,15 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
     movement: 'Thực hiện động tác dứt khoát theo video mẫu'
   };
 
-  // Lấy video chuẩn theo góc quay: chính diện (front) hoặc góc nghiêng (side / left)
+  // Lấy video chuẩn theo đủ 3 góc quay: chính diện (front), nghiêng trái (left), nghiêng phải (right)
   const currentVideo = React.useMemo(() => {
-    if (viewAngle === 'side') {
-      if (matchedWord.videoSide) return matchedWord.videoSide;
-      if (matchedWord.videoLeft) return matchedWord.videoLeft;
-      if (lesson.videoSideUrl) return lesson.videoSideUrl;
-      if (lesson.videoUrl && lesson.videoUrl.includes('_front.mp4')) {
-        return lesson.videoUrl.replace('_front.mp4', '_left.mp4');
-      }
-      return matchedWord.videoSide || matchedWord.videoLeft || matchedWord.videoFront || lesson.videoUrl || (lesson.slug ? `/vsl400_videos/${lesson.slug}_left.mp4` : '/vsl400_videos/cam_on_front.mp4');
-    }
-
-    // viewAngle === 'front'
-    return matchedWord.videoFront || lesson.videoUrl || (lesson.slug ? `/vsl400_videos/${lesson.slug}_front.mp4` : '/vsl400_videos/cam_on_front.mp4');
+    const wordObj = {
+      ...matchedWord,
+      slug: matchedWord.slug || lesson.slug,
+      videoFront: matchedWord.videoFront || lesson.videoUrl,
+      videoSide: matchedWord.videoSide || lesson.videoSideUrl,
+    };
+    return resolveAngleVideoUrl(wordObj, viewAngle);
   }, [viewAngle, matchedWord, lesson]);
 
   const isVideoFormat = currentVideo && (
@@ -383,28 +379,12 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
             </div>
           </div>
 
-          {/* View Angle Buttons */}
-          <div className="lesson-toolbar-group">
-            <span className="lesson-toolbar-label">Góc quay:</span>
-            <div className="lesson-toolbar-btns">
-              <button
-                type="button"
-                className={`btn-pill btn-sm ${viewAngle === 'front' ? 'btn-primary' : 'btn-secondary'}`}
-                style={{ padding: '0.32rem 0.75rem', fontSize: '0.78rem', whiteSpace: 'nowrap' }}
-                onClick={() => setViewAngle('front')}
-              >
-                Chính diện
-              </button>
-              <button
-                type="button"
-                className={`btn-pill btn-sm ${viewAngle === 'side' ? 'btn-primary' : 'btn-secondary'}`}
-                style={{ padding: '0.32rem 0.75rem', fontSize: '0.78rem', whiteSpace: 'nowrap' }}
-                onClick={() => setViewAngle('side')}
-              >
-                Góc nghiêng 45°
-              </button>
-            </div>
-          </div>
+          {/* View Angle Buttons (Đủ 3 góc quay: Chính diện, Nghiêng trái, Nghiêng phải) */}
+          <VideoAngleSwitcher
+            angle={viewAngle}
+            onChange={setViewAngle}
+            className="lesson-toolbar-group"
+          />
         </div>
 
         {/* Mẹo Kỹ Thuật Thực Hiện Cử Chỉ (2 Box Tinh Gọn) */}

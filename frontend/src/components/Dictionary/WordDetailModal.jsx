@@ -1,18 +1,14 @@
 import React, { useState } from 'react';
 import { X, Camera, BookOpen } from 'lucide-react';
-import { resolveMediaUrl } from '../../services/api';
+import { resolveMediaUrl, resolveAngleVideoUrl } from '../../services/api';
+import VideoAngleSwitcher from '../VideoAngleSwitcher';
 
 export default function WordDetailModal({ wordData, onClose, onStartPractice, onOpenLesson }) {
   const [viewAngle, setViewAngle] = useState('front');
 
   if (!wordData) return null;
-  
-  let currentVideo = wordData.videoFront || wordData.videoUrl;
-  if (viewAngle === 'left') {
-    currentVideo = wordData.videoLeft || wordData.videoSide || wordData.videoFront || wordData.videoUrl;
-  } else if (viewAngle === 'right') {
-    currentVideo = wordData.videoRight || wordData.videoFront || wordData.videoUrl;
-  }
+
+  const currentVideo = resolveAngleVideoUrl(wordData, viewAngle);
 
   const isVideo = currentVideo && (
     currentVideo.endsWith('.mp4') || 
@@ -73,39 +69,13 @@ export default function WordDetailModal({ wordData, onClose, onStartPractice, on
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '0.4rem',
-            flexWrap: 'wrap',
             backgroundColor: '#f8fafc',
             border: '1px solid var(--border-color)',
             padding: '0.45rem 0.65rem',
             borderRadius: 'var(--radius-lg)',
             marginBottom: '1rem'
           }}>
-            <span style={{ fontSize: '0.76rem', fontWeight: 700, color: '#64748b', marginRight: '0.15rem' }}>Góc quay:</span>
-            <button
-              type="button"
-              className={`btn-pill btn-sm ${viewAngle === 'front' ? 'btn-primary' : 'btn-secondary'}`}
-              style={{ padding: '0.28rem 0.7rem', fontSize: '0.76rem', fontWeight: 700 }}
-              onClick={() => setViewAngle('front')}
-            >
-              Chính diện
-            </button>
-            <button
-              type="button"
-              className={`btn-pill btn-sm ${viewAngle === 'left' ? 'btn-primary' : 'btn-secondary'}`}
-              style={{ padding: '0.28rem 0.7rem', fontSize: '0.76rem', fontWeight: 700 }}
-              onClick={() => setViewAngle('left')}
-            >
-              Góc trái
-            </button>
-            <button
-              type="button"
-              className={`btn-pill btn-sm ${viewAngle === 'right' ? 'btn-primary' : 'btn-secondary'}`}
-              style={{ padding: '0.28rem 0.7rem', fontSize: '0.76rem', fontWeight: 700 }}
-              onClick={() => setViewAngle('right')}
-            >
-              Góc phải
-            </button>
+            <VideoAngleSwitcher angle={viewAngle} onChange={setViewAngle} compact />
           </div>
 
           {/* Quick instructions (1 short line) */}

@@ -13,14 +13,13 @@ import {
   EyeOff,
   Award,
   Clock,
-  ChevronDown,
-  ChevronUp,
   Check,
   RefreshCw,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import CanvasSkeleton from '../CanvasSkeleton';
 import MemoryDistributionCard from './MemoryDistributionCard';
+import VideoAngleSwitcher from '../VideoAngleSwitcher';
 import {
   startSkeletonTracking,
   stopSkeletonTracking,
@@ -29,7 +28,7 @@ import {
 import {
   AI_API_URL,
   progressApi,
-  resolveMediaUrl,
+  resolveAngleVideoUrl,
   isNativePlatform,
 } from '../../services/api';
 import {
@@ -70,7 +69,7 @@ export default function SpacedReviewSessionView({
   const [badJoints, setBadJoints] = useState([]);
   const [failedAttemptsOnWord, setFailedAttemptsOnWord] = useState(0);
   const [showSampleHint, setShowSampleHint] = useState(false);
-  const [showDistributionPanel, setShowDistributionPanel] = useState(true);
+  const [hintAngle, setHintAngle] = useState('front');
   const [isSubmittingChoice, setIsSubmittingChoice] = useState(false);
   const [sessionHistory, setSessionHistory] = useState([]);
 
@@ -364,6 +363,7 @@ export default function SpacedReviewSessionView({
         setBadJoints([]);
         setFailedAttemptsOnWord(0);
         setShowSampleHint(false);
+        setHintAngle('front');
         phaseRef.current = 'ready';
         setPhase('ready');
       } else {
@@ -556,27 +556,6 @@ export default function SpacedReviewSessionView({
         </button>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
-          <button
-            type="button"
-            onClick={() => setShowDistributionPanel((prev) => !prev)}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.3rem',
-              padding: '0.35rem 0.75rem',
-              borderRadius: 'var(--radius-pill)',
-              border: '1px solid #cbd5e1',
-              backgroundColor: '#ffffff',
-              color: '#334155',
-              fontSize: '0.78rem',
-              fontWeight: 700,
-              cursor: 'pointer',
-            }}
-          >
-            <span>{showDistributionPanel ? 'Ẩn Phân bổ ghi nhớ' : 'Xem Phân bổ ghi nhớ'}</span>
-            {showDistributionPanel ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-          </button>
-
           <span
             style={{
               fontSize: '0.82rem',
@@ -613,10 +592,7 @@ export default function SpacedReviewSessionView({
         />
       </div>
 
-      {/* 2. Bảng Phân bổ ghi nhớ 6 mức độ (VstepOwl style) ngay trên màn hình Ôn ngay */}
-      {showDistributionPanel && <MemoryDistributionCard stats={stats} />}
-
-      {/* 3. Thẻ Từ Vựng Thử Thách & Thực Hiện Cử Chỉ Camera AI */}
+      {/* 2. Thẻ Từ Vựng Thử Thách & Thực Hiện Cử Chỉ Camera AI */}
       <div className="mini-card" style={{ padding: '1.25rem' }}>
         {/* Huy hiệu mức nhớ hiện tại -> mức tiếp theo */}
         <div
@@ -726,33 +702,39 @@ export default function SpacedReviewSessionView({
           </div>
         </div>
 
-        {/* Video mẫu gợi ý (chỉ hiện khi người học bấm xem) */}
-        {showSampleHint && (
-          <div
-            style={{
-              borderRadius: 'var(--radius-lg)',
-              overflow: 'hidden',
-              backgroundColor: '#0f172a',
-              maxHeight: 230,
-              marginBottom: '1rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              border: '1.5px solid #bae6fd',
-            }}
-          >
-            <video
-              key={currentItem?.videoFront}
-              src={resolveMediaUrl(currentItem?.videoFront)}
-              controls
-              autoPlay
-              loop
-              muted
-              playsInline
-              style={{ width: '100%', maxHeight: 230, objectFit: 'contain' }}
-            />
-          </div>
-        )}
+        {/* Video mẫu gợi ý đủ 3 góc quay (chỉ hiện khi người học bấm xem) */}
+        {showSampleHint && (() => {
+          const hintSrc = resolveAngleVideoUrl(currentItem, hintAngle);
+          return (
+            <div style={{ marginBottom: '1rem' }}>
+              <div
+                style={{
+                  borderRadius: 'var(--radius-lg)',
+                  overflow: 'hidden',
+                  backgroundColor: '#0f172a',
+                  maxHeight: 230,
+                  marginBottom: '0.5rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1.5px solid #bae6fd',
+                }}
+              >
+                <video
+                  key={hintSrc}
+                  src={hintSrc}
+                  controls
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  style={{ width: '100%', maxHeight: 230, objectFit: 'contain' }}
+                />
+              </div>
+              <VideoAngleSwitcher angle={hintAngle} onChange={setHintAngle} compact />
+            </div>
+          );
+        })()}
 
         {/* KHUNG CAMERA AI & KHUNG XƯƠNG THỜI GIAN THỰC */}
         <div
