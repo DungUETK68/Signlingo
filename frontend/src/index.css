@@ -1183,3 +1183,93 @@ body.native-mobile-app textarea {
     gap: 0.65rem;
   }
 }
+
+/* ========================================================
+   SINGLE-ROW SUB-TABS BAR (DESKTOP & MOBILE ANDROID)
+   ======================================================== */
+.subtabs-scroll-row {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.subtabs-scroll-row::-webkit-scrollbar {
+  display: none;
+}
+
+.review-subtabs {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 0;
+  overflow-x: auto;
+}
+
+.review-subtab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.65rem 1.15rem;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  background-color: transparent;
+  color: #64748b;
+  font-size: 0.96rem;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.review-subtab-btn.active {
+  border-bottom-color: #0284c7;
+  color: #0284c7;
+}
+
+.review-subtab-count {
+  font-size: 0.74rem;
+  padding: 0.12rem 0.5rem;
+  border-radius: var(--radius-pill);
+  font-weight: 800;
+}
+
+.review-subtab-due {
+  font-size: 0.68rem;
+  padding: 0.12rem 0.48rem;
+  border-radius: var(--radius-pill);
+  background-color: #ef4444;
+  color: #ffffff;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .review-subtabs {
+    gap: 0.2rem;
+    margin-bottom: 1rem;
+  }
+
+  .review-subtab-btn {
+    padding: 0.55rem 0.6rem;
+    gap: 0.3rem;
+    font-size: 0.84rem;
+  }
+
+  .review-subtab-count {
+    font-size: 0.68rem;
+    padding: 0.08rem 0.4rem;
+  }
+
+  .review-subtab-due {
+    font-size: 0.64rem;
+    padding: 0.08rem 0.4rem;
+  }
+}

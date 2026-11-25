@@ -495,11 +495,12 @@ export default function GamesView({ onStartPracticeWord, initialMode = 'quiz' })
 
   return (
     <div>
-      {/* Mode Switcher */}
-      <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '1.25rem' }}>
+      {/* Mode Switcher - luôn nằm trên 1 hàng ngang */}
+      <div className="subtabs-scroll-row" style={{ display: 'flex', gap: '0.45rem', marginBottom: '1.25rem', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '2px' }}>
         <button
           className={`btn-pill btn-sm ${mode === 'quiz' ? 'btn-primary' : 'btn-secondary'}`}
           onClick={() => setMode('quiz')}
+          style={{ whiteSpace: 'nowrap', flexShrink: 0 }}
         >
           <HelpCircle size={15} />
           <span>Đoán từ qua Video</span>
@@ -507,6 +508,7 @@ export default function GamesView({ onStartPracticeWord, initialMode = 'quiz' })
         <button
           className={`btn-pill btn-sm ${mode === 'reflex' ? 'btn-primary' : 'btn-secondary'}`}
           onClick={() => setMode('reflex')}
+          style={{ whiteSpace: 'nowrap', flexShrink: 0 }}
         >
           <Zap size={15} />
           <span>Thử thách 5s (Camera)</span>
@@ -514,6 +516,7 @@ export default function GamesView({ onStartPracticeWord, initialMode = 'quiz' })
         <button
           className={`btn-pill btn-sm ${mode === 'leaderboard' ? 'btn-primary' : 'btn-secondary'}`}
           onClick={() => setMode('leaderboard')}
+          style={{ whiteSpace: 'nowrap', flexShrink: 0 }}
         >
           <Trophy size={15} />
           <span>Xếp hạng</span>

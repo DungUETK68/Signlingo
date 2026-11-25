@@ -168,64 +168,29 @@ export default function ReviewView({
         paddingBottom: '3rem',
       }}
     >
-      {/* 0. Thanh điều hướng phân chia 2 phân hệ: Ôn tập từ vựng & Ôn tập câu */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.75rem',
-          marginBottom: '1.25rem',
-          borderBottom: '2px solid #e2e8f0',
-          paddingBottom: '0.25rem',
-          flexWrap: 'wrap',
-        }}
-      >
+      {/* 0. Thanh điều hướng phân chia 2 phân hệ: Ôn tập từ vựng & Ôn tập câu (luôn nằm trên 1 hàng ngang) */}
+      <div className="review-subtabs subtabs-scroll-row">
         <button
           onClick={() => {
             setReviewTab('vocab');
             setSearchQuery('');
           }}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            padding: '0.65rem 1.25rem',
-            border: 'none',
-            borderBottom:
-              reviewTab === 'vocab' ? '3px solid #0284c7' : '3px solid transparent',
-            marginBottom: -4,
-            backgroundColor: 'transparent',
-            color: reviewTab === 'vocab' ? '#0284c7' : '#64748b',
-            fontSize: '1rem',
-            fontWeight: 800,
-            cursor: 'pointer',
-            transition: 'all 0.15s ease',
-          }}
+          className={`review-subtab-btn ${reviewTab === 'vocab' ? 'active' : ''}`}
         >
-          <BookOpen size={19} />
+          <BookOpen size={17} style={{ flexShrink: 0 }} />
           <span>Ôn tập từ vựng</span>
           <span
+            className="review-subtab-count"
             style={{
-              fontSize: '0.75rem',
-              padding: '0.15rem 0.55rem',
-              borderRadius: 'var(--radius-pill)',
               backgroundColor: reviewTab === 'vocab' ? '#e0f2fe' : '#f1f5f9',
               color: reviewTab === 'vocab' ? '#0284c7' : '#64748b',
-              fontWeight: 800,
             }}
           >
             {trackedWords.length}
           </span>
           {stats.dueCount > 0 && (
             <span
-              style={{
-                fontSize: '0.7rem',
-                padding: '0.12rem 0.5rem',
-                borderRadius: 'var(--radius-pill)',
-                backgroundColor: '#ef4444',
-                color: '#ffffff',
-                fontWeight: 800,
-              }}
+              className="review-subtab-due"
               title="Số từ đã đến hạn cần ôn"
             >
               {stats.dueCount} cần ôn
@@ -238,35 +203,15 @@ export default function ReviewView({
             setReviewTab('sentences');
             setSearchQuery('');
           }}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            padding: '0.65rem 1.25rem',
-            border: 'none',
-            borderBottom:
-              reviewTab === 'sentences'
-                ? '3px solid #0284c7'
-                : '3px solid transparent',
-            marginBottom: -4,
-            backgroundColor: 'transparent',
-            color: reviewTab === 'sentences' ? '#0284c7' : '#64748b',
-            fontSize: '1rem',
-            fontWeight: 800,
-            cursor: 'pointer',
-            transition: 'all 0.15s ease',
-          }}
+          className={`review-subtab-btn ${reviewTab === 'sentences' ? 'active' : ''}`}
         >
-          <MessageSquareQuote size={19} />
+          <MessageSquareQuote size={17} style={{ flexShrink: 0 }} />
           <span>Ôn tập câu</span>
           <span
+            className="review-subtab-count"
             style={{
-              fontSize: '0.75rem',
-              padding: '0.15rem 0.55rem',
-              borderRadius: 'var(--radius-pill)',
               backgroundColor: reviewTab === 'sentences' ? '#e0f2fe' : '#f1f5f9',
               color: reviewTab === 'sentences' ? '#0284c7' : '#64748b',
-              fontWeight: 800,
             }}
           >
             {savedSentences.length}
@@ -665,10 +610,10 @@ export default function ReviewView({
                                 : '1px solid #f1f5f9',
                           }}
                         >
-                          <td style={{ padding: '0.95rem 1.15rem' }}>
+                          <td style={{ padding: '0.9rem 1.15rem', whiteSpace: 'nowrap' }}>
                             <div
                               style={{
-                                fontSize: '1.02rem',
+                                fontSize: '1rem',
                                 fontWeight: 800,
                                 color: '#1e293b',
                               }}
@@ -677,13 +622,12 @@ export default function ReviewView({
                             </div>
                             <div
                               style={{
-                                fontSize: '0.76rem',
+                                fontSize: '0.74rem',
                                 color: '#64748b',
                                 marginTop: 2,
                               }}
                             >
                               {item.topicTitle || 'Từ vựng VSL'}
-                              {item.description ? ` • ${item.description}` : ''}
                             </div>
                           </td>
 

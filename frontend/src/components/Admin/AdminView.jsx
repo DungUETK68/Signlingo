@@ -289,8 +289,8 @@ export default function AdminView() {
         </div>
       )}
 
-      {/* Admin Tab buttons */}
-      <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '1.25rem', overflowX: 'auto', paddingBottom: '2px' }}>
+      {/* Admin Tab buttons - luôn trên 1 hàng ngang */}
+      <div className="subtabs-scroll-row" style={{ display: 'flex', gap: '0.4rem', marginBottom: '1.25rem', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '2px' }}>
         {[
           { id: 'words', label: 'Quản lý Từ vựng', icon: Database },
           { id: 'contributions', label: 'Đóng góp từ vựng', icon: HeartHandshake, badge: pendingContributionsCount },
@@ -304,7 +304,7 @@ export default function AdminView() {
               key={t.id}
               className={`btn-pill btn-sm ${tab === t.id ? 'btn-primary' : 'btn-secondary'}`}
               onClick={() => setTab(t.id)}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', whiteSpace: 'nowrap' }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', whiteSpace: 'nowrap', flexShrink: 0 }}
             >
               <Icon size={14} />
               <span>{t.label}</span>

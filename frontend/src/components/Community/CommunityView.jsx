@@ -286,12 +286,12 @@ export default function CommunityView({ isAdmin = false }) {
         </div>
       </div>
 
-      {/* Sub Tabs Bar */}
-      <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '1.25rem', overflowX: 'auto', paddingBottom: '2px' }}>
+      {/* Sub Tabs Bar - luôn nằm trên 1 hàng ngang */}
+      <div className="subtabs-scroll-row" style={{ display: 'flex', gap: '0.4rem', marginBottom: '1.25rem', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '2px' }}>
         <button
           className={`btn-pill btn-sm ${activeSubTab === 'explore' ? 'btn-primary' : 'btn-secondary'}`}
           onClick={() => setActiveSubTab('explore')}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', whiteSpace: 'nowrap' }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', whiteSpace: 'nowrap', flexShrink: 0 }}
         >
           <Sparkles size={14} />
           <span>Khám phá & Bình chọn ({communityWords.length})</span>
@@ -300,7 +300,7 @@ export default function CommunityView({ isAdmin = false }) {
         <button
           className={`btn-pill btn-sm ${activeSubTab === 'my' ? 'btn-primary' : 'btn-secondary'}`}
           onClick={() => setActiveSubTab('my')}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', whiteSpace: 'nowrap' }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', whiteSpace: 'nowrap', flexShrink: 0 }}
         >
           <Clock size={14} />
           <span>Từ của tôi ({myWords.length})</span>
@@ -316,6 +316,7 @@ export default function CommunityView({ isAdmin = false }) {
               alignItems: 'center',
               gap: '0.45rem',
               whiteSpace: 'nowrap',
+              flexShrink: 0,
               backgroundColor: activeSubTab === 'admin_review' ? undefined : '#fef2f2',
               color: activeSubTab === 'admin_review' ? undefined : '#b91c1c',
               borderColor: activeSubTab === 'admin_review' ? undefined : '#fecaca',

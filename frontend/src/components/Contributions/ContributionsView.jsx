@@ -299,8 +299,8 @@ export default function ContributionsView() {
           flexWrap: 'wrap',
           gap: '1rem'
         }}>
-          {/* Tabs Trạng thái */}
-          <div style={{ display: 'flex', gap: '0.4rem', overflowX: 'auto', paddingBottom: '2px' }}>
+          {/* Tabs Trạng thái - luôn trên 1 hàng ngang */}
+          <div className="subtabs-scroll-row" style={{ display: 'flex', gap: '0.4rem', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '2px' }}>
             {[
               { id: 'all', label: `Tất cả (${stats.total})` },
               { id: 'PENDING', label: `Chờ duyệt (${stats.pending})` },
@@ -313,7 +313,8 @@ export default function ContributionsView() {
                 style={{
                   fontSize: '0.82rem',
                   padding: '0.4rem 0.85rem',
-                  whiteSpace: 'nowrap'
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0
                 }}
                 onClick={() => setStatusFilter(tab.id)}
               >
