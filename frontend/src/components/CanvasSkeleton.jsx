@@ -123,7 +123,7 @@ export default function CanvasSkeleton({
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
+    const ctx = canvas.getContext('2d', { alpha: true });
     let animationId;
     let frame = 0;
     let lastTimestamp = performance.now();

@@ -53,7 +53,7 @@ function getInferenceInput(videoEl, useMobileDownscale) {
 
   if (!inferenceCanvas) {
     inferenceCanvas = document.createElement('canvas');
-    inferenceCtx = inferenceCanvas.getContext('2d', { alpha: false, desynchronized: true });
+    inferenceCtx = inferenceCanvas.getContext('2d', { alpha: false });
   }
   if (inferenceCanvas.width !== targetW || inferenceCanvas.height !== targetH) {
     inferenceCanvas.width = targetW;

@@ -116,11 +116,11 @@ export default function SpacedReviewSessionView({
       stream = await navigator.mediaDevices.getUserMedia({
         video: isMobileCam
           ? {
-              width: { ideal: 480 },
-              height: { ideal: 360 },
-              frameRate: { ideal: 30, max: 30 },
-              facingMode: 'user',
-            }
+            width: { ideal: 480 },
+            height: { ideal: 360 },
+            frameRate: { ideal: 30, max: 30 },
+            facingMode: 'user',
+          }
           : { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' },
         audio: false,
       });
@@ -179,7 +179,7 @@ export default function SpacedReviewSessionView({
     if (videoEl && cameraStream) {
       videoEl.srcObject = cameraStream;
       videoEl.onloadedmetadata = () => {
-        videoEl.play().catch(() => {});
+        videoEl.play().catch(() => { });
       };
     }
   }, [cameraStream]);
@@ -775,11 +775,14 @@ export default function SpacedReviewSessionView({
             playsInline
             muted
             style={{
+              position: 'absolute',
+              inset: 0,
               width: '100%',
               height: '100%',
               objectFit: 'cover',
               transform: 'scaleX(-1)',
-              display: cameraStatus === 'active' ? 'block' : 'none',
+              opacity: cameraStatus === 'active' ? 1 : 0,
+              pointerEvents: 'none',
             }}
           />
 
