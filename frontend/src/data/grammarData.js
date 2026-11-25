@@ -1,16 +1,16 @@
-// Signlingo - Dữ liệu Lý thuyết Ngữ pháp Ngôn ngữ Ký hiệu Việt Nam (VSL)
+// Signlingo - Dữ liệu Lý thuyết Ngữ pháp Ngôn ngữ Ký hiệu Việt Nam
 // Căn cứ theo tài liệu nghiên cứu: 'MỘT SỐ ĐẶC TRƯNG NGỮ PHÁP CỦA NGÔN NGỮ KÍ HIỆU'
 
 export const VSL_GRAMMAR_RULES = [
   {
     id: 'rule-sov',
     order: 1,
-    title: 'Cấu trúc câu: "Chủ đề – Lời dẫn" & SOV',
-    shortDesc: 'Trật tự Chủ ngữ + Bổ ngữ (Sự vật) + Động từ (Hành động)',
-    tag: 'Cấu trúc cốt lõi',
+    title: 'Cấu trúc câu: "Chủ đề - Lời dẫn" & SOV',
+    shortDesc: 'Chủ ngữ + Bổ ngữ + Động từ',
+    tag: 'Cấu trúc câu',
     badgeColor: '#0284c7',
     iconName: 'Layers',
-    summary: 'Trong VSL, sự vật/chủ đề chính luôn được làm ký hiệu trước để định vị không gian, sau đó mới thực hiện hành động hoặc lời dẫn giải.',
+    summary: 'Trong NNKH, sự vật/chủ đề chính luôn được làm ký hiệu trước để định vị không gian, sau đó mới thực hiện hành động hoặc lời dẫn giải.',
     spokenExample: {
       text: 'Tôi thích màu đỏ',
       breakdown: ['Tôi (Chủ ngữ)', 'thích (Động từ)', 'màu đỏ (Bổ ngữ)'],
@@ -21,9 +21,9 @@ export const VSL_GRAMMAR_RULES = [
       breakdown: ['Tôi (Chủ đề)', 'Màu đỏ (Sự vật/Bổ ngữ)', 'Thích (Động từ/Lời dẫn)'],
       type: 'SOV (Chủ - Bổ - Động)'
     },
-    deepDive: `Đặc điểm đặc trưng nhất của Ngôn ngữ Ký hiệu Việt Nam là nguyên lý "Chủ đề – Lời dẫn". Khi giao tiếp, người điếc trước hết phải kiến tạo "chủ đề" (sự vật, con người, món ăn, sự việc cụ thể) trong trường không gian thị giác của người đối diện. Sau khi hình ảnh sự vật đã rõ ràng, họ mới đưa ra "lời dẫn" (nhận xét, trạng thái, hành động tương tác với sự vật đó).
+    deepDive: `Đặc điểm đặc trưng nhất của Ngôn ngữ Ký hiệu Việt Nam là nguyên lý "Chủ đề - Lời dẫn". Khi giao tiếp, người điếc trước hết phải kiến tạo "chủ đề" (sự vật, con người, món ăn, sự việc cụ thể) trong trường không gian thị giác của người đối diện. Sau khi hình ảnh sự vật đã rõ ràng, họ mới đưa ra "lời dẫn" (nhận xét, trạng thái, hành động tương tác với sự vật đó).
 
-Chính vì vậy, cấu trúc câu đơn giản trong VSL luôn tuân theo trật tự:
+Chính vì vậy, cấu trúc câu đơn giản luôn tuân theo trật tự:
 👉 Chủ ngữ + Bổ ngữ + Động từ (SOV), hoàn toàn khác với tiếng Việt nói (SVO: Chủ ngữ + Động từ + Bổ ngữ).`,
     sampleSentenceSlugs: ['em-thich-mau-do', 'anh-an-pho', 'hoc-sinh-doc-sach', 'em-an-banh-bao'],
     tips: [
@@ -39,7 +39,7 @@ Chính vì vậy, cấu trúc câu đơn giản trong VSL luôn tuân theo trậ
     tag: 'Trật tự cụm từ',
     badgeColor: '#059669',
     iconName: 'Hash',
-    summary: 'Khác với tiếng nói (Số từ + Danh từ), VSL luôn làm ký hiệu Danh từ trước rồi mới xòe ngón tay thể hiện Số lượng sau.',
+    summary: 'Khác với tiếng nói (Số từ + Danh từ), NNKH luôn làm ký hiệu Danh từ trước rồi mới xòe ngón tay thể hiện Số lượng sau.',
     spokenExample: {
       text: '4 sinh viên',
       breakdown: ['4 (Số từ)', 'sinh viên (Danh từ)'],
@@ -53,9 +53,9 @@ Chính vì vậy, cấu trúc câu đơn giản trong VSL luôn tuân theo trậ
     deepDive: `Trong tư duy thị giác, việc xòe số 4 ra trước sẽ vô nghĩa nếu người xem chưa biết "4 cái gì". Người khiếm thính cần biết đối tượng là ai (người, xe, quả cam, sinh viên...), sau đó mới đếm số lượng của đối tượng đó.
 
 Tương tự:
-- Tiếng Việt nói: "2 quả chuối" ➔ VSL: "Quả chuối / 2".
-- Tiếng Việt nói: "3 quyển sách" ➔ VSL: "Sách / 3".
-- Tiếng Việt nói: "1 chiếc ô tô" ➔ VSL: "Ô tô / 1".`,
+- Tiếng Việt nói: "2 quả chuối" ➔ NNKH: "Quả chuối / 2".
+- Tiếng Việt nói: "3 quyển sách" ➔ NNKH: "Sách / 3".
+- Tiếng Việt nói: "1 chiếc ô tô" ➔ NNKH: "Ô tô / 1".`,
     sampleSentenceSlugs: ['hoc-sinh-doc-sach', 'sinh-vien-viet-sach'],
     tips: [
       'Quy tắc này áp dụng cho hầu hết các danh từ đếm được trong sinh hoạt thường nhật.',
@@ -65,12 +65,12 @@ Tương tự:
   {
     id: 'rule-compound',
     order: 3,
-    title: 'Quy tắc Từ ghép (Compound Signs)',
+    title: 'Quy tắc Từ ghép',
     shortDesc: 'Lắp ghép liên hoàn các ký hiệu đơn lẻ tạo nghĩa mới',
     tag: 'Cấu tạo từ',
     badgeColor: '#7c3aed',
     iconName: 'Boxes',
-    summary: 'Rất nhiều khái niệm mới và từ ghép trong VSL được hình thành bằng cách lắp ghép tuần tự hai hoặc nhiều ký hiệu riêng lẻ.',
+    summary: 'Rất nhiều khái niệm mới và từ ghép được hình thành bằng cách lắp ghép tuần tự hai hoặc nhiều ký hiệu riêng lẻ.',
     spokenExample: {
       text: 'Hoa hồng, Uống sữa, Bác sĩ',
       breakdown: ['Hoa + Hồng (Từ ghép)', 'Uống + Sữa (Cụm động từ)'],
@@ -97,7 +97,7 @@ Các ví dụ điển hình trong bộ từ điển VSL400:
   {
     id: 'rule-question',
     order: 4,
-    title: 'Cấu trúc Câu hỏi & Ngữ điệu cơ thể (NMMs)',
+    title: 'Cấu trúc Câu hỏi & Ngữ điệu cơ thể',
     shortDesc: 'Từ để hỏi ở Cuối câu & Biểu cảm nét mặt là chìa khóa',
     tag: 'Câu nghi vấn',
     badgeColor: '#ea580c',
@@ -113,7 +113,7 @@ Các ví dụ điển hình trong bộ từ điển VSL400:
       breakdown: ['Chủ đề sự việc trước', 'Từ nghi vấn (Tại sao) ở CUỐI CÂU', 'Biểu cảm rướn người nhướng mày'],
       type: 'Từ để hỏi cuối câu + NMMs'
     },
-    deepDive: `Trong VSL, trật tự câu hỏi và câu tường thuật có cùng bản chất: Yếu tố chủ đề làm trước, lời dẫn làm sau.
+    deepDive: `Trong NNKH, trật tự câu hỏi và câu tường thuật có cùng bản chất: Yếu tố chủ đề làm trước, lời dẫn làm sau.
 Phân biệt hai dạng câu hỏi:
 1. Câu hỏi Có/Không (Yes/No):
 Trật tự từ không đổi. Biểu cảm cơ thể (Non-manual markers) là yếu tố quyết định: hơi rướn đầu về trước, nhướng hai cung mày, mở to mắt và nhìn thẳng vào người đối diện.
@@ -121,8 +121,8 @@ Ví dụ: "Bác có khỏe không?" ➔ Làm ký hiệu "Bác + Khỏe" kết h�
 
 2. Câu hỏi mở (Wh-questions: Tại sao, Thế nào, Bao nhiêu, Khi nào, Ai):
 Từ nghi vấn LUÔN ĐẶT Ở CUỐI CÂU:
-- Nói: "Tại sao bạn đi học muộn?" ➔ VSL: "Bạn / Đi học / Muộn / Tại sao?"
-- Nói: "Bạn có bao nhiêu tiền?" ➔ VSL: "Bạn / Tiền / Bao nhiêu?"`,
+- Nói: "Tại sao bạn đi học muộn?" ➔ NNKH: "Bạn / Đi học / Muộn / Tại sao?"
+- Nói: "Bạn có bao nhiêu tiền?" ➔ NNKH: "Bạn / Tiền / Bao nhiêu?"`,
     sampleSentenceSlugs: ['bac-khoe'],
     tips: [
       'Nét mặt (NMMs) mang giá trị ngữ pháp tương đương dấu chấm hỏi (?) trong văn viết.',
@@ -137,7 +137,7 @@ Từ nghi vấn LUÔN ĐẶT Ở CUỐI CÂU:
     tag: 'Phủ định',
     badgeColor: '#dc2626',
     iconName: 'XCircle',
-    summary: 'Ngược với tiếng nói đặt "không" trước động từ, VSL nêu toàn bộ sự việc trước rồi mới chốt lại bằng từ phủ định và cái lắc đầu.',
+    summary: 'Ngược với tiếng nói đặt "không" trước động từ, NNKH nêu toàn bộ sự việc trước rồi mới chốt lại bằng từ phủ định và cái lắc đầu.',
     spokenExample: {
       text: 'Anh từ chối uống rượu. Em không nên uống bia.',
       breakdown: ['từ chối (trước hành động uống)', 'không nên (trước uống bia)'],
@@ -150,7 +150,7 @@ Từ nghi vấn LUÔN ĐẶT Ở CUỐI CÂU:
     },
     deepDive: `Người khiếm thính cần nắm bắt trọn vẹn "bức tranh sự việc đang được đề cập" (ví dụ: hành vi uống rượu, việc đi học, việc uống thuốc), rồi sau đó mới đón nhận thông tin phán xét: Sự việc ấy Có hay Không, Đồng ý hay Từ chối.
 
-Các dạng phủ định trong VSL:
+Các dạng phủ định trong NNKH:
 1. Đặt ký hiệu phủ định chuyên biệt ở cuối: "từ chối", "không nên", "không cần", "không quen".
 2. Đồng thời kết hợp lắc đầu nhẹ nhàng hoặc dứt khoát khi thực hiện ký hiệu phủ định để tăng sức thuyết phục.`,
     sampleSentenceSlugs: ['anh-tu-choi-uong-ruou', 'em-khong-nen-uong-bia', 'em-khong-quen-lam-bai-tap'],
@@ -167,7 +167,7 @@ Các dạng phủ định trong VSL:
     tag: 'Tính từ & Miêu tả',
     badgeColor: '#0891b2',
     iconName: 'Smile',
-    summary: 'Tiếng Việt dùng từ láy và phó từ (rất, nóng nực, mát mẻ). VSL chỉ dùng ký hiệu gốc (Nóng, Mát) và biểu cảm nét mặt.',
+    summary: 'Tiếng Việt dùng từ láy và phó từ (rất, nóng nực, mát mẻ). NNKH chỉ dùng ký hiệu gốc (Nóng, Mát) và biểu cảm nét mặt.',
     spokenExample: {
       text: 'Thời tiết mùa hè rất nóng bức. Bánh xèo rất ngon miệng.',
       breakdown: ['rất nóng bức (từ láy + phó từ)', 'rất ngon miệng'],
@@ -183,7 +183,7 @@ Các dạng phủ định trong VSL:
 Trong ngôn ngữ ký hiệu:
 - Người điếc chỉ sử dụng DUY NHẤT một ký hiệu gốc (ví dụ: Màu đỏ, Nóng, Mát, Lạnh).
 - Mức độ "rất", "cực kỳ" hay các sắc thái tinh tế của từ láy được chuyển tải 100% bằng:
-  1. Biểu cảm khuôn mặt (Non-manual markers): cau trán, mở to mắt, cười rạng rỡ, phồng má...
+  1. Biểu cảm khuôn mặt: cau trán, mở to mắt, cười rạng rỡ, phồng má...
   2. Tốc độ cử chỉ: Cử chỉ vung nhanh, dứt khoát thể hiện mức độ mạnh.
   3. Biên độ và độ căng của cơ tay: Động tác siết chặt hoặc mở rộng hết cỡ.`,
     sampleSentenceSlugs: ['mua-he-thoi-tiet-nong', 'banh-xeo-rat-ngon-mieng', 'bac-si-tot-bung'],
@@ -195,7 +195,7 @@ Trong ngôn ngữ ký hiệu:
   {
     id: 'rule-directional-verbs',
     order: 7,
-    title: 'Động từ chuyển động có hướng (Directional Verbs)',
+    title: 'Động từ chuyển động có hướng',
     shortDesc: 'Hướng chuyển động của bàn tay chỉ rõ Chủ thể và Đối tượng nhận',
     tag: 'Không gian 3D',
     badgeColor: '#4f46e5',
@@ -234,7 +234,7 @@ Nhờ quy tắc này, người điếc không cần thực hiện thêm các đ�
     tag: 'Tối ưu tốc độ',
     badgeColor: '#0d9488',
     iconName: 'Zap',
-    summary: 'VSL loại bỏ triệt để các trợ từ/hư từ không mang hình ảnh, đồng thời kết hợp hai tay để cùng lúc truyền tải 2 dữ liệu.',
+    summary: 'NNKH loại bỏ triệt để các trợ từ/hư từ không mang hình ảnh, đồng thời kết hợp hai tay để cùng lúc truyền tải 2 dữ liệu.',
     spokenExample: {
       text: 'Em đang học ở trường học. Buổi sáng em thức dậy.',
       breakdown: ['đang, ở (hư từ nối)', 'thức dậy vào buổi sáng'],
@@ -255,7 +255,7 @@ Người điếc coi trọng tính kinh tế của ký hiệu (Sign Economy):
 3. Kết hợp hai tay đồng thời: Tay trái có thể giữ cố định vị trí của sự vật trong khi tay phải tiếp tục làm ký hiệu miêu tả hành động liên quan.`,
     sampleSentenceSlugs: ['em-hoc-o-truong-hoc', 'buoi-sang-em-thuc-day', 'buoi-toi-bo-xem-tivi', 'chu-nhat-em-di-cong-vien'],
     tips: [
-      'Đừng cố tìm ký hiệu cho các từ "ở", "là", "bằng" – việc bỏ qua chúng là hoàn toàn đúng ngữ pháp VSL!',
+      'Đừng cố tìm ký hiệu cho các từ "ở", "là", "bằng" - việc bỏ qua chúng là hoàn toàn đúng ngữ pháp!',
       'Đặt yếu tố thời gian ở vị trí đầu tiên của câu ký hiệu.'
     ]
   }
@@ -265,25 +265,25 @@ Người điếc coi trọng tính kinh tế của ký hiệu (Sign Economy):
 export const VSL_GRAMMAR_QUIZ = [
   {
     id: 'q1',
-    question: 'Trong câu đơn giản của Ngôn ngữ Ký hiệu Việt Nam (VSL), trật tự các thành phần câu là gì?',
+    question: 'Trong câu đơn giản của Ngôn ngữ Ký hiệu Việt Nam, trật tự các thành phần câu là gì?',
     options: [
       { id: 'A', text: 'Chủ ngữ + Động từ + Bổ ngữ (SVO) giống hệt tiếng Việt nói', isCorrect: false },
-      { id: 'B', text: 'Chủ ngữ + Bổ ngữ + Động từ (SOV) theo nguyên lý Chủ đề – Lời dẫn', isCorrect: true },
+      { id: 'B', text: 'Chủ ngữ + Bổ ngữ + Động từ (SOV) theo nguyên lý Chủ đề - Lời dẫn', isCorrect: true },
       { id: 'C', text: 'Động từ + Chủ ngữ + Bổ ngữ (VSO)', isCorrect: false },
       { id: 'D', text: 'Bổ ngữ + Động từ + Chủ ngữ (OVS)', isCorrect: false }
     ],
-    explanation: 'Chính xác! VSL tuân thủ cấu trúc SOV: Chủ ngữ + Bổ ngữ (sự vật/chủ đề) + Động từ (hành động/lời dẫn).'
+    explanation: 'Chính xác! NNKH tuân thủ cấu trúc SOV: Chủ ngữ + Bổ ngữ (sự vật/chủ đề) + Động từ (hành động/lời dẫn).'
   },
   {
     id: 'q2',
-    question: 'Khi biểu đạt cụm từ "4 sinh viên" trong VSL, người điếc sẽ thực hiện theo thứ tự nào?',
+    question: 'Khi biểu đạt cụm từ "4 sinh viên", người điếc sẽ thực hiện theo thứ tự nào?',
     options: [
       { id: 'A', text: 'Sinh viên trước, Số 4 sau (Danh từ + Số từ)', isCorrect: true },
       { id: 'B', text: 'Số 4 trước, Sinh viên sau (Số từ + Danh từ)', isCorrect: false },
       { id: 'C', text: 'Chỉ làm số 4, không cần làm sinh viên', isCorrect: false },
       { id: 'D', text: 'Làm đồng thời cả 2 từ cùng lúc', isCorrect: false }
     ],
-    explanation: 'Đúng! Cấu trúc cụm từ trong VSL là Danh từ + Số từ để xác định rõ đối tượng trong không gian trước khi định lượng.'
+    explanation: 'Đúng! Cấu trúc cụm từ trong NNKH là Danh từ + Số từ để xác định rõ đối tượng trong không gian trước khi định lượng.'
   },
   {
     id: 'q3',
@@ -294,17 +294,17 @@ export const VSL_GRAMMAR_QUIZ = [
       { id: 'C', text: 'Luôn luôn đặt ở CUỐI CÂU', isCorrect: true },
       { id: 'D', text: 'Không cần làm ký hiệu từ để hỏi, chỉ cần nét mặt', isCorrect: false }
     ],
-    explanation: 'Rất chính xác! Trong VSL, yếu tố sự việc được làm trước, từ nghi vấn luôn được đưa về CUỐI CÂU (ví dụ: Bạn / Đi học / Muộn / Tại sao?).'
+    explanation: 'Rất chính xác! Trong NNKH, yếu tố sự việc được làm trước, từ nghi vấn luôn được đưa về CUỐI CÂU (ví dụ: Bạn / Đi học / Muộn / Tại sao?).'
   },
   {
     id: 'q4',
-    question: 'Khi nói câu "Thời tiết mùa hè rất nóng", trong VSL từ "rất" được biểu đạt như thế nào?',
+    question: 'Khi nói câu "Thời tiết mùa hè rất nóng", trong NNKH từ "rất" được biểu đạt như thế nào?',
     options: [
       { id: 'A', text: 'Làm thêm một ký hiệu riêng biệt mang nghĩa "Rất"', isCorrect: false },
       { id: 'B', text: 'Lược bỏ từ "rất", mức độ được biểu cảm qua nét mặt (NMMs) và cường độ động tác', isCorrect: true },
       { id: 'C', text: 'Lặp lại ký hiệu Nóng 3 lần liên tục', isCorrect: false },
-      { id: 'D', text: 'Không được biểu đạt mức độ vì VSL không có tính từ', isCorrect: false }
+      { id: 'D', text: 'Không được biểu đạt mức độ vì NNKH không có tính từ', isCorrect: false }
     ],
-    explanation: 'Tuyệt vời! VSL không dùng hư từ chỉ mức độ ("rất", "quá") mà sử dụng biểu cảm nét mặt (nhíu mày, thở hắt) và độ dứt khoát của cơ thể.'
+    explanation: 'Tuyệt vời! NNKH không dùng hư từ chỉ mức độ ("rất", "quá") mà sử dụng biểu cảm nét mặt (nhíu mày, thở hắt) và độ dứt khoát của cơ thể.'
   }
 ];

@@ -128,89 +128,47 @@ export default function CanvasSkeleton({
     let frame = 0;
     let lastTimestamp = performance.now();
 
-    // Tính danh sách các khớp bị đánh dấu lỗi
-    const effectiveBadJoints = [...(badJoints || [])];
-    if (hasError) {
-      if (errorJoint === 'thumb') effectiveBadJoints.push(1, 2, 3, 4);
-      if (errorJoint === 'wrist') effectiveBadJoints.push(0);
-      if (errorJoint === 'elbow') effectiveBadJoints.push(13, 14);
-    }
-    const badJointSet = new Set(effectiveBadJoints);
     const GRACE_MS = 160; // Giữ khung xương 160ms nếu mất tín hiệu chớp nhoáng 1 frame khi vung tay nhanh
 
     const drawHandLandmarks = (hand) => {
       if (!hand || hand.length === 0) return;
 
-      // 1. Vẽ gom lô (Batched) toàn bộ xương đúng (xanh lá) trong 1 lần stroke
+      // 1. Vẽ gom lô (Batched) toàn bộ xương bàn tay màu xanh lá
       ctx.lineWidth = 3;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
 
       ctx.beginPath();
-      let hasGoodBone = false;
+      let hasBone = false;
       for (let i = 0; i < HAND_CONNECTIONS.length; i++) {
         const [startIdx, endIdx] = HAND_CONNECTIONS[i];
         const p1 = hand[startIdx];
         const p2 = hand[endIdx];
         if (!p1 || !p2) continue;
-        if (!badJointSet.has(startIdx) && !badJointSet.has(endIdx)) {
-          ctx.moveTo(p1.x * width, p1.y * height);
-          ctx.lineTo(p2.x * width, p2.y * height);
-          hasGoodBone = true;
-        }
+        ctx.moveTo(p1.x * width, p1.y * height);
+        ctx.lineTo(p2.x * width, p2.y * height);
+        hasBone = true;
       }
-      if (hasGoodBone) {
+      if (hasBone) {
         ctx.strokeStyle = '#10b981';
         ctx.stroke();
       }
 
-      // 2. Vẽ gom lô toàn bộ xương lỗi (đỏ) nếu có
-      if (badJointSet.size > 0) {
-        ctx.beginPath();
-        let hasBadBone = false;
-        for (let i = 0; i < HAND_CONNECTIONS.length; i++) {
-          const [startIdx, endIdx] = HAND_CONNECTIONS[i];
-          const p1 = hand[startIdx];
-          const p2 = hand[endIdx];
-          if (!p1 || !p2) continue;
-          if (badJointSet.has(startIdx) || badJointSet.has(endIdx)) {
-            ctx.moveTo(p1.x * width, p1.y * height);
-            ctx.lineTo(p2.x * width, p2.y * height);
-            hasBadBone = true;
-          }
-        }
-        if (hasBadBone) {
-          ctx.strokeStyle = '#ef4444';
-          ctx.stroke();
-        }
-      }
-
-      // 3. Vẽ điểm mốc (Joints) sắc nét
+      // 2. Vẽ điểm mốc (Joints) sắc nét đồng nhất màu xanh lá
       ctx.lineWidth = 1.5;
       for (let idx = 0; idx < hand.length; idx++) {
         const lm = hand[idx];
         if (!lm) continue;
         const x = lm.x * width;
         const y = lm.y * height;
-        const isBad = badJointSet.has(idx);
-        const radius = isBad ? 6 : FINGERTIP_INDICES.has(idx) ? 5 : 3.5;
+        const radius = FINGERTIP_INDICES.has(idx) ? 5 : 3.5;
 
         ctx.beginPath();
         ctx.arc(x, y, radius, 0, Math.PI * 2);
-        ctx.fillStyle = isBad ? '#ef4444' : '#22c55e';
+        ctx.fillStyle = '#22c55e';
         ctx.fill();
         ctx.strokeStyle = '#ffffff';
         ctx.stroke();
-
-        // Hiệu ứng sóng đỏ nhấp nháy tại khớp lỗi
-        if (isBad) {
-          ctx.beginPath();
-          ctx.arc(x, y, 9 + Math.sin(frame * 0.25) * 4, 0, Math.PI * 2);
-          ctx.strokeStyle = 'rgba(239, 68, 68, 0.7)';
-          ctx.lineWidth = 1.8;
-          ctx.stroke();
-          ctx.lineWidth = 1.5;
-        }
       }
     };
 
@@ -313,13 +271,13 @@ export default function CanvasSkeleton({
         const leftElbow = { x: width * 0.26, y: height * 0.62 + sway };
         const leftWrist = { x: width * 0.35, y: height * 0.72 + Math.cos(t) * 4 };
 
-        const rightElbow = { 
-          x: width * 0.72, 
-          y: height * 0.58 + (hasError && errorJoint === 'elbow' ? 25 : 0) 
+        const rightElbow = {
+          x: width * 0.72,
+          y: height * 0.58
         };
-        const rightWrist = { 
-          x: width * 0.58 + Math.sin(t * 0.8) * 8, 
-          y: height * 0.52 + (hasError && errorJoint === 'wrist' ? 35 : 0) 
+        const rightWrist = {
+          x: width * 0.58 + Math.sin(t * 0.8) * 8,
+          y: height * 0.52
         };
 
         ctx.lineWidth = 2.5;
@@ -337,10 +295,10 @@ export default function CanvasSkeleton({
         ctx.lineTo(rightWrist.x, rightWrist.y);
         ctx.stroke();
 
-        [head, leftShoulder, rightShoulder, leftElbow, rightElbow, leftWrist, rightWrist].forEach((pt, idx) => {
+        [head, leftShoulder, rightShoulder, leftElbow, rightElbow, leftWrist, rightWrist].forEach((pt) => {
           ctx.beginPath();
           ctx.arc(pt.x, pt.y, 5, 0, Math.PI * 2);
-          ctx.fillStyle = (hasError && idx === 4) ? '#ef4444' : '#22c55e';
+          ctx.fillStyle = '#22c55e';
           ctx.fill();
           ctx.strokeStyle = '#ffffff';
           ctx.lineWidth = 1.5;
@@ -350,28 +308,27 @@ export default function CanvasSkeleton({
         const handBaseX = rightWrist.x;
         const handBaseY = rightWrist.y;
         const scale = 0.8;
-        const thumbErr = hasError && errorJoint === 'thumb';
 
         const mockFingers = [
-          [{ dx: -12 * scale, dy: -12 * scale }, { dx: -34 * scale * (thumbErr ? 0.6 : 1), dy: -38 * scale }],
+          [{ dx: -12 * scale, dy: -12 * scale }, { dx: -34 * scale, dy: -38 * scale }],
           [{ dx: -8 * scale, dy: -30 * scale }, { dx: -14 * scale, dy: -68 * scale }],
           [{ dx: 4 * scale, dy: -32 * scale }, { dx: 7 * scale, dy: -74 * scale }],
           [{ dx: 16 * scale, dy: -30 * scale }, { dx: 26 * scale, dy: -68 * scale }],
           [{ dx: 26 * scale, dy: -22 * scale }, { dx: 42 * scale, dy: -52 * scale }]
         ];
 
-        mockFingers.forEach((finger, fIdx) => {
+        mockFingers.forEach((finger) => {
           ctx.beginPath();
           ctx.moveTo(handBaseX, handBaseY);
           finger.forEach(pt => ctx.lineTo(handBaseX + pt.dx, handBaseY + pt.dy));
-          ctx.strokeStyle = (fIdx === 0 && thumbErr) ? '#ef4444' : '#22c55e';
+          ctx.strokeStyle = '#22c55e';
           ctx.lineWidth = 2.5;
           ctx.stroke();
 
-          finger.forEach((pt, pIdx) => {
+          finger.forEach((pt) => {
             ctx.beginPath();
             ctx.arc(handBaseX + pt.dx, handBaseY + pt.dy, 4, 0, Math.PI * 2);
-            ctx.fillStyle = (fIdx === 0 && thumbErr && pIdx === 1) ? '#ef4444' : '#22c55e';
+            ctx.fillStyle = '#22c55e';
             ctx.fill();
             ctx.strokeStyle = '#ffffff';
             ctx.lineWidth = 1;
@@ -388,7 +345,7 @@ export default function CanvasSkeleton({
     return () => {
       cancelAnimationFrame(animationId);
     };
-  }, [width, height, hasError, errorJoint, badJoints, accuracy, isRecording]);
+  }, [width, height, accuracy, isRecording]);
 
   return (
     <canvas 

@@ -1,16 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { 
-  ArrowLeft, 
-  Camera, 
-  Play, 
-  RotateCcw, 
-  Video, 
-  CheckCircle2, 
-  Sparkles, 
-  Layers, 
-  Gauge, 
-  ChevronRight, 
+import {
+  ArrowLeft,
+  Camera,
+  Play,
+  RotateCcw,
+  Video,
+  CheckCircle2,
+  Sparkles,
+  Layers,
+  Gauge,
+  ChevronRight,
   ChevronLeft,
   Star,
   BookOpen,
@@ -42,11 +42,11 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
           startedNow: true,
         });
       })
-      .catch(() => {});
+      .catch(() => { });
     try {
       await progressApi.completeLesson(lesson.id || lesson.slug || lesson.title, 100);
       window.dispatchEvent(new CustomEvent('signlingo_data_updated', { detail: { action: 'complete_lesson', lessonId: lesson.id } }));
-    } catch (e) {}
+    } catch (e) { }
   };
 
   if (!lesson || !topic) return null;
@@ -60,13 +60,13 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
     .trim();
 
   // Tìm kiếm từ vựng tương ứng trong từ điển hoặc từ mới thêm
-  const matchedWord = allWords.find(w => 
+  const matchedWord = allWords.find(w =>
     (lesson.wordId && w.id === lesson.wordId) ||
     (lesson.slug && w.slug === lesson.slug) ||
     (lesson.word && w.word.toLowerCase() === lesson.word.toLowerCase()) ||
     (cleanWordTarget && w.word.toLowerCase() === cleanWordTarget.toLowerCase()) ||
     (lesson.title && w.word.toLowerCase() === lesson.title.toLowerCase())
-  ) || allWords.find(w => 
+  ) || allWords.find(w =>
     cleanWordTarget && (
       w.word.toLowerCase().includes(cleanWordTarget.toLowerCase()) ||
       cleanWordTarget.toLowerCase().includes(w.word.toLowerCase())
@@ -92,8 +92,8 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
   }, [viewAngle, matchedWord, lesson]);
 
   const isVideoFormat = currentVideo && (
-    currentVideo.endsWith('.mp4') || 
-    currentVideo.endsWith('.webm') || 
+    currentVideo.endsWith('.mp4') ||
+    currentVideo.endsWith('.webm') ||
     currentVideo.startsWith('blob:') ||
     currentVideo.startsWith('/uploads/') ||
     currentVideo.startsWith('/vsl400_videos/')
@@ -157,16 +157,6 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
         {/* Badges & Meta */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span style={{
-              fontSize: '0.75rem',
-              fontWeight: 800,
-              padding: '0.2rem 0.65rem',
-              borderRadius: 'var(--radius-pill)',
-              backgroundColor: '#e0f2fe',
-              color: '#0369a1'
-            }}>
-              {topic.level}
-            </span>
             <span style={{
               fontSize: '0.75rem',
               fontWeight: 700,
@@ -253,10 +243,10 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
               }}
               title={isSaved(lesson.id, lesson.title) ? 'Bấm để bỏ lưu bài học' : 'Lưu bài học để vào mục Ôn tập'}
             >
-              <Bookmark 
-                size={18} 
-                fill={isSaved(lesson.id, lesson.title) ? '#0284c7' : 'none'} 
-                color={isSaved(lesson.id, lesson.title) ? '#0284c7' : '#64748b'} 
+              <Bookmark
+                size={18}
+                fill={isSaved(lesson.id, lesson.title) ? '#0284c7' : 'none'}
+                color={isSaved(lesson.id, lesson.title) ? '#0284c7' : '#64748b'}
               />
               <span>{isSaved(lesson.id, lesson.title) ? 'Đã lưu' : 'Lưu'}</span>
             </button>
@@ -303,10 +293,10 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
           justifyContent: 'center'
         }}>
           {isVideoFormat ? (
-            <video 
+            <video
               key={currentVideo}
               ref={videoPlayerRef}
-              src={resolveMediaUrl(currentVideo)} 
+              src={resolveMediaUrl(currentVideo)}
               controls
               autoPlay
               loop
@@ -314,8 +304,8 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
               style={{ width: '100%', height: '100%', objectFit: 'contain' }}
             />
           ) : (
-            <img 
-              src={resolveMediaUrl(currentVideo)} 
+            <img
+              src={resolveMediaUrl(currentVideo)}
               alt={lesson.title}
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />

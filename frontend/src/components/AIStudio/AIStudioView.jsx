@@ -66,8 +66,6 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
   const [statusMessage, setStatusMessage] = useState("Quan sát video mẫu bên trái, sau đó bấm 'Luyện tập ngay'");
   const [evalResult, setEvalResult] = useState(null);
   const [dtwScore, setDtwScore] = useState(null);
-  const [hasError, setHasError] = useState(false);
-  const [errorType, setErrorType] = useState('thumb');
   const [isReplaying, setIsReplaying] = useState(false);
 
   // Video thực hành tạm thời (Lưu trữ in-memory trong RAM browser, KHÔNG lưu vào dự án/server)
@@ -114,19 +112,19 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
     const rawSearch = (selectedWord || '').trim();
     const cleanSearch = rawSearch
       .replace(/^Ký hiệu\s*["“]?/i, '')
-      .replace(/["”]?\s*(chuẩn VSL|chân thành|ngọt ngào)?$/i, '')
+      .replace(/["”]?\s*(chân thành|ngọt ngào)?$/i, '')
       .trim();
     const allWords = getAllWords();
 
     // 1. Khớp chính xác theo tên từ vựng
-    let found = allWords.find(w => 
-      w.word.toLowerCase() === rawSearch.toLowerCase() || 
+    let found = allWords.find(w =>
+      w.word.toLowerCase() === rawSearch.toLowerCase() ||
       w.word.toLowerCase() === cleanSearch.toLowerCase()
     );
     if (found) return found;
 
     // 2. Khớp theo slug
-    found = allWords.find(w => 
+    found = allWords.find(w =>
       (w.slug && w.slug.toLowerCase() === cleanSearch.toLowerCase()) ||
       (w.slug && w.slug.toLowerCase() === rawSearch.toLowerCase())
     );
@@ -153,10 +151,10 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
 
   const isVideoAvailable = React.useMemo(() => {
     const src = currentWordObj.videoFront || '';
-    return src.endsWith('.mp4') || 
-      src.endsWith('.webm') || 
-      src.includes('/vsl400_videos/') || 
-      src.startsWith('blob:') || 
+    return src.endsWith('.mp4') ||
+      src.endsWith('.webm') ||
+      src.includes('/vsl400_videos/') ||
+      src.startsWith('blob:') ||
       src.startsWith('/uploads/');
   }, [currentWordObj]);
 
@@ -373,7 +371,7 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
           mimeType = MediaRecorder.isTypeSupported('video/webm') ? 'video/webm' : '';
         }
         const recorder = new MediaRecorder(activeStream, mimeType ? { mimeType } : {});
-        
+
         recorder.ondataavailable = (event) => {
           if (event.data && event.data.size > 0) {
             recordedChunksRef.current.push(event.data);
@@ -424,7 +422,7 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
             .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
             .replace(/đ/g, 'd').replace(/Đ/g, 'd')
             .replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '')
-          : 'cam_on'
+            : 'cam_on'
         );
         const endpoint = `${AI_API_URL}/evaluate/${wordSlug}`;
 
@@ -447,30 +445,25 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
 
         // Nếu backend chưa kết nối hoặc chưa nhận đủ frame thực tế, sử dụng fallback thông minh
         if (!data) {
-          const simulatedPassed = !hasError;
-          const score = hasError ? Math.floor(Math.random() * 12 + 63) : Math.floor(Math.random() * 8 + 89);
+          const score = Math.floor(Math.random() * 8 + 89);
           data = {
             overall_score: score,
-            passed: simulatedPassed,
-            dtw_score: hasError ? 66.0 : 92.5,
-            angle_score: hasError ? 65.0 : 92.0,
-            position_score: hasError ? 68.0 : 90.0,
+            passed: true,
+            dtw_score: 92.5,
+            angle_score: 92.0,
+            position_score: 90.0,
             user_action_start_sec: 0.52,
             ref_action_start_sec: 0.44,
             time_offset_sec: 0.08,
             finger_details: {
-              "Ngón cái": hasError && errorType === 'thumb' ? 62.0 : 94.0,
+              "Ngón cái": 94.0,
               "Ngón trỏ": 91.0,
               "Ngón giữa": 93.0,
               "Ngón áp út": 89.0,
               "Ngón út": 90.0
             },
-            bad_joints: hasError ? (errorType === 'thumb' ? [1, 2, 3, 4] : [0]) : [],
-            feedbacks: hasError
-              ? (errorType === 'thumb'
-                ? ['Ngón cái chưa mở rộng đủ góc độ', 'Vị trí tay hơi thấp so với video mẫu']
-                : ['Độ cao bàn tay đang thấp hơn ngực'])
-              : ['Rất tốt! Cử chỉ chuẩn xác và đúng nhịp độ.']
+            bad_joints: [],
+            feedbacks: ['Rất tốt! Cử chỉ chuẩn xác và đúng nhịp độ.']
           };
         }
 
@@ -501,7 +494,7 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
 
         if (data.passed) {
           // Tự động ghi nhận hoàn thành bài học vào CSDL và thưởng XP
-          progressApi.completeLesson(wordSlug, Math.round(data.overall_score)).catch(() => {});
+          progressApi.completeLesson(wordSlug, Math.round(data.overall_score)).catch(() => { });
           window.dispatchEvent(new CustomEvent('signlingo_data_updated', { detail: { action: 'complete_lesson', slug: wordSlug } }));
 
           setStatusMessage("✅ Đã hoàn tất chấm điểm! Bạn đã ĐẠT yêu cầu (≥ 80%).");
@@ -514,27 +507,25 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
         console.error("Lỗi gọi API Backend:", error);
         setStatusMessage("❌ Không thể kết nối tới Backend FastAPI (cổng 8000). Đang dùng chế độ chấm điểm dự phòng.");
         // Chế độ mô phỏng offline
-        const simulatedScore = hasError ? 64 : 91;
+        const simulatedScore = 91;
         const fakeData = {
           overall_score: simulatedScore,
-          passed: !hasError,
-          dtw_score: hasError ? 65.0 : 91.0,
-          angle_score: hasError ? 62.0 : 92.0,
-          position_score: hasError ? 66.0 : 90.0,
+          passed: true,
+          dtw_score: 91.0,
+          angle_score: 92.0,
+          position_score: 90.0,
           user_action_start_sec: 0.6,
           ref_action_start_sec: 0.44,
           time_offset_sec: 0.16,
           finger_details: {
-            "Ngón cái": hasError ? 60.0 : 92.0,
+            "Ngón cái": 92.0,
             "Ngón trỏ": 90.0,
             "Ngón giữa": 91.0,
             "Ngón áp út": 89.0,
             "Ngón út": 90.0
           },
-          bad_joints: hasError ? [1, 2, 3, 4] : [],
-          feedbacks: hasError
-            ? ['Góc gập ngón cái chưa chuẩn xác']
-            : ['Động tác rất chuẩn xác!']
+          bad_joints: [],
+          feedbacks: ['Động tác rất chuẩn xác!']
         };
         setEvalResult(fakeData);
         setDtwScore(simulatedScore);
@@ -560,12 +551,12 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
       if (sVid) {
         sVid.currentTime = refStart;
         sVid.playbackRate = replaySpeed;
-        sVid.play().catch(() => {});
+        sVid.play().catch(() => { });
       }
       if (uVid) {
         uVid.currentTime = userStart;
         uVid.playbackRate = replaySpeed;
-        uVid.play().catch(() => {});
+        uVid.play().catch(() => { });
       }
     };
 
@@ -646,25 +637,6 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
               ))}
             </select>
           )}
-
-          {/* Test thử lỗi */}
-          <label style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.35rem',
-            fontSize: '0.8rem',
-            color: '#64748b',
-            cursor: 'pointer',
-            userSelect: 'none'
-          }}>
-            <input
-              type="checkbox"
-              checked={hasError}
-              onChange={(e) => setHasError(e.target.checked)}
-              style={{ accentColor: '#ef4444' }}
-            />
-            <span>Thử khớp lỗi (Đỏ)</span>
-          </label>
 
           {/* Nút Bật / Tắt camera */}
           <button
@@ -807,10 +779,7 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
               height: '26px'
             }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#10b981' }}></span>Đúng
-              </span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#ef4444' }}></span>Sai tư thế
+                <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#10b981' }}></span>Đang nhận diện
               </span>
             </div>
           </div>
@@ -851,9 +820,6 @@ export default function AIStudioView({ initialWord = 'Cảm ơn', targetWord, on
                 <CanvasSkeleton
                   width={640}
                   height={480}
-                  hasError={hasError}
-                  errorJoint={errorType}
-                  badJoints={badJoints}
                   accuracy={evalResult ? evalResult.overall_score : 95}
                   isRecording={isRecording}
                   showGuides={true}

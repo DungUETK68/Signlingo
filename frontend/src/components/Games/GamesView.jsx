@@ -5,7 +5,6 @@ import { progressApi, AI_API_URL, resolveMediaUrl, resolveAngleVideoUrl, isNativ
 import { startSkeletonTracking, stopSkeletonTracking, extract75Landmarks } from '../../services/skeletonTracker';
 import CanvasSkeleton from '../CanvasSkeleton';
 import VideoAngleSwitcher from '../VideoAngleSwitcher';
-import PageHeroBanner from '../common/PageHeroBanner';
 import confetti from 'canvas-confetti';
 import { 
   Timer, 
@@ -500,15 +499,6 @@ export default function GamesView({ onStartPracticeWord, initialMode = 'quiz' })
 
   return (
     <div>
-      {/* Hero Banner đồng bộ */}
-      <PageHeroBanner
-        style={{ marginBottom: '1.25rem' }}
-        badgeIcon={<Zap size={15} />}
-        badgeText="TRÒ CHƠI & THỬ THÁCH VSL"
-        title="Thử Thách Phản Xạ Ký Hiệu"
-        subtitle="Rèn luyện tốc độ nhận diện ký hiệu qua video và chinh phục thử thách thực hành Camera AI trong 5 giây."
-      />
-
       {/* Mode Switcher - luôn nằm trên 1 hàng ngang */}
       <div className="subtabs-scroll-row" style={{ display: 'flex', gap: '0.45rem', marginBottom: '1.25rem', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '2px' }}>
         <button

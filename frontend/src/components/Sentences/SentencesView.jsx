@@ -187,9 +187,9 @@ export default function SentencesView({ onStartPracticeWord, initialSentenceId =
       {/* 1. Header Trang */}
       <PageHeroBanner
         badgeIcon={<MessageSquareQuote size={15} />}
-        badgeText="CÂU GIAO TIẾP THỰC TẾ VSL"
-        title={`Câu Thường Gặp trong VSL (${sentencesList.length} câu)`}
-        subtitle="Học cách biểu diễn các câu giao tiếp thực tế theo chuẩn cấu trúc Chủ đề – Lời dẫn, trật tự SOV, và lược bỏ hư từ trong Ngôn ngữ Ký hiệu Việt Nam."
+        badgeText="CÂU GIAO TIẾP THỰC TẾ"
+        title={`Câu Thường Gặp (${sentencesList.length} câu)`}
+        subtitle="Học cách biểu diễn các câu giao tiếp thực tế theo chuẩn cấu trúc ngữ pháp trong Ngôn ngữ Ký hiệu Việt Nam."
       />
 
       {/* 2. Bộ lọc Chủ đề & Thanh tìm kiếm */}

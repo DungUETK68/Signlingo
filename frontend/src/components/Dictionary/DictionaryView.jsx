@@ -26,11 +26,11 @@ export default function DictionaryView({ onStartPracticeWord, onOpenLesson }) {
     if (!onOpenLesson) return;
     const allTopics = getAllTopics();
     const targetTopic = allTopics.find(t => t.id === word.topic) || allTopics[0];
-    
+
     let matchedLesson = targetTopic?.lessons?.find(
       l => l.title.toLowerCase() === word.word.toLowerCase() || l.id === word.id
     );
-    
+
     if (!matchedLesson) {
       matchedLesson = {
         id: `lesson-${word.id}`,
@@ -44,7 +44,7 @@ export default function DictionaryView({ onStartPracticeWord, onOpenLesson }) {
         videoUrl: word.videoFront || word.videoUrl
       };
     }
-    
+
     onOpenLesson(matchedLesson, targetTopic);
   };
 
@@ -65,7 +65,7 @@ export default function DictionaryView({ onStartPracticeWord, onOpenLesson }) {
 
   // Tính toán phân trang
   const totalPages = Math.max(1, Math.ceil(filteredWords.length / PAGE_SIZE));
-  
+
   // Đảm bảo currentPage hợp lệ
   const safeCurrentPage = Math.min(Math.max(1, currentPage), totalPages);
 
@@ -102,9 +102,9 @@ export default function DictionaryView({ onStartPracticeWord, onOpenLesson }) {
       {/* Hero Banner đồng bộ */}
       <PageHeroBanner
         badgeIcon={<BookOpen size={15} />}
-        badgeText="TỪ ĐIỂN KÝ HIỆU VSL"
+        badgeText="TỪ ĐIỂN KÝ HIỆU"
         title={`Từ Điển Ngôn Ngữ Ký Hiệu (${words.length} từ)`}
-        subtitle="Tra cứu nhanh từ vựng VSL kèm video hướng dẫn đa góc quay và thực hành chấm điểm cùng Camera AI."
+        subtitle="Tra cứu nhanh từ vựng kèm video hướng dẫn đa góc quay và thực hành chấm điểm cùng Camera AI."
       />
 
       {/* Search Bar */}
@@ -198,7 +198,7 @@ export default function DictionaryView({ onStartPracticeWord, onOpenLesson }) {
               style={{ padding: '0.75rem', cursor: 'pointer', display: 'flex', flexDirection: 'column' }}
             >
               {/* Thumbnail: Frame đầu tiên của video */}
-              <div 
+              <div
                 style={{
                   position: 'relative',
                   borderRadius: 'var(--radius-md)',
@@ -250,7 +250,7 @@ export default function DictionaryView({ onStartPracticeWord, onOpenLesson }) {
               {/* Tên từ vựng & Chủ đề */}
               <div style={{ marginTop: '0.2rem', marginBottom: '0.65rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '0.35rem' }}>
-                  <h4 
+                  <h4
                     style={{
                       fontSize: '1.12rem',
                       fontWeight: 800,

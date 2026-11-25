@@ -349,15 +349,21 @@ export default function ReviewView({
             />
           )}
 
-          {/* 3. Header Danh sách Từ vựng đã lưu & Thanh tìm kiếm */}
-          <PageHeroBanner
-            style={{ marginBottom: '1.25rem' }}
-            badgeIcon={<BookmarkCheck size={14} />}
-            badgeText="TỪ VỰNG ĐÃ LƯU & ĐANG HỌC"
-            badgeExtra={
-              <>
-                <span style={{ opacity: 0.9 }}>
-                  • {filteredWords.length} / {trackedWords.length} từ hiển thị
+          {/* 3. Thanh tìm kiếm và lọc nhanh (không dùng banner) */}
+          {(trackedWords.length > 0 || selectedMemoryFilter !== null) && (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '0.75rem',
+                marginBottom: '1rem',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '0.84rem', fontWeight: 700, color: '#64748b' }}>
+                  Hiển thị {filteredWords.length} / {trackedWords.length} từ
                 </span>
                 {selectedMemoryFilter !== null && (
                   <button
@@ -367,38 +373,36 @@ export default function ReviewView({
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '0.25rem',
-                      padding: '0.14rem 0.55rem',
+                      padding: '0.22rem 0.65rem',
                       borderRadius: 'var(--radius-pill)',
-                      border: 'none',
-                      backgroundColor: '#ffffff',
+                      border: '1px solid #bae6fd',
+                      backgroundColor: '#e0f2fe',
                       color: '#0284c7',
-                      fontSize: '0.72rem',
+                      fontSize: '0.76rem',
                       fontWeight: 800,
                       cursor: 'pointer',
                     }}
                   >
-                    <Filter size={11} />
+                    <Filter size={12} />
                     <span>
                       Bỏ lọc:{' '}
                       {selectedMemoryFilter === 'hard'
                         ? 'Khó nhớ'
                         : MEMORY_LEVELS[selectedMemoryFilter]?.title}
                     </span>
-                    <X size={12} />
+                    <X size={13} />
                   </button>
                 )}
-              </>
-            }
-            title="Danh Sách Từ Vựng Ôn Tập Ký Hiệu"
-            rightSlot={
-              trackedWords.length > 0 ? (
-                <div style={{ position: 'relative', width: '100%', minWidth: 260, maxWidth: 320 }}>
+              </div>
+
+              {trackedWords.length > 0 && (
+                <div style={{ position: 'relative', width: '100%', maxWidth: 320 }}>
                   <Search
-                    size={17}
-                    color="#64748b"
+                    size={16}
+                    color="#94a3b8"
                     style={{
                       position: 'absolute',
-                      left: 14,
+                      left: 13,
                       top: '50%',
                       transform: 'translateY(-50%)',
                     }}
@@ -410,20 +414,19 @@ export default function ReviewView({
                     onChange={(e) => setSearchQuery(e.target.value)}
                     style={{
                       width: '100%',
-                      padding: '0.68rem 1rem 0.68rem 2.45rem',
+                      padding: '0.58rem 1rem 0.58rem 2.3rem',
                       borderRadius: 'var(--radius-pill)',
-                      border: '1.5px solid rgba(255, 255, 255, 0.4)',
-                      fontSize: '0.88rem',
+                      border: '1.5px solid var(--border-color)',
+                      fontSize: '0.86rem',
                       outline: 'none',
                       color: '#0f172a',
                       backgroundColor: '#ffffff',
-                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
                     }}
                   />
                 </div>
-              ) : null
-            }
-          />
+              )}
+            </div>
+          )}
 
           {/* 4. Bảng Danh sách từ vựng kèm Mức độ nhớ & Thời gian chờ */}
           {trackedWords.length === 0 ? (
@@ -856,8 +859,8 @@ export default function ReviewView({
                 • {savedSentences.length} câu cần ôn luyện
               </span>
             }
-            title="Khu Vực Ôn Tập Câu Giao Tiếp VSL"
-            subtitle="Rèn luyện ghép câu hoàn chỉnh theo quy tắc ngữ pháp VSL (Chủ đề – Lời dẫn, SOV) và ghi nhớ chuỗi ký hiệu."
+            title="Ôn Tập Câu Giao Tiếp"
+            subtitle="Rèn luyện ghép câu hoàn chỉnh theo quy tắc ngữ pháp và ghi nhớ chuỗi ký hiệu."
             rightSlot={
               savedSentences.length > 0 ? (
                 <div style={{ position: 'relative', width: '100%', minWidth: 260, maxWidth: 320 }}>

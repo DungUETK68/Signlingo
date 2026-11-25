@@ -2,18 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useSignWords } from '../../data/wordsStore';
 import LessonDetailView from './LessonDetailView';
 import PageHeroBanner from '../common/PageHeroBanner';
-import { 
-  Check, 
-  Play, 
-  Lock, 
-  Sparkles, 
-  RotateCcw, 
-  Clock, 
-  Star, 
-  ChevronRight, 
-  BookOpen, 
-  Award, 
-  GraduationCap, 
+import {
+  Check,
+  Play,
+  Lock,
+  Sparkles,
+  RotateCcw,
+  Clock,
+  Star,
+  ChevronRight,
+  BookOpen,
+  Award,
+  GraduationCap,
   MessageSquareQuote,
   ArrowLeft,
   Camera,
@@ -24,9 +24,9 @@ import {
   FileText
 } from 'lucide-react';
 
-export default function LearningPathView({ 
-  onStartPracticeWord, 
-  initialLesson = null, 
+export default function LearningPathView({
+  onStartPracticeWord,
+  initialLesson = null,
   initialTopic = null,
   onClearInitialLesson,
   onOpenSentenceDetail,
@@ -37,7 +37,7 @@ export default function LearningPathView({
   const [selectedTopicForView, setSelectedTopicForView] = useState(null);
   const [activeLesson, setActiveLesson] = useState(initialLesson || null);
   const [activeTopic, setActiveTopic] = useState(initialTopic || null);
-  
+
   // Bộ lọc bên trong chuyên đề đang mở
   const [topicSearchQuery, setTopicSearchQuery] = useState('');
   const [lessonTypeFilter, setLessonTypeFilter] = useState('all'); // 'all' | 'grammar' | 'word' | 'sentence'
@@ -52,8 +52,8 @@ export default function LearningPathView({
         setSelectedTopicForView(initialTopic);
       } else {
         const found = topics.find(
-          t => t.id === initialLesson.topicId || 
-               (t.lessons && t.lessons.some(l => l.id === initialLesson.id || l.title === initialLesson.title || l.slug === initialLesson.slug))
+          t => t.id === initialLesson.topicId ||
+            (t.lessons && t.lessons.some(l => l.id === initialLesson.id || l.title === initialLesson.title || l.slug === initialLesson.slug))
         );
         if (found) {
           setActiveTopic(found);
@@ -73,8 +73,8 @@ export default function LearningPathView({
     }
   }, [initialLesson, initialTopic, topics]);
 
-  const filteredTopics = selectedLevel === 'all' 
-    ? topics 
+  const filteredTopics = selectedLevel === 'all'
+    ? topics
     : topics.filter(t => t.levelCode === selectedLevel);
 
   // Tính toán chính xác tổng số bài học và số bài đã hoàn thành
@@ -122,7 +122,7 @@ export default function LearningPathView({
   if (selectedTopicForView) {
     const currentTopic = topics.find(t => t.id === selectedTopicForView.id) || selectedTopicForView;
     const allTopicLessons = currentTopic.lessons || [];
-    
+
     // Phân loại các bài học trong chuyên đề
     const grammarLessons = allTopicLessons.filter(l => l.type === 'grammar' || (l.slug && l.slug.startsWith('ngu-phap-')));
     const vocabLessons = allTopicLessons.filter(l => l.type === 'word' || (!l.type && !l.sentenceSlug && !l.grammarRuleId && !l.slug?.startsWith('ngu-phap-')));
@@ -135,11 +135,11 @@ export default function LearningPathView({
     // Lọc bài học theo từ khóa tìm kiếm, phân loại và trạng thái
     const displayLessons = allTopicLessons.filter(lesson => {
       const q = topicSearchQuery.trim().toLowerCase();
-      const matchSearch = !q || 
-        lesson.title.toLowerCase().includes(q) || 
+      const matchSearch = !q ||
+        lesson.title.toLowerCase().includes(q) ||
         (lesson.slug && lesson.slug.toLowerCase().includes(q)) ||
         (lesson.word && lesson.word.toLowerCase().includes(q));
-      
+
       const isGrammar = lesson.type === 'grammar' || lesson.slug?.startsWith('ngu-phap-');
       const isSentence = lesson.type === 'sentence' || lesson.sentenceSlug;
       const isWord = !isGrammar && !isSentence;
@@ -204,23 +204,6 @@ export default function LearningPathView({
         {/* 2. Banner Giới Thiệu Chuyên Đề (Đồng bộ giao diện chuẩn, Tiến độ nằm bên phải trên web) */}
         <PageHeroBanner
           style={{ marginBottom: '1.25rem' }}
-          leftSlot={
-            <div style={{
-              width: 62,
-              height: 62,
-              borderRadius: 'var(--radius-lg)',
-              backgroundColor: 'rgba(255, 255, 255, 0.2)',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(8px)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '2rem',
-              flexShrink: 0,
-            }}>
-              {currentTopic.icon}
-            </div>
-          }
           badgeText={currentTopic.level}
           badgeExtra={
             <>
@@ -231,7 +214,7 @@ export default function LearningPathView({
                 </>
               )}
               <span style={{ opacity: 0.7 }}>•</span>
-              <span>🔤 {vocabLessons.length} Từ vựng VSL</span>
+              <span>🔤 {vocabLessons.length} Từ vựng</span>
               {sentenceLessons.length > 0 && (
                 <>
                   <span style={{ opacity: 0.7 }}>•</span>
@@ -297,7 +280,7 @@ export default function LearningPathView({
                     padding: '0.35rem 0.85rem',
                     fontSize: '0.8rem',
                     fontWeight: 800,
-                    backgroundColor: lessonTypeFilter === tab.id 
+                    backgroundColor: lessonTypeFilter === tab.id
                       ? (tab.id === 'grammar' ? '#7c3aed' : tab.id === 'sentence' ? '#16a34a' : undefined)
                       : undefined,
                     borderColor: lessonTypeFilter === tab.id
@@ -444,7 +427,7 @@ export default function LearningPathView({
                             backgroundColor: '#7c3aed',
                             color: '#ffffff'
                           }}>
-                            LÝ THUYẾT NGỮ PHÁP VSL
+                            LÝ THUYẾT NGỮ PHÁP
                           </span>
                           <span style={{ color: '#c4b5fd' }}>•</span>
                           <span style={{ fontSize: '0.75rem', color: '#6b21a8', fontWeight: 700 }}>
@@ -705,9 +688,9 @@ export default function LearningPathView({
       <PageHeroBanner
         style={{ marginBottom: '1.25rem' }}
         badgeIcon={<GraduationCap size={15} />}
-        badgeText="LỘ TRÌNH CHUẨN VSL"
-        title="Khung Chương Trình Học Ký Hiệu Chuẩn"
-        subtitle="12 Chuyên đề • 400 Ký hiệu VSL • 8 Bài học Ngữ pháp • 100 Câu thực hành"
+        badgeText="LỘ TRÌNH CHUẨN"
+        title="Chương Trình Học Ký Hiệu Chuẩn"
+        subtitle="12 Chuyên đề • 400 Ký hiệu • 8 Bài học Ngữ pháp • 100 Câu thực hành"
         rightSlot={
           <div className="page-hero-glass" style={{ minWidth: 210, textAlign: 'right' }}>
             <div style={{ fontSize: '0.72rem', opacity: 0.85, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.03em' }}>
@@ -767,7 +750,7 @@ export default function LearningPathView({
           const totalInTopic = topic.totalLessons || topic.lessons?.length || 0;
           const completedInTopic = topic.completedLessons || 0;
           const progressPercent = totalInTopic > 0 ? Math.round((completedInTopic / totalInTopic) * 100) : 0;
-          
+
           const wordsInTopic = topic.lessons ? topic.lessons.filter(l => l.type === 'word' || (!l.type && !l.sentenceSlug && !l.grammarRuleId && !l.slug?.startsWith('ngu-phap-'))).length : (topic.vocabCount || 0);
           const hasGrammar = topic.grammarRuleTitle || (topic.lessons && topic.lessons.some(l => l.type === 'grammar' || l.slug?.startsWith('ngu-phap-')));
           const sentenceCountInTopic = topic.sampleSentences?.length || (topic.lessons ? topic.lessons.filter(l => l.type === 'sentence' || l.sentenceSlug).length : 0);
@@ -853,10 +836,6 @@ export default function LearningPathView({
 
               {/* Thân thẻ: Mô tả & Chỉ số cấu trúc sư phạm */}
               <div style={{ padding: '1.15rem 1.4rem', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <p style={{ fontSize: '0.84rem', color: '#64748b', lineHeight: 1.45, margin: '0 0 0.85rem 0' }}>
-                  {topic.description}
-                </p>
-
                 {/* Bộ 3 chỉ số sư phạm: Ngữ pháp + Từ vựng + Câu giao tiếp */}
                 <div style={{
                   backgroundColor: '#f8fafc',
@@ -880,7 +859,7 @@ export default function LearningPathView({
                   {hasGrammar && <span style={{ color: '#cbd5e1' }}>•</span>}
                   <span style={{ color: '#0284c7', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                     <BookOpen size={13} />
-                    {wordsInTopic} Từ vựng VSL
+                    {wordsInTopic} Từ vựng
                   </span>
                   {sentenceCountInTopic > 0 && <span style={{ color: '#cbd5e1' }}>•</span>}
                   {sentenceCountInTopic > 0 && (

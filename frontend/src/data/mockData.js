@@ -7,17 +7,17 @@ export const TOPIC_METADATA = [
   // ==================== CẤP ĐỘ 1: CĂN BẢN (LEVEL 1 - FOUNDATION) ====================
   {
     id: 'greeting',
-    title: 'Giao tiếp & Xã giao cốt lõi',
+    title: 'Giao tiếp & Xã giao',
     level: 'Căn bản (Level 1)',
     levelCode: 'basic',
     icon: '👋',
-    description: 'Cảm ơn, Tạm biệt, Xin lỗi, Giúp đỡ, Khỏe và các giao tiếp xã giao lịch sự chuẩn VSL400',
+    description: 'Cảm ơn, Tạm biệt, Xin lỗi, Giúp đỡ, Khỏe và các giao tiếp xã giao lịch sự',
     color: '#0284c7',
     bgColor: '#e0f2fe',
     accentColor: '#38bdf8',
     grammarRuleId: 'rule-facial-expression',
-    grammarRuleTitle: 'Quy tắc 8: Biểu cảm nét mặt & Không gian giao tiếp',
-    grammarTip: 'Trong VSL, nét mặt và ánh mắt đóng vai trò như ngữ điệu giọng nói; biểu cảm chân thành khi chào hỏi, xin lỗi, cảm ơn.',
+    grammarRuleTitle: 'Biểu cảm nét mặt & Không gian giao tiếp',
+    grammarTip: 'Nét mặt và ánh mắt đóng vai trò như ngữ điệu giọng nói; biểu cảm chân thành khi chào hỏi, xin lỗi, cảm ơn.',
     sampleSentences: [
       { slug: 'em-cam-on-anh', title: 'Em cảm ơn anh' },
       { slug: 'em-xin-loi-co', title: 'Em xin lỗi cô' },
@@ -26,7 +26,7 @@ export const TOPIC_METADATA = [
   },
   {
     id: 'family',
-    title: 'Gia đình & Xưng hô thân thuộc',
+    title: 'Gia đình & Xưng hô',
     level: 'Căn bản (Level 1)',
     levelCode: 'basic',
     icon: '👨‍👩‍👧‍👦',
@@ -35,8 +35,8 @@ export const TOPIC_METADATA = [
     bgColor: '#ffe4e6',
     accentColor: '#fb7185',
     grammarRuleId: 'rule-spatial-grammar',
-    grammarRuleTitle: 'Quy tắc 7: Không gian ký hiệu & Điểm quy chiếu xưng hô',
-    grammarTip: 'Định vị người lớn tuổi ở vị trí cao hơn và phía trước; phân biệt nhánh nội và ngoại bằng vị trí bên trái/phải.',
+    grammarRuleTitle: 'Không gian ký hiệu & Điểm quy chiếu xưng hô',
+    grammarTip: 'Định vị người lớn tuổi ở vị trí cao hơn và phía trước; phân biệt nội và ngoại bằng vị trí bên trái/phải.',
     sampleSentences: [
       { slug: 'bo-me-giup-do-em', title: 'Bố mẹ giúp đỡ em' },
       { slug: 'ong-noi-yeu-thuong-chau', title: 'Ông nội yêu thương cháu' },
@@ -45,7 +45,7 @@ export const TOPIC_METADATA = [
   },
   {
     id: 'food',
-    title: 'Ẩm thực & Thức uống hàng ngày',
+    title: 'Ẩm thực & Đồ uống',
     level: 'Căn bản (Level 1)',
     levelCode: 'basic',
     icon: '🍲',
@@ -54,8 +54,8 @@ export const TOPIC_METADATA = [
     bgColor: '#fef3c7',
     accentColor: '#fbbf24',
     grammarRuleId: 'rule-sov',
-    grammarRuleTitle: 'Quy tắc 1: Cấu trúc Chủ đề – Lời dẫn & Trật tự SOV',
-    grammarTip: 'Nguyên lý cốt lõi: Luôn đưa món ăn/đồ uống lên trước động từ Ăn/Uống: [Chủ ngữ] + [Món ăn] + [Ăn/Uống].',
+    grammarRuleTitle: 'Cấu trúc Chủ đề - Lời dẫn & Trật tự SOV',
+    grammarTip: 'Luôn đưa món ăn/đồ uống lên trước động từ Ăn/Uống: [Chủ ngữ] + [Món ăn] + [Ăn/Uống].',
     sampleSentences: [
       { slug: 'anh-an-pho', title: 'Anh ăn phở' },
       { slug: 'chi-an-bun', title: 'Chị ăn bún' },
@@ -73,8 +73,8 @@ export const TOPIC_METADATA = [
     bgColor: '#d1fae5',
     accentColor: '#34d399',
     grammarRuleId: 'rule-compound-words',
-    grammarRuleTitle: 'Quy tắc 3: Từ ghép trong VSL',
-    grammarTip: 'Rất nhiều từ ghép đồ dùng được tạo bằng cách lắp ghép đơn thuần các ký hiệu đơn lẻ (Cái + Bàn, Áo + Sơ mi).',
+    grammarRuleTitle: 'Từ ghép',
+    grammarTip: 'Rất nhiều từ ghép đồ dùng được tạo bằng cách lắp ghép các ký hiệu đơn lẻ (Cái + Bàn, Áo + Sơ mi).',
     sampleSentences: [
       { slug: 'anh-nghe-dien-thoai', title: 'Anh nghe điện thoại' },
       { slug: 'chi-chup-hinh', title: 'Chị chụp hình' },
@@ -94,7 +94,7 @@ export const TOPIC_METADATA = [
     bgColor: '#ede9fe',
     accentColor: '#a78bfa',
     grammarRuleId: 'rule-negation',
-    grammarRuleTitle: 'Quy tắc 5: Câu phủ định trong VSL',
+    grammarRuleTitle: 'Câu phủ định',
     grammarTip: 'Từ phủ định (Không, Chưa, Không cần) đứng sau động từ hoặc ở cuối câu kết hợp động tác lắc đầu dứt khoát.',
     sampleSentences: [
       { slug: 'anh-tu-choi-uong-ruou', title: 'Anh từ chối uống rượu' },
@@ -113,8 +113,8 @@ export const TOPIC_METADATA = [
     bgColor: '#ecfeff',
     accentColor: '#22d3ee',
     grammarRuleId: 'rule-tense-time',
-    grammarRuleTitle: 'Quy tắc 6: Thời gian & Thì trong VSL',
-    grammarTip: 'VSL không chia động từ; luôn đặt từ chỉ thời gian ở đầu câu để xác lập khung thời gian tham chiếu cho toàn câu.',
+    grammarRuleTitle: 'Thời gian & Thì',
+    grammarTip: 'Ngôn ngữ ký hiệu không chia động từ; luôn đặt từ chỉ thời gian ở đầu câu để xác lập khung thời gian tham chiếu cho toàn câu.',
     sampleSentences: [
       { slug: 'buoi-sang-em-thuc-day', title: 'Buổi sáng em thức dậy' },
       { slug: 'chu-nhat-em-di-cong-vien', title: 'Chủ nhật em đi công viên' },
@@ -132,8 +132,8 @@ export const TOPIC_METADATA = [
     bgColor: '#eef2ff',
     accentColor: '#818cf8',
     grammarRuleId: 'rule-noun-numeral',
-    grammarRuleTitle: 'Quy tắc 2: Cấu trúc cụm từ Danh từ + Số từ',
-    grammarTip: 'Khác với tiếng nói (Số từ + Danh từ), trong VSL luôn làm ký hiệu Danh từ trước rồi mới xòe ngón tay chỉ số lượng sau.',
+    grammarRuleTitle: 'Cấu trúc cụm từ Danh từ + Số từ',
+    grammarTip: 'Khác với tiếng nói (Số từ + Danh từ), trong NNKH luôn làm ký hiệu Danh từ trước rồi mới xòe ngón tay chỉ số lượng sau.',
     sampleSentences: [
       { slug: 'hoc-sinh-doc-sach', title: 'Học sinh đọc sách' },
       { slug: 'sinh-vien-viet-sach', title: 'Sinh viên viết sách' },
@@ -151,7 +151,7 @@ export const TOPIC_METADATA = [
     bgColor: '#fee2e2',
     accentColor: '#f87171',
     grammarRuleId: 'rule-questions',
-    grammarRuleTitle: 'Quy tắc 4: Câu hỏi nghi vấn trong VSL',
+    grammarRuleTitle: 'Câu hỏi nghi vấn',
     grammarTip: 'Trong câu hỏi lấy thông tin, từ nghi vấn (Đâu, Bao nhiêu, Thế nào) đặt ở cuối câu kết hợp nét mặt nghi vấn.',
     sampleSentences: [
       { slug: 'bac-si-kham-benh-em', title: 'Bác sĩ khám bệnh cho em' },
@@ -172,7 +172,7 @@ export const TOPIC_METADATA = [
     bgColor: '#e0f2fe',
     accentColor: '#38bdf8',
     grammarRuleId: 'rule-spatial-grammar',
-    grammarRuleTitle: 'Quy tắc 7: Không gian 3D & Định hướng chuyển động',
+    grammarRuleTitle: 'Không gian 3D & Định hướng chuyển động',
     grammarTip: 'Mô phỏng chân thực hướng di chuyển từ điểm bắt đầu đến điểm đến trong không gian hình học trước ngực.',
     sampleSentences: [
       { slug: 'em-di-nha-sach', title: 'Em đi đến nhà sách' },
@@ -191,7 +191,7 @@ export const TOPIC_METADATA = [
     bgColor: '#dcfce7',
     accentColor: '#4ade80',
     grammarRuleId: 'rule-sov',
-    grammarRuleTitle: 'Quy tắc 1: Cấu trúc diễn đạt sở thích & hoạt động',
+    grammarRuleTitle: 'Cấu trúc diễn đạt sở thích & hoạt động',
     grammarTip: 'Môn thể thao đóng vai trò là chủ đề/bổ ngữ đưa lên trước động từ chơi: [Chủ ngữ] + [Môn thể thao] + [Chơi/Thích].',
     sampleSentences: [
       { slug: 'anh-da-bong', title: 'Anh chơi đá bóng' },
@@ -210,7 +210,7 @@ export const TOPIC_METADATA = [
     bgColor: '#ccfbf1',
     accentColor: '#2dd4bf',
     grammarRuleId: 'rule-compound-words',
-    grammarRuleTitle: 'Quy tắc 3: Mô tả đặc tính & hình tượng loài vật',
+    grammarRuleTitle: 'Mô tả đặc tính & hình tượng loài vật',
     grammarTip: 'Ký hiệu động vật thường mô phỏng đặc trưng cơ thể (tai mèo, mỏ gà, sừng bò) kết hợp chuyển động sinh động.',
     sampleSentences: [
       { slug: 'mua-he-thoi-tiet-nong', title: 'Mùa hè thời tiết rất nóng' },
@@ -229,7 +229,7 @@ export const TOPIC_METADATA = [
     bgColor: '#fce7f3',
     accentColor: '#f472b6',
     grammarRuleId: 'rule-facial-expression',
-    grammarRuleTitle: 'Quy tắc 8: Biểu cảm nét mặt thể hiện mức độ tính từ',
+    grammarRuleTitle: 'Biểu cảm nét mặt thể hiện mức độ tính từ',
     grammarTip: 'Nét mặt biểu đạt sắc thái và cường độ của tính từ: mở to mắt khi ngạc nhiên, mỉm cười khi hạnh phúc, nhíu mày khi giận.',
     sampleSentences: [
       { slug: 'banh-xeo-rat-ngon-mieng', title: 'Bánh xèo rất ngon miệng' },
@@ -251,10 +251,10 @@ export const TOPICS = TOPIC_METADATA.map((meta, topicIdx) => {
       type: 'grammar',
       grammarRuleId: meta.grammarRuleId,
       title: `Bài học Ngữ pháp: ${meta.grammarRuleTitle}`,
-      description: meta.grammarTip || 'Nắm vững quy tắc ngữ pháp VSL chuẩn để ghép câu và giao tiếp tự nhiên.',
+      description: meta.grammarTip || 'Nắm vững quy tắc ngữ pháp chuẩn để ghép câu và giao tiếp tự nhiên.',
       duration: '5 phút',
       level: 'Lý thuyết',
-      badge: 'Ngữ pháp VSL',
+      badge: 'Ngữ pháp',
       topicId: meta.id,
       topicTitle: meta.title,
       completed: topicIdx === 0, // Chương 1 demo hoàn thành bài ngữ pháp
@@ -271,7 +271,7 @@ export const TOPICS = TOPIC_METADATA.map((meta, topicIdx) => {
       slug: w.slug,
       word: w.word,
       title: w.word, // CHÍNH LÀ TỪ VỰNG: Cảm ơn, Xin lỗi, Giúp đỡ, Khỏe, Bố, Mẹ, v.v.
-      description: `Ký hiệu "${w.word}" chuẩn VSL (tay thuận: ${w.dominantHand === 'left' ? 'tay trái' : 'tay phải'}).`,
+      description: `Ký hiệu "${w.word}" chuẩn (tay thuận: ${w.dominantHand === 'left' ? 'tay trái' : 'tay phải'}).`,
       duration: '2-3 phút',
       level: w.difficulty || 'Dễ',
       videoUrl: w.videoFront,
@@ -293,10 +293,10 @@ export const TOPICS = TOPIC_METADATA.map((meta, topicIdx) => {
         type: 'sentence',
         sentenceSlug: sent.slug,
         title: `Câu VSL: "${sent.title}"`,
-        description: `Thực hành câu giao tiếp VSL ứng dụng từ vựng chương "${meta.title}".`,
+        description: `Thực hành câu giao tiếp ứng dụng từ vựng chương "${meta.title}".`,
         duration: '3-4 phút',
         level: 'Thực hành',
-        badge: 'Luyện câu VSL',
+        badge: 'Luyện câu',
         topicId: meta.id,
         topicTitle: meta.title,
         completed: false,
@@ -323,8 +323,8 @@ export const DICTIONARY_WORDS = [
     ...w,
     id: w.id || `vsl-${w.slug}`,
     benchmarkLandmarksExtracted: true,
-    handShape: w.handShape || 'Bàn tay mở hoặc định hình chuẩn VSL400',
-    movement: w.movement || 'Chuyển động dứt khoát theo video mẫu VSL400',
+    handShape: w.handShape || 'Bàn tay mở hoặc định hình chuẩn',
+    movement: w.movement || 'Chuyển động dứt khoát theo video mẫu',
     faceExpression: w.faceExpression || 'Tự nhiên, mắt nhìn thẳng thân thiện'
   }))
 ];
@@ -415,7 +415,7 @@ export const BADGES = [
   {
     id: 'badge-vocab-100',
     title: 'Bậc thầy 100 Từ Vựng',
-    desc: 'Luyện tập thành công 100 từ vựng VSL trong từ điển',
+    desc: 'Luyện tập thành công 100 từ vựng trong từ điển',
     icon: '📚',
     unlocked: false,
     progress: '48/100',
@@ -449,7 +449,7 @@ export const QUIZ_QUESTIONS = [
     signSymbol: '🙏',
     options: ['Cảm ơn', 'Tạm biệt', 'Xin lỗi', 'Giúp đỡ'],
     correctIndex: 0,
-    explanation: 'Đây là ký hiệu "Cảm ơn" chuẩn Ngôn ngữ Ký hiệu Việt Nam (VSL).'
+    explanation: 'Đây là ký hiệu "Cảm ơn" chuẩn Ngôn ngữ Ký hiệu Việt Nam.'
   },
   {
     id: 'q2',

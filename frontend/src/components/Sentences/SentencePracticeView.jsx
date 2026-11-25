@@ -86,8 +86,6 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
   const [statusMessage, setStatusMessage] = useState(
     "Quan sát video mẫu bên trái, sau đó bấm 'Bắt đầu luyện tập câu' để thực hiện liên tiếp các từ."
   );
-  const [hasError, setHasError] = useState(false);
-  const [errorType, setErrorType] = useState('thumb');
 
   const currentWord = words[currentWordIndex] || words[0];
 
@@ -102,7 +100,7 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
     playbackRateRef.current = rate;
     if (sampleVideoRef.current) {
       sampleVideoRef.current.playbackRate = rate;
-      sampleVideoRef.current.play().catch(() => {});
+      sampleVideoRef.current.play().catch(() => { });
     }
   };
 
@@ -266,7 +264,7 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
     if (sampleVideoRef.current) {
       sampleVideoRef.current.currentTime = 0;
       sampleVideoRef.current.playbackRate = playbackRate;
-      sampleVideoRef.current.play().catch(() => {});
+      sampleVideoRef.current.play().catch(() => { });
     }
   }, [currentWordIndex, sampleVideoSrc, playbackRate]);
 
@@ -320,7 +318,7 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
     if (sampleVideoRef.current) {
       sampleVideoRef.current.currentTime = 0;
       sampleVideoRef.current.playbackRate = playbackRateRef.current;
-      sampleVideoRef.current.play().catch(() => {});
+      sampleVideoRef.current.play().catch(() => { });
     }
   };
 
@@ -345,7 +343,7 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
       if (sampleVideoRef.current) {
         sampleVideoRef.current.currentTime = 0;
         sampleVideoRef.current.playbackRate = playbackRateRef.current;
-        sampleVideoRef.current.play().catch(() => {});
+        sampleVideoRef.current.play().catch(() => { });
       }
     } else {
       // Đã chạy hết video của từ cuối cùng -> Kết thúc và chấm điểm cả câu!
@@ -432,17 +430,14 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
 
         // Fallback thông minh nếu offline hoặc chưa nhận đủ frame
         if (!data) {
-          const simulatedPassed = !hasError;
-          const score = hasError ? Math.floor(Math.random() * 10 + 64) : Math.floor(Math.random() * 8 + 89);
+          const score = Math.floor(Math.random() * 8 + 89);
           data = {
             overall_score: score,
-            passed: simulatedPassed,
-            angle_score: hasError ? 65.0 : 92.0,
-            position_score: hasError ? 68.0 : 90.0,
-            bad_joints: hasError ? [1, 2, 3, 4] : [],
-            feedbacks: hasError
-              ? ['Góc gập tay chưa đạt góc độ chuẩn của mẫu VSL']
-              : ['Rất tốt! Cử chỉ dứt khoát và chuẩn xác theo mẫu.']
+            passed: true,
+            angle_score: 92.0,
+            position_score: 90.0,
+            bad_joints: [],
+            feedbacks: ['Rất tốt! Cử chỉ dứt khoát và chuẩn xác theo mẫu.']
           };
         }
 
@@ -690,25 +685,6 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
             </select>
           )}
 
-          {/* Test thử lỗi khớp tay */}
-          <label style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.35rem',
-            fontSize: '0.8rem',
-            color: '#64748b',
-            cursor: 'pointer',
-            userSelect: 'none'
-          }}>
-            <input
-              type="checkbox"
-              checked={hasError}
-              onChange={(e) => setHasError(e.target.checked)}
-              style={{ accentColor: '#ef4444' }}
-            />
-            <span>Thử khớp lỗi</span>
-          </label>
-
           {/* Nút Bật / Tắt camera */}
           <button
             className={`btn-pill btn-sm ${cameraStatus === 'active' ? 'btn-secondary' : 'btn-primary'}`}
@@ -837,10 +813,7 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
               height: '26px'
             }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#10b981' }}></span>Đúng
-              </span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#ef4444' }}></span>Sai tư thế
+                <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#10b981' }}></span>Đang nhận diện
               </span>
             </div>
           </div>
@@ -881,9 +854,6 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
                 <CanvasSkeleton
                   width={640}
                   height={480}
-                  hasError={hasError}
-                  errorJoint={errorType}
-                  badJoints={badJoints}
                   accuracy={sentencePassed ? 92 : 85}
                   isRecording={isRecording}
                   showGuides={true}
@@ -1103,10 +1073,6 @@ export default function SentencePracticeView({ sentence, onBack, onFinish }) {
             <span>Đang chấm điểm từng từ...</span>
           </button>
         )}
-
-        <div style={{ fontSize: '0.84rem', color: '#64748b', marginTop: '0.65rem' }}>
-          💡 Thời gian thực hành mỗi từ khớp chính xác theo độ dài video mẫu (phát 1 lần không lặp lại). Chuỗi video các từ sẽ tự động phát và ghi nhận liên tiếp mà không cần bấm thêm nút nào.
-        </div>
       </div>
 
       {/* =====================================================================

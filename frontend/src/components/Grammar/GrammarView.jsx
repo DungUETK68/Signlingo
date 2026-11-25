@@ -74,20 +74,20 @@ export default function GrammarView({ onSelectTab, onOpenSentenceDetail }) {
           spread: 70,
           origin: { y: 0.7 },
         });
-      } catch (e) {}
+      } catch (e) { }
     }
 
     const quizScorePercent = Math.round((correctCount / VSL_GRAMMAR_QUIZ.length) * 100);
     // Ghi nhận hoàn thành bài trắc nghiệm ngữ pháp vào CSDL và thưởng XP
-    progressApi.completeLesson('vsl_grammar_quiz', quizScorePercent).catch(() => {});
+    progressApi.completeLesson('vsl_grammar_quiz', quizScorePercent).catch(() => { });
     progressApi.logPractice({
       wordSlug: 'vsl_grammar_quiz',
-      wordName: 'Trắc nghiệm Ngữ pháp VSL',
+      wordName: 'Trắc nghiệm Ngữ pháp',
       score: quizScorePercent,
       isPassed: correctCount >= 3,
       mode: 'quiz',
       durationSeconds: 20
-    }).catch(() => {});
+    }).catch(() => { });
   };
 
   // Làm lại trắc nghiệm
@@ -138,13 +138,13 @@ export default function GrammarView({ onSelectTab, onOpenSentenceDetail }) {
               }}
             >
               <GraduationCap size={16} />
-              <span>Cẩm nang Ngữ pháp Ngôn ngữ Ký hiệu Việt Nam (VSL)</span>
+              <span>Cẩm nang Ngữ pháp Ngôn ngữ Ký hiệu Việt Nam</span>
             </div>
             <h1 style={{ fontSize: 'clamp(1.5rem, 4vw, 2.1rem)', fontWeight: 900, margin: '0 0 0.65rem 0', lineHeight: 1.25 }}>
-              Lý thuyết & Quy tắc Ngữ pháp VSL
+              Lý thuyết & Quy tắc Ngữ pháp
             </h1>
             <p style={{ fontSize: '0.96rem', margin: 0, opacity: 0.92, lineHeight: 1.55 }}>
-              Khám phá bản chất tư duy thị giác, nguyên lý "Chủ đề – Lời dẫn", trật tự SOV và các đặc thù ngôn ngữ học của người khiếm thính Việt Nam.
+              Khám phá bản chất tư duy thị giác, nguyên lý "Chủ đề - Lời dẫn", trật tự SOV và các đặc thù ngôn ngữ ký hiệu Việt Nam.
             </p>
           </div>
 
@@ -167,7 +167,7 @@ export default function GrammarView({ onSelectTab, onOpenSentenceDetail }) {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <BookOpen size={18} color="#93c5fd" />
-              <span style={{ fontSize: '0.85rem', fontWeight: 800 }}>36 Câu mẫu VSL</span>
+              <span style={{ fontSize: '0.85rem', fontWeight: 800 }}>36 Câu mẫu</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <Award size={18} color="#86efac" />
@@ -297,7 +297,7 @@ export default function GrammarView({ onSelectTab, onOpenSentenceDetail }) {
         {/* BẢNG SO SÁNH TRỰC QUAN: Tiếng Việt nói vs VSL Ký hiệu */}
         <div style={{ marginBottom: '2rem' }}>
           <h3 style={{ fontSize: '1.05rem', fontWeight: 900, color: '#1e293b', marginBottom: '0.75rem' }}>
-            Đối chiếu Ngôn ngữ nói & Ngôn ngữ ký hiệu VSL:
+            Đối chiếu Ngôn ngữ nói & Ngôn ngữ ký hiệu:
           </h3>
           <div
             style={{
@@ -357,7 +357,7 @@ export default function GrammarView({ onSelectTab, onOpenSentenceDetail }) {
             >
               <div style={{ marginBottom: '0.65rem' }}>
                 <div style={{ fontSize: '0.82rem', fontWeight: 900, color: '#166534', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
-                  🤟 VSL Ký Hiệu (Chủ đề - Lời dẫn)
+                  🤟 Ký Hiệu (Chủ đề - Lời dẫn)
                 </div>
                 <div style={{
                   display: 'inline-block',
@@ -530,7 +530,7 @@ export default function GrammarView({ onSelectTab, onOpenSentenceDetail }) {
                 <Award size={18} />
               </span>
               <h3 style={{ fontSize: '1.35rem', fontWeight: 900, color: '#0f172a', margin: 0 }}>
-                Trắc Nghiệm Ghi Nhớ Ngữ Pháp VSL
+                Trắc Nghiệm Ghi Nhớ Ngữ Pháp
               </h3>
             </div>
             <p style={{ fontSize: '0.88rem', color: '#64748b', margin: 0 }}>

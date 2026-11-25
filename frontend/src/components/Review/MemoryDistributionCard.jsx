@@ -99,7 +99,7 @@ export default function MemoryDistributionCard({
               <span>Tổng từ đã lưu</span>
             </div>
             <div className="srs-kpi-value">{totalWords}</div>
-            <div className="srs-kpi-sub">Trong bộ ôn tập VSL</div>
+            <div className="srs-kpi-sub">Trong bộ ôn tập</div>
           </div>
 
           {/* KPI 2: Đã bắt đầu học */}

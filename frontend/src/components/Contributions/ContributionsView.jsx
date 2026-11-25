@@ -354,7 +354,7 @@ export default function ContributionsView() {
               : 'Không tìm thấy từ vựng nào phù hợp với bộ lọc'}
           </h3>
           <p style={{ fontSize: '0.88rem', color: '#64748b', maxWidth: 460, margin: '0 auto 1.5rem auto' }}>
-            Hãy chia sẻ các cử chỉ ký hiệu mới mà bạn biết để giúp cộng đồng người khiếm thính và người học VSL có thêm nhiều từ ngữ phong phú!
+            Hãy chia sẻ các cử chỉ ký hiệu mới mà bạn biết để giúp cộng đồng người học NNKH có thêm nhiều từ ngữ phong phú!
           </p>
           <button
             onClick={() => {
@@ -363,8 +363,8 @@ export default function ContributionsView() {
             }}
             className="btn-pill btn-primary"
             style={{
-              backgroundColor: '#059669',
-              boxShadow: '0 4px 0 #047857',
+              backgroundColor: '#0284c7',
+              boxShadow: '0 4px 0 #0369a1',
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.5rem'
