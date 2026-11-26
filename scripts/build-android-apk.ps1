@@ -106,7 +106,14 @@ try {
 }
 
 $apkRelPath = if ($Release) {
-    "app\build\outputs\apk\release\app-release-unsigned.apk"
+    $signedCandidate = Join-Path $AndroidDir "app\build\outputs\apk\release\app-release.apk"
+    if (Test-Path $signedCandidate) {
+        $namedRelease = Join-Path $AndroidDir "app\build\outputs\apk\release\signlingo-release.apk"
+        Copy-Item -Path $signedCandidate -Destination $namedRelease -Force
+        "app\build\outputs\apk\release\signlingo-release.apk"
+    } else {
+        "app\build\outputs\apk\release\app-release-unsigned.apk"
+    }
 } else {
     "app\build\outputs\apk\debug\app-debug.apk"
 }

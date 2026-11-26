@@ -862,7 +862,7 @@ export default function LearningPathView({
                       gap: '0.75rem',
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', minWidth: 0, flex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', flex: '1 1 220px', minWidth: 'min(220px, 100%)' }}>
                       <div
                         style={{
                           width: 38,
@@ -886,15 +886,14 @@ export default function LearningPathView({
                         )}
                       </div>
 
-                      <div style={{ minWidth: 0 }}>
+                      <div style={{ flex: 1, minWidth: 0 }}>
                         <div
                           style={{
-                            fontSize: '1.05rem',
+                            fontSize: '1.04rem',
                             fontWeight: 900,
                             color: '#1e293b',
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
+                            lineHeight: 1.3,
+                            wordBreak: 'break-word',
                           }}
                         >
                           {lesson.title}
@@ -926,7 +925,7 @@ export default function LearningPathView({
                       </div>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexShrink: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexShrink: 0, flexWrap: 'wrap' }}>
                       {/* Nút Lưu từ nhanh vào kho Ôn tập */}
                       <button
                         type="button"

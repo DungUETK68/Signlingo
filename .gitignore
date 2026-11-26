@@ -17,6 +17,8 @@ frontend/android/app/build/
 frontend/android/app/src/main/assets/public/
 frontend/android/capacitor-cordova-android-plugins/build/
 frontend/android/local.properties
+frontend/android/keystore.properties
+keystore.properties
 *.apk
 *.aab
 *.keystore

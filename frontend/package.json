@@ -11,6 +11,7 @@
     "mobile:build": "node scripts/build-mobile-assets.mjs",
     "mobile:sync": "node scripts/build-mobile-assets.mjs && npx cap sync android",
     "mobile:apk": "powershell -ExecutionPolicy Bypass -File ../scripts/build-android-apk.ps1",
+    "mobile:apk:release": "powershell -ExecutionPolicy Bypass -File ../scripts/build-android-apk.ps1 -Release",
     "mobile:install": "powershell -ExecutionPolicy Bypass -File ../scripts/build-android-apk.ps1 -Install",
     "mobile:open": "npx cap open android"
   },
