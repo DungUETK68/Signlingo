@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { LEADERBOARD } from '../data/mockData';
 import { progressApi, userApi } from '../services/api';
+import UserAvatar from './common/UserAvatar';
 
 export default function RightSidebar({ 
   userProfile, 
@@ -149,18 +150,11 @@ export default function RightSidebar({
               padding: 0
             }}
           >
-            <img
-              src={userProfile?.avatarUrl || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80"}
-              alt="User"
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: '50%',
-                objectFit: 'cover',
-                border: isProfileMenuOpen ? '2px solid #0284c7' : '2px solid #0284c7',
-                boxShadow: isProfileMenuOpen ? '0 0 0 3px rgba(2, 132, 199, 0.25)' : 'none',
-                transition: 'all 0.15s ease'
-              }}
+            <UserAvatar
+              name={userProfile?.name || 'Học viên'}
+              size={36}
+              border="2px solid #0284c7"
+              boxShadow={isProfileMenuOpen ? '0 0 0 3px rgba(2, 132, 199, 0.25)' : 'none'}
             />
           </button>
 
@@ -183,10 +177,10 @@ export default function RightSidebar({
             >
               {/* Header: Avatar, Name, Email, Role */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '0.9rem' }}>
-                <img
-                  src={userProfile?.avatarUrl || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80"}
-                  alt="Avatar"
-                  style={{ width: 46, height: 46, borderRadius: '50%', objectFit: 'cover', border: '2px solid #0284c7', flexShrink: 0 }}
+                <UserAvatar
+                  name={userProfile?.name || 'Học viên'}
+                  size={46}
+                  border="2px solid #bae6fd"
                 />
                 <div style={{ overflow: 'hidden', flex: 1 }}>
                   <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -411,24 +405,12 @@ export default function RightSidebar({
                 <span style={{ fontWeight: 800, fontSize: '0.82rem', color: '#64748b', width: 14 }}>
                   {i + 1}
                 </span>
-                <div style={{
-                  width: 28,
-                  height: 28,
-                  borderRadius: '50%',
-                  backgroundColor: '#e0f2fe',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '0.75rem',
-                  fontWeight: 800,
-                  color: '#0284c7'
-                }}>
-                  {u.avatarUrl ? (
-                    <img src={u.avatarUrl} alt={u.fullName} style={{ width: 28, height: 28, borderRadius: '50%', objectFit: 'cover' }} />
-                  ) : (
-                    (u.fullName || u.name || 'H').charAt(0).toUpperCase()
-                  )}
-                </div>
+                <UserAvatar
+                  name={u.fullName || u.name || 'Học viên'}
+                  size={28}
+                  border="none"
+                  style={{ background: '#e0f2fe', color: '#0284c7' }}
+                />
                 <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#1e293b' }}>
                   {(u.fullName || u.name || 'Học viên').split(' ').slice(-1)[0]}
                 </span>

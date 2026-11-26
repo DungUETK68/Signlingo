@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { DICTIONARY_WORDS, TOPICS } from './mockData';
 import { dictionaryApi, aiApi, progressApi, getStoredToken } from '../services/api';
+import { enrichStandardTopicCurriculum } from './curriculumBuilder';
 
 const STORAGE_KEY = 'signlingo_custom_words';
 const TOPICS_STORAGE_KEY = 'signlingo_custom_topics';
@@ -185,13 +186,8 @@ export function getAllTopics() {
     }
   });
 
-  // Đồng bộ lại tổng số bài học và số bài đã hoàn thành
-  baseTopics.forEach(t => {
-    t.totalLessons = t.lessons.length;
-    t.completedLessons = t.lessons.filter(l => l.completed).length;
-  });
-
-  return baseTopics;
+  // Chuẩn hóa mỗi chuyên đề theo chu trình học 5 giai đoạn (Ngữ pháp + Trắc nghiệm + Từ vựng + Ôn từ đã lưu + Câu + Thử thách)
+  return baseTopics.map(t => enrichStandardTopicCurriculum(t));
 }
 
 // Lưu từ mới (vào localStorage và đồng bộ lên backend nếu online)
@@ -416,7 +412,7 @@ export function useSignWords() {
 
               const completedInTopic = mappedLessons.filter(l => l.completed).length;
 
-              return {
+              return enrichStandardTopicCurriculum({
                 ...baseTopic,
                 id: bt.slug || bt.id,
                 title: bt.title,
@@ -425,7 +421,7 @@ export function useSignWords() {
                 totalLessons: mappedLessons.length,
                 completedLessons: completedInTopic,
                 lessons: mappedLessons
-              };
+              }, completedMap);
             });
             setTopics(syncedTopics);
           } else {

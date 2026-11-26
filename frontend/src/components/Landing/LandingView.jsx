@@ -99,7 +99,6 @@ export default function LandingView({ onOpenAuth }) {
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <span className="landing-brand-title">Signlingo</span>
-                <span className="landing-brand-badge">VSL400 + AI</span>
               </div>
               <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 600 }}>
                 Học Ngôn Ngữ Ký Hiệu Thông Minh
@@ -113,7 +112,7 @@ export default function LandingView({ onOpenAuth }) {
               Công nghệ AI
             </a>
             <a href="#grammar" onClick={(e) => { e.preventDefault(); handleNavClick('#grammar'); }} className="landing-nav-link" style={{ color: '#059669', fontWeight: 800 }}>
-              Ngữ pháp VSL ✨
+              Ngữ pháp ✨
             </a>
             <a href="#sentences" onClick={(e) => { e.preventDefault(); handleNavClick('#sentences'); }} className="landing-nav-link" style={{ color: '#0284c7', fontWeight: 800 }}>
               Câu thường gặp 💬
@@ -182,7 +181,7 @@ export default function LandingView({ onOpenAuth }) {
               <ChevronRight size={18} color="#0284c7" />
             </a>
             <a href="#dictionary" onClick={(e) => { e.preventDefault(); handleNavClick('#dictionary'); }} className="landing-mobile-nav-link">
-              <span>Từ điển VSL 400 từ</span>
+              <span>Từ điển 400 từ</span>
               <ChevronRight size={18} color="#94a3b8" />
             </a>
             <a href="#how-it-works" onClick={(e) => { e.preventDefault(); handleNavClick('#how-it-works'); }} className="landing-mobile-nav-link">
@@ -229,16 +228,16 @@ export default function LandingView({ onOpenAuth }) {
             border: '1px solid #bae6fd'
           }}>
             <Sparkles size={16} color="#0284c7" />
-            <span>Nền tảng học Ngôn ngữ Ký hiệu Việt Nam thông minh với AI</span>
+            <span>Nền tảng học Ngôn ngữ Ký hiệu Việt Nam với AI</span>
           </div>
 
           <h1 className="landing-hero-heading">
-            Làm chủ <span style={{ color: '#0284c7' }}>Ngôn Ngữ Ký Hiệu</span> thông minh cùng Trí Tuệ Nhân Tạo
+            Làm chủ <span style={{ color: '#0284c7' }}>Ngôn Ngữ Ký Hiệu</span> cùng Trí Tuệ Nhân Tạo
           </h1>
 
           <p className="landing-hero-subtitle">
-            Học toàn diện từ <strong>Từ vựng 3 góc quay</strong>, <strong>Ngữ pháp VSL chuẩn khoa học</strong> đến <strong>100 câu giao tiếp thực tế</strong>. 
-            Luyện tập tương tác trực tiếp qua webcam với AI nhận diện <strong>75 khớp ngón tay</strong> và chấm điểm tức thì.
+            Học toàn diện từ <strong>Từ vựng 3 góc quay</strong>, <strong>Ngữ pháp chuẩn</strong> đến <strong>100 câu giao tiếp thực tế</strong>.
+            Luyện tập tương tác trực tiếp qua webcam với AI nhận diện và chấm điểm tức thì.
           </p>
 
           {/* Primary Action Buttons */}
@@ -267,11 +266,11 @@ export default function LandingView({ onOpenAuth }) {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.88rem', color: '#475569', fontWeight: 700 }}>
               <CheckCircle2 size={18} color="#22c55e" />
-              <span>Video 3 góc quay chuẩn VSL</span>
+              <span>Video 3 góc quay</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.88rem', color: '#475569', fontWeight: 700 }}>
               <CheckCircle2 size={18} color="#22c55e" />
-              <span>100 Câu thực tế & Ngữ pháp SOV</span>
+              <span>100 Câu thực tế & Ngữ pháp</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.88rem', color: '#475569', fontWeight: 700 }}>
               <CheckCircle2 size={18} color="#22c55e" />
@@ -298,20 +297,6 @@ export default function LandingView({ onOpenAuth }) {
               }}>
                 Chính xác 96% 🎉
               </span>
-            </div>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.35rem',
-              fontSize: '0.75rem',
-              fontWeight: 800,
-              color: '#0284c7',
-              backgroundColor: '#e0f2fe',
-              padding: '0.25rem 0.6rem',
-              borderRadius: '9999px'
-            }}>
-              <Camera size={14} />
-              <span>AI Skeleton 75 điểm</span>
             </div>
           </div>
 
@@ -363,32 +348,6 @@ export default function LandingView({ onOpenAuth }) {
               playsInline
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
-
-            {/* AI Landmark Skeleton Overlay Indicator */}
-            <div style={{
-              position: 'absolute',
-              bottom: 10,
-              left: 10,
-              right: 10,
-              backgroundColor: 'rgba(15, 23, 42, 0.88)',
-              backdropFilter: 'blur(8px)',
-              padding: '0.55rem 0.8rem',
-              borderRadius: '12px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              color: '#ffffff',
-              fontSize: '0.75rem',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              flexWrap: 'wrap',
-              gap: '0.4rem'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#22c55e', boxShadow: '0 0 8px #22c55e' }} />
-                <span style={{ fontWeight: 700 }}>MediaPipe AI: Khớp chuẩn</span>
-              </div>
-              <span style={{ color: '#38bdf8', fontWeight: 800 }}>60 FPS • Real-time</span>
-            </div>
           </div>
 
           {/* Quick CTA inside Mockup */}
@@ -432,7 +391,7 @@ export default function LandingView({ onOpenAuth }) {
           <div>
             <div className="landing-stat-num" style={{ color: '#0284c7' }}>400+</div>
             <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#1e293b', marginTop: '0.2rem' }}>
-              Từ Vựng VSL Chuẩn
+              Từ Vựng Chuẩn
             </div>
             <div style={{ fontSize: '0.78rem', color: '#64748b' }}>Bộ dữ liệu VSL400 chính thức</div>
           </div>
@@ -446,7 +405,7 @@ export default function LandingView({ onOpenAuth }) {
           <div>
             <div className="landing-stat-num" style={{ color: '#ea580c' }}>8 Quy Tắc</div>
             <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#1e293b', marginTop: '0.2rem' }}>
-              Ngữ Pháp VSL Khoa Học
+              Ngữ Pháp Khoa Học
             </div>
             <div style={{ fontSize: '0.78rem', color: '#64748b' }}>Cấu trúc SOV & Phi thủ ngữ</div>
           </div>
@@ -539,7 +498,7 @@ export default function LandingView({ onOpenAuth }) {
               Từ Điển 400 Từ Độc Quyền 3 Góc Quay
             </h3>
             <p style={{ fontSize: '0.92rem', color: '#64748b', lineHeight: 1.6 }}>
-              Khác với video một góc truyền thống dễ bị che khuất ngón tay, Signlingo cung cấp cả 3 góc quay: 
+              Khác với video một góc truyền thống dễ bị che khuất ngón tay, Signlingo cung cấp cả 3 góc quay:
               <strong> Chính diện, Nghiêng trái và Nghiêng phải</strong> cho mỗi từ vựng, giúp bạn nhìn rõ toàn bộ không gian cử chỉ.
             </p>
           </div>
@@ -566,10 +525,10 @@ export default function LandingView({ onOpenAuth }) {
               <Compass size={26} />
             </div>
             <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', marginBottom: '0.6rem' }}>
-              Lộ Trình Cá Nhân Hóa (Adaptive SRS)
+              Lộ Trình Cá Nhân Hóa
             </h3>
             <p style={{ fontSize: '0.92rem', color: '#64748b', lineHeight: 1.6 }}>
-              Dựa trên mục tiêu và kết quả luyện tập của bạn, thuật toán thích ứng Spaced Repetition tự động 
+              Dựa trên mục tiêu và kết quả luyện tập của bạn, thuật toán thích ứng Spaced Repetition tự động
               nhận diện các từ vựng bạn còn yếu và sắp xếp lịch ôn tập định kỳ, giúp bạn không bao giờ quên cử chỉ đã học.
             </p>
           </div>
@@ -599,7 +558,7 @@ export default function LandingView({ onOpenAuth }) {
               Minigames 5 Giây & Gamification
             </h3>
             <p style={{ fontSize: '0.92rem', color: '#64748b', lineHeight: 1.6 }}>
-              Thử thách phản xạ nhanh 5s, chuỗi ngày Streak Duolingo, trái tim sinh mệnh, XP và Bảng xếp hạng thi đua 
+              Thử thách phản xạ nhanh 5s, chuỗi ngày Streak Duolingo, trái tim sinh mệnh, XP và Bảng xếp hạng thi đua
               giúp quá trình học ngôn ngữ ký hiệu trở nên đầy hứng khởi mỗi ngày.
             </p>
           </div>
@@ -630,11 +589,11 @@ export default function LandingView({ onOpenAuth }) {
               </div>
 
               <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.3rem)', fontWeight: 900, color: '#0f172a', lineHeight: 1.25, letterSpacing: '-0.5px', marginBottom: '1rem' }}>
-                Học Đúng <span style={{ color: '#059669' }}>Ngữ Pháp VSL</span> - Không Còn Lo Dịch "Word-by-Word"
+                Học Đúng <span style={{ color: '#059669' }}>Ngữ Pháp</span> - Không Còn Lo Dịch "Word-by-Word"
               </h2>
 
               <p style={{ fontSize: '1rem', color: '#475569', lineHeight: 1.65, marginBottom: '1.75rem' }}>
-                Ngôn ngữ ký hiệu không phải là tiếng Việt nói ghép từng chữ cái. VSL sở hữu hệ thống ngữ pháp độc lập, 
+                Ngôn ngữ ký hiệu không phải là tiếng Việt nói ghép từng chữ cái. NNKH sở hữu hệ thống ngữ pháp độc lập,
                 vận hành theo tư duy thị giác và không gian 3 chiều. Signlingo giúp bạn làm chủ trọn vẹn bản chất này:
               </p>
 
@@ -646,7 +605,7 @@ export default function LandingView({ onOpenAuth }) {
                   </div>
                   <div>
                     <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#0f172a' }}>
-                      Cấu trúc "Chủ đề – Lời dẫn" & Trật tự SOV
+                      Cấu trúc "Chủ đề - Lời dẫn" & Trật tự SOV
                     </div>
                     <div style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '0.15rem' }}>
                       Định hình đối tượng trong không gian thị giác trước (Chủ đề / Bổ ngữ), sau đó mới thực hiện hành động (Lời dẫn / Động từ).
@@ -674,7 +633,7 @@ export default function LandingView({ onOpenAuth }) {
                   </div>
                   <div>
                     <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#0f172a' }}>
-                      Yếu tố Phi Thủ Ngữ (NMM - Non-Manual Markers)
+                      Yếu tố Phi Thủ Ngữ
                     </div>
                     <div style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '0.15rem' }}>
                       Biểu cảm khuôn mặt, rướn mày, hạ mày, cử động đầu và ánh mắt quyết định 50% ngữ nghĩa của câu hỏi hay phủ định.
@@ -688,7 +647,7 @@ export default function LandingView({ onOpenAuth }) {
                 className="landing-btn-primary"
                 style={{ backgroundColor: '#059669', boxShadow: '0 4px 0 #047857' }}
               >
-                <span>Luyện tập Ngữ pháp VSL ngay</span>
+                <span>Luyện tập Ngữ pháp ngay</span>
                 <ArrowRight size={18} />
               </button>
             </div>
@@ -724,7 +683,7 @@ export default function LandingView({ onOpenAuth }) {
 
                   <div style={{ backgroundColor: '#ecfdf5', padding: '0.85rem', borderRadius: '12px', border: '1.5px solid #a7f3d0' }}>
                     <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#059669', textTransform: 'uppercase' }}>
-                      Ngôn ngữ ký hiệu VSL (SOV)
+                      Ngôn ngữ ký hiệu (SOV)
                     </div>
                     <div style={{ fontSize: '1.05rem', fontWeight: 900, color: '#047857', marginTop: '0.35rem' }}>
                       "Tôi / Màu đỏ / Thích"
@@ -756,7 +715,7 @@ export default function LandingView({ onOpenAuth }) {
 
                   <div style={{ backgroundColor: '#ecfdf5', padding: '0.85rem', borderRadius: '12px', border: '1.5px solid #a7f3d0' }}>
                     <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#059669', textTransform: 'uppercase' }}>
-                      Ngôn ngữ ký hiệu VSL
+                      Ngôn ngữ ký hiệu
                     </div>
                     <div style={{ fontSize: '1.05rem', fontWeight: 900, color: '#047857', marginTop: '0.35rem' }}>
                       "Sinh viên / 4"
@@ -784,7 +743,7 @@ export default function LandingView({ onOpenAuth }) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <HelpCircle size={18} color="#059669" />
                   <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#166534' }}>
-                    Bộ trắc nghiệm 8 quy tắc VSL nhận thưởng XP
+                    Bộ trắc nghiệm 8 quy tắc nhận thưởng XP
                   </span>
                 </div>
                 <button
@@ -956,7 +915,7 @@ export default function LandingView({ onOpenAuth }) {
                 KHO DỮ LIỆU CHUẨN
               </div>
               <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.3rem)', fontWeight: 900, color: '#0f172a' }}>
-                Từ Điển VSL 400 Từ Vựng Thực Tế
+                Từ Điển 400 Từ Vựng Thực Tế
               </h2>
               <p style={{ fontSize: '0.95rem', color: '#64748b', marginTop: '0.3rem' }}>
                 Đầy đủ các chủ đề thiết thực: Chào hỏi, Gia đình, Ăn uống, Con số, Chữ cái, Xã hội...
@@ -1092,7 +1051,7 @@ export default function LandingView({ onOpenAuth }) {
               Học Từ Vựng & Ngữ Pháp
             </h4>
             <p style={{ fontSize: '0.88rem', color: '#64748b', lineHeight: 1.5 }}>
-              Nắm vững 400 từ vựng VSL 3 góc quay và thấu hiểu các nguyên tắc cấu trúc câu SOV chuẩn khoa học.
+              Nắm vững 400 từ vựng 3 góc quay và thấu hiểu các nguyên tắc cấu trúc câu SOV chuẩn khoa học.
             </p>
           </div>
 
@@ -1170,7 +1129,7 @@ export default function LandingView({ onOpenAuth }) {
             Sẵn Sàng Làm Chủ Ngôn Ngữ Ký Hiệu?
           </h2>
           <p style={{ fontSize: '1.1rem', opacity: 0.9, lineHeight: 1.6, marginBottom: '2.25rem' }}>
-            Tham gia cùng hàng ngàn học viên để xóa bỏ rào cản giao tiếp, kết nối với cộng đồng người Điếc Việt Nam.
+            Tham gia cùng hàng ngàn học viên để xóa bỏ rào cản giao tiếp, kết nối với cộng đồng.
           </p>
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
@@ -1235,11 +1194,11 @@ export default function LandingView({ onOpenAuth }) {
               <Sparkles size={18} />
             </div>
             <span style={{ fontSize: '1.1rem', fontWeight: 900, color: '#ffffff' }}>Signlingo</span>
-            <span style={{ fontSize: '0.8rem', color: '#64748b' }}>• Dự án VSL thông minh ứng dụng AI</span>
+            <span style={{ fontSize: '0.8rem', color: '#64748b' }}>• Dự án NNKH thông minh ứng dụng AI</span>
           </div>
 
           <div style={{ fontSize: '0.82rem', color: '#64748b' }}>
-            © {new Date().getFullYear()} Signlingo Project. Vì cộng đồng người Điếc Việt Nam.
+            © {new Date().getFullYear()} Signlingo Project.
           </div>
         </div>
       </footer>

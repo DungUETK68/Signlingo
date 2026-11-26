@@ -19,16 +19,19 @@ import {
 import { getAllWords, useSavedLessons } from '../../data/wordsStore';
 import { progressApi, resolveMediaUrl, resolveAngleVideoUrl } from '../../services/api';
 import VideoAngleSwitcher from '../VideoAngleSwitcher';
+import PathActivityRunner from './PathActivityRunner';
 
 export default function LessonDetailView({ lesson, topic, onBack, onStartPractice, onSelectLesson }) {
   const [speed, setSpeed] = useState(1.0);
   const [viewAngle, setViewAngle] = useState('front');
   const [completedState, setCompletedState] = useState(!!lesson?.completed);
+  const [showInlineSavedReview, setShowInlineSavedReview] = useState(false);
   const videoPlayerRef = useRef(null);
-  const { isSaved, toggleSave } = useSavedLessons();
+  const { savedLessons, isSaved, toggleSave } = useSavedLessons();
 
   useEffect(() => {
     setCompletedState(!!lesson?.completed);
+    setShowInlineSavedReview(false);
   }, [lesson?.id, lesson?.completed]);
 
   const handleCompleteLesson = async () => {
@@ -50,6 +53,25 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
   };
 
   if (!lesson || !topic) return null;
+
+  // Nếu người dùng bấm "Ôn lại từ vựng đã lưu" ngay trong màn hình bài học
+  if (showInlineSavedReview) {
+    return (
+      <PathActivityRunner
+        activity={{
+          id: `inline-saved-${topic.id || 'lesson'}`,
+          type: 'saved_review',
+          topicId: topic.id,
+          topicTitle: topic.title,
+          title: 'Ôn lại Từ vựng Đã lưu trong quá trình học',
+          targetWords: (topic.lessons || []).filter(l => l.type === 'word' || l.word),
+        }}
+        contextTitle={lesson.title}
+        onBack={() => setShowInlineSavedReview(false)}
+        onComplete={() => {}}
+      />
+    );
+  }
 
   const allWords = getAllWords();
 
@@ -431,6 +453,54 @@ export default function LessonDetailView({ lesson, topic, onBack, onStartPractic
           <Camera size={20} />
           <span>BƯỚC 2: BẬT CAMERA THỰC HÀNH CÙNG AI</span>
         </button>
+
+        {/* Mục Ôn lại từ vựng đã lưu ngay trong bài học để củng cố trí nhớ từ cũ */}
+        <div style={{
+          marginTop: '1rem',
+          padding: '0.9rem 1.1rem',
+          borderRadius: 'var(--radius-lg)',
+          backgroundColor: '#f0f9ff',
+          border: '1.5px solid #bae6fd',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '0.75rem'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flex: 1, minWidth: 220 }}>
+            <div style={{
+              width: 36,
+              height: 36,
+              borderRadius: '50%',
+              backgroundColor: '#e0f2fe',
+              color: '#0284c7',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}>
+              <RotateCcw size={17} />
+            </div>
+            <div>
+              <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#0f172a' }}>
+                Ôn lại từ vựng đã lưu ({savedLessons.length} từ)
+              </div>
+              <div style={{ fontSize: '0.78rem', color: '#475569' }}>
+                Xen kẽ ôn lại các từ cũ bạn đã lưu để củng cố trí nhớ dài hạn ngay trong lúc học.
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            className="btn-pill btn-primary btn-sm"
+            onClick={() => setShowInlineSavedReview(true)}
+            style={{ fontWeight: 800, padding: '0.48rem 1rem', gap: '0.35rem', flexShrink: 0 }}
+          >
+            <Bookmark size={14} fill="#ffffff" />
+            <span>Ôn từ đã lưu ngay</span>
+          </button>
+        </div>
       </div>
 
       {/* 3. Nút Điều Hướng Bài Trước / Bài Kế Tiếp Trong Cùng Chương */}

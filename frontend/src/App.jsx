@@ -371,6 +371,10 @@ export default function App() {
             onStartPracticeWord={handleStartPracticeWord}
             initialLesson={selectedLearningLesson}
             initialTopic={selectedLearningTopic}
+            onClearInitialLesson={() => {
+              setSelectedLearningLesson(null);
+              setSelectedLearningTopic(null);
+            }}
             onOpenSentenceDetail={(sentenceId) => {
               setSelectedSentenceId(sentenceId);
               setActiveTab('sentences');

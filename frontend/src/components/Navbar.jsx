@@ -87,11 +87,20 @@ export default function Navbar({ activeTab, onSelectTab, onOpenAuth, userProfile
 
           {/* User profile / login button */}
           <button className="user-btn" onClick={onOpenAuth}>
-            <img 
-              src={userProfile?.avatarUrl || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80"} 
-              alt="Avatar" 
+            <div
               className="user-avatar"
-            />
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
+                color: '#ffffff',
+                fontWeight: 800,
+                fontSize: '0.85rem',
+              }}
+            >
+              {(userProfile?.name || 'T').trim().charAt(0).toUpperCase()}
+            </div>
             <span className="user-name-abbr">
               {userProfile?.name ? userProfile.name.trim().split(' ').slice(-1)[0] : 'Tài khoản'}
             </span>

@@ -5,6 +5,7 @@ import { progressApi, AI_API_URL, resolveMediaUrl, resolveAngleVideoUrl, isNativ
 import { startSkeletonTracking, stopSkeletonTracking, extract75Landmarks } from '../../services/skeletonTracker';
 import CanvasSkeleton from '../CanvasSkeleton';
 import VideoAngleSwitcher from '../VideoAngleSwitcher';
+import UserAvatar from '../common/UserAvatar';
 import confetti from 'canvas-confetti';
 import { 
   Timer, 
@@ -48,7 +49,6 @@ export default function GamesView({ onStartPracticeWord, initialMode = 'quiz' })
             name: u.fullName || u.name,
             streak: u.streak || 1,
             xp: u.xp || 0,
-            avatar: u.avatarUrl || u.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
             isMe: u.fullName === 'Nguyễn Văn Học' || u.isMe,
             league: u.league || 'Vàng'
           })));
@@ -1136,7 +1136,7 @@ export default function GamesView({ onStartPracticeWord, initialMode = 'quiz' })
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                   <span style={{ fontWeight: 800, color: '#64748b', width: 16 }}>{i + 1}</span>
-                  <img src={u.avatar} alt={u.name} style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover' }} />
+                  <UserAvatar name={u.name || 'Học viên'} size={36} border="1.5px solid #bae6fd" />
                   <div>
                     <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#1e293b' }}>{u.name}</div>
                     <div style={{ fontSize: '0.75rem', color: '#64748b' }}>🔥 {u.streak} ngày</div>

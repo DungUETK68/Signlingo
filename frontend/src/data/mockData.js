@@ -433,11 +433,11 @@ export const BADGES = [
 ];
 
 export const LEADERBOARD = [
-  { rank: 1, name: 'Trần Bảo Ngọc', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80', xp: 3450, streak: 21, badge: 'Đại kiện tướng VSL' },
-  { rank: 2, name: 'Lê Hoàng Long', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80', xp: 2980, streak: 14, badge: 'Chuyên gia ký hiệu' },
-  { rank: 3, name: 'Phạm Thu Thảo', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80', xp: 2650, streak: 12, badge: 'Đôi tay thấu cảm' },
-  { rank: 4, name: 'Nguyễn Minh Anh (Bạn)', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80', xp: 1240, streak: 7, badge: 'Bàn tay giao tiếp', isMe: true },
-  { rank: 5, name: 'Đặng Tuấn Kiệt', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80', xp: 1120, streak: 5, badge: 'Học viên tiềm năng' }
+  { rank: 1, name: 'Trần Bảo Ngọc', xp: 3450, streak: 21, badge: 'Đại kiện tướng VSL' },
+  { rank: 2, name: 'Lê Hoàng Long', xp: 2980, streak: 14, badge: 'Chuyên gia ký hiệu' },
+  { rank: 3, name: 'Phạm Thu Thảo', xp: 2650, streak: 12, badge: 'Đôi tay thấu cảm' },
+  { rank: 4, name: 'Nguyễn Minh Anh (Bạn)', xp: 1240, streak: 7, badge: 'Bàn tay giao tiếp', isMe: true },
+  { rank: 5, name: 'Đặng Tuấn Kiệt', xp: 1120, streak: 5, badge: 'Học viên tiềm năng' }
 ];
 
 export const QUIZ_QUESTIONS = [

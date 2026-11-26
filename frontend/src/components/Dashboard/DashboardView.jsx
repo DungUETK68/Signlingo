@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { getUserProfile, saveUserProfile } from '../../data/personalizedStore';
 import { authApi, progressApi, adaptiveApi, userApi } from '../../services/api';
+import UserAvatar from '../common/UserAvatar';
 
 export default function DashboardView({ onStartPracticeWord }) {
   const [user, setUser] = useState(() => getUserProfile());
@@ -227,11 +228,12 @@ export default function DashboardView({ onStartPracticeWord }) {
         boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <img
-            src={user?.avatarUrl || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80"}
-            alt={user?.name || "Học viên"}
-            style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', border: '2px solid #bae6fd' }}
-          />
+            <UserAvatar
+              name={user?.name || 'Học viên'}
+              size={64}
+              fontSize="1.65rem"
+              border="3px solid #bae6fd"
+            />
           <div>
             <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#1e293b', margin: 0, marginBottom: '0.25rem' }}>
               {user?.name || 'Học viên'}

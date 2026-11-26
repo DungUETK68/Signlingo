@@ -969,6 +969,7 @@ body.native-mobile-app textarea {
   border-radius: 18px;
   overflow: hidden;
   box-shadow: var(--card-shadow);
+  container-type: inline-size;
 }
 
 .srs-kpi-grid {
@@ -1037,12 +1038,13 @@ body.native-mobile-app textarea {
 .srs-levels-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
+  gap: 1px;
+  background-color: #f1f5f9;
 }
 
 .srs-level-cell {
-  padding: 0.95rem 0.85rem;
+  padding: 0.95rem 0.9rem;
   border: none;
-  border-right: 1px solid #f1f5f9;
   background-color: #ffffff;
   text-align: left;
   cursor: pointer;
@@ -1053,10 +1055,6 @@ body.native-mobile-app textarea {
   min-width: 0;
 }
 
-.srs-level-cell:last-child {
-  border-right: none;
-}
-
 .srs-level-cell:hover {
   background-color: #f8fafc !important;
 }
@@ -1065,17 +1063,16 @@ body.native-mobile-app textarea {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.25rem;
+  gap: 0.35rem;
   margin-bottom: 0.45rem;
 }
 
 .srs-level-title {
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 800;
   color: #1e293b;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.25;
+  white-space: normal;
 }
 
 .srs-level-count-row {
@@ -1150,13 +1147,21 @@ body.native-mobile-app textarea {
   box-shadow: 0 4px 0 #fb923c;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1440px) {
   .srs-levels-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+}
 
-  .srs-level-cell {
-    border-bottom: 1px solid #f1f5f9;
+@container (max-width: 900px) {
+  .srs-levels-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@container (max-width: 520px) {
+  .srs-levels-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

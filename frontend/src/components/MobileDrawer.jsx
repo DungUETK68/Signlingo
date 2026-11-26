@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import UserAvatar from './common/UserAvatar';
 import {
   X,
   Sparkles,
@@ -131,10 +132,10 @@ export default function MobileDrawer({
         {/* Drawer Footer: User Profile & Logout */}
         <div className="mobile-drawer-footer">
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.75rem' }}>
-            <img
-              src={userProfile?.avatarUrl || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80"}
-              alt="Avatar"
-              style={{ width: 38, height: 38, borderRadius: '50%', objectFit: 'cover', border: '2px solid #0284c7' }}
+            <UserAvatar
+              name={userProfile?.name || 'Học viên'}
+              size={38}
+              border="2px solid #bae6fd"
             />
             <div style={{ overflow: 'hidden', flex: 1 }}>
               <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>

@@ -1198,16 +1198,17 @@ export function generatePersonalizedPath(level, capability) {
     }
   }
 
-  // Tự động chuẩn hóa toàn bộ các bài từ vựng trong lộ trình cá nhân khớp 100% video và slug VSL400
-  stages = stages.map(stg => ({
-    ...stg,
-    lessons: stg.lessons.map(ls => {
+  // Tự động chuẩn hóa toàn bộ các bài từ vựng & lồng ghép chu trình học thích ứng 6 bước hợp lý cho mỗi chặng:
+  // (Ôn từ đã lưu & từ cũ -> Học từ vựng cốt lõi -> Trắc nghiệm Video mẫu -> Ngữ pháp + Trắc nghiệm Lý thuyết -> Luyện câu -> Thử thách ký hiệu từ từ có sẵn)
+  stages = stages.map((stg, stageIdx) => {
+    const normalizedLessons = stg.lessons.map(ls => {
       if (ls.word || ls.type === 'word' || (!ls.type && !ls.grammarRuleId && !ls.sentenceSlug)) {
         const targetWord = ls.word || ls.title;
         const meta = getWordMetadata(targetWord);
         if (meta) {
           return {
             ...ls,
+            type: 'word',
             word: meta.word,
             slug: meta.slug,
             wordId: meta.wordId,
@@ -1218,11 +1219,117 @@ export function generatePersonalizedPath(level, capability) {
         }
       }
       return ls;
-    })
-  }));
+    });
+
+    const wordItems = normalizedLessons.filter(l => l.type === 'word');
+    const grammarItems = normalizedLessons.filter(l => l.type === 'grammar');
+    const sentenceItems = normalizedLessons.filter(l => l.type === 'sentence');
+    const topicExtraWords = VSL400_WORDS.filter(w => w.topic === stg.topicId).slice(0, 8);
+    const quizWordPool = [...wordItems, ...topicExtraWords];
+
+    const savedReviewItem = {
+      id: `p-saved-rev-${currentLevel}-${stg.id}`,
+      type: 'saved_review',
+      topicId: stg.topicId,
+      topicTitle: stg.title,
+      title: stageIdx === 0
+        ? '🔁 Ôn lại từ vựng đã lưu & củng cố từ vừa học'
+        : '🔁 Khởi động chặng: Ôn lại từ vựng đã lưu & từ cũ',
+      duration: '3 phút',
+      level: 'Ôn tập SRS',
+      badge: 'Ôn từ đã lưu',
+      targetWords: wordItems,
+      completed: false,
+      score: 0
+    };
+
+    const videoQuizItem = {
+      id: `p-vid-quiz-${currentLevel}-${stg.id}`,
+      type: 'quiz_video',
+      topicId: stg.topicId,
+      topicTitle: stg.title,
+      title: '🎬 Bài tập: Trắc nghiệm đoán từ qua Video mẫu',
+      duration: '3 phút',
+      level: 'Nhận diện',
+      badge: 'Trắc nghiệm video',
+      targetWords: quizWordPool,
+      questionCount: 4,
+      completed: false,
+      score: 0
+    };
+
+    const theoryQuizItem = {
+      id: `p-theory-quiz-${currentLevel}-${stg.id}`,
+      type: 'quiz_theory',
+      topicId: stg.topicId,
+      topicTitle: stg.title,
+      grammarRuleId: grammarItems[0]?.grammarRuleId || 'rule-sov',
+      title: '📝 Bài tập: Trắc nghiệm Lý thuyết Ngữ pháp & Ký hiệu',
+      duration: '3 phút',
+      level: 'Lý thuyết',
+      badge: 'Trắc nghiệm lý thuyết',
+      targetWords: wordItems,
+      questionCount: 4,
+      completed: false,
+      score: 0
+    };
+
+    const signChallengeItem = {
+      id: `p-sign-chal-${currentLevel}-${stg.id}`,
+      type: 'challenge_sign',
+      topicId: stg.topicId,
+      topicTitle: stg.title,
+      title: cap.fastTrackUnlocked
+        ? '⚡ Thử thách Tăng tốc: Biểu diễn ký hiệu theo từ cho sẵn (AI)'
+        : '🎯 Thử thách Chốt chặng: Thực hiện ký hiệu theo từ cho sẵn',
+      duration: '4 phút',
+      level: cap.fastTrackUnlocked ? 'Nâng cao' : 'Thực hành AI',
+      badge: 'Thử thách ký hiệu',
+      targetWords: quizWordPool,
+      questionCount: cap.fastTrackUnlocked ? 5 : 4,
+      completed: false,
+      score: 0
+    };
+
+    // Sắp xếp lộ trình hợp lý theo nguyên lý xoắn ốc:
+    // - Chặng 1: Học 4 từ đầu -> Ôn lại từ đã lưu -> Trắc nghiệm Video -> Ngữ pháp -> Trắc nghiệm Lý thuyết -> Ghép câu -> Thử thách Ký hiệu AI
+    // - Chặng 2..4: Ôn lại từ đã lưu & chặng trước -> Học 4 từ mới -> Trắc nghiệm Video -> Ngữ pháp -> Trắc nghiệm Lý thuyết -> Ghép câu -> Thử thách Ký hiệu AI
+    const structuredLessons = stageIdx === 0
+      ? [
+          ...wordItems,
+          savedReviewItem,
+          videoQuizItem,
+          ...grammarItems,
+          theoryQuizItem,
+          ...sentenceItems,
+          signChallengeItem
+        ]
+      : [
+          savedReviewItem,
+          ...wordItems,
+          videoQuizItem,
+          ...grammarItems,
+          theoryQuizItem,
+          ...sentenceItems,
+          signChallengeItem
+        ];
+
+    const compCount = structuredLessons.filter(l => l.completed).length;
+    const progress = structuredLessons.length > 0
+      ? Math.round((compCount / structuredLessons.length) * 100)
+      : 0;
+
+    return {
+      ...stg,
+      progress,
+      lessons: structuredLessons
+    };
+  });
 
   return stages;
 }
+
+const PERSONALIZED_CACHE_VERSION = 7;
 
 // 5. Tính toán và lưu Lộ trình Cá nhân
 export function getPersonalizedPath() {
@@ -1233,14 +1340,35 @@ export function getPersonalizedPath() {
     
     if (raw) {
       const parsed = JSON.parse(raw);
-      // Nâng cấp cache cũ: kiểm tra version === 5 để đồng bộ video/slug chuẩn VSL400
-      if (parsed && parsed.version === 5 && Array.isArray(parsed.stages) && parsed.stages.length > 0) {
+      if (parsed && parsed.version === PERSONALIZED_CACHE_VERSION && Array.isArray(parsed.stages) && parsed.stages.length > 0) {
         return parsed.stages;
+      }
+      // Nếu nâng cấp từ bản cũ, bảo toàn các bài học đã hoàn thành theo id
+      if (parsed && Array.isArray(parsed.stages)) {
+        const oldCompleted = new Map();
+        parsed.stages.forEach(s => {
+          (s.lessons || []).forEach(l => {
+            if (l.completed && l.id) oldCompleted.set(l.id, l.score || 95);
+          });
+        });
+        const upgraded = generatePersonalizedPath(profile.learningLevel || 'beginner', capability).map(s => {
+          const mergedLessons = s.lessons.map(l =>
+            oldCompleted.has(l.id) ? { ...l, completed: true, score: oldCompleted.get(l.id) } : l
+          );
+          const comp = mergedLessons.filter(x => x.completed).length;
+          return {
+            ...s,
+            lessons: mergedLessons,
+            progress: Math.round((comp / Math.max(1, mergedLessons.length)) * 100)
+          };
+        });
+        localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: PERSONALIZED_CACHE_VERSION, stages: upgraded }));
+        return upgraded;
       }
     }
 
     const generated = generatePersonalizedPath(profile.learningLevel || 'beginner', capability);
-    localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: 5, stages: generated }));
+    localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: PERSONALIZED_CACHE_VERSION, stages: generated }));
     return generated;
   } catch (e) {
     return generatePersonalizedPath('beginner');
@@ -1251,8 +1379,25 @@ export function getPersonalizedPath() {
 export function recalculateAdaptivePath() {
   const profile = getUserProfile();
   const capability = analyzeLearnerCapability();
-  const newPath = generatePersonalizedPath(profile.learningLevel || 'beginner', capability);
-  localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: 5, stages: newPath }));
+  const existing = getPersonalizedPath();
+  const completedIds = new Map();
+  existing.forEach(s => (s.lessons || []).forEach(l => {
+    if (l.completed && l.id) completedIds.set(l.id, l.score || 95);
+  }));
+
+  const newPath = generatePersonalizedPath(profile.learningLevel || 'beginner', capability).map(s => {
+    const mergedLessons = s.lessons.map(l =>
+      completedIds.has(l.id) ? { ...l, completed: true, score: completedIds.get(l.id) } : l
+    );
+    const comp = mergedLessons.filter(x => x.completed).length;
+    return {
+      ...s,
+      lessons: mergedLessons,
+      progress: Math.round((comp / Math.max(1, mergedLessons.length)) * 100)
+    };
+  });
+
+  localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: PERSONALIZED_CACHE_VERSION, stages: newPath }));
   window.dispatchEvent(new CustomEvent(PERSONALIZED_EVENT, { detail: { path: newPath, capability } }));
   return newPath;
 }
@@ -1303,7 +1448,7 @@ export function usePersonalizedPath() {
             return { ...stage, lessons: updatedLessons, progress };
           });
 
-          localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: 5, stages: synced }));
+          localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: PERSONALIZED_CACHE_VERSION, stages: synced }));
           setPath(synced);
         }
 
@@ -1335,7 +1480,7 @@ export function usePersonalizedPath() {
     const updatedProf = saveUserProfile({ learningLevel: newLevel });
     const newCapability = analyzeLearnerCapability();
     const newPath = generatePersonalizedPath(newLevel, newCapability);
-    localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: 5, stages: newPath }));
+    localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: PERSONALIZED_CACHE_VERSION, stages: newPath }));
     setProfile(updatedProf);
     setCapability(newCapability);
     setPath(newPath);
@@ -1355,7 +1500,7 @@ export function usePersonalizedPath() {
       return { ...stage, lessons: updatedLessons, progress };
     });
 
-    localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: 5, stages: updatedPath }));
+    localStorage.setItem(PERSONALIZED_PATH_KEY, JSON.stringify({ version: PERSONALIZED_CACHE_VERSION, stages: updatedPath }));
     setPath(updatedPath);
 
     // Đồng bộ lưu hoàn thành bài học lên Backend NestJS

@@ -9,6 +9,7 @@ import {
   Hand
 } from 'lucide-react';
 import { userApi } from '../services/api';
+import UserAvatar from './common/UserAvatar';
 
 export default function MobileTopBar({
   userProfile,
@@ -203,16 +204,10 @@ export default function MobileTopBar({
             }}
             aria-label="User Profile"
           >
-            <img
-              src={userProfile?.avatarUrl || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80"}
-              alt="Avatar"
-              style={{
-                width: 32,
-                height: 32,
-                borderRadius: '50%',
-                objectFit: 'cover',
-                border: isProfileMenuOpen ? '2px solid #0284c7' : '2px solid #cbd5e1'
-              }}
+            <UserAvatar
+              name={userProfile?.name || 'Học viên'}
+              size={32}
+              border={isProfileMenuOpen ? '2px solid #0284c7' : '2px solid #bae6fd'}
             />
           </button>
 
@@ -231,10 +226,10 @@ export default function MobileTopBar({
             }}>
               {/* User Info */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.85rem' }}>
-                <img
-                  src={userProfile?.avatarUrl || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80"}
-                  alt="Avatar"
-                  style={{ width: 42, height: 42, borderRadius: '50%', objectFit: 'cover', border: '2px solid #0284c7' }}
+                <UserAvatar
+                  name={userProfile?.name || 'Học viên'}
+                  size={42}
+                  border="2px solid #bae6fd"
                 />
                 <div style={{ overflow: 'hidden', flex: 1 }}>
                   <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
